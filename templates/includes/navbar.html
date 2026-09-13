@@ -1,0 +1,26 @@
+{% comment %}
+Site navigation.
+
+The app links are plain paths for now, because the apps do not define named
+routes yet. Once they do, swap them for URL tags so the routes stay in one place.
+{% endcomment %}
+<nav class="navbar">
+  <a class="navbar__brand" href="/">Language Learning</a>
+
+  <ul class="navbar__links">
+    <li><a href="/lessons/">Lessons</a></li>
+    <li><a href="/vocabulary/">Vocabulary</a></li>
+    <li><a href="/exercises/">Exercises</a></li>
+    <li><a href="/tests/">Tests</a></li>
+  </ul>
+
+  <ul class="navbar__account">
+    {% if user.is_authenticated %}
+      <li><span class="navbar__user">{{ user.get_username }}</span></li>
+      <li><a href="{% url 'admin:index' %}">Admin</a></li>
+      <li><a href="/accounts/logout/">Log out</a></li>
+    {% else %}
+      <li><a href="/accounts/login/">Log in</a></li>
+    {% endif %}
+  </ul>
+</nav>
