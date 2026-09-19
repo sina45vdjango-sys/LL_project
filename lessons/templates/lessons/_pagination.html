@@ -1,0 +1,7 @@
+{% if page.has_other_pages %}
+<nav class="lesson-pagination" aria-label="صفحه‌بندی">
+  {% if page.has_previous %}<a href="?{{ page_param }}={{ page.previous_page_number }}{{ page_anchor }}">صفحهٔ قبل</a>{% endif %}
+  <span>صفحهٔ {{ page.number }} از {{ page.paginator.num_pages }}</span>
+  {% if page.has_next %}<a href="?{{ page_param }}={{ page.next_page_number }}{{ page_anchor }}">صفحهٔ بعد</a>{% endif %}
+</nav>
+{% endif %}

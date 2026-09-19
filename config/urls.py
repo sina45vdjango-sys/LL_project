@@ -4,6 +4,8 @@ URL configuration for the Language_Learning project.
 Each local app exposes its own urlpatterns in <app>/urls.py; add routes there
 and they become reachable under the prefix declared below.
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
@@ -15,3 +17,6 @@ urlpatterns = [
     path('exercises/', include('exercises.urls')),
     path('tests/', include('tests.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

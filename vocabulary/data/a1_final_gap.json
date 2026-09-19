@@ -1,0 +1,42 @@
+{
+  "level": "A1",
+  "topic": "Final Goethe Wortliste gap fill",
+  "words": [
+    {"word": "Disco", "type": "NOUN", "gender": "F", "article": "die", "plural": "die Discos", "fa": "دیسکو", "en": "disco", "ipa": "ˈdɪsko"},
+    {"word": "Doktor", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Doktoren", "fa": "دکتر", "en": "doctor", "ipa": "ˈdɔktoːɐ̯"},
+    {"word": "Halbpension", "type": "NOUN", "gender": "F", "article": "die", "plural": "", "fa": "اقامت با صبحانه و شام", "en": "half board", "ipa": "ˈhalppaŋzi̯oːn"},
+    {"word": "Satz", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Sätze", "fa": "جمله", "en": "sentence", "ipa": "zats"},
+
+    {"word": "ausländisch", "type": "ADJ", "fa": "خارجی، بیگانه", "en": "foreign", "ipa": "ˈaʊslɛndɪʃ"},
+    {"word": "lange", "type": "ADVERB", "fa": "مدت زیاد", "en": "a long time", "ipa": "ˈlaŋə"},
+    {"word": "zurzeit", "type": "ADVERB", "fa": "در حال حاضر", "en": "at present", "ipa": "tsuːɐ̯ˈtsaɪt"},
+
+    {"word": "euer", "type": "PRONOUN", "fa": "مالِ شما (جمع)", "en": "your (plural)", "ipa": "ˈɔɪɐ"},
+
+    {"word": "scheinen", "type": "VERB", "fa": "به نظر رسیدن؛ تابیدن", "en": "to seem; to shine", "ipa": "ˈʃaɪnən", "aux": "haben"},
+    {"word": "sich ausziehen", "type": "VERB", "fa": "لباس درآوردن", "en": "to undress, to take off", "ipa": "zɪç ˈaʊstsiːən", "aux": "haben", "separable": true},
+
+    {"word": "Kellner", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Kellner", "fa": "پیشخدمت", "en": "waiter", "ipa": "ˈkɛlnɐ"},
+    {"word": "Kellnerin", "type": "NOUN", "gender": "F", "article": "die", "plural": "die Kellnerinnen", "fa": "پیشخدمت (زن)", "en": "waitress", "ipa": "ˈkɛlnəʁɪn"},
+    {"word": "Koch", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Köche", "fa": "آشپز", "en": "cook", "ipa": "kɔx"},
+    {"word": "Ingenieur", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Ingenieure", "fa": "مهندس", "en": "engineer", "ipa": "ɪnʒeˈni̯øːɐ̯"},
+    {"word": "Polizist", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Polizisten", "fa": "پلیس", "en": "police officer", "ipa": "poliˈtsɪst"},
+    {"word": "Friseur", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Friseure", "fa": "آرایشگر", "en": "hairdresser", "ipa": "fʁiˈzøːɐ̯"},
+    {"word": "Bäcker", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Bäcker", "fa": "نانوا", "en": "baker", "ipa": "ˈbɛkɐ"},
+    {"word": "Trinkgeld", "type": "NOUN", "gender": "N", "article": "das", "plural": "die Trinkgelder", "fa": "انعام", "en": "tip", "ipa": "ˈtʁɪŋkɡɛlt"},
+    {"word": "Quittung", "type": "NOUN", "gender": "F", "article": "die", "plural": "die Quittungen", "fa": "رسید", "en": "receipt", "ipa": "ˈkvɪtʊŋ"},
+    {"word": "Wand", "type": "NOUN", "gender": "F", "article": "die", "plural": "die Wände", "fa": "دیوار", "en": "wall", "ipa": "vant"},
+    {"word": "Boden", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Böden", "fa": "کف اتاق، زمین", "en": "floor", "ipa": "ˈboːdn̩"},
+    {"word": "Kissen", "type": "NOUN", "gender": "N", "article": "das", "plural": "die Kissen", "fa": "بالش", "en": "pillow", "ipa": "ˈkɪsn̩"},
+    {"word": "Badewanne", "type": "NOUN", "gender": "F", "article": "die", "plural": "die Badewannen", "fa": "وان حمام", "en": "bathtub", "ipa": "ˈbaːdəvanə"},
+    {"word": "Geschirr", "type": "NOUN", "gender": "N", "article": "das", "plural": "", "fa": "ظرف و ظروف", "en": "dishes", "ipa": "ɡəˈʃɪʁ"},
+    {"word": "Müll", "type": "NOUN", "gender": "M", "article": "der", "plural": "", "fa": "زباله", "en": "rubbish", "ipa": "mʏl"},
+    {"word": "Ferien", "type": "NOUN", "gender": null, "article": "die", "plural": "", "fa": "تعطیلات مدرسه و دانشگاه", "en": "school holidays", "ipa": "ˈfeːʁiən"},
+    {"word": "Jahreszeit", "type": "NOUN", "gender": "F", "article": "die", "plural": "die Jahreszeiten", "fa": "فصل سال", "en": "season", "ipa": "ˈjaːʁəsˌtsaɪ̯t"},
+    {"word": "Kreuzung", "type": "NOUN", "gender": "F", "article": "die", "plural": "die Kreuzungen", "fa": "چهارراه", "en": "crossroads, junction", "ipa": "ˈkʁɔʏ̯tsʊŋ"},
+    {"word": "Nachricht", "type": "NOUN", "gender": "F", "article": "die", "plural": "die Nachrichten", "fa": "پیام، خبر", "en": "message, news", "ipa": "ˈnaːxʁɪçt"},
+
+    {"word": "passen", "type": "VERB", "fa": "اندازه بودن، مناسب بودن", "en": "to fit, to suit", "ipa": "ˈpasn̩", "aux": "haben"},
+    {"word": "aufräumen", "type": "VERB", "fa": "مرتب کردن، جمع کردن", "en": "to tidy up", "ipa": "ˈaʊfˌʁɔʏ̯mən", "aux": "haben", "separable": true}
+  ]
+}

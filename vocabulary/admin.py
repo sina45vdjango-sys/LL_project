@@ -1,6 +1,70 @@
 from django.contrib import admin
-from  . import models
 
-admin.site.register(models.Word)
-admin.site.register(models.Grammar)
-admin.site.register(models.Sentence)
+from .models import Word, Grammar, Sentence
+
+
+@admin.register(Word)
+class WordAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "word_type", "gender", "meaning_fa", "meanin_en_short", "level", "is_published")
+    list_filter = ("word_type", "gender", "is_published", "level__level")
+    search_fields = ("word", "meaning_fa", "meaning_en", "plural", "pronunciation")
+    list_per_page = 40
+
+    autocomplete_fields = ("level",)
+    list_select_related = ("level",)
+
+    fieldsets = (
+        (None, {
+            "fields": (
+                ("word", "word_type"),
+                ("article", "gender", "plural", "pronunciation"),
+                "meaning_fa",
+                "meaning_en",
+                ("level", "is_published"),
+            ),
+        }),
+        ("فایل صوتی", {"fields": ("audio",), "classes": ("collapse",)}),
+    )
+
+    @admin.display(description="انگلیسی")
+    def meanin_en_short(self, obj):
+        return obj.meaning_en[:40] if obj.meaning_en else ""
+
+
+@admin.register(Grammar)
+class GrammarAdmin(admin.ModelAdmin):
+    list_display = ("title", "level", "is_published")
+    list_filter = ("level__level", "is_published")
+    search_fields = ("title", "explanation", "level__title", "level__level")
+    list_per_page = 30
+
+    autocomplete_fields = ("level",)
+    list_select_related = ("level",)
+
+    fieldsets = (
+        (None, {"fields": ("level", "title", "is_published")}),
+        ("توضیح", {"fields": ("explanation",)}),
+        ("فایل صوتی", {"fields": ("audio",), "classes": ("collapse",)}),
+    )
+
+
+@admin.register(Sentence)
+class SentenceAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "level", "is_published", "text_short")
+    list_filter = ("level__level", "is_published")
+    search_fields = ("text", "translation_fa", "level__title", "level__level")
+    list_per_page = 40
+
+    autocomplete_fields = ("level",)
+    list_select_related = ("level",)
+
+    fieldsets = (
+        (None, {
+            "fields": ("level", "text", "translation_fa", "is_published"),
+        }),
+        ("فایل صوتی", {"fields": ("audio",), "classes": ("collapse",)}),
+    )
+
+    @admin.display(description="متن")
+    def text_short(self, obj):
+        return (obj.text[:60] + "…") if len(obj.text) > 60 else obj.text

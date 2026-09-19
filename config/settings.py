@@ -131,6 +131,13 @@ STATIC_URL = 'static/'
 # Project-wide static assets, alongside each app's static/<app>/ folder.
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+# Media files (uploaded/generated audio, images, ...)
+# https://docs.djangoproject.com/en/4.2/topics/files/
+
+MEDIA_URL = 'media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

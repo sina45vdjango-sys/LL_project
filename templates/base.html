@@ -1,25 +1,78 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Language Learning{% endblock %}</title>
+  <meta name="color-scheme" content="light dark">
+  <title>{% block title %}واژه‌خانه | یادگیری آلمانی{% endblock %}</title>
+  <script>
+    (() => {
+      let saved;
+      try { saved = localStorage.getItem('vocabulary-theme'); } catch (_) {}
+      document.documentElement.dataset.theme = ['light', 'dark'].includes(saved)
+        ? saved : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    })();
+  </script>
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   {% block extra_css %}{% endblock %}
 </head>
 <body>
+  <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
   {% include "includes/navbar.html" %}
-
-  <main class="content">
+  <main class="content {% block content_class %}{% endblock %}" id="main-content" tabindex="-1">
     {% include "includes/messages.html" %}
     {% block content %}{% endblock %}
   </main>
-
   <footer class="footer">
-    <p>&copy; {% now "Y" %} Language Learning</p>
+    <span>واژه‌خانه <span class="footer__dot" aria-hidden="true">·</span> هر روز، یک قدم به آلمانی نزدیک‌تر.</span>
+    <span dir="ltr" lang="en">LANGUAGE LEARNING · {% now "Y" %}</span>
   </footer>
-
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const toggle = document.getElementById('theme-toggle');
+      const syncTheme = () => {
+        const dark = root.dataset.theme === 'dark';
+        toggle.setAttribute('aria-pressed', String(dark));
+        toggle.setAttribute('aria-label', dark ? 'فعال کردن حالت روشن' : 'فعال کردن حالت تاریک');
+        toggle.querySelector('[data-theme-label]').textContent = dark ? 'حالت روشن' : 'حالت تاریک';
+      };
+      toggle.hidden = false;
+      syncTheme();
+      toggle.addEventListener('click', () => {
+        root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem('vocabulary-theme', root.dataset.theme); } catch (_) {}
+        syncTheme();
+      });
+      matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        let saved;
+        try { saved = localStorage.getItem('vocabulary-theme'); } catch (_) {}
+        if (!['light', 'dark'].includes(saved)) {
+          root.dataset.theme = event.matches ? 'dark' : 'light';
+          syncTheme();
+        }
+      });
+      const menu = document.getElementById('nav-toggle');
+      const links = document.getElementById('nav-links');
+      menu.hidden = false;
+      root.classList.add('js');
+      const closeMenu = () => { menu.setAttribute('aria-expanded', 'false'); links.classList.remove('is-open'); };
+      menu.addEventListener('click', () => {
+        const open = menu.getAttribute('aria-expanded') !== 'true';
+        menu.setAttribute('aria-expanded', String(open));
+        links.classList.toggle('is-open', open);
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') { closeMenu(); menu.focus(); }
+      });
+      links.addEventListener('click', event => { if (event.target.closest('a')) closeMenu(); });
+      document.querySelectorAll('[data-dismiss-message]').forEach(button => {
+        button.hidden = false;
+        button.addEventListener('click', () => { button.closest('.messages__item').remove(); document.getElementById('main-content').focus(); });
+      });
+    })();
+  </script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

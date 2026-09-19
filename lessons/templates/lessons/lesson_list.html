@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}درس‌ها | واژه‌خانه{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'lessons/css/lessons.css' %}">{% endblock %}
+{% block content %}
+<header class="lesson-heading"><p>آموزش آلمانی</p><h1>{% block heading %}درس‌ها{% endblock %}</h1>{% block description %}<p>فهرست درس‌های منتشرشده، به ترتیب سطح و شمارهٔ درس.</p>{% endblock %}</header>
+<nav class="course-tabs" aria-label="دوره‌ها">
+<a href="{% url 'lessons:lesson-list' %}" {% if not course %}aria-current="page"{% endif %}>همهٔ درس‌ها</a>
+{% for item in courses %}<a href="{% url 'lessons:course-detail' item.pk %}" {% if course.pk == item.pk %}aria-current="page"{% endif %}><bdi>{{ item.language_level }}</bdi></a>{% endfor %}
+</nav>
+<div class="lesson-summary"><h2>فهرست درس‌ها</h2><span>{{ lessons.paginator.count }} درس</span></div>
+<div class="lesson-grid">
+{% for lesson in lessons %}
+<article class="lesson-tile">
+  <div class="lesson-meta"><span>درس {{ lesson.order }}</span><bdi>{{ lesson.course.language_level }}</bdi></div>
+  <h2 dir="auto">{{ lesson.title }}</h2><p dir="auto">{{ lesson.description }}</p>
+  <div class="lesson-tile__footer"><span>{{ lesson.estimated_time }} دقیقه</span><a href="{% url 'lessons:lesson-detail' lesson.pk %}">مشاهدهٔ درس ←</a></div>
+</article>
+{% empty %}<p class="lesson-empty">هنوز درسی منتشر نشده است.</p>{% endfor %}
+</div>
+{% include "lessons/_pagination.html" with page=lessons page_param="page" %}
+{% endblock %}

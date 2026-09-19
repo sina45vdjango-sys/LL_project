@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{% if lesson %}تمرین‌های {{ lesson.title }}
+{% else %}تمرین‌ها{% endif %} واژه‌خانه
+{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'lessons/css/lessons.css' %}">
+<link rel="stylesheet" href="{% static 'lessons/css/reader_modern.css' %}">
+{% endblock %}
+{% block content_class %}content--exercises{% endblock %}
+{% block content %}
+<div class="exercise-page">
+  <nav class="exercise-breadcrumb" aria-label="مسیر صفحه">
+    <a href="{% url 'lessons:lesson-list' %}" class="nav-back-link">← دروس</a>
+    {% if lesson %}
+      <span>/</span>
+      <a href="{% url 'lessons:lesson-detail' lesson.pk %}">{{ lesson.title }}</a>
+    {% endif %}
+  </nav>
+
+  <header class="exercise-list-header card">
+    <h1 class="exercise-list-title">
+      {% if lesson %}
+        تمرین‌های درس: {{ lesson.title }}
+      {% else %}
+        تمام تمرین‌ها
+      {% endif %}
+    </h1>
+    <p class="exercise-list-subtitle">
+      {{ exercises.count }} تمرین در دسترس است.
+    </p>
+  </header>
+
+  {% if exercises.exists %}
+    <div class="exercise-list-grid">
+      {% for exercise in exercises %}
+        <a class="reader-exercise-card exercise-list-card" href="{% url 'exercises:exercise-detail' exercise.pk %}">
+          <div class="reader-exercise-card-header">
+            <span class="reader-exercise-number"> تمرین {{ exercise.order }}</span>
+            <span class="reader-exercise-type">{{ exercise.get_type_display }}</span>
+          </div>
+          <h3 class="reader-exercise-title" dir="auto">{{ exercise.title }}</h3>
+          {% if exercise.instruction %}
+            <p class="reader-exercise-instruction">{{ exercise.instruction }}</p>
+          {% endif %}
+          <div class="reader-exercise-footer">
+            <span class="reader-difficulty-badge difficulty-{{ exercise.difficulty|lower }}">
+              {% if exercise.difficulty == 'EASY' %}آسان
+              {% elif exercise.difficulty == 'MEDIUM' %}متوسط
+              {% elif exercise.difficulty == 'HARD' %}سخت{% endif %}
+            </span>
+            <span class="reader-exercise-link">شرکت در تمرین →</span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state card">
+      <p class="text-center">هیچ تمرینی ثبت نشده است.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

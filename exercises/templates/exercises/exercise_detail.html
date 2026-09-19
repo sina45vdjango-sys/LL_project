@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ exercise.title }} | تمرین{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'lessons/css/lessons.css' %}"><link rel="stylesheet" href="{% static 'exercises/css/exercise.css' %}">{% endblock %}
+{% block content_class %}content--exercise{% endblock %}
+{% block content %}
+<div class="exercise-page">
+  <nav class="exercise-breadcrumb" aria-label="مسیر صفحه">
+    <a href="{% url 'lessons:lesson-list' %}" class="breadcrumb-link">درس‌ها</a>
+    <span class="breadcrumb-separator">›</span>
+    <a href="{% url 'lessons:lesson-detail' exercise.lesson.pk %}" class="breadcrumb-link">{{ exercise.lesson.title }}</a>
+    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-current">{{ exercise.title }}</span>
+  </nav>
+
+  <header class="exercise-header card">
+    <div class="exercise-header-top">
+      <div class="exercise-meta-bar">
+        <span class="exercise-type-badge">{{ exercise.get_type_display }}</span>
+        <span class="exercise-difficulty-badge {{ exercise.difficulty|lower }}">{{ exercise.get_difficulty_display }}</span>
+      </div>
+      <h1 class="exercise-title">{{ exercise.title }}</h1>
+      {% if exercise.instruction %}
+        <p class="exercise-instruction">{{ exercise.instruction }}</p>
+      {% endif %}
+    </div>
+  </header>
+
+  {% if exercise.questions.exists %}
+    <div class="questions-container">
+      {% for question in exercise.questions.all %}
+        <article class="question-card card" id="question-{{ question.pk }}">
+          <header class="question-header">
+            <div class="question-number">{{ question.order }}</div>
+            <div class="question-prompt" dir="auto">{{ question.prompt|linebreaksbr }}</div>
+          </header>
+
+          {% if question.audio %}
+            <div class="question-audio">
+              {% include "lessons/_audio_control.html" with audio=question.audio prefix="q-audio" pk=question.pk label=question.prompt %}
+            </div>
+          {% endif %}
+
+          {% if question.targets.exists %}
+            <div class="question-context">
+              {% for target in question.targets.all %}
+                <div class="context-tag">
+                  {% if target.word %}واژه: {{ target.word.word }}{% endif %}
+                  {% if target.sentence %}جمله: "{{ target.sentence.text }}"{% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if exercise.type == 'MULTIPLE_CHOICE' or exercise.type == 'TRUE_FALSE' %}
+            <div class="answers-list">
+              {% for answer in question.answers.all %}
+                <label class="answer-option {{ answer.is_correct|yesno:"correct,incorrect" }}">
+                  <input type="radio" name="answer_{{ question.pk }}" value="{{ answer.pk }}" {% if answer.is_correct %}data-correct{% endif %}>
+                  <span class="answer-bullet">{{ answer.order|add:"۰" }}</span>
+                  <span class="answer-text" dir="auto">{{ answer.text|linebreaksbr }}</span>
+                </label>
+              {% endfor %}
+            </div>
+            <button type="button" class="btn-check" data-question="{{ question.pk }}">بررسی پاسخ</button>
+          {% elif exercise.type == 'TRANSLATION' or exercise.type == 'FILL_BLANK' %}
+            <div class="answer-form-group">
+              <textarea name="answer_{{ question.pk }}" rows="3" placeholder="پاسخ خود را بنویسید..." class="answer-textarea"></textarea>
+              <button type="button" class="btn-check" data-question="{{ question.pk }}">بررسی پاسخ</button>
+            </div>
+          {% elif exercise.type == 'READING' %}
+            <div class="reading-content">
+              {% for answer in question.answers.all %}
+                <p class="reading-answer" dir="auto">{{ answer.text|linebreaksbr }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          {% if question.explanation %}
+            <details class="explanation-section">
+              <summary class="explanation-summary">توضیح بیشتر</summary>
+              <div class="explanation-content" dir="auto">{{ question.explanation|linebreaksbr }}</div>
+            </details>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state card">
+      <p class="text-center">هیچ سؤالی برای این تمرین ثبت نشده است.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+{% block extra_js %}<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const forms = document.querySelectorAll('.btn-check');
+    forms.forEach(btn => {
+      btn.addEventListener('click', function () {
+        const qid = this.getAttribute('data-question');
+        const form = this.closest('.question-card');
+        const radios = form.querySelectorAll('input[type="radio"]');
+        const checked = form.querySelector('input[type="radio"]:checked');
+
+        if (radios.length > 0) {
+          if (!checked) {
+            alert('لطفاً یک گزینه را انتخاب کنید.');
+            return;
+          }
+          const isCorrect = checked.hasAttribute('data-correct');
+          if (isCorrect) {
+            alert('✅ درست! خوب بود.');
+          } else {
+            alert('❌ غلط. دوباره سعی کنید.');
+          }
+        } else {
+          const textarea = form.querySelector('textarea');
+          const userAnswer = textarea?.value.trim();
+          if (userAnswer) {
+            alert('پاسخ شما ثبت شد. در آینده امکان بررسی وجود خواهد داشت.');
+          } else {
+            alert('لطفاً پاسخ خود را وارد کنید.');
+          }
+        }
+      });
+    });
+  });
+</script>{% endblock %}

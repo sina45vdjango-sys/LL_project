@@ -1,0 +1,22 @@
+.list-heading { margin: 12px 0 30px; }
+.list-heading h1 { font-size: clamp(24px, 3vw, 34px); margin: 8px 0; }
+.list-heading p, .list-summary span { color: var(--muted); font-size: 13px; }
+.level-tabs { display: flex; flex-wrap: wrap; gap: 10px; padding-block: 12px 26px; border-bottom: 1px solid var(--line); }
+.level-tabs a { min-width: 52px; min-height: 44px; padding: 8px 16px; text-align: center; border: 1px solid var(--line); border-radius: 9px; color: var(--fg); }
+.level-tabs a[aria-current] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.list-summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 22px 0; }
+.list-summary h2 { margin: 0; font-size: 16px; }
+.word-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.word-tile { display: flex; flex-direction: column; padding: 23px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--fg); overflow-wrap: anywhere; }
+.word-tile:hover { text-decoration: none; border-color: var(--accent); background: var(--accent-soft); }
+.word-tile__meta { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font: 11px/1.8 system-ui, sans-serif; }
+.word-tile__meta bdi { background: var(--accent-soft); color: var(--accent); padding: 2px 8px; border-radius: 5px; }
+.word-tile h3 { font: 28px/1.4 Georgia, serif; margin: 25px 0 12px; }
+.word-tile h3 span { color: var(--accent); font-style: italic; }
+.word-tile p { margin: 0 0 22px; font-size: 14px; }
+.word-tile__open { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 12px; margin-top: auto; font-size: 11px; color: var(--accent); }
+.pagination { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 34px; color: var(--muted); font-size: 12px; }
+.pagination a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 9px; }
+.empty-state { grid-column: 1 / -1; padding: 50px 24px; text-align: center; background: var(--surface); border: 1px dashed var(--line); border-radius: 16px; }
+@media (max-width: 900px) { .word-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .word-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; } }

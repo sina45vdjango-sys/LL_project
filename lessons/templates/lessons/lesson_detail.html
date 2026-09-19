@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ lesson.title }} | درس {{ lesson.order }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'lessons/css/lessons.css' %}">
+<link rel="stylesheet" href="{% static 'lessons/css/reader_interactions.css' %}">
+<link rel="stylesheet" href="{% static 'lessons/css/reader_modern.css' %}">
+{% endblock %}
+{% block content_class %}content--reader{% endblock %}
+{% block content %}
+<div class="reader-page">
+
+  <!-- Top Navigation -->
+  <nav class="reader-topbar">
+    <a href="{% url 'lessons:lesson-list' %}" class="reader-back-btn">← دروس</a>
+    <div class="reader-topbar-meta">
+      <span class="reader-level">{{ lesson.course.language_level }}</span>
+      <span class="reader-duration">⏱ {{ lesson.estimated_time }} دقیقه</span>
+    </div>
+    {% if exercises %}
+    <a href="{% url 'exercises:exercise-list' %}?lesson={{ lesson.pk }}" class="reader-exercise-hint" title="تمرین‌های این درس">
+      <span class="reader-exercise-count">{{ exercises|length }}</span> تمرین
+    </a>
+    {% endif %}
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="reader-hero">
+    <div class="reader-hero-text">
+      <h1 class="reader-hero-title" dir="auto">{{ lesson.title }}</h1>
+      {% if lesson.description %}
+        <p class="reader-hero-desc" dir="auto">{{ lesson.description }}</p>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- Section Tabs -->
+  <nav class="reader-tabs" role="tablist">
+    <button type="button" class="reader-tab active" data-section="content">محتوی درس</button>
+    <button type="button" class="reader-tab" data-section="grammar">گرامر</button>
+    <button type="button" class="reader-tab" data-section="sentences">گفت‌وگو</button>
+    <button type="button" class="reader-tab" data-section="words">واژگان</button>
+    {% if exercises %}
+      <button type="button" class="reader-tab" data-section="exercises">تمرین‌ها</button>
+    {% endif %}
+  </nav>
+
+  <!-- Content Section -->
+  <section id="section-content" class="reader-panel active" role="tabpanel">
+    {% for block in blocks %}
+    <article class="reader-content-block">
+      <div class="reader-block-label">
+        <span class="reader-block-badge 
+          {% if block.type == 'GRAMMAR' %}badge-grammar
+          {% elif block.type == 'VOCABULARY' %}badge-vocab
+          {% elif block.type == 'DIALOGUE' %}badge-dialogue
+          {% elif block.type == 'EXAMPLE' %}badge-example
+          {% elif block.type == 'NOTE' %}badge-note
+          {% else %}badge-info{% endif %}">
+          {% if block.type == 'GRAMMAR' %}گرامر{% elif block.type == 'VOCABULARY' %}واژگان{% elif block.type == 'DIALOGUE' %}گفتگو{% elif block.type == 'EXAMPLE' %}مثال{% elif block.type == 'NOTE' %}نکته{% else %}توضیح{% endif %}
+        </span>
+      </div>
+      <h2 class="reader-block-title" dir="auto">{{ block.title }}</h2>
+      <div class="reader-block-body" dir="auto">{{ block.body|linebreaksbr }}</div>
+      {% if block.audio %}
+        <div class="reader-block-audio">
+          {% include "lessons/_audio_control.html" with audio=block.audio prefix="block" pk=block.pk label=block.title %}
+        </div>
+      {% endif %}
+    </article>
+    {% empty %}
+      <div class="reader-empty-state">
+        <p>هنوز محتوایی برای این درس ثبت نشده است.</p>
+      </div>
+    {% endfor %}
+  </section>
+
+  <!-- Grammar Section -->
+  <section id="section-grammar" class="reader-panel" hidden role="tabpanel">
+    {% for link in grammar_links %}
+    <article class="reader-grammar-block">
+      <span class="reader-section-badge badge-grammar">گرامر</span>
+      <h2 class="reader-block-title" dir="auto">{{ link.grammar.title }}</h2>
+      <div class="reader-block-body" dir="auto">{{ link.grammar.explanation|linebreaksbr }}</div>
+      {% if link.grammar.audio %}
+        <div class="reader-block-audio">
+          {% include "lessons/_audio_control.html" with audio=link.grammar.audio prefix="grammar" pk=link.grammar.pk label=link.grammar.title %}
+        </div>
+      {% endif %}
+    </article>
+    {% empty %}
+      <div class="reader-empty-state">
+        <p>گرامری برای این درس در دسترس نیست.</p>
+      </div>
+    {% endfor %}
+  </section>
+
+  <!-- Sentences Section -->
+  <section id="section-sentences" class="reader-panel" hidden role="tabpanel">
+    {% for link in sentence_links %}
+    <div class="reader-sentence-item">
+      <div class="reader-sentence-role 
+        {% if link.role == 'DIALOGUE' %}role-dialogue
+        {% elif link.role == 'READING' %}role-reading
+        {% elif link.role == 'LISTENING' %}role-listening
+        {% else %}role-example{% endif %}">
+        {% if link.role == 'DIALOGUE' %}گفتگو{% elif link.role == 'READING' %}خواندن{% elif link.role == 'LISTENING' %}شنیدن{% else %}مثال{% endif %}
+      </div>
+      {% if link.speaker %}<bdi class="reader-speaker">{{ link.speaker }}</bdi>{% endif %}
+      <p class="reader-sentence-de" lang="de" dir="ltr">{{ link.sentence.text }}</p>
+      <p class="reader-sentence-fa">{{ link.sentence.translation_fa }}</p>
+      {% if link.sentence.audio %}
+        <div class="reader-sentence-audio">
+          {% include "lessons/_audio_control.html" with audio=link.sentence.audio prefix="sentence" pk=link.sentence.pk label=link.sentence.text %}
+        </div>
+      {% endif %}
+    </div>
+    {% empty %}
+      <div class="reader-empty-state">
+        <p>جمله‌ای برای این درس در دسترس نیست.</p>
+      </div>
+    {% endfor %}
+  </section>
+
+  <!-- Words Section -->
+  <section id="section-words" class="reader-panel" hidden role="tabpanel">
+    <div class="reader-section-header">
+      <h2 class="reader-section-title">واژگان درس</h2>
+      <span class="reader-word-counter">{{ word_links.paginator.count }} واژه</span>
+    </div>
+    <div class="reader-word-grid">
+      {% for link in word_links %}
+        <a class="reader-word-card" href="{% url 'vocabulary:word-detail' link.word.pk %}">
+          <div class="reader-word-header">
+            <strong class="reader-word-de" lang="de" dir="ltr">
+              {% if link.word.article %}{{ link.word.article }} {% endif %}{{ link.word.word }}
+            </strong>
+            {% if link.word.audio %}
+              <span class="reader-word-play" data-url="{{ link.word.audio.url }}" 
+                    aria-label="شنیدن {{ link.word.word }}"></span>
+            {% endif %}
+          </div>
+          <span class="reader-word-role {% if link.role == 'REVIEW' %}role-review{% endif %}">
+            {% if link.role == 'REVIEW' %}مرور{% else %}جدید{% endif %}
+          </span>
+          <p class="reader-word-fa">{{ link.word.meaning_fa }}</p>
+        </a>
+      {% empty %}
+        <div class="reader-empty-state">
+          <p>هیچ واژه‌ای برای این درس منتشر نشده است.</p>
+        </div>
+      {% endfor %}
+    </div>
+    {% include "lessons/_pagination.html" with page=word_links page_param="words_page" page_anchor="#section-words" %}
+  </section>
+
+  <!-- Exercises Section -->
+  {% if exercises %}
+  <section id="section-exercises" class="reader-panel" hidden role="tabpanel">
+    <div class="reader-section-header">
+      <h2 class="reader-section-title">تمرین‌های این درس</h2>
+      <span class="reader-exercise-counter">{{ exercises|length }} تمرین</span>
+    </div>
+    <div class="reader-exercise-grid">
+      {% for exercise in exercises %}
+        <a class="reader-exercise-card" href="{% url 'exercises:exercise-detail' exercise.pk %}">
+          <div class="reader-exercise-card-header">
+            <span class="reader-exercise-number"> تمرین {{ exercise.order }}</span>
+            <span class="reader-exercise-type">{{ exercise.get_type_display }}</span>
+          </div>
+          <h3 class="reader-exercise-title" dir="auto">{{ exercise.title }}</h3>
+          {% if exercise.instruction %}
+            <p class="reader-exercise-instruction">{{ exercise.instruction }}</p>
+          {% endif %}
+          <div class="reader-exercise-footer">
+            <span class="reader-difficulty-badge difficulty-{{ exercise.difficulty|lower }}">
+              {% if exercise.difficulty == 'EASY' %}آسان
+              {% elif exercise.difficulty == 'MEDIUM' %}متوسط
+              {% elif exercise.difficulty == 'HARD' %}سخت{% endif %}
+            </span>
+            <span class="reader-exercise-link">شرکت در تمرین →</span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Bottom Navigation -->
+  <div class="reader-footer-nav">
+    <button type="button" class="reader-nav-btn prev-btn" disabled aria-label="بخش قبلی">
+      ←
+    </button>
+    <div class="reader-progress">
+      <span class="reader-progress-text">بخش <span id="reader-progress-current">1</span> از <span id="reader-progress-total">{{ sectionOrder|length }}</span></span>
+      <div class="reader-progress-bar">
+        <div class="reader-progress-fill" style="width: 0%"></div>
+      </div>
+    </div>
+    <button type="button" class="reader-nav-btn next-btn" aria-label="بخش بعدی">
+      →
+    </button>
+  </div>
+</div>
+
+<!-- Floating Action Button -->
+<div class="reader-floating-actions">
+  {% if exercises %}
+    <a href="{% url 'exercises:exercise-list' %}?lesson={{ lesson.pk }}" class="reader-fab" title="لیست تمرین‌ها">
+      📝
+    </a>
+  {% endif %}
+  <button class="reader-fab reader-toc-fab" title="فهرست مطالعاتی">
+    📋
+  </button>
+</div>
+
+<!-- Word popover -->
+<div id="word-popover" class="word-popover" role="dialog" aria-label="معنی واژه" hidden dir="rtl">
+  <button type="button" data-lookup-close aria-label="بستن معنی">×</button>
+  <div data-lookup-body aria-live="polite"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'lessons/js/lesson_audio.js' %}"></script>
+<script src="{% static 'lessons/js/lesson_reader.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // Determine available sections
+  const availableSections = [
+    'content',
+    {% if grammar_links %}'grammar',{% endif %}
+    {% if sentence_links %}'sentences',{% endif %}
+    {% if word_links %}'words',{% endif %}
+    {% if exercises %}'exercises',{% endif %}
+  ];
+
+  const panels = availableSections.map(name => document.getElementById('section-' + name));
+  const tabs = availableSections.map(name => document.querySelector('.reader-tab[data-section="' + name + '"]'));
+  const prevBtn = document.querySelector('.reader-nav-btn.prev-btn');
+  const nextBtn = document.querySelector('.reader-nav-btn.next-btn');
+  const progressCurrent = document.getElementById('reader-progress-current');
+  const progressTotal = document.getElementById('reader-progress-total');
+  const progressBar = document.querySelector('.reader-progress-fill');
+
+  let currentIndex = 0;
+
+  function updateProgress() {
+    progressCurrent.textContent = currentIndex + 1;
+    progressTotal.textContent = availableSections.length;
+    progressBar.style.width = ((currentIndex + 1) / availableSections.length * 100) + '%';
+  }
+
+  function showSection(name) {
+    const idx = availableSections.indexOf(name);
+    panels.forEach((panel, i) => {
+      panel.hidden = i !== idx;
+      panel.classList.toggle('active', i === idx);
+    });
+    tabs.forEach((tab, i) => {
+      tab.classList.toggle('active', i === idx);
+    });
+    currentIndex = idx;
+    prevBtn.disabled = idx <= 0;
+    nextBtn.disabled = idx >= availableSections.length - 1;
+    updateProgress();
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => showSection(availableSections[i]));
+  });
+
+  prevBtn.addEventListener('click', () => {
+    if (currentIndex > 0) showSection(availableSections[currentIndex - 1]);
+  });
+
+  nextBtn.addEventListener('click', () => {
+    if (currentIndex < availableSections.length - 1) showSection(availableSections[currentIndex + 1]);
+  });
+
+  updateProgress();
+});
+</script>
+{% endblock %}

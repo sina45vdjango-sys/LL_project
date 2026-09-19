@@ -1,7 +1,11 @@
 {% if messages %}
-  <ul class="messages">
+  <ul class="messages" aria-label="پیام‌های سیستم">
     {% for message in messages %}
-      <li class="messages__item messages__item--{{ message.tags }}">{{ message }}</li>
+      <li class="messages__item messages__item--{{ message.level_tag }}" role="{% if message.level_tag == 'error' %}alert{% else %}status{% endif %}">
+        <span class="messages__icon" aria-hidden="true">{% if message.level_tag == 'success' %}✓{% elif message.level_tag == 'error' %}!{% elif message.level_tag == 'warning' %}△{% else %}i{% endif %}</span>
+        <span class="messages__text">{{ message }}</span>
+        <button class="icon-button" type="button" data-dismiss-message aria-label="بستن پیام" hidden>×</button>
+      </li>
     {% endfor %}
   </ul>
 {% endif %}

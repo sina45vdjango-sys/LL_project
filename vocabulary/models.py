@@ -113,6 +113,7 @@ class Grammar(models.Model):
         on_delete=models.PROTECT,
         related_name="grammars",
     )
+    audio = models.FileField(upload_to="grammars/audio/", blank=True, null=True)
     is_published = models.BooleanField(default=False)
     # Examples live in Sentence (linked via LessonSentence), not in this text.
 

@@ -1,0 +1,418 @@
+/* Modern Reader CSS */
+.reader-page {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+}
+
+.reader-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.reader-back-btn {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.reader-exercise-hint {
+  color: var(--muted-foreground);
+  font-size: 0.85rem;
+  text-decoration: none;
+  background: var(--surface-alt);
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.reader-hero {
+  margin-bottom: 1.5rem;
+}
+
+.reader-hero-title {
+  font-size: 1.8rem;
+  line-height: 1.4;
+  margin: 0 0 0.5rem;
+  color: var(--foreground);
+}
+
+.reader-hero-desc {
+  color: var(--muted-foreground);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Section Tabs */
+.reader-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border);
+  flex-wrap: wrap;
+  background: var(--surface);
+  border-radius: 12px 12px 0 0;
+  padding: 0 1rem;
+}
+
+.reader-tab {
+  padding: 0.9rem 1.5rem;
+  border: none;
+  background: transparent;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.25s ease;
+  whitespace: nowrap;
+}
+
+.reader-tab:hover {
+  color: var(--accent);
+  background: var(--surface-alt);
+}
+
+.reader-tab.active {
+  color: var(--accent-foreground);
+  background: var(--accent);
+  border-bottom: none;
+}
+
+/* Panels */
+.reader-panel {
+  display: none;
+  animation: fadeInUp 0.3s ease;
+}
+
+.reader-panel.active {
+  display: block;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Badges */
+.reader-section-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+.badge-grammar { background: rgba(79, 70, 229, 0.1); color: rgb(79, 70, 229); }
+.badge-vocab { background: rgba(236, 74, 91, 0.1); color: rgb(236, 74, 91); }
+.badge-dialogue { background: rgba(5, 150, 108, 0.1); color: rgb(5, 150, 108); }
+.badge-example { background: rgba(245, 158, 11, 0.1); color: rgb(245, 158, 11); }
+.badge-note { background: rgba(107, 114, 128, 0.1); color: rgb(107, 114, 128); }
+.badge-info { background: rgba(59, 130, 246, 0.1); color: rgb(59, 130, 246); }
+
+/* Block Elements */
+.reader-content-block, .reader-grammar-block {
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.reader-block-label {
+  margin-bottom: 0.75rem;
+}
+
+.reader-block-title {
+  font-size: 1.25rem;
+  margin: 0 0 0.75rem;
+  color: var(--foreground);
+  line-height: 1.4;
+}
+
+.reader-block-body {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--foreground);
+  word-break: break-word;
+}
+
+/* Sentences */
+.reader-sentence-item {
+  padding: 1.25rem;
+  margin-bottom: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.reader-sentence-de {
+  font-family: 'Georgia', serif;
+  font-size: 1.15rem;
+  font-style: italic;
+  line-height: 1.6;
+  direction: ltr;
+  text-align: left;
+  margin: 0 0 0.5rem;
+  color: var(--foreground);
+}
+
+.reader-sentence-fa {
+  color: var(--muted-foreground);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.reader-sentence-role {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.role-dialogue { background: rgba(5, 150, 108, 0.1); color: rgb(5, 150, 108); }
+.role-reading { background: rgba(59, 130, 246, 0.1); color: rgb(59, 130, 246); }
+.role-listening { background: rgba(168, 85, 247, 0.1); color: rgb(168, 85, 247); }
+.role-example { background: rgba(245, 158, 11, 0.1); color: rgb(245, 158, 11); }
+
+/* Words */
+.reader-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.reader-section-title {
+  font-size: 1.35rem;
+  margin: 0;
+  color: var(--foreground);
+}
+
+/* Exercises */
+.reader-exercise-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.reader-exercise-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: all 0.25s ease;
+  color: inherit;
+}
+
+.reader-exercise-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-color: var(--accent);
+}
+
+.reader-exercise-card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.reader-exercise-number {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
+.reader-exercise-type {
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+}
+
+.reader-exercise-title {
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+  color: var(--foreground);
+  line-height: 1.4;
+}
+
+.reader-exercise-instruction {
+  color: var(--muted-foreground);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.reader-exercise-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.reader-difficulty-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.difficulty-easy { background: rgba(34, 197, 94, 0.1); color: rgb(34, 197, 94); }
+.difficulty-medium { background: rgba(245, 158, 11, 0.1); color: rgb(245, 158, 11); }
+.difficulty-hard { background: rgba(239, 68, 68, 0.1); color: rgb(239, 68, 68); }
+
+/* Footer Navigation */
+.reader-footer-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.reader-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  color: var(--foreground);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s;
+}
+
+.reader-nav-btn:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.reader-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Progress Bar */
+.reader-progress-bar {
+  width: 120px;
+  height: 6px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0;
+}
+
+.reader-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+/* Floating Action Buttons */
+.reader-floating-actions {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 50;
+}
+
+.reader-fab {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.25s;
+}
+
+.reader-fab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reader-page {
+    padding: 1rem;
+  }
+
+  .reader-tabs {
+    padding: 0;
+    border-radius: 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .reader-tab {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .reader-header {
+    margin-bottom: 1rem;
+  }
+
+  .reader-hero-title {
+    font-size: 1.4rem;
+  }
+
+  .reader-exercise-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reader-floating-actions {
+    bottom: 1rem;
+    left: 1rem;
+  }
+}
+
+@media (min-width: 1100px) {
+  .reader-page {
+    max-width: 900px;
+  }
+}

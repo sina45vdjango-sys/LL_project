@@ -44,3 +44,106 @@ class Lesson(models.Model):
 
     def __str__(self):
         return f"{self.course} – {self.title}"
+
+class LessonContent(models.Model):
+    """Lesson blocks to make them easier to order instead of one big text field in the lesson"""
+
+    class ContentType(models.TextChoices):
+        EXPLANATION = "EXPLANATION", "Explanation"                      #db/django
+        VOCABULARY = "VOCABULARY", "Vocabulary"
+        GRAMMAR = "GRAMMAR", "Grammar"
+        EXAMPLE = "EXAMPLE", "Example"
+        DIALOGUE = "DIALOGUE", "Dialogue"
+        NOTE = "NOTE", "Note"
+
+    lesson = models.ForeignKey(
+        Lesson,
+        on_delete=models.CASCADE,
+        related_name="contents",
+    )
+    type = models.CharField(max_length=20, choices=ContentType.choices)
+    title = models.CharField(max_length=200)
+    body = models.TextField()
+    audio = models.FileField(upload_to="contents/audio/", blank=True, null=True)
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ["lesson", "order"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["lesson", "order"],
+                name="unique_content_order_per_lesson",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.lesson} – {self.order}. {self.title}"
+
+
+class LessonWord(models.Model):
+    """What are the words used in the lessons?"""
+
+    class Role(models.TextChoices):
+        NEW = "NEW", "New"
+        REVIEW = "REVIEW", "Review"
+
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="lesson_words")
+    word = models.ForeignKey("vocabulary.Word", on_delete=models.CASCADE, related_name="lesson_links")
+    role = models.CharField(max_length=10, choices=Role.choices, default=Role.NEW)
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ["lesson", "order"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["lesson", "word"],
+                name="unique_word_per_lesson",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.lesson} – {self.word}"
+
+
+class LessonGrammar(models.Model):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="lesson_grammars")
+    grammar = models.ForeignKey("vocabulary.Grammar", on_delete=models.CASCADE, related_name="lesson_links")
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ["lesson", "order"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["lesson", "grammar"],
+                name="unique_grammar_per_lesson",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.lesson} – {self.grammar}"
+
+
+class LessonSentence(models.Model):
+    class Role(models.TextChoices):
+        EXAMPLE = "EXAMPLE", "Example"
+        DIALOGUE = "DIALOGUE", "Dialogue"
+        READING = "READING", "Reading"
+        LISTENING = "LISTENING", "Listening"
+
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="lesson_sentences")
+    sentence = models.ForeignKey("vocabulary.Sentence", on_delete=models.CASCADE, related_name="lesson_links")
+    role = models.CharField(max_length=20, choices=Role.choices, default=Role.EXAMPLE)
+    speaker = models.CharField(max_length=100, blank=True)
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ["lesson", "order"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["lesson", "sentence"],
+                name="unique_sentence_per_lesson",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.lesson} – {self.sentence}"

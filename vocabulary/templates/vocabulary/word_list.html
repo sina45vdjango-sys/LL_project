@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}دفتر واژه‌ها | واژه‌خانه{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'vocabulary/css/word_list.css' %}">{% endblock %}
+{% block content %}
+<header class="list-heading"><p>دفتر واژه‌های آلمانی</p><h1>{% block list_heading %}واژه‌هایت را کشف کن.{% endblock %}</h1><p>از یک واژه شروع کن؛ معنی، تلفظ و نکته‌هایش را یاد بگیر.</p></header>
+<nav class="level-tabs" aria-label="فیلتر سطح زبان">
+  <a href="{% url 'vocabulary:word-list' %}" {% if not selected_level %}aria-current="page"{% endif %}>همهٔ سطح‌ها</a>
+  {% for level in levels %}<a href="{% url 'vocabulary:word-level-list' level.level %}" {% if selected_level.pk == level.pk %}aria-current="page"{% endif %}><bdi>{{ level.level }}</bdi></a>{% endfor %}
+</nav>
+<div class="list-summary"><h2>{% if selected_level %}واژه‌های سطح <bdi>{{ selected_level }}</bdi>{% else %}همهٔ واژه‌ها{% endif %}</h2><span>{{ words.paginator.count }} واژه</span></div>
+<div class="word-grid">
+{% for word in words %}
+  <a class="word-tile" href="{% url 'vocabulary:word-detail' word.pk %}">
+    <div class="word-tile__meta"><span lang="en">{{ word.get_word_type_display }}</span><bdi>{{ word.level }}</bdi></div>
+    <h3 lang="de" dir="ltr"><span>{{ word.article }}</span> {{ word.word }}</h3>
+    <p>{{ word.meaning_fa }}</p><span class="word-tile__open">معنی و تلفظ <span aria-hidden="true">←</span></span>
+  </a>
+{% empty %}<section class="empty-state"><h2>هنوز واژه‌ای اینجا نیست.</h2><p>برای این سطح هنوز واژه‌ای ثبت نشده است.</p><a href="{% url 'vocabulary:word-list' %}">دیدن همهٔ واژه‌ها</a></section>{% endfor %}
+</div>
+{% include "vocabulary/_pagination.html" %}
+{% endblock %}

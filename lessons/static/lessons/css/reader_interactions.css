@@ -1,0 +1,10 @@
+.lookup-word { cursor: help; border-radius: 2px; }
+.lookup-word:hover, .lookup-word[aria-expanded="true"] { background: var(--accent-soft); color: var(--accent); }
+.word-popover { position: fixed; z-index: 50; width: min(320px, calc(100vw - 16px)); max-height: min(420px, calc(100dvh - 16px)); overflow-y: auto; background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 8px 28px #0003; padding: 12px 18px 18px; }
+.word-popover > button { display: block; margin-inline-start: auto; width: 44px; height: 44px; background: transparent; border: 0; color: var(--muted); font-size: 24px; }
+.word-popover section + section { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 12px; }
+.word-popover strong { display: block; font-size: 21px; }
+.word-popover p { margin: 8px 0; overflow-wrap: anywhere; }
+.word-popover .lookup-meta { font-size: 12px; color: var(--muted); }
+.word-popover audio { width: 100%; margin-block: 10px; direction: ltr; }
+.word-popover a { display: inline-flex; align-items: center; min-height: 44px; }

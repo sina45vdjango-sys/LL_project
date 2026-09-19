@@ -1,0 +1,20 @@
+<aside class="course-sidebar" aria-label="انتخاب درس">
+  <details class="course-selector" open>
+    <summary><span><span class="sidebar-kicker">فهرست دوره</span><strong>انتخاب درس <bdi>{{ lesson.course.language_level }}</bdi></strong></span><span class="selector-chevron" aria-hidden="true">⌄</span></summary>
+    <div class="sidebar-course"><a href="{% url 'lessons:course-detail' lesson.course.pk %}"><bdi>{{ lesson.course.title }}</bdi></a><span>{{ course_lessons.paginator.count }} درس منتشرشده</span></div>
+    <nav aria-label="درس‌های دوره" class="course-outline">
+    {% for item in course_lessons %}
+      <a class="outline-item" href="{% url 'lessons:lesson-detail' item.pk %}#lesson-content" {% if item.pk == lesson.pk %}aria-current="page"{% endif %}>
+        <span class="outline-number">{{ item.order|stringformat:"02d" }}</span>
+        <span class="outline-copy"><strong dir="auto">{{ item.title }}</strong><small>{{ item.estimated_time }} دقیقه{% if item.pk == lesson.pk %} · درس فعلی{% endif %}</small></span>
+      </a>
+    {% endfor %}
+    </nav>
+    {% if course_lessons.has_other_pages %}<nav class="outline-pagination" aria-label="صفحه‌بندی فهرست درس‌ها">
+      {% if course_lessons.has_previous %}<a href="{% querystring nav_page=course_lessons.previous_page_number %}">قبلی</a>{% endif %}
+      <span>{{ course_lessons.number }} / {{ course_lessons.paginator.num_pages }}</span>
+      {% if course_lessons.has_next %}<a href="{% querystring nav_page=course_lessons.next_page_number %}">بعدی</a>{% endif %}
+    </nav>{% endif %}
+  </details>
+  <a class="sidebar-back" href="{% url 'lessons:course-detail' lesson.course.pk %}">مشاهدهٔ نمای کلی دوره ←</a>
+</aside>

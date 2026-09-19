@@ -1,26 +1,27 @@
-{% comment %}
-Site navigation.
-
-The app links are plain paths for now, because the apps do not define named
-routes yet. Once they do, swap them for URL tags so the routes stay in one place.
-{% endcomment %}
-<nav class="navbar">
-  <a class="navbar__brand" href="/">Language Learning</a>
-
-  <ul class="navbar__links">
-    <li><a href="/lessons/">Lessons</a></li>
-    <li><a href="/vocabulary/">Vocabulary</a></li>
-    <li><a href="/exercises/">Exercises</a></li>
-    <li><a href="/tests/">Tests</a></li>
-  </ul>
-
-  <ul class="navbar__account">
-    {% if user.is_authenticated %}
-      <li><span class="navbar__user">{{ user.get_username }}</span></li>
-      <li><a href="{% url 'admin:index' %}">Admin</a></li>
-      <li><a href="/accounts/logout/">Log out</a></li>
-    {% else %}
-      <li><a href="/accounts/login/">Log in</a></li>
-    {% endif %}
-  </ul>
-</nav>
+<header class="site-header">
+  <nav class="navbar" aria-label="ناوبری اصلی">
+    <a class="navbar__brand" href="{% url 'vocabulary:word-list' %}" aria-label="واژه‌خانه؛ محتوای اصلی">
+      <span class="brand-mark" aria-hidden="true">w<span>.</span></span>
+      <span>واژه‌خانه<small lang="en" dir="ltr">DEUTSCH LERNEN</small></span>
+    </a>
+    <button id="nav-toggle" class="icon-button navbar__toggle" type="button" aria-label="فهرست ناوبری" aria-controls="nav-links" aria-expanded="false" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <ul class="navbar__links" id="nav-links">
+      <li><a href="{% url 'vocabulary:word-list' %}" {% if request.resolver_match.app_name == "vocabulary" %}class="is-active" aria-current="true"{% endif %}>واژه‌ها</a></li>
+      {% comment %}These apps have no public routes yet; do not send users to 404 pages.{% endcomment %}
+      <li><a href="{% url 'lessons:lesson-list' %}" {% if request.resolver_match.app_name == "lessons" %}class="is-active" aria-current="true"{% endif %}>درس‌ها</a></li>
+      <li><span class="nav-pending" aria-disabled="true" title="این بخش هنوز آماده نیست">تمرین‌ها</span></li>
+      <li><span class="nav-pending" aria-disabled="true" title="این بخش هنوز آماده نیست">آزمون</span></li>
+    </ul>
+    <div class="navbar__account">
+      <button id="theme-toggle" type="button" class="theme-toggle" aria-pressed="false" hidden>
+        <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 13a9 9 0 0 1-9.7-9.7A9 9 0 1 0 20.7 13Z"/></svg>
+        <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+        <span data-theme-label>حالت تاریک</span>
+      </button>
+      {% if user.is_authenticated %}<span class="navbar__user"><bdi>{{ user.get_username }}</bdi></span>{% endif %}
+      {% if user.is_staff %}<a class="admin-link" href="{% url 'admin:index' %}">مدیریت</a>{% endif %}
+    </div>
+  </nav>
+</header>
