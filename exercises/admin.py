@@ -2,10 +2,31 @@ from django.contrib import admin
 
 from .models import (
     Exercise,
+    ExerciseAttempt,
     Question,
     QuestionTarget,
     Answer,
 )
+
+
+@admin.register(ExerciseAttempt)
+class ExerciseAttemptAdmin(admin.ModelAdmin):
+    """Read-mostly: one row per answer a learner has submitted."""
+
+    list_display = (
+        "__str__",
+        "user",
+        "question",
+        "answer",
+        "response_text",
+        "is_correct",
+        "response_time",
+        "created_at",
+    )
+    list_filter = ("is_correct", "question__exercise__type")
+    search_fields = ("user__username", "question__prompt", "answer__text", "response_text")
+    list_select_related = ("user", "question", "answer")
+    list_per_page = 50
 
 
 @admin.register(Answer)

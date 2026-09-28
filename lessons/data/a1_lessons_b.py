@@ -3,7 +3,7 @@
 Same structure as ``a1_lessons_a`` -- see that module for the field reference.
 """
 
-LESSONS: list[dict] = []
+LESSONS = []
 
 # -------------------------------------------------------------------- lesson 13
 LESSONS.append(
@@ -675,7 +675,7 @@ English: Describing and asking for ways, with dative and accusative prepositions
             "dort",
             "in",
             "aus",
-            "entschuldigung",
+            "Entschuldigung",
             "bitte",
         ],
         "grammar": [
@@ -1676,7 +1676,7 @@ English: Sentences for writing, sending and understanding messages.""",
             "sprechen",
             "sagen",
             "fragen",
-            "entschuldigung",
+            "Entschuldigung",
             "bitte",
             "danke",
         ],

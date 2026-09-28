@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}ساخت حساب | {{ brand.name }}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/auth.css' %}">{% endblock %}
+{% block content %}
+<div class="auth">
+  <header class="auth__head">
+    <p class="auth__eyebrow">شروع کن</p>
+    <h1 class="auth__title">یک حساب بساز.</h1>
+    <p class="auth__intro">با حساب، می‌توانی پیشرفتت را نگه داری و بعداً ادامه بدهی.</p>
+  </header>
+
+  <form class="panel auth__form" method="post" novalidate>
+    {% csrf_token %}
+    {% include "accounts/_form_fields.html" %}
+    <button class="btn btn--primary auth__submit" type="submit">ساخت حساب</button>
+  </form>
+
+  <p class="auth__alt">قبلاً حساب داری؟ <a href="{% url 'accounts:login' %}">وارد شو</a></p>
+</div>
+{% endblock %}

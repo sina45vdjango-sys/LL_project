@@ -21,8 +21,6 @@ already existing ``Lesson`` / ``LessonContent`` / ``Grammar`` / ``Sentence`` is 
 untouched unless ``--update`` is passed.
 """
 
-from __future__ import annotations
-
 import sys
 from collections import Counter, defaultdict
 
@@ -81,12 +79,12 @@ class Command(BaseCommand):
 
     # ------------------------------------------------------------------ helpers
 
-    def lesson_data(self) -> list[dict]:
+    def lesson_data(self):
         lessons = list(a1_lessons_a.LESSONS) + list(a1_lessons_b.LESSONS)
         lessons.sort(key=lambda item: item["order"])
         return lessons
 
-    def get_level(self, code: str, create: bool = True) -> LanguageLevel:
+    def get_level(self, code, create=True):
         if code not in LEVELS:
             raise CommandError(f"Unknown level {code!r}. Known: {', '.join(LEVELS)}")
         title, order = LEVELS[code]
@@ -101,17 +99,17 @@ class Command(BaseCommand):
         level, _ = LanguageLevel.objects.get_or_create(level=code, defaults={"title": title, "order": order})
         return level
 
-    def word_index(self, level: LanguageLevel) -> tuple[dict[str, Word], list[str]]:
+    def word_index(self, level):
         """Map German word -> Word row. Returns (index, ambiguous refs)."""
-        index: dict[str, Word] = {}
-        ambiguous: list[str] = []
+        index = {}
+        ambiguous = []
         for word in Word.objects.filter(level=level):
             if word.word in index:
                 ambiguous.append(word.word)
             index[word.word] = word
         return index, ambiguous
 
-    def resolve_word(self, ref: str, index: dict[str, Word], level: LanguageLevel) -> Word | None:
+    def resolve_word(self, ref, index, level):
         """``ref`` is either ``Wort`` or ``Wort::NOUN`` when the text is ambiguous."""
         if "::" in ref:
             text, _, type_name = ref.partition("::")
@@ -122,8 +120,8 @@ class Command(BaseCommand):
 
     def validate(self, lessons, index, ambiguous, level):
         """Return (errors, warnings, stats) describing problems in the data modules."""
-        errors: list[str] = []
-        warnings: list[str] = []
+        errors = []
+        warnings = []
 
         for text in ambiguous:
             errors.append(
@@ -138,7 +136,7 @@ class Command(BaseCommand):
         if sorted(orders) != expected:
             warnings.append(f"lesson orders are {sorted(orders)} – expected 1…{len(lessons)}")
 
-        introduced: dict[str, int] = {}
+        introduced = {}
         total_links = 0
         for item in lessons:
             lesson_no = item["order"]
@@ -190,7 +188,7 @@ class Command(BaseCommand):
                 if title not in a1_grammar.GRAMMAR:
                     errors.append(f"{label}: unknown grammar topic {title!r}")
 
-            seen_sentences: set[str] = set()
+            seen_sentences = set()
             for sentence in item.get("sentences", []):
                 text = sentence[0]
                 if text in seen_sentences:
@@ -219,7 +217,7 @@ class Command(BaseCommand):
 
     # ------------------------------------------------------------------- writing
 
-    def seed_lesson(self, item, level, course, index, update: bool, publish: bool, dry: bool, counters):
+    def seed_lesson(self, item, level, course, index, update, publish, dry, counters):
         lesson, created = Lesson.objects.get_or_create(
             course=course,
             order=item["order"],
@@ -230,7 +228,10 @@ class Command(BaseCommand):
                 "is_published": publish,
             },
         )
-        counters["lessons_created" if created else "lessons_reused"] += 1
+        if created:
+            counters["lessons_created"] += 1
+        else:
+            counters["lessons_reused"] += 1
 
         if not created:
             fields = []
@@ -315,7 +316,11 @@ class Command(BaseCommand):
 
         # ---- sentences
         for order, sentence in enumerate(item.get("sentences", []), start=1):
-            text, translation_fa, role, speaker = (list(sentence) + ["", "", "EXAMPLE", ""])[:4]
+            # A sentence entry is [text, translation_fa] with optional role and speaker.
+            text = sentence[0]
+            translation_fa = sentence[1] if len(sentence) > 1 else ""
+            role = sentence[2] if len(sentence) > 2 else "EXAMPLE"
+            speaker = sentence[3] if len(sentence) > 3 else ""
             row, sentence_created = Sentence.objects.get_or_create(
                 level=level,
                 text=text,
@@ -405,14 +410,31 @@ class Command(BaseCommand):
                 self.style.WARNING(f"  kept existing text (use --update to refresh): {message}")
             )
 
-        prefix = "Dry run – no changes written. " if dry else ""
+        if dry:
+            prefix = "Dry run – no changes written. "
+        else:
+            prefix = ""
+
+        if course_created:
+            course_status = "created"
+        else:
+            course_status = "reused"
+
+        # "updated" is only worth mentioning when it is not zero.
+        lessons_updated = ""
+        if counters["lessons_updated"]:
+            lessons_updated = f", {counters['lessons_updated']} updated"
+        contents_updated = ""
+        if counters["contents_updated"]:
+            contents_updated = f", {counters['contents_updated']} updated"
+
         self.stdout.write(
             self.style.SUCCESS(
-                f"{prefix}Course: {'created' if course_created else 'reused'} ({course.title})\n"
+                f"{prefix}Course: {course_status} ({course.title})\n"
                 f"  Lessons: {counters['lessons_created']} created, {counters['lessons_reused']} reused"
-                f"{f', {counters['lessons_updated']} updated' if counters['lessons_updated'] else ''}\n"
+                f"{lessons_updated}\n"
                 f"  Content blocks: {counters['contents_created']} created, {counters['contents_reused']} reused"
-                f"{f', {counters['contents_updated']} updated' if counters['contents_updated'] else ''}\n"
+                f"{contents_updated}\n"
                 f"  Words linked: {counters['words_new']} NEW, {counters['words_review']} REVIEW "
                 f"({counters['word_links_created']} new links, {counters['word_links_reused']} already there)\n"
                 f"  Grammar: {counters['grammar_created']} topics created, {counters['grammar_reused']} reused, "

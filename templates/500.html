@@ -1,0 +1,35 @@
+{% load static %}
+{% comment %}Django renders this template with an EMPTY context — no request, so no
+   context processors and no `brand`, `nav_items` or `home_url`. That is why it is a
+   standalone document instead of a page that extends base.html, and why the product
+   name is written out here by hand. It is the one place outside settings.BRAND where
+   the name appears: rename it in both places.{% endcomment %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0f1116">
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <title>خطای سرور | گام‌به‌گام</title>
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+</head>
+<body>
+  <main class="content" id="main-content">
+    <section class="error-page">
+      <p class="error-page__code">۵۰۰</p>
+      <h1 class="error-page__title" dir="auto">مشکلی پیش آمد.</h1>
+      <p class="error-page__text">
+        خطای غیرمنتظره‌ای در سرور رخ داد و این صفحه ساخته نشد.
+        یک‌بار دیگر تلاش کن؛ اگر باز هم همین پیام را دیدی، خبر بده تا بررسی کنیم.
+      </p>
+      <div class="error-page__actions">
+        <a class="btn btn--primary" href="/">بازگشت به داشبورد</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

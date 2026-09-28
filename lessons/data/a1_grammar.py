@@ -585,6 +585,6 @@ English: Describing rooms and furniture: die Wohnung, das Zimmer, das Wohnzimmer
 }
 
 
-A1_2: dict[str, str] = a1_grammar_b.A1_2
+A1_2 = a1_grammar_b.A1_2
 
-GRAMMAR: dict[str, str] = {**A1_1, **A1_2}
+GRAMMAR = {**A1_1, **A1_2}

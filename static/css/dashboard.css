@@ -1,0 +1,91 @@
+/* Dashboard: where the learner is, and what to do next.
+   Shared .panel / .btn primitives come from components.css. */
+
+.dash { display: flex; flex-direction: column; gap: 20px; }
+.dash__head { display: flex; flex-direction: column; gap: 4px; }
+.dash__eyebrow { margin: 0; color: var(--accent); font: 11px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.dash__title { margin: 0; font-size: clamp(22px, 3vw, 30px); line-height: 1.5; }
+.dash__intro { margin: 0; color: var(--muted); font-size: 13px; }
+
+/* ------------------------------------------------------- next action ----- */
+.dash-next { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; border-color: var(--accent); background: var(--accent-soft); }
+.dash-next__body { min-width: 0; }
+.dash-next__eyebrow { margin: 0 0 6px; color: var(--accent); font: 11px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.dash-next__title { margin: 0; font-size: clamp(18px, 2.4vw, 23px); line-height: 1.6; overflow-wrap: anywhere; }
+.dash-next__meta { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+.dash-next__cta { flex: 0 0 auto; }
+
+/* ----------------------------------------------------------- columns ----- */
+.dash__cols { display: grid; gap: 20px; }
+.dash__col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+@media (min-width: 900px) { .dash__cols { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); } }
+
+/* ---------------------------------------------------------- progress ----- */
+.dash-progress__head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.dash-progress__count { color: var(--muted); font-size: 12px; }
+.dash-progress .progress { margin-top: 14px; }  /* .progress itself lives in components.css */
+.dash-note { margin: 12px 0 0; color: var(--muted); font-size: 11px; line-height: 1.9; }
+
+/* ---------------------------------------------------------- headings ----- */
+.dash-activity h2, .dash-empty h2, .dash-section h2,
+.dash-quick h2, .dash-course h2, .dash-account h2 { margin: 0; font-size: 16px; }
+
+/* ---------------------------------------------------------- activity ----- */
+.dash-activity__list { display: flex; flex-direction: column; margin: 14px 0 0; }
+.dash-activity__list > div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
+.dash-activity__list > div:last-child { border-bottom: 0; padding-bottom: 0; }
+.dash-activity__list dt { color: var(--muted); }
+.dash-activity__list dd { margin: 0; min-width: 0; text-align: end; overflow-wrap: anywhere; }
+
+/* ------------------------------------------------------------- empty ----- */
+.dash-empty p { margin: 10px 0 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+
+/* ------------------------------------------------------------ course ----- */
+.dash-course__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.dash-level { padding: 3px 10px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font: 700 12px/1.7 system-ui, sans-serif; }
+.dash-course__count { color: var(--muted); font-size: 12px; }
+.dash-course h2 { line-height: 1.6; overflow-wrap: anywhere; }
+.dash-course__desc { margin: 10px 0 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.dash-course__link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 6px; font-size: 12px; }
+
+/* ----------------------------------------------------- quick actions ----- */
+.dash-quick__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 10px; margin-top: 14px; }
+.dash-quick__item { display: flex; flex-direction: column; gap: 4px; min-height: 78px; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--fg); text-decoration: none; }
+.dash-quick__item:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.dash-quick__label { font-size: 13px; font-weight: 600; }
+.dash-quick__value { color: var(--muted); font-size: 11px; }
+
+/* -------------------------------------------------------------- path ----- */
+.dash-section { display: flex; flex-direction: column; gap: 12px; }
+.dash-section__head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
+.dash-section__head a { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; }
+.dash-path { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+/* 8px block padding, not 13px: the lesson title inside is now a 44px tap target, and a
+   slightly tighter row keeps the list the same height overall. */
+.dash-path__item { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.dash-path__item.is-current { border-color: var(--accent); background: var(--accent-soft); }
+.dash-path__num { display: grid; place-content: center; width: 30px; height: 30px; border-radius: 9px; background: var(--surface-alt); color: var(--muted); font: 12px system-ui, sans-serif; }
+.dash-path__item.is-current .dash-path__num { background: var(--accent); color: var(--on-accent); }
+.dash-path__title { display: inline-flex; align-items: center; min-height: 44px; color: var(--fg); font-size: 13px; line-height: 1.7; overflow-wrap: anywhere; }
+.dash-path__title:hover { color: var(--accent); }
+.dash-path__aside { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.dash-path__meta { color: var(--muted); font-size: 11px; }
+.dash-path__state { color: var(--muted); font-size: 11px; }
+.dash-path__state.is-started { color: var(--accent); }
+.dash-path__state.is-done { color: var(--success); }
+
+/* ----------------------------------------------------------- account ----- */
+.dash-account { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+.dash-account p { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.dash-account__actions { display: flex; gap: 10px; }
+
+@media (max-width: 560px) {
+  .dash-path__item { grid-template-columns: auto minmax(0, 1fr); gap: 8px 12px; }
+  .dash-path__aside { grid-column: 2; }
+  .dash-next__cta { width: 100%; }
+  .dash-account__actions { width: 100%; }
+  .dash-account__actions .btn { flex: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dash-quick__item { transition: border-color .15s, background-color .15s; }
+}

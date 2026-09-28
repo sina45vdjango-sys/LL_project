@@ -1,221 +1,84 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}{{ lesson.title }} | درس {{ lesson.order }}{% endblock %}
+{% block title %}{{ lesson.title }} | درس {{ lesson.order }} | {{ brand.name }}{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'lessons/css/lessons.css' %}">
-<link rel="stylesheet" href="{% static 'lessons/css/reader_interactions.css' %}">
-<link rel="stylesheet" href="{% static 'lessons/css/reader_modern.css' %}">
+<link rel="stylesheet" href="{% static 'lessons/css/lesson_journey.css' %}">
 {% endblock %}
-{% block content_class %}content--reader{% endblock %}
+{% block content_class %}content--lesson{% endblock %}
 {% block content %}
-<div class="reader-page">
+{% comment %}The lesson journey. Every step is rendered in full; `.js` makes the
+   stepper hide all but the active one (see .js rules in lesson_journey.css), so with
+   JavaScript unavailable the whole lesson is still readable as one document.{% endcomment %}
+{% comment %}The progress attributes are only rendered for a signed-in learner: they are
+   the endpoint the stepper POSTs to, and the step to open on. With them absent,
+   lesson_steps.js and progress.js fall back to localStorage, exactly as before.{% endcomment %}
+<div class="lesson" data-journey data-lookup-url="{% url 'vocabulary:word-lookup' %}"
+     data-lesson-id="{{ lesson.pk }}" data-step-count="{{ journey_step_count }}"
+     {% if user.is_authenticated %}data-progress-url="{% url 'lessons:lesson-progress' lesson.pk %}"{% endif %}
+     {% if resume_step is not None %}data-resume-step="{{ resume_step }}"{% endif %}>
 
-  <!-- Top Navigation -->
-  <nav class="reader-topbar">
-    <a href="{% url 'lessons:lesson-list' %}" class="reader-back-btn">← دروس</a>
-    <div class="reader-topbar-meta">
-      <span class="reader-level">{{ lesson.course.language_level }}</span>
-      <span class="reader-duration">⏱ {{ lesson.estimated_time }} دقیقه</span>
-    </div>
-    {% if exercises %}
-    <a href="{% url 'exercises:exercise-list' %}?lesson={{ lesson.pk }}" class="reader-exercise-hint" title="تمرین‌های این درس">
-      <span class="reader-exercise-count">{{ exercises|length }}</span> تمرین
-    </a>
-    {% endif %}
-  </nav>
+  <header class="lesson-head">
+    <a class="lesson-head__back" href="{% url 'lessons:lesson-list' %}">← مسیر یادگیری</a>
+    <p class="lesson-head__meta">
+      <span class="lesson-head__level" lang="en" dir="ltr">{{ lesson.course.language_level }}</span>
+      <span>درس {{ lesson.order }}</span>
+      <span>{{ lesson.estimated_time }} دقیقه</span>
+    </p>
+    <h1 class="lesson-head__title" dir="auto">{{ lesson.title }}</h1>
+    {% if lesson.description %}<p class="lesson-head__desc">{{ lesson.description }}</p>{% endif %}
 
-  <!-- Hero Header -->
-  <header class="reader-hero">
-    <div class="reader-hero-text">
-      <h1 class="reader-hero-title" dir="auto">{{ lesson.title }}</h1>
-      {% if lesson.description %}
-        <p class="reader-hero-desc" dir="auto">{{ lesson.description }}</p>
-      {% endif %}
+    <div class="journey-progress">
+      <div class="progress" role="progressbar" aria-labelledby="journey-progress-text"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ journey_percent }}" data-journey-bar>
+        <span class="progress__fill" data-journey-fill style="width:{{ journey_percent }}%"></span>
+      </div>
+      <p class="journey-progress__text" id="journey-progress-text">
+        قدم <span data-journey-current>1</span> از {{ journey_step_count }} — <span data-journey-label>{{ steps.0.label }}</span>
+      </p>
     </div>
+
+    <nav class="journey-steps" aria-label="قدم‌های این درس">
+      <ol>
+        {% for step in steps %}
+          <li>
+            <a class="journey-chip{% if forloop.first %} is-active{% endif %}" href="#step-{{ step.key }}"
+               data-journey-chip="{{ step.key }}"{% if forloop.first %} aria-current="step"{% endif %}>
+              <span class="journey-chip__num" aria-hidden="true">{{ forloop.counter }}</span>
+              <span class="journey-chip__label">{{ step.label }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ol>
+    </nav>
   </header>
 
-  <!-- Section Tabs -->
-  <nav class="reader-tabs" role="tablist">
-    <button type="button" class="reader-tab active" data-section="content">محتوی درس</button>
-    <button type="button" class="reader-tab" data-section="grammar">گرامر</button>
-    <button type="button" class="reader-tab" data-section="sentences">گفت‌وگو</button>
-    <button type="button" class="reader-tab" data-section="words">واژگان</button>
-    {% if exercises %}
-      <button type="button" class="reader-tab" data-section="exercises">تمرین‌ها</button>
-    {% endif %}
-  </nav>
-
-  <!-- Content Section -->
-  <section id="section-content" class="reader-panel active" role="tabpanel">
-    {% for block in blocks %}
-    <article class="reader-content-block">
-      <div class="reader-block-label">
-        <span class="reader-block-badge 
-          {% if block.type == 'GRAMMAR' %}badge-grammar
-          {% elif block.type == 'VOCABULARY' %}badge-vocab
-          {% elif block.type == 'DIALOGUE' %}badge-dialogue
-          {% elif block.type == 'EXAMPLE' %}badge-example
-          {% elif block.type == 'NOTE' %}badge-note
-          {% else %}badge-info{% endif %}">
-          {% if block.type == 'GRAMMAR' %}گرامر{% elif block.type == 'VOCABULARY' %}واژگان{% elif block.type == 'DIALOGUE' %}گفتگو{% elif block.type == 'EXAMPLE' %}مثال{% elif block.type == 'NOTE' %}نکته{% else %}توضیح{% endif %}
-        </span>
-      </div>
-      <h2 class="reader-block-title" dir="auto">{{ block.title }}</h2>
-      <div class="reader-block-body" dir="auto">{{ block.body|linebreaksbr }}</div>
-      {% if block.audio %}
-        <div class="reader-block-audio">
-          {% include "lessons/_audio_control.html" with audio=block.audio prefix="block" pk=block.pk label=block.title %}
-        </div>
-      {% endif %}
-    </article>
-    {% empty %}
-      <div class="reader-empty-state">
-        <p>هنوز محتوایی برای این درس ثبت نشده است.</p>
-      </div>
+  <div class="journey-body">
+    {% for step in steps %}
+      <section class="journey-step{% if forloop.first %} is-active{% endif %}" id="step-{{ step.key }}"
+               data-journey-step="{{ step.key }}" aria-labelledby="step-title-{{ step.key }}">
+        <header class="journey-step__head">
+          <p class="journey-step__eyebrow">قدم {{ forloop.counter }} از {{ journey_step_count }} · {{ step.label }}</p>
+          <h2 class="journey-step__title" id="step-title-{{ step.key }}" tabindex="-1">{{ step.title }}</h2>
+          <p class="journey-step__hint">{{ step.hint }}</p>
+        </header>
+        {% include step.template %}
+      </section>
     {% endfor %}
-  </section>
+  </div>
 
-  <!-- Grammar Section -->
-  <section id="section-grammar" class="reader-panel" hidden role="tabpanel">
-    {% for link in grammar_links %}
-    <article class="reader-grammar-block">
-      <span class="reader-section-badge badge-grammar">گرامر</span>
-      <h2 class="reader-block-title" dir="auto">{{ link.grammar.title }}</h2>
-      <div class="reader-block-body" dir="auto">{{ link.grammar.explanation|linebreaksbr }}</div>
-      {% if link.grammar.audio %}
-        <div class="reader-block-audio">
-          {% include "lessons/_audio_control.html" with audio=link.grammar.audio prefix="grammar" pk=link.grammar.pk label=link.grammar.title %}
-        </div>
-      {% endif %}
-    </article>
-    {% empty %}
-      <div class="reader-empty-state">
-        <p>گرامری برای این درس در دسترس نیست.</p>
-      </div>
-    {% endfor %}
-  </section>
-
-  <!-- Sentences Section -->
-  <section id="section-sentences" class="reader-panel" hidden role="tabpanel">
-    {% for link in sentence_links %}
-    <div class="reader-sentence-item">
-      <div class="reader-sentence-role 
-        {% if link.role == 'DIALOGUE' %}role-dialogue
-        {% elif link.role == 'READING' %}role-reading
-        {% elif link.role == 'LISTENING' %}role-listening
-        {% else %}role-example{% endif %}">
-        {% if link.role == 'DIALOGUE' %}گفتگو{% elif link.role == 'READING' %}خواندن{% elif link.role == 'LISTENING' %}شنیدن{% else %}مثال{% endif %}
-      </div>
-      {% if link.speaker %}<bdi class="reader-speaker">{{ link.speaker }}</bdi>{% endif %}
-      <p class="reader-sentence-de" lang="de" dir="ltr">{{ link.sentence.text }}</p>
-      <p class="reader-sentence-fa">{{ link.sentence.translation_fa }}</p>
-      {% if link.sentence.audio %}
-        <div class="reader-sentence-audio">
-          {% include "lessons/_audio_control.html" with audio=link.sentence.audio prefix="sentence" pk=link.sentence.pk label=link.sentence.text %}
-        </div>
-      {% endif %}
-    </div>
-    {% empty %}
-      <div class="reader-empty-state">
-        <p>جمله‌ای برای این درس در دسترس نیست.</p>
-      </div>
-    {% endfor %}
-  </section>
-
-  <!-- Words Section -->
-  <section id="section-words" class="reader-panel" hidden role="tabpanel">
-    <div class="reader-section-header">
-      <h2 class="reader-section-title">واژگان درس</h2>
-      <span class="reader-word-counter">{{ word_links.paginator.count }} واژه</span>
-    </div>
-    <div class="reader-word-grid">
-      {% for link in word_links %}
-        <a class="reader-word-card" href="{% url 'vocabulary:word-detail' link.word.pk %}">
-          <div class="reader-word-header">
-            <strong class="reader-word-de" lang="de" dir="ltr">
-              {% if link.word.article %}{{ link.word.article }} {% endif %}{{ link.word.word }}
-            </strong>
-            {% if link.word.audio %}
-              <span class="reader-word-play" data-url="{{ link.word.audio.url }}" 
-                    aria-label="شنیدن {{ link.word.word }}"></span>
-            {% endif %}
-          </div>
-          <span class="reader-word-role {% if link.role == 'REVIEW' %}role-review{% endif %}">
-            {% if link.role == 'REVIEW' %}مرور{% else %}جدید{% endif %}
-          </span>
-          <p class="reader-word-fa">{{ link.word.meaning_fa }}</p>
-        </a>
-      {% empty %}
-        <div class="reader-empty-state">
-          <p>هیچ واژه‌ای برای این درس منتشر نشده است.</p>
-        </div>
-      {% endfor %}
-    </div>
-    {% include "lessons/_pagination.html" with page=word_links page_param="words_page" page_anchor="#section-words" %}
-  </section>
-
-  <!-- Exercises Section -->
-  {% if exercises %}
-  <section id="section-exercises" class="reader-panel" hidden role="tabpanel">
-    <div class="reader-section-header">
-      <h2 class="reader-section-title">تمرین‌های این درس</h2>
-      <span class="reader-exercise-counter">{{ exercises|length }} تمرین</span>
-    </div>
-    <div class="reader-exercise-grid">
-      {% for exercise in exercises %}
-        <a class="reader-exercise-card" href="{% url 'exercises:exercise-detail' exercise.pk %}">
-          <div class="reader-exercise-card-header">
-            <span class="reader-exercise-number"> تمرین {{ exercise.order }}</span>
-            <span class="reader-exercise-type">{{ exercise.get_type_display }}</span>
-          </div>
-          <h3 class="reader-exercise-title" dir="auto">{{ exercise.title }}</h3>
-          {% if exercise.instruction %}
-            <p class="reader-exercise-instruction">{{ exercise.instruction }}</p>
-          {% endif %}
-          <div class="reader-exercise-footer">
-            <span class="reader-difficulty-badge difficulty-{{ exercise.difficulty|lower }}">
-              {% if exercise.difficulty == 'EASY' %}آسان
-              {% elif exercise.difficulty == 'MEDIUM' %}متوسط
-              {% elif exercise.difficulty == 'HARD' %}سخت{% endif %}
-            </span>
-            <span class="reader-exercise-link">شرکت در تمرین →</span>
-          </div>
-        </a>
-      {% endfor %}
-    </div>
-  </section>
-  {% endif %}
-
-  <!-- Bottom Navigation -->
-  <div class="reader-footer-nav">
-    <button type="button" class="reader-nav-btn prev-btn" disabled aria-label="بخش قبلی">
-      ←
-    </button>
-    <div class="reader-progress">
-      <span class="reader-progress-text">بخش <span id="reader-progress-current">1</span> از <span id="reader-progress-total">{{ sectionOrder|length }}</span></span>
-      <div class="reader-progress-bar">
-        <div class="reader-progress-fill" style="width: 0%"></div>
-      </div>
-    </div>
-    <button type="button" class="reader-nav-btn next-btn" aria-label="بخش بعدی">
-      →
-    </button>
+  <div class="journey-nav" data-journey-nav hidden>
+    <button type="button" class="btn journey-nav__btn" data-journey-prev>قبلی</button>
+    <span class="journey-nav__pos" aria-hidden="true"><span data-journey-current>1</span> / {{ journey_step_count }}</span>
+    <button type="button" class="btn btn--primary journey-nav__btn journey-nav__btn--next" data-journey-next>بعدی</button>
   </div>
 </div>
 
-<!-- Floating Action Button -->
-<div class="reader-floating-actions">
-  {% if exercises %}
-    <a href="{% url 'exercises:exercise-list' %}?lesson={{ lesson.pk }}" class="reader-fab" title="لیست تمرین‌ها">
-      📝
-    </a>
-  {% endif %}
-  <button class="reader-fab reader-toc-fab" title="فهرست مطالعاتی">
-    📋
-  </button>
-</div>
+{% comment %}The learner's own progress in the shape progress.js already reads, so the
+   dashboard, the path and this page never disagree about what is finished.{% endcomment %}
+{% if progress_state %}{{ progress_state|json_script:"progress-state" }}{% endif %}
 
-<!-- Word popover -->
+{# Word lookup popover. Real data from vocabulary:word-lookup; see lesson_reader.js. #}
 <div id="word-popover" class="word-popover" role="dialog" aria-label="معنی واژه" hidden dir="rtl">
   <button type="button" data-lookup-close aria-label="بستن معنی">×</button>
   <div data-lookup-body aria-live="polite"></div>
@@ -223,63 +86,10 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'lessons/js/lesson_audio.js' %}"></script>
-<script src="{% static 'lessons/js/lesson_reader.js' %}"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  // Determine available sections
-  const availableSections = [
-    'content',
-    {% if grammar_links %}'grammar',{% endif %}
-    {% if sentence_links %}'sentences',{% endif %}
-    {% if word_links %}'words',{% endif %}
-    {% if exercises %}'exercises',{% endif %}
-  ];
-
-  const panels = availableSections.map(name => document.getElementById('section-' + name));
-  const tabs = availableSections.map(name => document.querySelector('.reader-tab[data-section="' + name + '"]'));
-  const prevBtn = document.querySelector('.reader-nav-btn.prev-btn');
-  const nextBtn = document.querySelector('.reader-nav-btn.next-btn');
-  const progressCurrent = document.getElementById('reader-progress-current');
-  const progressTotal = document.getElementById('reader-progress-total');
-  const progressBar = document.querySelector('.reader-progress-fill');
-
-  let currentIndex = 0;
-
-  function updateProgress() {
-    progressCurrent.textContent = currentIndex + 1;
-    progressTotal.textContent = availableSections.length;
-    progressBar.style.width = ((currentIndex + 1) / availableSections.length * 100) + '%';
-  }
-
-  function showSection(name) {
-    const idx = availableSections.indexOf(name);
-    panels.forEach((panel, i) => {
-      panel.hidden = i !== idx;
-      panel.classList.toggle('active', i === idx);
-    });
-    tabs.forEach((tab, i) => {
-      tab.classList.toggle('active', i === idx);
-    });
-    currentIndex = idx;
-    prevBtn.disabled = idx <= 0;
-    nextBtn.disabled = idx >= availableSections.length - 1;
-    updateProgress();
-  }
-
-  tabs.forEach((tab, i) => {
-    tab.addEventListener('click', () => showSection(availableSections[i]));
-  });
-
-  prevBtn.addEventListener('click', () => {
-    if (currentIndex > 0) showSection(availableSections[currentIndex - 1]);
-  });
-
-  nextBtn.addEventListener('click', () => {
-    if (currentIndex < availableSections.length - 1) showSection(availableSections[currentIndex + 1]);
-  });
-
-  updateProgress();
-});
-</script>
+{% comment %}Anonymous visitors only: tells the dashboard which lesson this device last
+   opened. A signed-in learner's visit is recorded by the stepper's own POST instead.{% endcomment %}
+<script src="{% static 'js/lesson_visit.js' %}" defer></script>
+{# The audio behaviour is global now (static/js/audio.js, loaded by base.html). #}
+<script src="{% static 'lessons/js/lesson_reader.js' %}" defer></script>
+<script src="{% static 'lessons/js/lesson_steps.js' %}" defer></script>
 {% endblock %}

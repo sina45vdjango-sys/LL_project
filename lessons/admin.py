@@ -8,6 +8,7 @@ from .models import (
     LessonWord,
     LessonGrammar,
     LessonSentence,
+    LessonProgress,
 )
 
 
@@ -22,6 +23,26 @@ class LanguageLevelAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {"fields": ("level", "title", "order")}),
     )
+
+
+@admin.register(LessonProgress)
+class LessonProgressAdmin(admin.ModelAdmin):
+    """Read-mostly: these rows are written by the lesson page as a learner moves."""
+
+    list_display = (
+        "__str__",
+        "user",
+        "lesson",
+        "status",
+        "current_step",
+        "started_at",
+        "completed_at",
+        "last_activity_at",
+    )
+    list_filter = ("status", "current_step")
+    search_fields = ("user__username", "lesson__title")
+    list_select_related = ("user", "lesson")
+    list_per_page = 50
 
 
 @admin.register(Course)

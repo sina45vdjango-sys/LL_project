@@ -17,8 +17,6 @@ Files produced:
 * ``06_sentences.csv``      -- every sentence with lesson, role, speaker, translation
 """
 
-from __future__ import annotations
-
 import csv
 from pathlib import Path
 
@@ -42,7 +40,7 @@ class Command(BaseCommand):
         )
         parser.add_argument("--level", default="A1", help="Language level code (default A1).")
 
-    def write_csv(self, path: Path, header: list[str], rows: list[list]) -> int:
+    def write_csv(self, path, header, rows):
         with path.open("w", newline="", encoding="utf-8-sig") as handle:
             writer = csv.writer(handle, quoting=csv.QUOTE_ALL)
             writer.writerow(header)
@@ -60,7 +58,7 @@ class Command(BaseCommand):
 
         out_dir = Path(options["output_dir"])
         out_dir.mkdir(parents=True, exist_ok=True)
-        written: list[tuple[str, int]] = []
+        written = []
 
         lessons = list(course.lessons.order_by("order"))
 
@@ -157,7 +155,7 @@ class Command(BaseCommand):
         )
 
         # -------------------------------------------------------------- 04 vocabulary
-        lesson_map: dict[int, list[str]] = {}
+        lesson_map = {}
         for link in LessonWord.objects.select_related("lesson").order_by("lesson__order", "order"):
             role = "NEW" if link.role == LessonWord.Role.NEW else "REV"
             lesson_map.setdefault(link.word_id, []).append(f"{link.lesson.order}({role})")
@@ -206,7 +204,7 @@ class Command(BaseCommand):
         )
 
         # ----------------------------------------------------------------- 05 grammar
-        grammar_lessons: dict[int, list[str]] = {}
+        grammar_lessons = {}
         for link in Grammar.objects.filter(level=level).all():
             for lesson in link.lesson_links.select_related("lesson").order_by("lesson__order"):
                 grammar_lessons.setdefault(link.id, []).append(f"{lesson.lesson.order}. {lesson.lesson.title}")

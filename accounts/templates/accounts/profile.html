@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}حساب من | {{ brand.name }}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/auth.css' %}">{% endblock %}
+{% block content %}
+<div class="auth">
+  <header class="auth__head auth__head--row">
+    <span class="account__avatar account__avatar--lg" aria-hidden="true">{{ user.get_username|slice:":1" }}</span>
+    <div>
+      <p class="auth__eyebrow">حساب من</p>
+      <h1 class="auth__title"><bdi>{{ user.get_username }}</bdi></h1>
+    </div>
+  </header>
+
+  <section class="panel" aria-label="اطلاعات حساب">
+    <dl class="detail-list">
+      <div><dt>نام کاربری</dt><dd><bdi>{{ user.get_username }}</bdi></dd></div>
+      <div>
+        <dt>ایمیل</dt>
+        <dd>{% if user.email %}<bdi dir="ltr">{{ user.email }}</bdi>{% else %}<span class="muted">ثبت نشده</span>{% endif %}</dd>
+      </div>
+      <div><dt>تاریخ عضویت</dt><dd>{{ user.date_joined|date:"Y/m/d" }}</dd></div>
+      <div>
+        <dt>سطح فعلی</dt>
+        <dd>{% if profile.current_level %}<bdi>{{ profile.current_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
+      </div>
+      <div>
+        <dt>زبان مادری</dt>
+        <dd>{% if profile.native_language == "fa" %}فارسی{% else %}<bdi>{{ profile.native_language }}</bdi>{% endif %}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="auth__actions">
+    <a class="btn btn--primary" href="{{ home_url }}">ادامهٔ یادگیری</a>
+    <form method="post" action="{% url 'accounts:logout' %}">
+      {% csrf_token %}
+      <button class="btn" type="submit">خروج از حساب</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

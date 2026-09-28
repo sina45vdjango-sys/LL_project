@@ -1,13 +1,18 @@
 (() => {
   'use strict';
-  const reader = document.querySelector('.lesson-main[data-lookup-url]');
+  // Any container that publishes a lookup endpoint, not one particular layout.
+  const reader = document.querySelector('[data-lookup-url]');
   if (!reader) return;
   const popup = document.getElementById('word-popover');
   const body = popup.querySelector('[data-lookup-body]');
   const cache = new Map();
   let active = null, timer, hideTimer, generation = 0;
   const pattern = /[A-Za-zÄÖÜäöüß]+(?:[-’'][A-Za-zÄÖÜäöüß]+)*/gu;
-  reader.querySelectorAll('.lesson-prose, .sentence-de, .lesson-block h3, .lesson-word strong').forEach(container => {
+  // Only elements that opt in with `data-lookup` are tokenised — prose blocks,
+  // grammar explanations and German sentences. Vocabulary cards are left alone on
+  // purpose: their term is already a link to the word page, and nesting a lookup
+  // button inside a link would nest interactive elements.
+  reader.querySelectorAll('[data-lookup]').forEach(container => {
     const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
@@ -27,6 +32,7 @@
         token.setAttribute('aria-expanded', 'false');
         token.setAttribute('aria-controls', 'word-popover');
         token.setAttribute('aria-label', `معنی ${match[0]}`);
+        token.lang = 'de';
         token.textContent = match[0];
         fragment.append(token);
         end = match.index + match[0].length;
@@ -39,8 +45,13 @@
     if (!active || popup.hidden) return;
     const rect = active.getBoundingClientRect();
     const width = popup.offsetWidth, height = popup.offsetHeight;
+    // On phones the bottom navigation is fixed over the page, so the popover has
+    // to stay above it. The shell publishes that height as a token — use it
+    // rather than hardcoding a number that would drift.
+    const navHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bottom-nav-h')) || 0;
+    const bottomGuard = innerWidth < 900 ? navHeight + 12 : 8;
     popup.style.left = `${Math.max(8, Math.min(innerWidth - width - 8, rect.left + rect.width / 2 - width / 2))}px`;
-    popup.style.top = `${Math.max(8, rect.top >= height + 12 ? rect.top - height - 8 : Math.min(innerHeight - height - 8, rect.bottom + 8))}px`;
+    popup.style.top = `${Math.max(8, rect.top >= height + 12 ? rect.top - height - 8 : Math.min(innerHeight - height - bottomGuard, rect.bottom + 8))}px`;
   };
   const close = () => {
     clearTimeout(timer); clearTimeout(hideTimer); generation++;

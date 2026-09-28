@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Word, Grammar, Sentence
+from .models import Word, Grammar, Sentence, WordProgress
 
 
 @admin.register(Word)
@@ -29,6 +29,25 @@ class WordAdmin(admin.ModelAdmin):
     @admin.display(description="انگلیسی")
     def meanin_en_short(self, obj):
         return obj.meaning_en[:40] if obj.meaning_en else ""
+
+
+@admin.register(WordProgress)
+class WordProgressAdmin(admin.ModelAdmin):
+    """Read-mostly: moved by exercise submissions, one row per learner and word."""
+
+    list_display = (
+        "__str__",
+        "user",
+        "word",
+        "attempt_count",
+        "correct_count",
+        "wrong_count",
+        "last_attempted_at",
+    )
+    list_filter = ("word__word_type",)
+    search_fields = ("user__username", "word__word")
+    list_select_related = ("user", "word")
+    list_per_page = 50
 
 
 @admin.register(Grammar)

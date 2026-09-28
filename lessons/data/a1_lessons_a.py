@@ -17,7 +17,7 @@ lesson (a review lesson, for instance) reuses the same ``Sentence`` row instead 
 creating a second one.
 """
 
-LESSONS: list[dict] = []
+LESSONS = []
 
 # --------------------------------------------------------------------- lesson 1
 LESSONS.append(
@@ -127,7 +127,7 @@ English: Introducing other people and confirming or denying an identity.""",
             "wie geht's",
             "Wie heißt du?",
             "Wie bitte?",
-            "entschuldigung",
+            "Entschuldigung",
             "es tut mir leid",
             "danke",
             "bitte",
@@ -1137,7 +1137,7 @@ English: Saying what you eat and drink, and what you never eat.""",
             "gern",
             "lieber",
             "mögen",
-            "gern haben",
+            "gernhaben",
         ],
         "words_review": [
             "ich",

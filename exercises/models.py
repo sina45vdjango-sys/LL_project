@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 class Exercise(models.Model):
@@ -48,6 +49,38 @@ class Exercise(models.Model):
                 name="unique_exercise_order_per_lesson",
             ),
         ]
+
+    # Persian labels for the learner-facing pages. `get_type_display()` /
+    # `get_difficulty_display()` stay English because the admin uses them. Properties
+    # only — no field, so no migration. One definition, used by the exercise list, the
+    # exercise page and the lesson journey's practice step.
+    TYPE_LABELS = {
+        ExerciseType.MULTIPLE_CHOICE: "چندگزینه‌ای",
+        ExerciseType.TRANSLATION: "ترجمه",
+        ExerciseType.FILL_BLANK: "جای خالی",
+        ExerciseType.LISTENING: "شنیدن",
+        ExerciseType.READING: "خواندن",
+        ExerciseType.TRUE_FALSE: "درست / نادرست",
+        ExerciseType.SPEAKING: "گفتن",
+        ExerciseType.WRITING: "نوشتن",
+    }
+    DIFFICULTY_LABELS = {
+        Difficulty.EASY: "آسان",
+        Difficulty.MEDIUM: "متوسط",
+        Difficulty.HARD: "سخت",
+    }
+
+    @property
+    def type_label(self):
+        if self.type in self.TYPE_LABELS:
+            return self.TYPE_LABELS[self.type]
+        return self.get_type_display()
+
+    @property
+    def difficulty_label(self):
+        if self.difficulty in self.DIFFICULTY_LABELS:
+            return self.DIFFICULTY_LABELS[self.difficulty]
+        return self.get_difficulty_display()
 
     def __str__(self):
         return f"{self.lesson} – {self.title}"
@@ -163,7 +196,13 @@ class QuestionTarget(models.Model):
         ]
 
     def __str__(self):
-        target = self.word or self.grammar or self.sentence
+        # Exactly one of the three targets is set (see the check constraint above).
+        if self.word:
+            target = self.word
+        elif self.grammar:
+            target = self.grammar
+        else:
+            target = self.sentence
         return f"{self.question} → {self.role}: {target}"
 
 
@@ -202,3 +241,71 @@ class Answer(models.Model):
 
     def __str__(self):
         return f"{self.question} – {self.text}"
+
+class ExerciseAttempt(models.Model):
+    """One learner's answer to one question.
+
+    A new row is written for every submission, so the history is never overwritten.
+    How the learner answered is stored one of two ways:
+
+    * ``answer`` — the option they picked, for the questions that are answered by
+      choosing one of the authored options (MULTIPLE_CHOICE, TRUE_FALSE, READING,
+      and FILL_BLANK questions that were authored with distractors).
+    * ``response_text`` — what they typed, for the questions that are answered by
+      typing (TRANSLATION, and FILL_BLANK questions without distractors). Those
+      questions have exactly one ``Answer`` row — the correct one — so a wrong
+      typed answer has no row to point at, and the text is kept here instead.
+
+    Exactly one of the two is filled for a graded answer.
+    """
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="exercise_attempts",
+    )
+
+    exercise = models.ForeignKey(
+        Exercise,
+        on_delete=models.CASCADE,
+        related_name="attempts",
+    )
+
+    question = models.ForeignKey(
+        Question,
+        on_delete=models.CASCADE,
+        related_name="attempts",
+    )
+
+    answer = models.ForeignKey(
+        Answer,
+        on_delete=models.CASCADE,
+        related_name="attempts",
+        blank=True,
+        null=True,
+    )
+
+    response_text = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text="The typed answer, for questions that are not answered by choosing an option.",
+    )
+
+    is_correct = models.BooleanField()
+
+    response_time = models.FloatField(
+        blank=True,
+        null=True,
+        help_text="Response time in seconds",
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        verdict = "correct" if self.is_correct else "wrong"
+        return f"{self.user} → {self.question} ({verdict})"

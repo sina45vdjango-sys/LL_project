@@ -1,0 +1,24 @@
+/* The word review page (vocabulary/templates/vocabulary/word_review.html).
+
+   The list itself is the vocabulary list's row layout, so word_list.css supplies
+   .vlist, .vrow and .chip and this file holds only what is new: the two attempt
+   counters a review row exists for, and the button row inside an empty state.
+
+   Canonical tokens only (static/css/base.css). */
+
+/* The counters are deliberately not `.chip`s. A chip says what a word *is* -- its
+   type, its level -- while these are the learner's own record of getting it wrong,
+   and the two should not read alike. The words "غلط" and "درست" carry the meaning,
+   so the colour is reinforcement rather than the only signal. */
+.vstat {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: 999px;
+  background: var(--surface-alt); color: var(--muted);
+  font: 700 11px/1.8 system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.vstat--wrong { color: var(--danger); }
+.vstat--right { color: var(--success); }
+
+/* The empty state and its button row are the list's, not this page's: they live in
+   word_list.css, which this page loads first, so there is only one definition. */

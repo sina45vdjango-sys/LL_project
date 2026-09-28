@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}ورود | {{ brand.name }}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/auth.css' %}">{% endblock %}
+{% block content %}
+<div class="auth">
+  <header class="auth__head">
+    <p class="auth__eyebrow">حساب من</p>
+    <h1 class="auth__title">خوش برگشتی.</h1>
+    <p class="auth__intro">برای دیدن پیشرفتت وارد شو. درس‌ها بدون حساب هم باز هستند.</p>
+  </header>
+
+  <form class="panel auth__form" method="post" novalidate>
+    {% csrf_token %}
+    {% include "accounts/_form_fields.html" %}
+    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+    <button class="btn btn--primary auth__submit" type="submit">ورود</button>
+  </form>
+
+  <p class="auth__alt">حساب نداری؟ <a href="{% url 'accounts:signup' %}">یک حساب بساز</a></p>
+</div>
+{% endblock %}

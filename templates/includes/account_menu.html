@@ -1,0 +1,18 @@
+{# Shared account controls for the sidebar (desktop) and the app bar (mobile). #}
+{# Logout is a POST form: Django's LogoutView only accepts POST. #}
+<div class="account">
+  {% if user.is_authenticated %}
+    <a class="account__user" href="{% url 'accounts:profile' %}" title="حساب من">
+      <span class="account__avatar" aria-hidden="true">{{ user.get_username|slice:":1" }}</span>
+      <bdi class="account__name">{{ user.get_username }}</bdi>
+    </a>
+    <form class="account__form" method="post" action="{% url 'accounts:logout' %}">
+      {% csrf_token %}
+      <button class="account__action" type="submit">خروج</button>
+    </form>
+  {% else %}
+    <a class="account__action" href="{% url 'accounts:login' %}">ورود</a>
+    <a class="account__action account__action--primary" href="{% url 'accounts:signup' %}">ساخت حساب</a>
+  {% endif %}
+  {% if user.is_staff %}<a class="account__action" href="{% url 'admin:index' %}">مدیریت</a>{% endif %}
+</div>

@@ -1,0 +1,16 @@
+{% include "lessons/steps/_lead.html" %}
+
+<p class="step-toolbar">
+  <span>{{ step.count }} واژه در این درس</span>
+  {% if step.word_page.has_other_pages %}
+    <span class="step-toolbar__page">صفحهٔ {{ step.word_page.number }} از {{ step.word_page.paginator.num_pages }}</span>
+  {% endif %}
+</p>
+
+<ul class="word-grid">
+  {% for link in step.words %}
+    <li>{% include "lessons/steps/_word_card.html" with word=link.word role=link.role %}</li>
+  {% endfor %}
+</ul>
+
+{% include "lessons/_pagination.html" with page=step.word_page page_param="words_page" page_anchor="#step-vocabulary" %}

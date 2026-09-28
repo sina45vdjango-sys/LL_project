@@ -1,7 +1,10 @@
+from django.conf import settings
 from django.db import models
+
 
 class LanguageLevel(models.Model):
     """A1, A2, B1, B2, C1, C2"""
+
     level = models.CharField(max_length=2, unique=True)
     title = models.CharField(max_length=40)
     order = models.PositiveIntegerField(unique=True)
@@ -12,8 +15,10 @@ class LanguageLevel(models.Model):
     def __str__(self):
         return self.level
 
+
 class Course(models.Model):
     """Each level has 1 course"""
+
     language_level = models.OneToOneField(LanguageLevel, on_delete=models.CASCADE, related_name="course")
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
@@ -24,6 +29,7 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="lessons")
@@ -45,11 +51,12 @@ class Lesson(models.Model):
     def __str__(self):
         return f"{self.course} – {self.title}"
 
+
 class LessonContent(models.Model):
     """Lesson blocks to make them easier to order instead of one big text field in the lesson"""
 
     class ContentType(models.TextChoices):
-        EXPLANATION = "EXPLANATION", "Explanation"                      #db/django
+        EXPLANATION = "EXPLANATION", "Explanation"
         VOCABULARY = "VOCABULARY", "Vocabulary"
         GRAMMAR = "GRAMMAR", "Grammar"
         EXAMPLE = "EXAMPLE", "Example"
@@ -147,3 +154,73 @@ class LessonSentence(models.Model):
 
     def __str__(self):
         return f"{self.lesson} – {self.sentence}"
+
+
+class LessonProgress(models.Model):
+
+    class Status(models.TextChoices):
+        NOT_STARTED = "not_started", "Not Started"
+        IN_PROGRESS = "in_progress", "In Progress"
+        COMPLETED = "completed", "Completed"
+
+    class Step(models.TextChoices):
+        INTRO = "intro", "Introduction"
+        EXPLANATION = "explanation", "Explanation"
+        VOCABULARY = "vocabulary", "Vocabulary"
+        GRAMMAR = "grammar", "Grammar"
+        EXAMPLES = "examples", "Examples"
+        DIALOGUE = "dialogue", "Dialogue"
+        READING = "reading", "Reading"
+        LISTENING = "listening", "Listening"
+        PRACTICE = "practice", "Practice"
+        FINISH = "finish", "Finish"
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="lesson_progress",
+    )
+
+    lesson = models.ForeignKey(
+        Lesson,
+        on_delete=models.CASCADE,
+        related_name="user_progress",
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.NOT_STARTED,
+    )
+
+    current_step = models.CharField(
+        max_length=20,
+        choices=Step.choices,
+        blank=True,
+    )
+
+    started_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    completed_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    last_activity_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "lesson"],
+                name="unique_user_lesson_progress",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.user} → {self.lesson} ({self.status})"

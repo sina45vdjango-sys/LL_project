@@ -9,8 +9,6 @@ written to ``MEDIA_ROOT/words/audio/``. After that the files are served locally
 by Django -- no internet connection is needed to use them.
 """
 
-from __future__ import annotations
-
 import asyncio
 import hashlib
 import json
@@ -70,7 +68,7 @@ UMLAUTS = {
 }
 
 
-def audio_filename(text: str) -> str:
+def audio_filename(text):
     """A stable, filesystem-safe filename for the spoken text."""
     ascii_text = "".join(UMLAUTS.get(ch, ch) for ch in text)
     slug = "".join(ch.lower() if ch.isalnum() else "-" for ch in ascii_text).strip("-")
@@ -80,7 +78,7 @@ def audio_filename(text: str) -> str:
     return f"{slug[:60]}-{digest}.mp3"
 
 
-def spoken_text(entry: dict, word_type: str) -> str:
+def spoken_text(entry, word_type):
     """What the audio should say. Nouns are spoken with their article."""
     article = (entry.get("article") or "").strip()
     word = entry["word"].strip()
@@ -129,7 +127,7 @@ class Command(BaseCommand):
 
     # ------------------------------------------------------------------ helpers
 
-    def get_level(self, code: str) -> LanguageLevel:
+    def get_level(self, code):
         if code not in LEVELS:
             raise CommandError(f"Unknown level {code!r}. Known: {', '.join(LEVELS)}")
         title, order = LEVELS[code]
@@ -139,10 +137,10 @@ class Command(BaseCommand):
         )
         return level
 
-    def resolve_files(self, raw: list[str] | None) -> list[Path]:
+    def resolve_files(self, raw):
         if not raw:
             return sorted(DATA_DIR.glob("*.json"))
-        files: list[Path] = []
+        files = []
         for item in raw:
             path = Path(item)
             if path.is_dir():
@@ -153,8 +151,8 @@ class Command(BaseCommand):
                 raise CommandError(f"No such data file or directory: {path}")
         return files
 
-    def load_entries(self, files: list[Path]) -> list[dict]:
-        entries: list[dict] = []
+    def load_entries(self, files):
+        entries = []
         for path in files:
             with path.open(encoding="utf-8") as handle:
                 payload = json.load(handle)
@@ -166,9 +164,11 @@ class Command(BaseCommand):
 
     # ------------------------------------------------------------------- import
 
-    def import_words(self, entries, level, publish: bool):
-        created = updated = skipped = 0
-        seen: set[tuple] = set()
+    def import_words(self, entries, level, publish):
+        created = 0
+        updated = 0
+        skipped = 0
+        seen = set()
         for entry in entries:
             raw_type = (entry.get("type") or "OTHER").upper()
             if raw_type not in TYPE_MAP:
@@ -218,24 +218,24 @@ class Command(BaseCommand):
         target_dir.mkdir(parents=True, exist_ok=True)
 
         # Map spoken text -> filename, one job per distinct text.
-        jobs: dict[str, str] = {}
+        jobs = {}
         for entry in entries:
             raw_type = (entry.get("type") or "OTHER").upper()
             text = spoken_text(entry, raw_type)
             jobs.setdefault(text, audio_filename(text))
 
-        pending = {
-            text: name
-            for text, name in jobs.items()
-            if force or not (target_dir / name).exists()
-        }
+        # Only the clips that are not already on disk need to be generated.
+        pending = {}
+        for text, name in jobs.items():
+            if force or not (target_dir / name).exists():
+                pending[text] = name
         self.stdout.write(
             f"Audio: {len(jobs)} distinct clips, {len(jobs) - len(pending)} already on disk, "
             f"{len(pending)} to generate."
         )
 
         if pending:
-            failures = asyncio.run(self._render_all(pending, target_dir, voice, concurrency))
+            failures = asyncio.run(self.render_audio_all(pending, target_dir, voice, concurrency))
             for text, error in failures:
                 self.stderr.write(f"  ! audio failed for {text!r}: {error}")
             if failures:
@@ -263,38 +263,48 @@ class Command(BaseCommand):
                 linked += 1
         return linked
 
-    async def _render_all(self, pending, target_dir, voice, concurrency):
+    async def render_audio_all(self, pending, target_dir, voice, concurrency):
         import edge_tts
 
         semaphore = asyncio.Semaphore(max(1, concurrency))
-        failures: list[tuple[str, str]] = []
+        failures = []
         done = 0
 
-        async def render(text: str, name: str):
+        async def render(text, name):
             nonlocal done
             async with semaphore:
                 path = target_dir / name
                 last_error = "unknown error"
+                rendered = False
+
+                # Up to three attempts: the TTS service can hiccup or answer empty.
                 for attempt in range(3):
                     try:
                         communicate = edge_tts.Communicate(text, voice)
                         await communicate.save(str(path))
                         if path.stat().st_size > 0:
+                            rendered = True
                             break
                         last_error = "empty file"
                     except Exception as exc:  # noqa: BLE001 - surfaced to the caller
                         last_error = f"{type(exc).__name__}: {exc}"
                     await asyncio.sleep(1 + attempt)
-                else:
+
+                if not rendered:
                     failures.append((text, last_error))
                     if path.exists():
                         path.unlink()
                     return
+
                 done += 1
                 if done % 25 == 0:
                     self.stdout.write(f"  ... {done}/{len(pending)} clips generated")
 
-        await asyncio.gather(*(render(text, name) for text, name in pending.items()))
+        tasks = []
+        for text, name in pending.items():
+            tasks.append(render(text, name))
+        await asyncio.gather(*tasks)
+
         return failures
 
     # ------------------------------------------------------------------- handle

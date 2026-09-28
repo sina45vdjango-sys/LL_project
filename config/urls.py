@@ -8,8 +8,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from lessons.views import DashboardView
 
 urlpatterns = [
+    path('', DashboardView.as_view(), name='home'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('lessons/', include('lessons.urls')),

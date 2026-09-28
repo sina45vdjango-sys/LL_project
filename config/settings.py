@@ -69,6 +69,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Shell-level data (brand + primary navigation).
+                'config.context_processors.shell',
             ],
         },
     },
@@ -142,3 +144,28 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Authentication redirects (Django's built-in auth views read these).
+# Learning content stays public: only /accounts/profile/ requires a login.
+
+LOGIN_URL = 'accounts:login'
+
+LOGIN_REDIRECT_URL = 'accounts:profile'
+
+LOGOUT_REDIRECT_URL = '/'
+
+
+# Brand identity.
+# Every place the product name is shown (sidebar, mobile bar, page titles, footer)
+# reads from here, so renaming the product is a change to this dict and nothing else.
+# "name_lead" + "name_tail" split the wordmark for its two-tone treatment.
+
+BRAND = {
+    'name': 'گام‌به‌گام',
+    'name_lead': 'گام',
+    'name_tail': 'به‌گام',
+    'latin': 'GAM · BE · GAM',
+    'tagline': 'آلمانی، گام‌به‌گام',
+    'footer_note': 'هر روز، یک گام به آلمانی نزدیک‌تر.',
+}

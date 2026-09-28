@@ -7,8 +7,6 @@ against the real database, so it works even when the database user is not allowe
 create a test database. Exit code is 1 when a check fails.
 """
 
-from __future__ import annotations
-
 import sys
 
 from django.core.management.base import BaseCommand, CommandError
@@ -42,10 +40,10 @@ class Command(BaseCommand):
         if course is None:
             raise CommandError(f"No course for {code!r} – run `python manage.py seed_a1_course` first.")
 
-        problems: list[tuple[str, list[str]]] = []
-        notes: list[str] = []
+        problems = []
+        notes = []
 
-        def check(name: str, items: list[str]) -> None:
+        def check(name, items):
             problems.append((name, items))
 
         lessons = list(course.lessons.order_by("order"))
@@ -65,7 +63,7 @@ class Command(BaseCommand):
 
         # ------------------------------------------------------------ content blocks
         blocks = list(LessonContent.objects.select_related("lesson").order_by("lesson__order", "order"))
-        block_problems: list[str] = []
+        block_problems = []
         for lesson in lessons:
             lesson_blocks = [block for block in blocks if block.lesson_id == lesson.id]
             if not lesson_blocks:
@@ -87,7 +85,7 @@ class Command(BaseCommand):
 
         # --------------------------------------------------------------- word links
         links = list(LessonWord.objects.select_related("lesson", "word").order_by("lesson__order", "order"))
-        link_problems: list[str] = []
+        link_problems = []
         for lesson in lessons:
             lesson_links = [link for link in links if link.lesson_id == lesson.id]
             if [link.order for link in lesson_links] != list(range(1, len(lesson_links) + 1)):
@@ -101,8 +99,8 @@ class Command(BaseCommand):
         ]
         check("word links are ordered and unique", link_problems[:show])
 
-        introduced: set[int] = set()
-        review_problems: list[str] = []
+        introduced = set()
+        review_problems = []
         for lesson in lessons:
             for link in lesson.lesson_words.all():
                 if link.role == LessonWord.Role.REVIEW and link.word_id not in introduced:
@@ -128,18 +126,18 @@ class Command(BaseCommand):
         unlinked = (
             Word.objects.filter(level=level).exclude(id__in=linked_ids).order_by("word")
         )
-        check(
-            "every level word is linked to a lesson",
-            [] if not unlinked.exists() else [f"{unlinked.count()} unlinked: " + ", ".join(
-                unlinked.values_list("word", flat=True)[:show]
-            )],
-        )
+        if unlinked.exists():
+            examples = ", ".join(unlinked.values_list("word", flat=True)[:show])
+            unlinked_problems = [f"{unlinked.count()} unlinked: {examples}"]
+        else:
+            unlinked_problems = []
+        check("every level word is linked to a lesson", unlinked_problems)
 
         # ----------------------------------------------------------------- grammar
         grammar_links = list(
             LessonGrammar.objects.select_related("lesson", "grammar").order_by("lesson__order", "order")
         )
-        grammar_problems: list[str] = []
+        grammar_problems = []
         for lesson in lessons:
             lesson_grammar = [link for link in grammar_links if link.lesson_id == lesson.id]
             if [link.order for link in lesson_grammar] != list(range(1, len(lesson_grammar) + 1)):
@@ -159,7 +157,7 @@ class Command(BaseCommand):
         sentence_links = list(
             LessonSentence.objects.select_related("lesson", "sentence").order_by("lesson__order", "order")
         )
-        sentence_problems: list[str] = []
+        sentence_problems = []
         for lesson in lessons:
             lesson_sentences = [link for link in sentence_links if link.lesson_id == lesson.id]
             if [link.order for link in lesson_sentences] != list(range(1, len(lesson_sentences) + 1)):
@@ -196,7 +194,7 @@ class Command(BaseCommand):
         check("sentences are complete, ordered and translated", sentence_problems[:show])
 
         # ------------------------------------------------------------ word data
-        word_problems: list[str] = []
+        word_problems = []
         for word in Word.objects.filter(level=level):
             if word.word_type == Word.WordType.NOUN:
                 expected = {"der": "M", "die": "F", "das": "N"}.get(word.article)

@@ -1,22 +1,107 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}درس‌ها | واژه‌خانه{% endblock %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'lessons/css/lessons.css' %}">{% endblock %}
+{% block title %}مسیر یادگیری | {{ brand.name }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'lessons/css/lessons.css' %}">
+<link rel="stylesheet" href="{% static 'lessons/css/lesson_path.css' %}">
+{% endblock %}
 {% block content %}
-<header class="lesson-heading"><p>آموزش آلمانی</p><h1>{% block heading %}درس‌ها{% endblock %}</h1>{% block description %}<p>فهرست درس‌های منتشرشده، به ترتیب سطح و شمارهٔ درس.</p>{% endblock %}</header>
-<nav class="course-tabs" aria-label="دوره‌ها">
-<a href="{% url 'lessons:lesson-list' %}" {% if not course %}aria-current="page"{% endif %}>همهٔ درس‌ها</a>
-{% for item in courses %}<a href="{% url 'lessons:course-detail' item.pk %}" {% if course.pk == item.pk %}aria-current="page"{% endif %}><bdi>{{ item.language_level }}</bdi></a>{% endfor %}
-</nav>
-<div class="lesson-summary"><h2>فهرست درس‌ها</h2><span>{{ lessons.paginator.count }} درس</span></div>
-<div class="lesson-grid">
-{% for lesson in lessons %}
-<article class="lesson-tile">
-  <div class="lesson-meta"><span>درس {{ lesson.order }}</span><bdi>{{ lesson.course.language_level }}</bdi></div>
-  <h2 dir="auto">{{ lesson.title }}</h2><p dir="auto">{{ lesson.description }}</p>
-  <div class="lesson-tile__footer"><span>{{ lesson.estimated_time }} دقیقه</span><a href="{% url 'lessons:lesson-detail' lesson.pk %}">مشاهدهٔ درس ←</a></div>
-</article>
-{% empty %}<p class="lesson-empty">هنوز درسی منتشر نشده است.</p>{% endfor %}
+{% comment %}The learning path. Every published lesson appears exactly once, in order,
+   as a step on a trail. The server renders every step as not-started and hands the
+   browser the learner's own progress when there is one; static/js/path.js paints the
+   statuses from that. An anonymous visitor simply has nothing to hand over.{% endcomment %}
+<div class="path" data-path-root>
+
+  <header class="lesson-heading">
+    <p class="path__eyebrow">{% block eyebrow %}مسیر یادگیری{% endblock %}</p>
+    <h1>{% block heading %}مسیر یادگیری{% endblock %}</h1>
+    {% block description %}
+      <p>{{ lesson_total }} درس پشت سر هم؛ از درس اول شروع کن و قدم‌به‌قدم جلو برو.</p>
+    {% endblock %}
+  </header>
+
+  {% if first_lesson %}
+    <div class="path__track">
+      <div class="progress" role="progressbar" aria-labelledby="path-progress-text"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-path-bar>
+        <span class="progress__fill" data-path-fill style="width:0%"></span>
+      </div>
+      <p class="path__progress" id="path-progress-text" data-path-progress>
+        هیچ درسی کامل نشده —
+        {% if user.is_authenticated %}پیشرفت روی حساب کاربری‌ات نگه داشته می‌شود.{% else %}پیشرفت روی همین مرورگر نگه داشته می‌شود.{% endif %}
+      </p>
+    </div>
+
+    <div class="path__next">
+      <p class="path__next-text">
+        <span class="path__next-label">قدم بعدی</span>
+        <bdi data-path-next-title>{{ first_lesson.title }}</bdi>
+      </p>
+      <a class="btn btn--primary path__next-cta" data-path-next-link
+         href="{% url 'lessons:lesson-detail' first_lesson.pk %}">شروع درس {{ first_lesson.order }}</a>
+    </div>
+  {% endif %}
+
+  <nav class="course-tabs" aria-label="دوره‌ها">
+    <a href="{% url 'lessons:lesson-list' %}" {% if not course %}aria-current="page"{% endif %}>همهٔ درس‌ها</a>
+    {% for item in courses %}<a href="{% url 'lessons:course-detail' item.pk %}" {% if course.pk == item.pk %}aria-current="page"{% endif %}><bdi>{{ item.language_level }}</bdi></a>{% endfor %}
+  </nav>
+
+  {% for group in groups %}
+    <section class="path-group" aria-labelledby="path-course-{{ group.course.pk }}">
+      <header class="path-group__head">
+        <div>
+          <span class="path-level" lang="en" dir="ltr">{{ group.level }}</span>
+          {% if not course %}<h2 id="path-course-{{ group.course.pk }}" dir="auto">{{ group.course.title }}</h2>{% endif %}
+          {% if group.course.description %}<p class="path-group__desc" dir="auto">{{ group.course.description }}</p>{% endif %}
+        </div>
+        <p class="path-group__count">
+          <span>{{ group.lessons|length }} درس</span>
+          <span class="path-group__done" data-group-done="{{ group.course.pk }}" hidden></span>
+        </p>
+      </header>
+
+      <ol class="path-steps" data-steps-group="{{ group.course.pk }}">
+        {% for lesson in group.lessons %}
+          <li class="path-step" data-lesson="{{ lesson.pk }}">
+            <span class="path-step__marker" aria-hidden="true">
+              <span class="path-step__dot">
+                <span class="path-step__num">{{ lesson.order }}</span>
+                <svg class="path-step__check" viewBox="0 0 24 24"><path d="M5 12.6l4.4 4.4L19 7.4"/></svg>
+              </span>
+            </span>
+            <article class="path-step__card">
+              <div class="path-step__top">
+                <span class="path-step__index">درس {{ lesson.order }}</span>
+                <span class="path-step__time">{{ lesson.estimated_time }} دقیقه</span>
+                <span class="path-step__state" data-step-state>شروع نشده</span>
+              </div>
+              <h3 class="path-step__title">
+                <a class="path-step__link" href="{% url 'lessons:lesson-detail' lesson.pk %}" dir="auto">{{ lesson.title }}</a>
+              </h3>
+              {% if lesson.description %}<p class="path-step__desc" dir="auto">{{ lesson.description }}</p>{% endif %}
+              <div class="path-step__foot">
+                {% comment %}A span, not a second link: the title above is the card's one
+                   action and it covers the whole card (see lesson_path.css), so a second
+                   link to the same lesson would only be a duplicate target for a screen
+                   reader. path.js still rewrites its text.{% endcomment %}
+                <span class="path-step__cta" data-step-cta>مشاهدهٔ درس</span>
+              </div>
+            </article>
+          </li>
+        {% endfor %}
+      </ol>
+    </section>
+  {% empty %}
+    <p class="lesson-empty">هنوز درسی منتشر نشده است.</p>
+  {% endfor %}
+
+  {{ lessons_payload|json_script:"path-lessons" }}
+  {# A signed-in learner's real progress, in the shape progress.js already reads. #}
+  {% if progress_state %}{{ progress_state|json_script:"progress-state" }}{% endif %}
 </div>
-{% include "lessons/_pagination.html" with page=lessons page_param="page" %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/path.js' %}" defer></script>
 {% endblock %}

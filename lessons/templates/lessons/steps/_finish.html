@@ -1,0 +1,32 @@
+<p class="step-lead-text">
+  این درس را تا آخر دیدی. اگر آماده‌ای، همین‌جا کاملش کن تا در مسیر یادگیری و داشبورد کامل نشان داده شود.
+</p>
+
+{% include "lessons/steps/_agenda.html" %}
+
+<div class="step-finish__actions">
+  {% comment %}Revealed by lesson_steps.js and only then clickable: without
+     JavaScript nothing can be recorded, and a dead button would be a lie.{% endcomment %}
+  <button type="button" class="btn btn--primary" data-finish-complete hidden>درس را کامل کردم</button>
+  <p class="step-finish__state" data-finish-state hidden></p>
+</div>
+
+{% comment %}Where the completion is kept depends on who is reading: a signed-in learner
+   has a real LessonProgress row, everyone else only has this browser. Saying otherwise
+   would be a claim the code cannot keep.{% endcomment %}
+<p class="step-note">
+  {% if user.is_authenticated %}
+    این درس روی حساب کاربری‌ات ذخیره می‌شود؛ هر وقت خواستی از همان‌جا ادامه بده.
+  {% else %}
+    پیشرفت فعلاً روی همین مرورگر نگه داشته می‌شود و روی حساب کاربری ذخیره نمی‌شود.
+  {% endif %}
+</p>
+
+<div class="step-finish__nav">
+  {% if next_lesson %}
+    <a class="btn" href="{% url 'lessons:lesson-detail' next_lesson.pk %}">درس بعدی <bdi dir="auto">{{ next_lesson.title }}</bdi> ←</a>
+  {% else %}
+    <span class="step-note">این آخرین درس این دوره است.</span>
+  {% endif %}
+  <a class="btn" href="{% url 'lessons:lesson-list' %}">بازگشت به مسیر یادگیری</a>
+</div>

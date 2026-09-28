@@ -1,64 +1,79 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
-{% if lesson %}تمرین‌های {{ lesson.title }}
-{% else %}تمرین‌ها{% endif %} واژه‌خانه
+{% if lesson %}تمرین‌های درس {{ lesson.order }}{% else %}تمرین‌ها{% endif %} | {{ brand.name }}
 {% endblock %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'lessons/css/lessons.css' %}">
-<link rel="stylesheet" href="{% static 'lessons/css/reader_modern.css' %}">
+<link rel="stylesheet" href="{% static 'exercises/css/exercise_list.css' %}">
 {% endblock %}
 {% block content_class %}content--exercises{% endblock %}
 {% block content %}
-<div class="exercise-page">
-  <nav class="exercise-breadcrumb" aria-label="مسیر صفحه">
-    <a href="{% url 'lessons:lesson-list' %}" class="nav-back-link">← دروس</a>
-    {% if lesson %}
-      <span>/</span>
-      <a href="{% url 'lessons:lesson-detail' lesson.pk %}">{{ lesson.title }}</a>
-    {% endif %}
-  </nav>
-
-  <header class="exercise-list-header card">
-    <h1 class="exercise-list-title">
+{% comment %}The exercise index. Without a lesson it groups by lesson, because the
+   alternative — 111 identical-looking cards — tells a learner nothing. The card rules
+   live in exercises/css/exercise_list.css (this page used to borrow the retired
+   reader_modern.css).{% endcomment %}
+<div class="ex-index">
+  <header class="ex-index__head">
+    <a class="ex-back" href="{% if lesson %}{% url 'lessons:lesson-detail' lesson.pk %}{% else %}{% url 'lessons:lesson-list' %}{% endif %}">
+      {% if lesson %}← <span dir="auto">{{ lesson.title }}</span>{% else %}← مسیر یادگیری{% endif %}
+    </a>
+    <h1 class="ex-index__title">
       {% if lesson %}
-        تمرین‌های درس: {{ lesson.title }}
+        <span>تمرین‌های درس</span> <span dir="auto">{{ lesson.title }}</span>
       {% else %}
-        تمام تمرین‌ها
+        تمرین‌ها
       {% endif %}
     </h1>
-    <p class="exercise-list-subtitle">
-      {{ exercises.count }} تمرین در دسترس است.
+    <p class="ex-index__lead">
+      {% if lesson %}
+        {% comment %}Not "graded in your browser" any more: the server decides, and the
+           detail page says where the answers go. Keep this neutral.{% endcomment %}
+        {{ exercises|length }} تمرین · {{ question_total }} پرسش. پاسخ‌ها همان لحظه بررسی می‌شوند.
+      {% else %}
+        {{ exercises|length }} تمرین در {{ lesson_count }} درس · {{ question_total }} پرسش.
+      {% endif %}
     </p>
   </header>
 
-  {% if exercises.exists %}
-    <div class="exercise-list-grid">
-      {% for exercise in exercises %}
-        <a class="reader-exercise-card exercise-list-card" href="{% url 'exercises:exercise-detail' exercise.pk %}">
-          <div class="reader-exercise-card-header">
-            <span class="reader-exercise-number"> تمرین {{ exercise.order }}</span>
-            <span class="reader-exercise-type">{{ exercise.get_type_display }}</span>
+  {% if exercises %}
+    {% if lesson %}
+      <ul class="ex-grid">
+        {% for exercise in exercises %}
+          <li>{% include "exercises/_exercise_card.html" with show_instruction=True %}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      {% regroup exercises by lesson as lesson_groups %}
+      {% for group in lesson_groups %}
+        <section class="ex-group" aria-labelledby="ex-group-{{ group.grouper.pk }}">
+          <div class="ex-group__head">
+            <h2 class="ex-group__title" id="ex-group-{{ group.grouper.pk }}">
+              <a href="{% url 'lessons:lesson-detail' group.grouper.pk %}">
+                درس {{ group.grouper.order }} — <span dir="auto">{{ group.grouper.title }}</span>
+              </a>
+            </h2>
+            <span class="ex-group__count">{{ group.list|length }} تمرین</span>
           </div>
-          <h3 class="reader-exercise-title" dir="auto">{{ exercise.title }}</h3>
-          {% if exercise.instruction %}
-            <p class="reader-exercise-instruction">{{ exercise.instruction }}</p>
-          {% endif %}
-          <div class="reader-exercise-footer">
-            <span class="reader-difficulty-badge difficulty-{{ exercise.difficulty|lower }}">
-              {% if exercise.difficulty == 'EASY' %}آسان
-              {% elif exercise.difficulty == 'MEDIUM' %}متوسط
-              {% elif exercise.difficulty == 'HARD' %}سخت{% endif %}
-            </span>
-            <span class="reader-exercise-link">شرکت در تمرین →</span>
-          </div>
-        </a>
+          <ul class="ex-grid">
+            {% for exercise in group.list %}
+              <li>{% include "exercises/_exercise_card.html" %}</li>
+            {% endfor %}
+          </ul>
+        </section>
       {% endfor %}
-    </div>
+    {% endif %}
   {% else %}
-    <div class="empty-state card">
-      <p class="text-center">هیچ تمرینی ثبت نشده است.</p>
-    </div>
+    <section class="ex-empty">
+      {% if lesson %}
+        <h2>این درس تمرینی ندارد.</h2>
+        <p>برای این درس هنوز تمرینی ثبت نشده است؛ درس را بخوان و بعداً برگرد.</p>
+        <a class="btn" href="{% url 'lessons:lesson-detail' lesson.pk %}">بازگشت به درس</a>
+      {% else %}
+        <h2>هنوز تمرینی ثبت نشده است.</h2>
+        <p>تمرین‌ها همراه با درس‌ها منتشر می‌شوند. از مسیر یادگیری شروع کن.</p>
+        <a class="btn" href="{% url 'lessons:lesson-list' %}">مسیر یادگیری</a>
+      {% endif %}
+    </section>
   {% endif %}
 </div>
 {% endblock %}

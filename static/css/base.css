@@ -1,31 +1,25 @@
-/* Shared neutral theme with blue accents. No external assets are needed. */
+/* Single dark theme with a blue accent. No external assets are needed.
+   This is the one source of truth for design tokens. Write `var(--line)`, not
+   `var(--border)` — see the note below the palette. */
 :root {
-  color-scheme: light;
-  --bg: #dfe3eb; --surface: #f4f4f1; --surface-alt: #dde2ea;
-  --fg: #262a34; --muted: #4d5668; --line: #ccd4e0;
-  --accent: #365fc5; --accent-soft: #e9efff; --on-accent: #ffffff;
-  --danger: #ad3737; --warning: #885e19; --info: #286491;
-  --shadow: 0 8px 24px #202a4412;
-}
-:root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #181a20; --surface: #22252d; --surface-alt: #2b2f39;
-  --fg: #eef0f6; --muted: #b0b8c8; --line: #3c4250;
-  --accent: #9bb8ff; --accent-soft: #293650; --on-accent: #17213a;
-  --danger: #ffaaaa; --warning: #e7c280; --info: #9acded;
-  --shadow: 0 8px 32px #00000012;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    color-scheme: dark;
-    --bg: #181a20; --surface: #22252d; --surface-alt: #2b2f39;
-    --fg: #eef0f6; --muted: #b0b8c8; --line: #3c4250;
-    --accent: #9bb8ff; --accent-soft: #293650; --on-accent: #17213a;
-    --danger: #ffaaaa; --warning: #e7c280; --info: #9acded;
-  }
+
+  /* Canonical palette */
+  --bg: #0f1116; --surface: #171a21; --surface-alt: #1f232c;
+  --fg: #e9edf5; --muted: #9aa4b8; --line: #2a2f3a;
+  --accent: #7caeff; --accent-soft: #1b2740; --on-accent: #0b1220;
+  --success: #7bd88f; --warning: #e7c280; --danger: #ffaaaa; --info: #9acded;
+  --shadow: 0 8px 32px #00000059;
+
+  /* The Phase 0 compatibility aliases (--border → --line, --card → --surface,
+     --foreground → --fg, --muted-foreground → --muted, --accent-foreground →
+     --on-accent) were removed in Phase 6: the last two consumers were the exercise
+     stylesheets, which now use the canonical names. Do not reintroduce them — a new
+     rule that references an undefined token silently renders transparent or inherit. */
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; background: var(--bg); color: var(--fg); font-family: Tahoma, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.9; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 5px; }
@@ -35,31 +29,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
 ::selection { color: var(--on-accent); background: var(--accent); }
 svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
-.skip-link { position: fixed; top: -100px; right: 20px; padding: 10px 20px; background: var(--surface); z-index: 20; }
+.skip-link { position: fixed; top: -100px; right: 20px; padding: 10px 20px; background: var(--surface); z-index: 50; }
 .skip-link:focus { top: 12px; }
-.site-header { background: var(--surface); border-bottom: 1px solid var(--line); }
-.navbar { min-height: 94px; max-width: 1240px; margin-inline: auto; padding: 16px 32px; display: flex; align-items: center; gap: 48px; }
-.navbar__brand { display: flex; gap: 11px; align-items: center; color: var(--fg); font-size: 20px; font-weight: 700; white-space: nowrap; }
-.navbar__brand:hover { text-decoration: none; }
-.navbar__brand small { display: block; font: 9px/1.7 system-ui, sans-serif; letter-spacing: 1.7px; color: var(--muted); }
-.brand-mark { display: grid; place-content: center; width: 43px; height: 43px; border-radius: 13px 13px 3px 13px; background: var(--accent); color: var(--on-accent); font: 700 30px/1 Georgia, serif; direction: ltr; position: relative; padding-bottom: 4px; }
-.brand-mark span { position: absolute; right: 5px; bottom: 3px; font-size: 23px; }
-.navbar__links { list-style: none; padding: 0; margin: 0; display: flex; align-items: center; gap: 28px; }
-.navbar__links a { color: var(--fg); padding-block: 10px; display: inline-block; }
-.navbar__links .is-active { color: var(--accent); position: relative; font-weight: 700; }
-.is-active::after { content: ''; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; position: absolute; bottom: 0; right: calc(50% - 2px); }
-.nav-pending { color: var(--muted); cursor: default; white-space: nowrap; }
-.nav-pending small { font-size: 9px; border: 1px solid var(--line); border-radius: 5px; padding: 2px 4px; margin-inline-start: 4px; }
-.navbar__account { margin-inline-start: auto; display: flex; align-items: center; gap: 14px; }
-.navbar__user { max-width: 110px; overflow-wrap: anywhere; }
-.theme-toggle, .icon-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 44px; padding: 8px 13px; border: 1px solid var(--line); border-radius: 10px; background: transparent; color: var(--fg); }
-.theme-toggle { white-space: nowrap; font-size: 12px; }
-.theme-toggle:hover, .icon-button:hover { background: var(--surface-alt); }
-.icon-button { min-width: 44px; }
-.theme-sun { display: none; }
-[data-theme="dark"] .theme-sun { display: block; }
-[data-theme="dark"] .theme-moon { display: none; }
-.navbar__toggle { display: none; }
 .content { flex: 1; width: 100%; max-width: 1176px; margin-inline: auto; padding: 36px 32px 72px; }
 .footer { width: calc(100% - 64px); max-width: 1112px; margin-inline: auto; border-top: 1px solid var(--line); padding: 24px 0; display: flex; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 11px; }
 .footer [lang="en"] { font: 10px/2 system-ui, sans-serif; letter-spacing: 1.6px; }
@@ -74,20 +45,7 @@ svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width:
 .messages__item--error .messages__icon { color: var(--danger); }
 .messages__item--warning .messages__icon { color: var(--warning); }
 .messages__text { flex: 1; overflow-wrap: anywhere; }
+.icon-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-width: 44px; min-height: 44px; padding: 8px 13px; border: 1px solid var(--line); border-radius: 10px; background: transparent; color: var(--fg); }
+.icon-button:hover { background: var(--surface-alt); }
 .messages .icon-button { font-size: 24px; border: 0; }
-@media (max-width: 1000px) { .navbar { gap: 24px; } .navbar__links { gap: 18px; } .nav-pending small { display: none; } }
-@media (max-width: 760px) {
-  .navbar { flex-wrap: wrap; min-height: 80px; padding: 16px 20px; gap: 16px; }
-  .navbar__brand { font-size: 18px; }
-  .navbar__account { gap: 8px; }
-  .theme-toggle { width: 44px; padding: 8px; }
-  .theme-toggle span { display: none; }
-  .js .navbar__toggle { display: inline-flex; order: 3; }
-  .navbar__links { order: 4; width: 100%; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--line); }
-  .js .navbar__links { display: none; }
-  .js .navbar__links.is-open { display: flex; }
-  .navbar__user, .admin-link { font-size: 11px; max-width: 64px; }
-  .content { padding: 24px 20px 40px; }
-  .footer { width: calc(100% - 40px); flex-direction: column; gap: 6px; }
-}
 @media (prefers-reduced-motion: no-preference) { button, a { transition: color .15s, background-color .15s; } }

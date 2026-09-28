@@ -1,52 +1,90 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}{{ word.word }} — {{ word.meaning_fa }} | واژه‌خانه{% endblock %}
+{% block title %}{{ word.word }} — {{ word.meaning_fa }} | {{ brand.name }}{% endblock %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'vocabulary/css/word_detail.css' %}">{% endblock %}
+{% block content_class %}content--word{% endblock %}
 {% block content %}
-  <nav class="breadcrumb" aria-label="مسیر صفحه"><span>واژه‌خانه</span><span aria-hidden="true">/</span><a href="{% url 'vocabulary:word-list' %}">واژه‌ها</a><span aria-hidden="true">/</span><bdi lang="de" aria-current="page">{{ word.word }}</bdi></nav>
-  <header class="page-heading">
-    <div><p class="eyebrow">دفتر واژه‌های آلمانی</p><h1>یک واژه، یک دنیای تازه.</h1><p class="page-intro">معنی، تلفظ و نکته‌های هر واژه؛ همه در یک نگاه.</p></div>
-    <span class="language-label"><span class="german-flag" aria-hidden="true"></span><span lang="de" dir="ltr">Deutsch</span><span class="language-label__divider">/</span> فارسی</span>
-  </header>
+{% comment %}One word, in the order a learner needs it: the German word, how it sounds, what
+   it means, then what kind of word it is. Every field is rendered only when the word
+   actually has it — a noun without a recorded plural says "ثبت نشده" rather than showing
+   an empty row, and nothing is invented to fill the page out.
+
+   The audio control is the product-wide component (templates/includes/audio_control.html);
+   the vocabulary app used to ship its own second player with its own script.{% endcomment %}
+<div class="word-page">
+  <a class="word-back" href="{% url 'vocabulary:word-list' %}">← دفتر واژه‌ها</a>
+
   <div class="word-layout">
-    <article class="word-card" aria-labelledby="german-word">
-      <div class="word-card__top"><span class="eyebrow">واژه را بشناس</span><span class="level-badge" lang="en" dir="ltr">{{ word.level }} <span>LEVEL</span></span></div>
-      <div class="word-hero" lang="de" dir="ltr">
-        <span class="word-type">{{ word.get_word_type_display }}</span>
-        <h2 id="german-word">{% if word.article %}<span class="word-article">{{ word.article }}</span> {% endif %}{{ word.word }}</h2>
-        {% if word.pronunciation %}<p class="pronunciation">{{ word.pronunciation }}</p>{% endif %}
-      </div>
-      <div class="translation">
-        <span class="section-label">معنی واژه</span>
-        <p class="translation__fa">{{ word.meaning_fa }}</p>
-        {% if word.meaning_en %}<p class="translation__en" dir="ltr" lang="en">{{ word.meaning_en }}</p>{% endif %}
-      </div>
-      <section class="audio-section" aria-label="تلفظ آلمانی">
-        <div class="audio-heading"><button class="audio-icon" id="audio-toggle" type="button" aria-label="پخش تلفظ" aria-controls="word-audio" aria-pressed="false" {% if not word.audio %}disabled{% endif %}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4zM17 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></svg></button><div><strong>گوش کن، تکرار کن</strong><p>{% if word.audio %}تلفظ آلمانی این واژه{% else %}فایل تلفظ هنوز اضافه نشده است.{% endif %}</p></div></div>
-        {% if word.audio %}<audio id="word-audio" controls preload="none" aria-label="تلفظ {{ word.word }}" src="{{ word.audio.url }}">مرورگر شما پخش صوت را پشتیبانی نمی‌کند. <a href="{{ word.audio.url }}">دریافت فایل تلفظ</a></audio>{% endif %}
-        <p id="audio-status" role="status" hidden></p>
+    <article class="word-hero" aria-labelledby="german-word">
+      <p class="word-hero__chips">
+        <span class="chip chip--accent">{{ word.type_label }}</span>
+        <span class="chip" lang="en" dir="ltr">{{ word.level }}</span>
+      </p>
+
+      <h1 class="word-hero__term" id="german-word" lang="de" dir="ltr">{% if word.article %}<span class="word-hero__article">{{ word.article }}</span> {% endif %}{{ word.word }}</h1>
+
+      {% if word.pronunciation %}<p class="word-hero__pronunciation" lang="de" dir="ltr">{{ word.pronunciation }}</p>{% endif %}
+
+      {% if word.audio %}
+        {% include "includes/audio_control.html" with audio=word.audio prefix="word" pk=word.pk label=word.word %}
+      {% else %}
+        <p class="word-hero__note">فایل تلفظ برای این واژه ثبت نشده است.</p>
+      {% endif %}
+
+      <section class="word-meaning" aria-labelledby="word-meaning-title">
+        <h2 class="word-meaning__label" id="word-meaning-title">معنی واژه</h2>
+        <p class="word-meaning__fa">{{ word.meaning_fa }}</p>
+        {% if word.meaning_en %}<p class="word-meaning__en" lang="en" dir="ltr">{{ word.meaning_en }}</p>{% endif %}
       </section>
-      <div class="word-card__bottom"><span class="tiny-dot" aria-hidden="true"></span>آلمانی را واژه‌به‌واژه یاد بگیر.<span lang="en" dir="ltr">WORT FÜR WORT</span></div>
     </article>
-    <aside class="word-sidebar">
-      <section class="details-card" id="word-details" aria-labelledby="details-title">
-        <div class="section-heading"><h2 id="details-title">شناسنامهٔ واژه</h2><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/></svg></div>
-        <dl class="word-details">
-          <div><dt>نوع واژه</dt><dd>{% if word.word_type == 'NOUN' %}اسم{% elif word.word_type == 'VERB' %}فعل{% elif word.word_type == 'ADJECTIVE' %}صفت{% elif word.word_type == 'ADVERB' %}قید{% elif word.word_type == 'PREPOSITION' %}حرف اضافه{% elif word.word_type == 'PRONOUN' %}ضمیر{% else %}سایر{% endif %}</dd></div>
-          <div><dt>سطح زبان</dt><dd><bdi>{{ word.level }}</bdi></dd></div>
+
+    <aside class="word-aside">
+      <section class="word-panel" id="word-details" aria-labelledby="word-details-title">
+        <h2 class="word-panel__title" id="word-details-title">شناسنامهٔ واژه</h2>
+        <dl class="word-facts">
+          <div><dt>نوع واژه</dt><dd>{{ word.type_label }}</dd></div>
+          <div><dt>سطح زبان</dt><dd lang="en" dir="ltr"><bdi>{{ word.level }}</bdi></dd></div>
           {% if word.word_type == 'NOUN' %}
-            {% if word.gender %}<div><dt>جنسیت</dt><dd>{% if word.gender == 'M' %}مذکر{% elif word.gender == 'F' %}مؤنث{% else %}خنثی{% endif %}</dd></div>{% endif %}
-            {% if word.article %}<div><dt>حرف تعریف</dt><dd lang="de"><bdi>{{ word.article }}</bdi></dd></div>{% endif %}
-            <div><dt>شکل جمع</dt><dd>{% if word.plural %}<bdi lang="de">{{ word.plural }}</bdi>{% else %}<span class="muted">ثبت نشده</span>{% endif %}</dd></div>
+            {% if word.gender_label %}<div><dt>جنسیت</dt><dd>{{ word.gender_label }}</dd></div>{% endif %}
+            {% if word.article %}<div><dt>حرف تعریف</dt><dd lang="de" dir="ltr"><bdi>{{ word.article }}</bdi></dd></div>{% endif %}
+            <div><dt>شکل جمع</dt><dd>{% if word.plural %}<bdi lang="de" dir="ltr">{{ word.plural }}</bdi>{% else %}<span class="muted">ثبت نشده</span>{% endif %}</dd></div>
           {% elif word.word_type == 'VERB' %}
             <div><dt>جداشدنی</dt><dd>{{ word.is_separable|yesno:"بله,خیر" }}</dd></div>
-            {% if word.perfect_auxiliary %}<div><dt>فعل کمکی پرفکت</dt><dd lang="de"><bdi>{{ word.get_perfect_auxiliary_display }}</bdi></dd></div>{% endif %}
+            {% if word.perfect_auxiliary %}<div><dt>فعل کمکی پرفکت</dt><dd lang="de" dir="ltr"><bdi>{{ word.get_perfect_auxiliary_display }}</bdi></dd></div>{% endif %}
           {% endif %}
         </dl>
       </section>
+
+      {% if lesson_links %}
+        <section class="word-panel" aria-labelledby="word-lessons-title">
+          <h2 class="word-panel__title" id="word-lessons-title">این واژه در این درس‌ها</h2>
+          <ul class="word-lessons">
+            {% for link in lesson_links %}
+              <li class="word-lesson">
+                <a class="word-lesson__link" href="{% url 'lessons:lesson-detail' link.lesson.pk %}">
+                  <span class="word-lesson__number">درس {{ link.lesson.order }}</span>
+                  <span class="word-lesson__title" dir="auto">{{ link.lesson.title }}</span>
+                </a>
+                <span class="chip">{% if link.role == 'REVIEW' %}مرور{% else %}جدید{% endif %}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+
+      {% if exercises %}
+        <section class="word-panel" aria-labelledby="word-exercises-title">
+          <h2 class="word-panel__title" id="word-exercises-title">تمرین‌های این واژه</h2>
+          <ul class="word-exercises">
+            {% for exercise in exercises %}
+              <li>
+                <a class="chip chip--exercise" href="{% url 'exercises:exercise-detail' exercise.pk %}">{{ exercise.type_label }} · {{ exercise.question_count }} پرسش</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
     </aside>
   </div>
-{% endblock %}
-{% block extra_js %}
-<script src="{% static 'vocabulary/js/word_audio.js' %}" defer></script>
+</div>
 {% endblock %}

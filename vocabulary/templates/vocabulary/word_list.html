@@ -1,22 +1,90 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}دفتر واژه‌ها | واژه‌خانه{% endblock %}
+{% block title %}دفتر واژه‌ها | {{ brand.name }}{% endblock %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'vocabulary/css/word_list.css' %}">{% endblock %}
+{% block content_class %}content--vocabulary{% endblock %}
 {% block content %}
-<header class="list-heading"><p>دفتر واژه‌های آلمانی</p><h1>{% block list_heading %}واژه‌هایت را کشف کن.{% endblock %}</h1><p>از یک واژه شروع کن؛ معنی، تلفظ و نکته‌هایش را یاد بگیر.</p></header>
-<nav class="level-tabs" aria-label="فیلتر سطح زبان">
-  <a href="{% url 'vocabulary:word-list' %}" {% if not selected_level %}aria-current="page"{% endif %}>همهٔ سطح‌ها</a>
-  {% for level in levels %}<a href="{% url 'vocabulary:word-level-list' level.level %}" {% if selected_level.pk == level.pk %}aria-current="page"{% endif %}><bdi>{{ level.level }}</bdi></a>{% endfor %}
-</nav>
-<div class="list-summary"><h2>{% if selected_level %}واژه‌های سطح <bdi>{{ selected_level }}</bdi>{% else %}همهٔ واژه‌ها{% endif %}</h2><span>{{ words.paginator.count }} واژه</span></div>
-<div class="word-grid">
-{% for word in words %}
-  <a class="word-tile" href="{% url 'vocabulary:word-detail' word.pk %}">
-    <div class="word-tile__meta"><span lang="en">{{ word.get_word_type_display }}</span><bdi>{{ word.level }}</bdi></div>
-    <h3 lang="de" dir="ltr"><span>{{ word.article }}</span> {{ word.word }}</h3>
-    <p>{{ word.meaning_fa }}</p><span class="word-tile__open">معنی و تلفظ <span aria-hidden="true">←</span></span>
-  </a>
-{% empty %}<section class="empty-state"><h2>هنوز واژه‌ای اینجا نیست.</h2><p>برای این سطح هنوز واژه‌ای ثبت نشده است.</p><a href="{% url 'vocabulary:word-list' %}">دیدن همهٔ واژه‌ها</a></section>{% endfor %}
+{% comment %}The vocabulary list. A dictionary entry is three things — the German term, its
+   Persian meaning, and its grammar — so each row is those three zones and no more. The
+   rows are deliberately not decorative cards: a learner scans many words here, and the
+   only interactive elements are the term (a link) and its audio button, side by side
+   rather than nested.{% endcomment %}
+<div class="vlist">
+  <header class="vlist__head">
+    <p class="vlist__eyebrow">دفتر واژه‌های آلمانی</p>
+    <h1 class="vlist__title">{% block list_heading %}واژه‌هایت را کشف کن.{% endblock %}</h1>
+    <p class="vlist__lead">هر ردیف یک واژه است: واژهٔ آلمانی، معنی فارسی و نکته‌های دستوری. تلفظ هر واژه را همان‌جا بشنو.</p>
+    <form class="vsearch" method="get" role="search">
+      <label class="sr-only" for="word-search">جست‌وجوی واژه</label>
+      <input class="vsearch__input" id="word-search" type="search" name="q" value="{{ query }}" placeholder="واژهٔ آلمانی یا معنی..." autocomplete="off">
+      <button class="btn" type="submit">جست‌وجو</button>
+      {% if query %}<a class="btn" href="{{ request.path }}">پاک کردن</a>{% endif %}
+    </form>
+    <div class="vlist__actions">
+      <a class="btn" href="{% url 'vocabulary:word-review' %}">مرور واژه‌های دشوار</a>
+    </div>
+  </header>
+
+  <nav class="vlist__levels" aria-label="فیلتر سطح زبان">
+    {% comment %}The whitespace between the label and the count is load-bearing: without it
+       a screen reader reads «همهٔ سطح‌ها1008» as one word. The visual gap is the flex gap.{% endcomment %}
+    <a class="vlevel" href="{% url 'vocabulary:word-list' %}"{% if not selected_level %} aria-current="page"{% endif %}>
+      <span>همهٔ سطح‌ها</span> <span class="vlevel__count">{{ word_total }}</span>
+    </a>
+    {% for level in levels %}
+      <a class="vlevel" href="{% url 'vocabulary:word-level-list' level.level %}"{% if selected_level.pk == level.pk %} aria-current="page"{% endif %}>
+        <bdi lang="en" dir="ltr">{{ level.level }}</bdi> <span class="vlevel__count">{{ level.word_count }}</span>
+      </a>
+    {% endfor %}
+  </nav>
+
+  <div class="vlist__bar">
+    <h2 class="vlist__bar-title">
+      {% if query %}نتیجهٔ جست‌وجو برای «{{ query }}»{% elif selected_level %}واژه‌های سطح <bdi lang="en" dir="ltr">{{ selected_level.level }}</bdi>{% else %}همهٔ واژه‌ها{% endif %}
+    </h2>
+    <p class="vlist__bar-meta">
+      {{ words.paginator.count }} واژه
+      {% if words.paginator.num_pages > 1 %}· صفحهٔ {{ words.number }} از {{ words.paginator.num_pages }}{% endif %}
+    </p>
+  </div>
+
+  {% if words %}
+    <ul class="vlist__words">
+      {% for word in words %}
+        <li class="vrow" data-word-type="{{ word.word_type }}">
+          <div class="vrow__main">
+            <a class="vrow__term" href="{% url 'vocabulary:word-detail' word.pk %}" lang="de" dir="ltr">{% if word.article %}<span class="vrow__article">{{ word.article }}</span> {% endif %}{{ word.word }}</a>
+            {% if word.audio %}
+              {% include "includes/audio_control.html" with audio=word.audio prefix="word" pk=word.pk label=word.word icon_only=True %}
+            {% endif %}
+          </div>
+          <p class="vrow__meaning">{{ word.meaning_fa }}</p>
+          <p class="vrow__meta">
+            <span class="chip">{{ word.type_label }}</span>
+            {% if word.gender_label %}<span class="chip">{{ word.gender_label }}</span>{% endif %}
+            {% if word.plural %}<span class="chip chip--value" lang="de" dir="ltr">{{ word.plural }}</span>{% endif %}
+            <span class="chip chip--accent" lang="en" dir="ltr">{{ word.level }}</span>
+          </p>
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% include "vocabulary/_pagination.html" %}
+  {% elif query %}
+    {% comment %}A search that found nothing is not an empty catalogue, and the two need
+different words: the first asks the learner to check the spelling, the second says the
+content has not been published yet.{% endcomment %}
+    <section class="vlist__empty">
+      <h2>چیزی برای «{{ query }}» پیدا نشد.</h2>
+      <p>واژهٔ آلمانی، معنی فارسی و معنی انگلیسی هر واژه جست‌وجو می‌شود. املای واژه را بررسی کن یا جست‌وجو را پاک کن.</p>
+      <p class="vlist__empty-actions"><a class="btn" href="{{ request.path }}">پاک کردن جست‌وجو</a></p>
+    </section>
+  {% else %}
+    <section class="vlist__empty">
+      <h2>هنوز واژه‌ای اینجا نیست.</h2>
+      <p>{% if selected_level %}برای این سطح هنوز واژه‌ای منتشر نشده است.{% else %}هنوز واژه‌ای منتشر نشده است.{% endif %}</p>
+      <p class="vlist__empty-actions">{% if selected_level %}<a class="btn" href="{% url 'vocabulary:word-list' %}">دیدن همهٔ واژه‌ها</a>{% else %}<a class="btn" href="{% url 'lessons:lesson-list' %}">شروع از مسیر یادگیری</a>{% endif %}</p>
+    </section>
+  {% endif %}
 </div>
-{% include "vocabulary/_pagination.html" %}
 {% endblock %}

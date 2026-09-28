@@ -1,0 +1,204 @@
+/* The lesson journey.
+   The lesson page is a reading experience first, so the column is narrower than
+   the app default and prose is capped to a comfortable measure. This replaces the
+   retired reader stylesheets: reader_interactions.css (Phase 5) and reader_modern.css
+   (Phase 6, deleted — its last consumer was the exercise list).
+
+   Two patterns worth knowing before editing:
+   - Only ONE step is on screen when JavaScript is available. That hiding lives in
+     the `.js` rule below and nowhere else, so with JavaScript off every step stays
+     visible and the lesson reads as a single document.
+   - German and Persian are interleaved inside the same prose blocks. `unicode-bidi:
+     plaintext` lets each line pick its own direction (a line starting with "ich bin"
+     renders LTR, a Persian line renders RTL) and `.lookup-word` isolates the injected
+     German tokens so they do not disturb the line around them. */
+
+.content--lesson { max-width: 960px; }
+
+.lesson { display: flex; flex-direction: column; gap: 24px; }
+
+/* ------------------------------------------------------------------- head --- */
+.lesson-head { display: flex; flex-direction: column; gap: 8px; }
+.lesson-head__back { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-size: 12px; }
+.lesson-head__back:hover { color: var(--accent); text-decoration: none; }
+.lesson-head__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0; color: var(--muted); font-size: 12px; }
+.lesson-head__level { padding: 3px 10px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font: 700 12px/1.7 system-ui, sans-serif; }
+.lesson-head__title { margin: 4px 0 0; font-size: clamp(23px, 2.9vw, 32px); line-height: 1.55; overflow-wrap: anywhere; }
+.lesson-head__desc { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.95; }
+
+/* --------------------------------------------------------------- progress --- */
+.journey-progress { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.journey-progress__text { margin: 0; color: var(--muted); font-size: 12px; }
+
+/* -------------------------------------------------------------- step chips --- */
+.journey-steps ol { display: flex; gap: 8px; margin: 0; padding: 2px 2px 8px; list-style: none; overflow-x: auto; }
+.journey-steps li { flex: 0 0 auto; }
+.journey-chip { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 12px; white-space: nowrap; }
+.journey-chip:hover { border-color: var(--accent); color: var(--fg); text-decoration: none; }
+.journey-chip__num { display: grid; place-content: center; width: 20px; height: 20px; border-radius: 50%; background: var(--surface-alt); font: 600 11px/1 system-ui, sans-serif; }
+.journey-chip.is-active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.journey-chip.is-active .journey-chip__num { background: var(--accent); color: var(--on-accent); }
+/* A step the learner has already passed: the number becomes a check, the same way the
+   learning path marks a finished lesson. The chips are a trail, not a numbered list —
+   "قدم ۵ از ۹" above the step still says exactly where they are. */
+.journey-chip.is-done { border-color: #7bd88f40; }
+.journey-chip.is-done .journey-chip__num { background: #7bd88f1a; color: var(--success); }
+
+/* ------------------------------------------------------------------ steps --- */
+.journey-body { display: flex; flex-direction: column; }
+.journey-step { display: flex; flex-direction: column; gap: 18px; scroll-margin-block-start: 16px; }
+.js .journey-step:not(.is-active) { display: none; }
+.journey-step__head { display: flex; flex-direction: column; gap: 6px; padding-block-end: 14px; border-block-end: 1px solid var(--line); }
+.journey-step__eyebrow { margin: 0; color: var(--accent); font: 11px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.journey-step__title { margin: 0; font-size: clamp(19px, 2.2vw, 23px); line-height: 1.6; }
+.journey-step__hint { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.9; }
+
+/* ------------------------------------------------------------- navigation --- */
+.journey-nav { display: flex; align-items: center; gap: 10px; }
+.journey-nav__btn { flex: 0 0 auto; }
+.journey-nav__btn--next { flex: 1 1 auto; }
+.journey-nav__pos { flex: 0 0 auto; color: var(--muted); font-size: 12px; }
+
+/* ------------------------------------------------------- shared primitives --- */
+/* `.tag`'s base rule lives in static/css/components.css (shared with `.chip`); only the
+   content-block colour variants belong to the journey. */
+.tag--explanation { background: var(--accent-soft); color: var(--accent); }
+.tag--grammar { background: #a5a0ff1a; color: #a5a0ff; }
+.tag--vocabulary { background: #ffaaaa1a; color: var(--danger); }
+.tag--dialogue { background: #7bd88f1a; color: var(--success); }
+.tag--example { background: #e7c2801a; color: var(--warning); }
+.tag--type { background: var(--surface-alt); color: var(--info); }
+.tag--role.is-review { background: #e7c2801a; color: var(--warning); }
+
+.step-lead-text { margin: 0; max-width: 68ch; font-size: 14px; line-height: 2; }
+.step-note { margin: 0; max-width: 68ch; color: var(--muted); font-size: 12px; line-height: 1.95; }
+.step-toolbar { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0; font-size: 13px; }
+.step-toolbar__page { color: var(--muted); font-size: 12px; }
+
+/* ------------------------------------------------------------ prose blocks --- */
+.step-lead { display: flex; flex-direction: column; gap: 12px; }
+.step-block { display: flex; flex-direction: column; gap: 10px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.step-block__title { margin: 0; font-size: 17px; line-height: 1.7; overflow-wrap: anywhere; }
+.step-block__body { max-width: 68ch; line-height: 2.1; unicode-bidi: plaintext; overflow-wrap: anywhere; }
+/* Prose blocks and grammar explanations are written in paragraphs (Phase 7 renders them
+   as real <p> elements instead of a wall of <br>), so give the paragraphs room and keep
+   the first one flush with the title. */
+.step-block__body p, .grammar-topic__body p { margin: 0 0 12px; }
+.step-block__body p:last-child, .grammar-topic__body p:last-child { margin-block-end: 0; }
+
+/* ----------------------------------------------------------------- agenda --- */
+.agenda { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.agenda__link { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; min-height: 44px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--fg); font-size: 13px; }
+.agenda__link:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.agenda__count { color: var(--muted); font-size: 12px; white-space: nowrap; }
+
+/* -------------------------------------------------------------- vocabulary --- */
+.word-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(224px, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.word-card { display: flex; flex-direction: column; gap: 10px; height: 100%; padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.word-card__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.word-card__term { color: var(--fg); font: 700 19px/1.5 system-ui, sans-serif; overflow-wrap: anywhere; }
+.word-card__term:hover { color: var(--accent); text-decoration: none; }
+.word-card__article { color: var(--accent); }
+.word-card__meaning { margin: 0; font-size: 14px; }
+.word-card__facts { display: flex; flex-direction: column; gap: 2px; margin: 0; font-size: 12px; }
+.word-card__facts > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.word-card__facts dt { color: var(--muted); }
+.word-card__facts dd { margin: 0; min-width: 0; text-align: end; overflow-wrap: anywhere; }
+.word-card__foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; }
+.word-card__en { color: var(--muted); font-size: 11px; }
+
+/* --------------------------------------------------------------- sentences --- */
+.sentence-list { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.sentence { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.sentence__speaker { align-self: flex-start; margin: 0; padding: 2px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font: 700 11px/1.8 system-ui, sans-serif; }
+.sentence__de { margin: 0; max-width: 68ch; font: 500 20px/1.85 system-ui, sans-serif; overflow-wrap: anywhere; }
+.sentence__fa { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.95; }
+.sentence__audio { margin-top: 4px; }
+
+/* Dialogue reads as a script: the speaker sits beside the line, the translation and the
+   player stay under it. Still one card per line and no bubbles — this is reading
+   material, not a chat window. */
+@media (min-width: 768px) {
+  .sentence[data-role="DIALOGUE"] {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    grid-template-areas: "speaker de" ". fa" ". audio";
+    align-items: start;
+    column-gap: 14px;
+    row-gap: 6px;
+  }
+  .sentence[data-role="DIALOGUE"] .sentence__speaker { grid-area: speaker; }
+  .sentence[data-role="DIALOGUE"] .sentence__de { grid-area: de; }
+  .sentence[data-role="DIALOGUE"] .sentence__fa { grid-area: fa; }
+  .sentence[data-role="DIALOGUE"] .sentence__audio { grid-area: audio; }
+}
+
+/* ----------------------------------------------------------------- grammar --- */
+.grammar-list { display: flex; flex-direction: column; gap: 14px; }
+.grammar-topic { display: flex; flex-direction: column; gap: 10px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.grammar-topic__eyebrow { margin: 0; color: var(--muted); font: 11px/1.8 system-ui, sans-serif; letter-spacing: 1px; }
+.grammar-topic__title { margin: 0; font-size: 18px; line-height: 1.6; overflow-wrap: anywhere; }
+.grammar-topic__body { max-width: 68ch; line-height: 2.1; unicode-bidi: plaintext; overflow-wrap: anywhere; }
+
+/* ---------------------------------------------------------------- practice --- */
+.ex-list { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.ex-item { display: flex; flex-direction: column; gap: 8px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.ex-item__head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.ex-item__number { font: 600 12px/1.7 system-ui, sans-serif; }
+.ex-item__difficulty { color: var(--muted); font-size: 12px; }
+.ex-item__title { margin: 0; font-size: 17px; line-height: 1.65; overflow-wrap: anywhere; }
+.ex-item__instruction { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.9; }
+.ex-item__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.ex-item__meta { color: var(--muted); font-size: 12px; }
+
+/* ------------------------------------------------------------------ finish --- */
+.step-finish__actions { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.step-finish__state { margin: 0; color: var(--success); font-size: 12px; }
+.step-finish__nav { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* The audio control moved to static/css/components.css in Phase 7 (it is used by
+   vocabulary and exercises too now, not only by the lesson journey). */
+
+/* ------------------------------------------------------------ word lookup --- */
+/* Moved here from the retired reader_interactions.css. */
+.lookup-word { cursor: help; border-radius: 2px; unicode-bidi: isolate; }
+.lookup-word:hover, .lookup-word[aria-expanded="true"] { background: var(--accent-soft); color: var(--accent); }
+.word-popover { position: fixed; z-index: 50; width: min(320px, calc(100vw - 16px)); max-height: min(420px, calc(100dvh - 16px)); overflow-y: auto; background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 8px 28px #0003; padding: 12px 18px 18px; }
+.word-popover > button { display: block; margin-inline-start: auto; width: 44px; height: 44px; background: transparent; border: 0; color: var(--muted); font-size: 24px; }
+.word-popover section + section { border-top: 1px solid var(--line); margin-top: 12px; padding-top: 12px; }
+.word-popover strong { display: block; font-size: 21px; }
+.word-popover p { margin: 8px 0; overflow-wrap: anywhere; }
+.word-popover .lookup-meta { font-size: 12px; color: var(--muted); }
+.word-popover audio { width: 100%; margin-block: 10px; direction: ltr; }
+.word-popover a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* ------------------------------------------------------------------ mobile --- */
+/* A focused player: compact header, one step at a time, and the primary action
+   pinned above the shell's bottom navigation rather than below the fold. */
+@media (max-width: 899.98px) {
+  .journey-step { scroll-margin-block-start: 72px; }
+  .journey-nav {
+    position: sticky; bottom: var(--bottom-nav-h); z-index: 20;
+    margin-inline: -16px; margin-block-start: 4px;
+    padding: 10px 16px;
+    background: var(--bg); border-block-start: 1px solid var(--line);
+  }
+}
+
+@media (max-width: 560px) {
+  .lesson { gap: 18px; }
+
+  .journey-nav__pos { display: none; }
+  .journey-step { gap: 14px; }
+  .step-block, .grammar-topic, .ex-item { padding: 16px; border-radius: 12px; }
+  .sentence { padding: 14px 16px; }
+  .sentence__de { font-size: 18px; }
+  .word-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .word-card { gap: 8px; padding: 13px 14px; }
+  .word-card__term { font-size: 17px; }
+  .agenda { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .journey-chip, .agenda__link, .word-card, .word-card__term, .lookup-word { transition: border-color .15s, background-color .15s, color .15s; }
+}

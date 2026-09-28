@@ -1,0 +1,124 @@
+/* Application shell.
+   Desktop (>= 900px): a fixed sidebar at the inline-start edge (the right in RTL)
+   plus a centred content column. Mobile (< 900px): a sticky app bar with the brand
+   and a fixed bottom navigation. Both navigation surfaces render the same links
+   (templates/includes/nav_links.html) and only differ through CSS. */
+
+:root {
+  --sidebar-w: 258px;
+  /* The bottom bar has a fixed height so this value stays truthful: it also sizes
+     the mobile content padding and the lesson floating-actions offset. */
+  --bottom-nav-h: 66px;
+}
+
+.app-shell { min-height: 100dvh; }
+.app-main { display: flex; flex-direction: column; min-height: 100dvh; }
+.app-main > .content { flex: 1; }
+
+.app-bar { display: none; }
+.bottom-nav { display: none; }
+.sidebar { display: none; }
+
+/* ---------------------------------------------------------------- brand ---- */
+.brand { display: inline-flex; align-items: center; gap: 11px; min-width: 0; min-height: 44px; color: var(--fg); text-decoration: none; }
+.brand:hover { text-decoration: none; }
+.brand__mark { display: grid; place-content: center; flex: 0 0 40px; width: 40px; height: 40px; border-radius: 12px; background: var(--accent); color: var(--on-accent); }
+.brand__mark svg { width: 23px; height: 23px; }
+.brand__text { display: flex; flex-direction: column; min-width: 0; }
+.brand__word { font-size: 19px; font-weight: 700; line-height: 1.4; white-space: nowrap; }
+.brand__word b { font-weight: 800; }
+.brand__latin { font: 9px/1.7 system-ui, sans-serif; letter-spacing: 1.6px; color: var(--muted); }
+
+/* ----------------------------------------------------------- nav links ----- */
+.nav-link { display: flex; align-items: center; justify-content: center; gap: 4px; min-height: 44px; color: var(--muted); text-decoration: none; }
+.nav-link:hover { color: var(--fg); text-decoration: none; }
+.nav-link.is-active { color: var(--accent); }
+.nav-link svg { width: 22px; height: 22px; }
+
+/* ------------------------------------------------------------ app bar ------ */
+.app-bar {
+  position: sticky; top: 0; z-index: 30;
+  display: none; align-items: center; justify-content: space-between; gap: 12px;
+  /* 6px, not 10px: the brand inside is a 44px tap target now, and the bar should not
+     grow just because the target is correct. */
+  padding: 6px 16px;
+  background: var(--surface); border-block-end: 1px solid var(--line);
+}
+.app-bar__account { display: flex; align-items: center; gap: 12px; font-size: 11px; color: var(--muted); }
+.app-bar .brand__mark { flex-basis: 34px; width: 34px; height: 34px; border-radius: 10px; }
+.app-bar .brand__mark svg { width: 20px; height: 20px; }
+.app-bar .brand__word { font-size: 17px; }
+.app-bar .brand__latin { display: none; }
+.app-bar__admin, .sidebar__admin { color: var(--accent); }
+
+/* ---------------------------------------------------------- bottom nav ----- */
+.bottom-nav {
+  position: fixed; inset-inline: 0; bottom: 0; z-index: 40;
+  /* A definite height, otherwise the fixed flex container resolves its own height
+     from children that are themselves stretched by `align-items`, and the bar ends
+     up taller than --bottom-nav-h at narrow widths. */
+  height: var(--bottom-nav-h); align-items: stretch;
+  background: var(--surface); border-block-start: 1px solid var(--line);
+}
+.bottom-nav .nav-link { position: relative; flex: 1; height: var(--bottom-nav-h); flex-direction: column; justify-content: center; padding: 6px 4px 8px; font-size: 11px; white-space: nowrap; }
+.bottom-nav .nav-link.is-active::before {
+  content: ''; position: absolute; inset-block-start: 0; inset-inline: 24%;
+  height: 2px; border-radius: 0 0 3px 3px; background: var(--accent);
+}
+
+/* -------------------------------------------------------- mobile layout ---- */
+@media (max-width: 899.98px) {
+  .app-bar { display: flex; }
+  .bottom-nav { display: flex; }
+  .app-main { padding-block-end: var(--bottom-nav-h); }
+  .content { padding: 22px 16px 40px; }
+  .footer { width: calc(100% - 32px); flex-direction: column; gap: 6px; }
+}
+
+/* ------------------------------------------------------- desktop layout ---- */
+@media (min-width: 900px) {
+  .app-shell { padding-inline-start: var(--sidebar-w); }
+  .sidebar {
+    position: fixed; inset-block: 0; inset-inline-start: 0; z-index: 30;
+    display: flex; flex-direction: column; gap: 22px;
+    width: var(--sidebar-w); padding: 22px 16px 24px;
+    overflow-y: auto;
+    background: var(--surface); border-inline-end: 1px solid var(--line);
+  }
+  .sidebar__nav { display: flex; flex-direction: column; gap: 4px; }
+  .sidebar .nav-link { justify-content: flex-start; gap: 12px; padding: 11px 12px; border-radius: 10px; font-size: 14px; color: var(--fg); }
+  .sidebar .nav-link:hover { background: var(--surface-alt); }
+  .sidebar .nav-link.is-active { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+  .sidebar__foot {
+    margin-block-start: auto; display: flex; flex-direction: column; gap: 8px;
+    padding-block-start: 16px; border-block-start: 1px solid var(--line);
+    font-size: 11px; color: var(--muted);
+  }
+  .sidebar__user { overflow-wrap: anywhere; }
+  .sidebar__latin { font: 9px/1.7 system-ui, sans-serif; letter-spacing: 1.6px; }
+}
+
+/* ------------------------------------------------------- account menu ----- */
+/* Shared by the sidebar (vertical) and the app bar (horizontal). */
+.account { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.account__user { display: inline-flex; align-items: center; gap: 9px; min-width: 0; min-height: 44px; color: var(--fg); text-decoration: none; }
+.account__user:hover { text-decoration: none; }
+.account__avatar { display: grid; place-content: center; flex: 0 0 30px; width: 30px; height: 30px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font: 700 13px/1 system-ui, sans-serif; }
+.account__avatar--lg { flex-basis: 52px; width: 52px; height: 52px; font-size: 20px; }
+.account__name { max-width: 12ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account__form { margin: 0; }
+.account__action { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 13px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--fg); font-size: 12px; text-decoration: none; white-space: nowrap; }
+.account__action:hover { background: var(--surface-alt); text-decoration: none; }
+.account__action--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
+.account__action--primary:hover { background: var(--accent); color: var(--on-accent); opacity: .92; }
+.sidebar .account { flex-direction: column; align-items: stretch; gap: 8px; }
+.sidebar .account__user { justify-content: flex-start; }
+
+@media (max-width: 430px) {
+  /* The brand plus two pill actions does not fit next to each other on small
+     phones; the signup link stays reachable from the login page. */
+  .app-bar .account__action--primary { display: none; }
+  .account__name { max-width: 8ch; }
+}
+
+@media (prefers-reduced-motion: no-preference) { .nav-link { transition: color .15s, background-color .15s; } }

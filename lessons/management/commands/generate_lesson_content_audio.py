@@ -46,8 +46,13 @@ class Command(BaseCommand):
             path = Path(name)
             try:
                 asyncio.run(edge_tts.Communicate(block.text, voice=VOICE).save(str(path)))
-                subprocess.run(["ffmpeg", "-v", "error", "-xerror", "-i", str(path),
-                                "-f", "null", "-"], check=True, capture_output=True, timeout=120)
+
+                # The file must be a real MP3, so ffmpeg reads it once as a check.
+                command = [
+                    "ffmpeg", "-v", "error", "-xerror",
+                    "-i", str(path), "-f", "null", "-",
+                ]
+                subprocess.run(command, check=True, capture_output=True, timeout=120)
                 return path
             except Exception as exc:
                 path.unlink(missing_ok=True)
@@ -62,7 +67,8 @@ class Command(BaseCommand):
         pending = LessonContent.objects.filter(lesson__is_published=True).filter(
             Q(audio="") | Q(audio__isnull=True)
         ).order_by("pk")
-        rows, skipped = [], []
+        rows = []
+        skipped = []
         for pk, title, body in pending.values_list("pk", "title", "body"):
             text = spoken_text(title, body)
             if text:
@@ -76,7 +82,8 @@ class Command(BaseCommand):
             return
         if options["limit"]:
             rows = rows[:options["limit"]]
-        generated, failures = 0, []
+        generated = 0
+        failures = []
 
         def publish(block, path):
             relpath = f"contents/audio/{path.name}"
@@ -91,14 +98,32 @@ class Command(BaseCommand):
             return updated
 
         # Workers do network/file work only; DB publication stays on this thread.
-        with ThreadPoolExecutor(max_workers=options["workers"]) as pool:
-            jobs = {pool.submit(self.generate, row, options["retries"]): row for row in rows} if options["workers"] > 1 else {}
-            results = ((jobs[job], job) for job in as_completed(jobs)) if jobs else ((row, None) for row in rows)
-            for block, job in results:
+        if options["workers"] > 1:
+            with ThreadPoolExecutor(max_workers=options["workers"]) as pool:
+                jobs = {}
+                for row in rows:
+                    job = pool.submit(self.generate, row, options["retries"])
+                    jobs[job] = row
+
+                for job in as_completed(jobs):
+                    block = jobs[job]
+                    path = None
+                    try:
+                        path = job.result()
+                        if publish(block, path):
+                            generated += 1
+                    except Exception as exc:
+                        if path is not None:
+                            path.unlink(missing_ok=True)
+                        failures.append(block.pk)
+                        self.stderr.write(f"FAIL {block.pk}: {exc}")
+        else:
+            for block in rows:
                 path = None
                 try:
-                    path = job.result() if job else self.generate(block, options["retries"])
-                    generated += publish(block, path)
+                    path = self.generate(block, options["retries"])
+                    if publish(block, path):
+                        generated += 1
                 except Exception as exc:
                     if path is not None:
                         path.unlink(missing_ok=True)

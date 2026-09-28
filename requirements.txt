@@ -1,4 +1,13 @@
 Django==6.1.1
 
-# Used by `manage.py import_a1_words` to generate vocabulary audio.
+# PostgreSQL driver for Django's "django.db.backends.postgresql" backend. It is not
+# imported by the project's own code -- Django loads it -- but the app cannot reach
+# the database without it, so it belongs here. The [binary] extra pulls the prebuilt
+# libpq wheels instead of building from source. Django 6 uses psycopg 3; psycopg2 is
+# not supported by this project.
+psycopg[binary]==3.3.5
+
+# Used by `manage.py import_a1_words`, `generate_grammar_audio`,
+# `generate_lesson_content_audio` and `generate_sentence_audio` to synthesise the
+# German audio files.
 edge-tts==7.2.8

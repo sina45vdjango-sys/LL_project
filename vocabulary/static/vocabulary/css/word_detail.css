@@ -1,71 +1,70 @@
-.breadcrumb { display: flex; align-items: center; gap: 13px; font-size: 11px; color: var(--muted); overflow-wrap: anywhere; }
-.breadcrumb [aria-current] { color: var(--fg); }
-.page-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 34px 0 30px; }
-.eyebrow { color: var(--muted); font-size: 11px; margin: 0 0 9px; font-weight: 400; }
-.page-heading h1 { font-size: clamp(23px, 3vw, 32px); font-weight: 700; line-height: 1.7; margin: 0 0 9px; }
-.page-intro { color: var(--muted); margin: 0; font-size: 13px; }
-.language-label { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; font-size: 12px; color: var(--muted); }
-.language-label__divider { color: var(--line); }
-.german-flag { width: 22px; height: 15px; border-radius: 3px; background: linear-gradient(#252525 0 33.33%, #b74438 33.33% 66.66%, #dfb952 66.66%); }
-.word-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; align-items: start; }
-.word-card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); }
-.word-card__top { display: flex; justify-content: space-between; align-items: center; padding: 24px 30px 0; }
-.word-card__top .eyebrow { margin: 0; }
-.level-badge { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); background: var(--accent-soft); padding: 4px 10px; border-radius: 6px; font: 700 13px/1.6 system-ui, sans-serif; }
-.level-badge span { font-size: 9px; letter-spacing: 1px; font-weight: 500; }
-.word-hero { padding: 36px 30px 32px; text-align: center; overflow-wrap: anywhere; }
-.word-type { color: var(--muted); font: 11px/1.6 system-ui, sans-serif; letter-spacing: 2px; text-transform: uppercase; }
-.word-hero h2 { font: 500 clamp(38px, 5.4vw, 68px)/1.3 Georgia, 'Times New Roman', serif; letter-spacing: -1.5px; margin: 14px 0 12px; }
-.word-article { color: var(--accent); font-style: italic; }
-.pronunciation { color: var(--muted); font: 15px/1.6 system-ui, sans-serif; margin: 0; }
-.translation { margin-inline: 30px; border-top: 1px solid var(--line); text-align: center; padding: 25px 12px 28px; overflow-wrap: anywhere; }
-.section-label { color: var(--muted); font-size: 10px; }
-.translation__fa { font-size: 25px; margin: 7px 0 2px; }
-.translation__en { color: var(--muted); font: 16px/1.7 system-ui, sans-serif; margin: 0; }
-.audio-section { margin: 0 30px 30px; padding: 18px; border-radius: 12px; background: var(--surface-alt); }
-.audio-heading { display: flex; align-items: center; gap: 12px; }
-.audio-icon { width: 42px; height: 42px; display: grid; place-items: center; background: var(--surface); border-radius: 50%; color: var(--accent); flex-shrink: 0; }
-.audio-icon { border: 1px solid var(--line); min-width: 44px; min-height: 44px; }
-.audio-icon:hover:not(:disabled), .audio-icon[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
-.audio-icon:disabled { opacity: .5; cursor: not-allowed; }
-#audio-status { color: var(--danger); font-size: 12px; }
-.audio-heading strong { font-size: 12px; font-weight: 500; }
-.audio-heading p { font-size: 11px; color: var(--muted); margin: 0; }
-audio { display: block; width: 100%; max-width: 100%; height: 42px; margin-top: 14px; direction: ltr; }
-.word-card__bottom { padding: 15px 30px; border-top: 1px solid var(--line); display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 10px; }
-.word-card__bottom [lang] { margin-inline-start: auto; font: 9px system-ui, sans-serif; letter-spacing: 1.8px; }
-.tiny-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
-.word-sidebar { display: grid; gap: 20px; min-width: 0; }
-.details-card { border: 1px solid var(--line); background: var(--surface); border-radius: 16px; padding: 23px; }
-.section-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
-.section-heading h2 { font-size: 14px; margin: 0; }
-.section-heading svg { color: var(--muted); width: 18px; height: 18px; }
-.word-details { margin: 18px 0 0; }
-.word-details > div { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
-.word-details > div:last-child { border: 0; padding-bottom: 0; }
-.word-details dt, .muted { color: var(--muted); }
-.word-details dd { margin: 0; text-align: end; overflow-wrap: anywhere; min-width: 0; }
-.word-details bdi { font-family: system-ui, sans-serif; }
-.study-note { padding: 26px 24px; background: var(--accent-soft); border: 1px solid var(--line); border-radius: 16px; position: relative; overflow: hidden; }
-.note-number { font: italic 32px Georgia, serif; color: var(--accent); display: block; margin-bottom: 18px; }
-.study-note h2 { font-size: 15px; line-height: 1.9; margin: 0 0 9px; }
-.study-note > p:not(.eyebrow) { color: var(--muted); font-size: 12px; line-height: 2.1; margin: 0; }
-.note-example { color: var(--accent); font: 19px/1.8 Georgia, serif; margin-top: 18px; border-top: 1px solid var(--line); padding-top: 13px; overflow-wrap: anywhere; }
-@media (max-width: 1000px) { .word-layout { grid-template-columns: minmax(0, 1fr) 280px; gap: 20px; } }
-@media (max-width: 760px) {
+/* One word page (vocabulary/templates/vocabulary/word_detail.html).
+
+   Rewritten in Phase 7 onto the lesson/exercise visual language and the canonical tokens.
+   Gone: the German-flag gradient, the "WORT FÜR WORT" footer strip, the marketing heading
+   ("یک واژه، یک دنیای تازه.") and the page's own audio button + script — the page now uses
+   the shared `.chip`, `.btn` and `templates/includes/audio_control.html` like every other
+   page in the product. */
+
+.content--word { max-width: 1040px; }
+
+.word-page { display: flex; flex-direction: column; gap: 18px; }
+.word-back { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-size: 12px; }
+.word-back:hover { color: var(--accent); text-decoration: none; }
+
+.word-layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+
+/* ------------------------------------------------------------------ hero ---- */
+.word-hero { display: flex; flex-direction: column; padding: 26px 28px 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+.word-hero__chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 14px; }
+.word-hero__term { margin: 0; font: 700 clamp(34px, 5vw, 54px)/1.3 Georgia, 'Times New Roman', serif; letter-spacing: -.5px; overflow-wrap: anywhere; }
+.word-hero__article { color: var(--accent); font-style: italic; font-weight: 500; }
+.word-hero__pronunciation { margin: 10px 0 0; color: var(--muted); font: 15px/1.6 system-ui, sans-serif; }
+.word-hero__note { margin: 14px 0 0; color: var(--muted); font-size: 12px; }
+.word-hero .audio-control { margin-top: 16px; }
+
+.word-meaning { margin-block-start: 24px; padding-block-start: 20px; border-block-start: 1px solid var(--line); }
+.word-meaning__label { margin: 0; color: var(--muted); font: 700 11px/1.8 system-ui, sans-serif; letter-spacing: 1px; }
+.word-meaning__fa { margin: 8px 0 0; font-size: 24px; line-height: 1.8; overflow-wrap: anywhere; }
+.word-meaning__en { margin: 6px 0 0; color: var(--muted); font: 15px/1.7 system-ui, sans-serif; }
+
+/* ----------------------------------------------------------------- aside ---- */
+.word-aside { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.word-panel { padding: 20px 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.word-panel__title { margin: 0; font-size: 15px; line-height: 1.7; }
+
+.word-facts { margin: 14px 0 0; }
+.word-facts > div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-block: 9px; border-block-end: 1px solid var(--line); font-size: 13px; }
+.word-facts > div:last-child { border-block-end: 0; padding-block-end: 0; }
+.word-facts dt { color: var(--muted); }
+.word-facts dd { margin: 0; min-width: 0; text-align: end; overflow-wrap: anywhere; }
+
+.word-lessons, .word-exercises { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+.word-lesson { display: flex; align-items: center; gap: 10px; }
+.word-lesson__link { display: flex; flex-direction: column; gap: 2px; min-width: 0; min-height: 44px; justify-content: center; padding: 6px 10px; border: 1px solid var(--line); border-radius: 10px; color: var(--fg); font-size: 13px; flex: 1 1 auto; }
+.word-lesson__link:hover { border-color: var(--accent); text-decoration: none; }
+.word-lesson__number { color: var(--accent); font: 700 11px/1.6 system-ui, sans-serif; }
+.word-lesson__title { overflow-wrap: anywhere; }
+
+.chip--exercise { min-height: 44px; padding: 8px 14px; font-size: 12px; }
+.chip--exercise:hover { background: var(--accent-soft); color: var(--accent); text-decoration: none; }
+
+/* ---------------------------------------------------------------- mobile ---- */
+@media (max-width: 900px) {
   .word-layout { grid-template-columns: minmax(0, 1fr); }
-  .page-heading { margin: 26px 0 24px; }
-  .language-label { display: none; }
-  .word-sidebar { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
-  .word-hero { padding-block: 30px; }
-  .word-card__top { padding: 20px 22px 0; }
+  /* The facts read better as two columns than as one very tall panel on a tablet. */
+  .word-aside { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .word-panel:only-child { grid-column: 1 / -1; }
 }
-@media (max-width: 520px) {
-  .word-sidebar { grid-template-columns: minmax(0, 1fr); }
-  .word-card__top { padding-inline: 20px; }
-  .word-hero { padding-inline: 20px; }
-  .translation { margin-inline: 20px; }
-  .audio-section { margin-inline: 20px; padding: 14px; }
-  .word-card__bottom { padding-inline: 20px; }
-  .word-card__bottom [lang] { display: none; }
+
+@media (max-width: 560px) {
+  .word-aside { grid-template-columns: minmax(0, 1fr); }
+  .word-hero { padding: 20px 18px; border-radius: 14px; }
+  .word-panel { padding: 16px 18px; border-radius: 14px; }
+  .word-meaning__fa { font-size: 21px; }
+  .word-hero__term { font-size: 32px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .word-back, .word-lesson__link, .chip--exercise { transition: border-color .15s, background-color .15s, color .15s; }
 }

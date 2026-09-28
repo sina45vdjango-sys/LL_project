@@ -1,0 +1,118 @@
+/* The learning path: one sequential trail of steps per course.
+   Page-level primitives come from lessons.css (.lesson-heading, .course-tabs,
+   .lesson-empty) and components.css (.progress, .btn). Only the trail lives here.
+
+   Layout note: the trail is a vertical spine drawn with ::before on each step,
+   with the step marker absolutely positioned on it. Both are anchored with
+   inset-inline-start, so the whole path mirrors correctly in RTL. */
+
+.path { display: flex; flex-direction: column; gap: 22px; }
+.path__eyebrow { color: var(--accent); font: 11px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+
+/* ---------------------------------------------------------- progress ---- */
+.path__track { display: flex; flex-direction: column; gap: 10px; }
+.path__progress { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+
+/* --------------------------------------------------------- next step ---- */
+.path__next { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 16px 20px; border: 1px solid var(--accent); border-radius: 14px; background: var(--accent-soft); }
+.path__next-text { display: flex; align-items: baseline; gap: 10px; margin: 0; min-width: 0; font-size: 14px; line-height: 1.8; }
+.path__next-label { flex: 0 0 auto; color: var(--accent); font: 700 11px/1.8 system-ui, sans-serif; letter-spacing: .6px; }
+.path__next-text bdi { overflow-wrap: anywhere; }
+.path__next-cta { flex: 0 0 auto; }
+
+/* ------------------------------------------------------------ course ---- */
+.path-group { display: flex; flex-direction: column; gap: 14px; }
+.path-group__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.path-group__head h2 { margin: 10px 0 0; font-size: 19px; line-height: 1.6; }
+.path-level { display: inline-block; padding: 3px 10px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font: 700 12px/1.7 system-ui, sans-serif; }
+.path-group__desc { margin: 8px 0 0; max-width: 62ch; color: var(--muted); font-size: 12px; line-height: 1.95; }
+.path-group__count { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; margin: 0; color: var(--muted); font-size: 12px; }
+.path-group__done { color: var(--success); }
+
+/* -------------------------------------------------------------- trail ---- */
+.path-steps { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.path-step { position: relative; padding-inline-start: 58px; padding-block: 9px; }
+
+/* the spine, from marker to marker */
+.path-step::before { content: ""; position: absolute; inset-inline-start: 26px; top: 0; bottom: 0; width: 2px; background: var(--line); }
+.path-step:first-child::before { top: 35px; }
+.path-step:last-child::before { bottom: auto; top: 0; height: 35px; }
+.path-step:only-child::before { display: none; }
+
+/* the marker */
+.path-step__marker { position: absolute; inset-inline-start: 10px; top: 18px; width: 34px; height: 34px; }
+.path-step__dot { display: grid; place-content: center; width: 100%; height: 100%; border: 2px solid var(--line); border-radius: 50%; background: var(--bg); color: var(--muted); font: 600 12px/1 system-ui, sans-serif; }
+.path-step__check { display: none; width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* the card */
+.path-step__card { display: flex; flex-direction: column; gap: 10px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.path-step__top { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.path-step__index { color: var(--fg); font: 600 12px/1.7 system-ui, sans-serif; }
+.path-step__time { color: var(--muted); font-size: 12px; }
+.path-step__state { margin-inline-start: auto; color: var(--muted); font-size: 12px; }
+.path-step__title { margin: 0; font-size: 16px; line-height: 1.7; overflow-wrap: anywhere; }
+.path-step__title a { color: var(--fg); }
+/* One action per card, and it is the whole card. The title link covers its card, so the
+   tap target is the card's full height on a phone and nothing has to grow to get there. */
+.path-step__card { position: relative; }
+.path-step__link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.path-step__desc { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.95; }
+.path-step__foot { display: flex; justify-content: flex-end; }
+.path-step__cta { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 9px 16px; border: 1px solid var(--line); border-radius: 10px; color: var(--fg); font-size: 13px; font-weight: 600; }
+
+/* ------------------------------------------------------- step states ---- */
+/* State is never carried by colour alone: the chip text always says what the
+   step is, and a completed step also swaps its number for a check. */
+
+.path-step.is-completed .path-step__dot { border-color: var(--success); background: var(--success); color: var(--bg); }
+.path-step.is-completed .path-step__num { display: none; }
+.path-step.is-completed .path-step__check { display: block; }
+.path-step.is-completed .path-step__state { color: var(--success); }
+
+.path-step.is-current .path-step__card { border-color: var(--accent); background: var(--accent-soft); }
+.path-step.is-current .path-step__dot { border-color: var(--accent); background: var(--accent); color: var(--on-accent); box-shadow: 0 0 0 5px var(--accent-soft); }
+.path-step.is-current .path-step__state { color: var(--accent); font-weight: 700; }
+.path-step.is-current .path-step__cta { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+
+.path-step.is-started .path-step__dot { border-color: var(--accent); color: var(--accent); }
+.path-step.is-started .path-step__state { color: var(--accent); }
+
+/* Ahead on the trail. The signal is the trail itself — solid behind you, dashed
+   ahead — never a dimmed card: nothing is locked in this phase, and a faded step
+   would read as "unavailable". The chip already says "شروع نشده". */
+.path-step.is-upcoming::before { background: repeating-linear-gradient(to bottom, var(--line) 0 6px, transparent 6px 12px); }
+
+/* --------------------------------------------------------- interactions -- */
+@media (hover: hover) {
+  .path-step:not(.is-current) .path-step__card:hover { border-color: var(--accent); }
+  .path-step__cta:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+  .path-step__title a:hover { color: var(--accent); }
+  /* The CTA is a span now, so it borrows the card's hover instead of its own. */
+  .path-step:not(.is-current) .path-step__card:hover .path-step__cta { text-decoration: underline; text-underline-offset: 5px; }
+  .path-step.is-current .path-step__cta:hover { background: var(--accent); color: var(--on-accent); opacity: .92; }
+}
+
+/* --------------------------------------------------------------- mobile -- */
+/* Deliberately re-proportioned rather than shrunk: tighter spine, smaller
+   markers, descriptions clamped to two lines, full-width action. */
+@media (max-width: 560px) {
+  .path { gap: 18px; }
+  .path-step { padding-inline-start: 46px; padding-block: 7px; }
+  .path-step::before { inset-inline-start: 21px; }
+  .path-step:first-child::before { top: 28px; }
+  .path-step:last-child::before { top: 0; height: 28px; }
+  .path-step__marker { inset-inline-start: 8px; top: 14px; width: 28px; height: 28px; }
+  .path-step__dot { font-size: 11px; }
+  .path-step__check { width: 14px; height: 14px; }
+  .path-step__card { gap: 8px; padding: 15px 16px; }
+  .path-step__state { margin-inline-start: 0; }
+  .path-step__desc { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  .path-step__foot { justify-content: stretch; }
+  .path-step__cta { width: 100%; }
+  .path__next { padding: 14px 16px; }
+  .path__next-cta { width: 100%; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .path-step__card, .path-step__cta, .path-step__title a { transition: color .15s, border-color .15s, background-color .15s; }
+}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}مرور واژه‌های دشوار | {{ brand.name }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'vocabulary/css/word_list.css' %}">
+<link rel="stylesheet" href="{% static 'vocabulary/css/word_review.css' %}">
+{% endblock %}
+{% block content_class %}content--vocabulary{% endblock %}
+{% block content %}
+{% comment %}The review list, built from the learner's own WordProgress rows — the words
+   they actually answered wrong in an exercise. The rows reuse the vocabulary list's
+   `.vrow` layout because a review is still a list of words to scan; the only thing this
+   page adds is the pair of counters each row exists for.{% endcomment %}
+<div class="vlist">
+  <header class="vlist__head">
+    <p class="vlist__eyebrow">مرور</p>
+    <h1 class="vlist__title">واژه‌هایی که سخت‌تر بوده‌اند.</h1>
+    <p class="vlist__lead">این فهرست را پاسخ‌های خودت می‌سازد. هر واژه‌ای که در تمرین‌ها اشتباه زده باشی اینجا می‌آید، پراشتباه‌ترین اول، تا بدانی وقتت را کجا بگذاری.</p>
+    <div class="vlist__actions">
+      <a class="btn" href="{% url 'vocabulary:word-list' %}">دفتر واژه‌ها</a>
+    </div>
+  </header>
+
+  {% if not user.is_authenticated %}
+    <section class="vlist__empty">
+      <h2>این صفحه به حساب تو نیاز دارد.</h2>
+      <p>اشتباه‌های هر کس جداگانه روی حساب خودش ذخیره می‌شود، پس برای دیدن فهرست مرور باید وارد شوی. تا وقتی وارد نشده‌ای، تمرین‌ها درست بررسی می‌شوند ولی جایی برای نگه‌داشتن نتیجه نیست.</p>
+      <p class="vlist__empty-actions">
+        <a class="btn btn--primary" href="{% url 'accounts:login' %}">ورود</a>
+        <a class="btn" href="{% url 'accounts:signup' %}">ساخت حساب</a>
+      </p>
+    </section>
+  {% elif words %}
+    <div class="vlist__bar">
+      <h2 class="vlist__bar-title">واژه‌های نیازمند مرور</h2>
+      <p class="vlist__bar-meta">
+        {{ words.paginator.count }} واژه
+        {% if words.paginator.num_pages > 1 %}· صفحهٔ {{ words.number }} از {{ words.paginator.num_pages }}{% endif %}
+      </p>
+    </div>
+
+    <ul class="vlist__words">
+      {% for row in words %}
+        <li class="vrow">
+          <div class="vrow__main">
+            <a class="vrow__term" href="{% url 'vocabulary:word-detail' row.word.pk %}" lang="de" dir="ltr">{% if row.word.article %}<span class="vrow__article">{{ row.word.article }}</span> {% endif %}{{ row.word.word }}</a>
+            {% if row.word.audio %}
+              {% include "includes/audio_control.html" with audio=row.word.audio prefix="review" pk=row.pk label=row.word.word icon_only=True %}
+            {% endif %}
+          </div>
+          <p class="vrow__meaning">{{ row.word.meaning_fa }}</p>
+          <p class="vrow__meta">
+            <span class="vstat vstat--wrong">غلط: {{ row.wrong_count }}</span>
+            <span class="vstat vstat--right">درست: {{ row.correct_count }}</span>
+            <span class="chip chip--accent" lang="en" dir="ltr">{{ row.word.level }}</span>
+          </p>
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% include "vocabulary/_pagination.html" %}
+  {% else %}
+    <section class="vlist__empty">
+      <h2>هنوز واژه‌ای اشتباه نشده.</h2>
+      <p>این فهرست از تمرین‌ها پر می‌شود: هر واژه‌ای که در یک تمرین اشتباه بزنی، اینجا می‌آید. پس اولین تمرین را بزن و برگرد.</p>
+      <p class="vlist__empty-actions">
+        <a class="btn btn--primary" href="{% url 'exercises:exercise-list' %}">شروع تمرین‌ها</a>
+      </p>
+    </section>
+  {% endif %}
+</div>
+{% endblock %}

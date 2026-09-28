@@ -1,0 +1,19 @@
+{% comment %}One sentence, used by the examples, dialogue, reading and listening steps.
+
+   German first and always LTR; the Persian translation follows in the page's own RTL
+   flow. The speaker is only shown when the data has one — in the live data that means
+   DIALOGUE lines only, which is also the only role the validator allows a speaker on.
+
+   `data-role` is the real LessonSentence role. CSS uses it to lay dialogue out like a
+   script (speaker beside the line) instead of a chat transcript; the role is never
+   carried by colour.{% endcomment %}
+<li class="sentence" data-role="{{ link.role }}">
+  {% if link.speaker %}<p class="sentence__speaker"><bdi>{{ link.speaker }}</bdi></p>{% endif %}
+  <p class="sentence__de" lang="de" dir="ltr" data-lookup>{{ link.sentence.text }}</p>
+  <p class="sentence__fa">{{ link.sentence.translation_fa }}</p>
+  {% if link.sentence.audio %}
+    <div class="sentence__audio">
+      {% include "includes/audio_control.html" with audio=link.sentence.audio prefix="sentence" pk=link.sentence.pk label=link.sentence.text|truncatechars:60 %}
+    </div>
+  {% endif %}
+</li>

@@ -1,0 +1,11 @@
+{% comment %}Shared by the examples, dialogue, reading and listening steps: the only
+   difference between them is the LessonSentence role the journey selected.{% endcomment %}
+{% include "lessons/steps/_lead.html" %}
+
+{% if step.sentences %}
+  <ul class="sentence-list">
+    {% for link in step.sentences %}
+      {% include "lessons/steps/_sentence.html" with link=link %}
+    {% endfor %}
+  </ul>
+{% endif %}

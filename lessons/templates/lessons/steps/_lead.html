@@ -1,0 +1,9 @@
+{% comment %}A prose lead-in shared by the vocabulary, grammar, examples and dialogue
+   steps. Renders nothing when the lesson has no block of that type.{% endcomment %}
+{% if step.blocks %}
+<div class="step-lead">
+  {% for block in step.blocks %}
+    {% include "lessons/steps/_block.html" with block=block %}
+  {% endfor %}
+</div>
+{% endif %}

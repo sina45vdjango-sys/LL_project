@@ -4,72 +4,54 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light dark">
-  <title>{% block title %}واژه‌خانه | یادگیری آلمانی{% endblock %}</title>
-  <script>
-    (() => {
-      let saved;
-      try { saved = localStorage.getItem('vocabulary-theme'); } catch (_) {}
-      document.documentElement.dataset.theme = ['light', 'dark'].includes(saved)
-        ? saved : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    })();
-  </script>
+  {% comment %}Set before anything renders: the lesson stepper hides inactive steps
+     with a .js rule, so with JavaScript off every step stays visible and readable.{% endcomment %}
+  <script>document.documentElement.classList.add('js');</script>
+  <meta name="color-scheme" content="dark">
+  {% comment %}Mobile browser chrome follows the dark surface instead of flashing white.
+     The favicon is the brand monogram; without it every page logged one 404.{% endcomment %}
+  <meta name="theme-color" content="#0f1116">
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  {% comment %}Read by the two scripts that POST JSON — the lesson stepper and the
+     exercise runner — and sent back in an X-CSRFToken header.{% endcomment %}
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{% block title %}{{ brand.name }} · {{ brand.tagline }}{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/shell.css' %}">
   {% block extra_css %}{% endblock %}
+  {# Temporary client-side progress (localStorage). See static/js/progress.js. #}
+  <script src="{% static 'js/progress.js' %}" defer></script>
+  {# Status classification shared by the dashboard and the learning path. #}
+  <script src="{% static 'js/lesson_status.js' %}" defer></script>
+  {# The one audio behaviour, used by lessons, vocabulary and exercises alike. #}
+  <script src="{% static 'js/audio.js' %}" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
-  {% include "includes/navbar.html" %}
-  <main class="content {% block content_class %}{% endblock %}" id="main-content" tabindex="-1">
-    {% include "includes/messages.html" %}
-    {% block content %}{% endblock %}
-  </main>
-  <footer class="footer">
-    <span>واژه‌خانه <span class="footer__dot" aria-hidden="true">·</span> هر روز، یک قدم به آلمانی نزدیک‌تر.</span>
-    <span dir="ltr" lang="en">LANGUAGE LEARNING · {% now "Y" %}</span>
-  </footer>
+  <div class="app-shell">
+    {% include "includes/sidebar.html" %}
+    <div class="app-main">
+      {% include "includes/app_bar.html" %}
+      <main class="content {% block content_class %}{% endblock %}" id="main-content" tabindex="-1">
+        {% include "includes/messages.html" %}
+        {% block content %}{% endblock %}
+      </main>
+      <footer class="footer">
+        <span>{{ brand.name }} <span class="footer__dot" aria-hidden="true">·</span> {{ brand.footer_note }}</span>
+        <span dir="ltr" lang="en">{{ brand.latin }} · {% now "Y" %}</span>
+      </footer>
+    </div>
+  </div>
+  {% include "includes/bottom_nav.html" %}
   <script>
     (() => {
-      const root = document.documentElement;
-      const toggle = document.getElementById('theme-toggle');
-      const syncTheme = () => {
-        const dark = root.dataset.theme === 'dark';
-        toggle.setAttribute('aria-pressed', String(dark));
-        toggle.setAttribute('aria-label', dark ? 'فعال کردن حالت روشن' : 'فعال کردن حالت تاریک');
-        toggle.querySelector('[data-theme-label]').textContent = dark ? 'حالت روشن' : 'حالت تاریک';
-      };
-      toggle.hidden = false;
-      syncTheme();
-      toggle.addEventListener('click', () => {
-        root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
-        try { localStorage.setItem('vocabulary-theme', root.dataset.theme); } catch (_) {}
-        syncTheme();
-      });
-      matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-        let saved;
-        try { saved = localStorage.getItem('vocabulary-theme'); } catch (_) {}
-        if (!['light', 'dark'].includes(saved)) {
-          root.dataset.theme = event.matches ? 'dark' : 'light';
-          syncTheme();
-        }
-      });
-      const menu = document.getElementById('nav-toggle');
-      const links = document.getElementById('nav-links');
-      menu.hidden = false;
-      root.classList.add('js');
-      const closeMenu = () => { menu.setAttribute('aria-expanded', 'false'); links.classList.remove('is-open'); };
-      menu.addEventListener('click', () => {
-        const open = menu.getAttribute('aria-expanded') !== 'true';
-        menu.setAttribute('aria-expanded', String(open));
-        links.classList.toggle('is-open', open);
-      });
-      document.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') { closeMenu(); menu.focus(); }
-      });
-      links.addEventListener('click', event => { if (event.target.closest('a')) closeMenu(); });
       document.querySelectorAll('[data-dismiss-message]').forEach(button => {
         button.hidden = false;
-        button.addEventListener('click', () => { button.closest('.messages__item').remove(); document.getElementById('main-content').focus(); });
+        button.addEventListener('click', () => {
+          button.closest('.messages__item').remove();
+          document.getElementById('main-content').focus();
+        });
       });
     })();
   </script>

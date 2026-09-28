@@ -1,0 +1,10 @@
+<p class="step-lead-text">
+  این درس {{ lesson.estimated_time }} دقیقه زمان می‌برد{% if material_step_count %} و در {{ material_step_count }} قدم پیش می‌رود{% endif %}.
+</p>
+
+{% if material_step_count %}
+  {% include "lessons/steps/_agenda.html" %}
+  <p class="step-note">از فهرست بالا می‌توانی هر قدم را مستقیم باز کنی؛ لازم نیست به ترتیب جلو بروی.</p>
+{% else %}
+  <p class="step-note">هنوز محتوایی برای این درس ثبت نشده است. می‌توانی درس را کامل‌شده علامت بزنی و به درس بعدی بروی.</p>
+{% endif %}

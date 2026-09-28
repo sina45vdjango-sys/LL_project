@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% comment %}Rendered by Django's default `page_not_found` view, with the request, so the
+   context processors run and the sidebar/bottom navigation render normally.
+
+   The most likely real reason a learner lands here: a lesson that exists but is not
+   published, or a word/exercise that was removed. Say that, and offer the way back.{% endcomment %}
+{% block title %}صفحه پیدا نشد | {{ brand.name }}{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <p class="error-page__code">۴۰۴</p>
+  <h1 class="error-page__title" dir="auto">این صفحه را پیدا نکردیم.</h1>
+  <p class="error-page__text">
+    ممکن است آدرس عوض شده باشد، یا این درس هنوز منتشر نشده باشد.
+    از مسیر یادگیری ادامه بده — درس‌های منتشرشده سر جای خودشان هستند.
+  </p>
+  <div class="error-page__actions">
+    <a class="btn btn--primary" href="{{ home_url }}">بازگشت به داشبورد</a>
+    <a class="btn" href="{% url 'lessons:lesson-list' %}">مسیر یادگیری</a>
+    <a class="btn" href="{% url 'vocabulary:word-list' %}">دفتر واژه‌ها</a>
+  </div>
+</section>
+{% endblock %}

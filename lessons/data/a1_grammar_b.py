@@ -4,7 +4,7 @@
 extend. Titles are the stable key that ``lessons/data/a1_lessons_b.py`` references.
 """
 
-A1_2: dict[str, str] = {}
+A1_2 = {}
 
 # ------------------------------------------------------------- lessons 13-16
 A1_2.update(

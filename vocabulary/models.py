@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 
 class Word(models.Model):
     """A German vocabulary word."""
@@ -101,9 +101,42 @@ class Word(models.Model):
             ),
         ]
 
+    # Persian labels for the learner-facing pages. `get_word_type_display()` stays English
+    # because the admin uses it. Properties only — no field, so no migration. One
+    # definition, used by the word list, the word page, the lesson word cards and the
+    # lookup popover.
+    TYPE_LABELS = {
+        WordType.NOUN: "اسم",
+        WordType.VERB: "فعل",
+        WordType.ADJECTIVE: "صفت",
+        WordType.ADVERB: "قید",
+        WordType.PREPOSITION: "حرف اضافه",
+        WordType.PRONOUN: "ضمیر",
+        WordType.OTHER: "سایر",
+    }
+    GENDER_LABELS = {
+        Gender.MASCULINE: "مذکر",
+        Gender.FEMININE: "مؤنث",
+        Gender.NEUTER: "خنثی",
+    }
+
+    @property
+    def type_label(self):
+        if self.word_type in self.TYPE_LABELS:
+            return self.TYPE_LABELS[self.word_type]
+        return self.get_word_type_display()
+
+    @property
+    def gender_label(self):
+        """Empty for words that have no gender (anything but a noun)."""
+        if self.gender in self.GENDER_LABELS:
+            return self.GENDER_LABELS[self.gender]
+        return ""
+
     def __str__(self):
-        article = f"{self.article} " if self.article else ""
-        return f"{article}{self.word} ({self.word_type})"
+        if self.article:
+            return f"{self.article} {self.word} ({self.word_type})"
+        return f"{self.word} ({self.word_type})"
 
 class Grammar(models.Model):
     title = models.CharField(max_length=200)
@@ -142,3 +175,59 @@ class Sentence(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class WordProgress(models.Model):
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="word_progress",
+    )
+
+    word = models.ForeignKey(
+        "Word",
+        on_delete=models.CASCADE,
+        related_name="user_progress",
+    )
+
+    attempt_count = models.PositiveIntegerField(
+        default=0,
+        help_text="Number of times the user has been tested on this word.",
+    )
+
+    correct_count = models.PositiveIntegerField(
+        default=0,
+        help_text="Number of correct answers for this word.",
+    )
+
+    wrong_count = models.PositiveIntegerField(
+        default=0,
+        help_text="Number of wrong answers for this word.",
+    )
+
+    last_attempted_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    last_correct_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    last_wrong_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "word"],
+                name="unique_user_word_progress",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.user} → {self.word}"

@@ -1,0 +1,14 @@
+{% comment %}The material steps, as counts. Used by the intro (what's ahead) and the
+   finish (what you just went through). Links jump to the step, with or without JS.{% endcomment %}
+<ul class="agenda">
+  {% for item in steps %}
+    {% if item.key != "intro" and item.key != "finish" %}
+      <li class="agenda__item">
+        <a class="agenda__link" href="#step-{{ item.key }}">
+          <span class="agenda__label">{{ item.label }}</span>
+          <span class="agenda__count">{{ item.count }} {{ item.unit }}</span>
+        </a>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

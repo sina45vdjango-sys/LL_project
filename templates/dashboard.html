@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}داشبورد | {{ brand.name }}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">{% endblock %}
+{% block content %}
+<div class="dash" data-dashboard>
+
+  <header class="dash__head">
+    <p class="dash__eyebrow">داشبورد</p>
+    <h1 class="dash__title">
+      {% if user.is_authenticated %}خوش آمدی، <bdi>{{ user.get_username }}</bdi>.{% else %}به {{ brand.name }} خوش آمدی.{% endif %}
+    </h1>
+    <p class="dash__intro">اینجا می‌بینی کجای مسیر هستی و قدم بعدی‌ات چیست.</p>
+  </header>
+
+  {% if course %}
+    {# ---- the one thing to do next -------------------------------------- #}
+    <section class="panel dash-next" aria-labelledby="dash-next-title">
+      <div class="dash-next__body">
+        <p class="dash-next__eyebrow" data-continue-eyebrow>از اینجا شروع کن</p>
+        <h2 class="dash-next__title" id="dash-next-title" data-continue-title>{{ first_lesson.title }}</h2>
+        <p class="dash-next__meta" data-continue-meta>درس {{ first_lesson.order }} · {{ first_lesson.estimated_time }} دقیقه{% if level %} · <bdi>{{ level }}</bdi>{% endif %}</p>
+      </div>
+      <a class="btn btn--primary dash-next__cta" href="{% url 'lessons:lesson-detail' first_lesson.pk %}" data-continue-link>شروع درس {{ first_lesson.order }}</a>
+    </section>
+
+    <div class="dash__cols">
+      <div class="dash__col">
+
+        {# ---- where you are + local progress ----------------------------- #}
+        <section class="panel dash-progress" aria-labelledby="dash-progress-title">
+          <div class="dash-progress__head">
+            <h2 id="dash-progress-title">پیشرفت تو</h2>
+            <span class="dash-progress__count" data-progress-count>0 از {{ lesson_total }} درس کامل‌شده</span>
+          </div>
+          <div class="progress" role="progressbar" aria-labelledby="dash-progress-title"
+               aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-progress-bar>
+            <span class="progress__fill" data-progress-fill style="width:0%"></span>
+          </div>
+          <p class="dash-note" data-progress-note>
+            {% if user.is_authenticated %}
+              پیشرفت روی حساب کاربری‌ات ذخیره می‌شود.
+            {% else %}
+              پیشرفت فعلاً در همین مرورگر ذخیره می‌شود؛ روی حساب کاربری نگه داشته نمی‌شود.
+            {% endif %}
+          </p>
+        </section>
+
+        {# ---- recent local activity (only real localStorage data) -------- #}
+        <section class="panel dash-activity" aria-labelledby="dash-activity-title" data-activity hidden>
+          <h2 id="dash-activity-title">
+            {% if user.is_authenticated %}فعالیت اخیر تو{% else %}فعالیت اخیر روی این دستگاه{% endif %}
+          </h2>
+          <dl class="dash-activity__list">
+            <div><dt>آخرین درس</dt><dd data-activity-lesson>—</dd></div>
+            <div><dt>آخرین بازدید</dt><dd data-activity-when>—</dd></div>
+            <div><dt>درس‌های شروع‌شده</dt><dd data-activity-started>—</dd></div>
+          </dl>
+        </section>
+
+        {# ---- empty state for a brand new learner ------------------------ #}
+        <section class="panel dash-empty" data-empty hidden>
+          <h2>هنوز درسی را شروع نکرده‌ای</h2>
+          <p>با درس اول شروع کن؛ هر وقت درسی را باز کنی، همین‌جا نشان داده می‌شود.</p>
+        </section>
+      </div>
+
+      <div class="dash__col">
+        {# ---- course / level ------------------------------------------- #}
+        <section class="panel dash-course" aria-labelledby="dash-course-title">
+          <div class="dash-course__top">
+            <span class="dash-level" lang="en" dir="ltr">{{ level }}</span>
+            <span class="dash-course__count">{{ lesson_total }} درس</span>
+          </div>
+          <h2 id="dash-course-title" dir="auto">{{ course.title }}</h2>
+          {% if course.description %}<p class="dash-course__desc" dir="auto">{{ course.description }}</p>{% endif %}
+          <a class="dash-course__link" href="{% url 'lessons:course-detail' course.pk %}">نمای کلی دوره ←</a>
+        </section>
+
+        {# ---- quick actions -------------------------------------------- #}
+        <section class="dash-quick" aria-labelledby="dash-quick-title">
+          <h2 id="dash-quick-title">دسترسی سریع</h2>
+          <div class="dash-quick__grid">
+            <a class="dash-quick__item" href="{% url 'vocabulary:word-list' %}">
+              <span class="dash-quick__label">واژه‌ها</span>
+              <span class="dash-quick__value">{{ word_total }} واژه</span>
+            </a>
+            <a class="dash-quick__item" href="{% url 'exercises:exercise-list' %}">
+              <span class="dash-quick__label">تمرین‌ها</span>
+              <span class="dash-quick__value">{{ exercise_total }} تمرین</span>
+            </a>
+            <a class="dash-quick__item" href="{% url 'lessons:lesson-list' %}">
+              <span class="dash-quick__label">درس‌ها</span>
+              <span class="dash-quick__value">{{ lesson_total }} درس</span>
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    {# ---- learning path entry point ----------------------------------- #}
+    <section class="dash-section" aria-labelledby="dash-path-title">
+      <div class="dash-section__head">
+        <h2 id="dash-path-title">مسیر یادگیری</h2>
+        <a href="{% url 'lessons:lesson-list' %}">همهٔ {{ lesson_total }} درس ←</a>
+      </div>
+      <ol class="dash-path" data-path>
+        {% for lesson in preview_lessons %}
+          <li class="dash-path__item" data-path-item="{{ lesson.pk }}">
+            <span class="dash-path__num" aria-hidden="true">{{ lesson.order }}</span>
+            <a class="dash-path__title" href="{% url 'lessons:lesson-detail' lesson.pk %}" dir="auto">{{ lesson.title }}</a>
+            <span class="dash-path__aside">
+              <span class="dash-path__meta">{{ lesson.estimated_time }} دقیقه</span>
+              <span class="dash-path__state" data-path-state>شروع نشده</span>
+            </span>
+          </li>
+        {% endfor %}
+      </ol>
+    </section>
+  {% else %}
+    {# ---- empty state: no published course yet ------------------------ #}
+    <section class="panel dash-empty">
+      <h2>هنوز دوره‌ای منتشر نشده است</h2>
+      <p>به‌محض انتشار دورهٔ آلمانی، مسیر یادگیری همین‌جا نمایش داده می‌شود.</p>
+    </section>
+  {% endif %}
+
+  {# ---- account: optional enhancement, not a paywall ------------------ #}
+  {% if not user.is_authenticated %}
+    <section class="panel dash-account">
+      <div>
+        <h2>حساب کاربری (اختیاری)</h2>
+        <p>برای یادگیری لازم نیست. ساخت حساب برای زمانی است که بخواهیم پیشرفت را روی حساب نگه داریم.</p>
+      </div>
+      <div class="dash-account__actions">
+        <a class="btn btn--primary" href="{% url 'accounts:signup' %}">ساخت حساب</a>
+        <a class="btn" href="{% url 'accounts:login' %}">ورود</a>
+      </div>
+    </section>
+  {% endif %}
+
+  {{ lessons_payload|json_script:"dashboard-lessons" }}
+  {# A signed-in learner's real progress, in the shape progress.js already reads. #}
+  {% if progress_state %}{{ progress_state|json_script:"progress-state" }}{% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dashboard.js' %}" defer></script>
+{% endblock %}

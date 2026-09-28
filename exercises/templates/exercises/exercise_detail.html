@@ -1,128 +1,192 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}{{ exercise.title }} | تمرین{% endblock %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'lessons/css/lessons.css' %}"><link rel="stylesheet" href="{% static 'exercises/css/exercise.css' %}">{% endblock %}
+{% block title %}{{ exercise.title }} | تمرین | {{ brand.name }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'exercises/css/exercise.css' %}">
+{% endblock %}
 {% block content_class %}content--exercise{% endblock %}
 {% block content %}
+{% comment %}The exercise runner. Every question is rendered server-side in full;
+   exercise_runner.js reveals one at a time and submits the answer to
+   ExerciseSubmitView, which grades it, records it for a signed-in learner and sends
+   the verdict back. The correct answers are deliberately not in this page. With
+   JavaScript off the page is a readable list of questions — the controls stay hidden
+   instead of pretending to work.{% endcomment %}
 <div class="exercise-page">
-  <nav class="exercise-breadcrumb" aria-label="مسیر صفحه">
-    <a href="{% url 'lessons:lesson-list' %}" class="breadcrumb-link">درس‌ها</a>
-    <span class="breadcrumb-separator">›</span>
-    <a href="{% url 'lessons:lesson-detail' exercise.lesson.pk %}" class="breadcrumb-link">{{ exercise.lesson.title }}</a>
-    <span class="breadcrumb-separator">›</span>
-    <span class="breadcrumb-current">{{ exercise.title }}</span>
-  </nav>
+  <a class="exercise-back" href="{% url 'lessons:lesson-detail' exercise.lesson.pk %}">
+    ← <span dir="auto">{{ exercise.lesson.title }}</span>
+  </a>
 
-  <header class="exercise-header card">
-    <div class="exercise-header-top">
-      <div class="exercise-meta-bar">
-        <span class="exercise-type-badge">{{ exercise.get_type_display }}</span>
-        <span class="exercise-difficulty-badge {{ exercise.difficulty|lower }}">{{ exercise.get_difficulty_display }}</span>
-      </div>
-      <h1 class="exercise-title">{{ exercise.title }}</h1>
-      {% if exercise.instruction %}
-        <p class="exercise-instruction">{{ exercise.instruction }}</p>
-      {% endif %}
-    </div>
+  <header class="exercise-head">
+    <p class="exercise-head__meta">
+      <span class="chip chip--accent">{{ exercise.type_label }}</span>
+      <span class="chip">{{ exercise.difficulty_label }}</span>
+      <span class="chip">تمرین {{ exercise.order }}</span>
+      <span class="chip">{{ total_questions }} پرسش</span>
+    </p>
+    <h1 class="exercise-head__title" dir="auto">{{ exercise.title }}</h1>
+    {% if exercise.instruction %}<p class="exercise-head__instruction">{{ exercise.instruction }}</p>{% endif %}
   </header>
 
-  {% if exercise.questions.exists %}
-    <div class="questions-container">
-      {% for question in exercise.questions.all %}
-        <article class="question-card card" id="question-{{ question.pk }}">
-          <header class="question-header">
-            <div class="question-number">{{ question.order }}</div>
-            <div class="question-prompt" dir="auto">{{ question.prompt|linebreaksbr }}</div>
-          </header>
+  {% comment %}The learner's own past result, read back from ExerciseAttempt
+     (exercises/history.py). Without it a reload would look like a first visit even
+     though every answer is already stored. The correct answers are still not on this
+     page: this repeats the score and which questions were last missed, nothing more.{% endcomment %}
+  {% if history %}
+    <section class="exercise-history" aria-labelledby="history-title">
+      <h2 class="exercise-history__title" id="history-title">این تمرین را قبلاً انجام داده‌ای</h2>
+      <p class="exercise-history__score">
+        <b>{{ history.correct }}</b> از <b>{{ history.total }}</b> پاسخ درست
+        · {{ history.answered }} پرسش پاسخ‌داده‌شده
+        · آخرین تلاش: {{ history.last_at|date:"Y/m/d" }}
+      </p>
 
-          {% if question.audio %}
-            <div class="question-audio">
-              {% include "lessons/_audio_control.html" with audio=question.audio prefix="q-audio" pk=question.pk label=question.prompt %}
-            </div>
-          {% endif %}
+      {% if history.missed %}
+        <div class="exercise-history__missed">
+          <h3 class="exercise-history__subtitle">پرسش‌هایی که آخرین بار اشتباه بود</h3>
+          <ul class="exercise-history__list">
+            {% for row in history.missed %}
+              <li class="exercise-history__item"><span class="exercise-history__num">پرسش {{ row.position }}</span> <span dir="auto">{{ row.prompt }}</span></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% else %}
+        <p class="exercise-history__perfect">آخرین بار همهٔ پرسش‌هایی که پاسخ دادی درست بود.</p>
+      {% endif %}
 
-          {% if question.targets.exists %}
-            <div class="question-context">
-              {% for target in question.targets.all %}
-                <div class="context-tag">
-                  {% if target.word %}واژه: {{ target.word.word }}{% endif %}
-                  {% if target.sentence %}جمله: "{{ target.sentence.text }}"{% endif %}
-                </div>
-              {% endfor %}
-            </div>
-          {% endif %}
+      <p class="exercise-history__note">پاسخ درست اینجا تکرار نمی‌شود؛ برای سنجش دوباره، تمرین را از نو انجام بده.</p>
+    </section>
+  {% endif %}
 
-          {% if exercise.type == 'MULTIPLE_CHOICE' or exercise.type == 'TRUE_FALSE' %}
-            <div class="answers-list">
-              {% for answer in question.answers.all %}
-                <label class="answer-option {{ answer.is_correct|yesno:"correct,incorrect" }}">
-                  <input type="radio" name="answer_{{ question.pk }}" value="{{ answer.pk }}" {% if answer.is_correct %}data-correct{% endif %}>
-                  <span class="answer-bullet">{{ answer.order|add:"۰" }}</span>
-                  <span class="answer-text" dir="auto">{{ answer.text|linebreaksbr }}</span>
-                </label>
-              {% endfor %}
-            </div>
-            <button type="button" class="btn-check" data-question="{{ question.pk }}">بررسی پاسخ</button>
-          {% elif exercise.type == 'TRANSLATION' or exercise.type == 'FILL_BLANK' %}
-            <div class="answer-form-group">
-              <textarea name="answer_{{ question.pk }}" rows="3" placeholder="پاسخ خود را بنویسید..." class="answer-textarea"></textarea>
-              <button type="button" class="btn-check" data-question="{{ question.pk }}">بررسی پاسخ</button>
-            </div>
-          {% elif exercise.type == 'READING' %}
-            <div class="reading-content">
-              {% for answer in question.answers.all %}
-                <p class="reading-answer" dir="auto">{{ answer.text|linebreaksbr }}</p>
-              {% endfor %}
-            </div>
-          {% endif %}
+  {% if questions %}
+    <div class="runner" data-runner data-submit-url="{% url 'exercises:exercise-submit' exercise.pk %}">
+      <noscript>
+        <p class="runner-note">برای بررسی پاسخ‌ها جاوااسکریپت لازم است. با خاموش بودن آن می‌توانی پرسش‌ها را بخوانی، ولی پاسخی بررسی نمی‌شود.</p>
+      </noscript>
 
-          {% if question.explanation %}
-            <details class="explanation-section">
-              <summary class="explanation-summary">توضیح بیشتر</summary>
-              <div class="explanation-content" dir="auto">{{ question.explanation|linebreaksbr }}</div>
-            </details>
+      {% comment %}The bar is the only progress indicator on the page; the visible
+         position text lives once, in the current question's eyebrow below.{% endcomment %}
+      {% comment %}Honest disclosure, same as the dashboard's: say where the answers go,
+         and only claim the account when there is one to write to.{% endcomment %}
+      <p class="runner-disclosure">
+        {% if user.is_authenticated %}
+          هر پاسخ همان لحظه بررسی و روی حساب کاربری‌ات ثبت می‌شود.
+        {% else %}
+          هر پاسخ همان لحظه بررسی می‌شود، ولی جایی ذخیره نمی‌شود.
+        {% endif %}
+      </p>
+
+      <div class="runner-progress" data-runner-progress hidden>
+        <div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="{{ total_questions }}"
+             aria-valuenow="1" aria-label="پیشرفت تمرین" data-runner-bar>
+          <span class="progress__fill" data-runner-fill style="width:{% widthratio 1 total_questions 100 %}%"></span>
+        </div>
+      </div>
+
+      <div class="runner-body">
+        {% for question in questions %}
+          <section class="runner-q{% if forloop.first %} is-active{% endif %}"
+                   data-question="{{ question.id }}" data-kind="{{ question.kind }}"
+                   aria-labelledby="question-title-{{ question.id }}">
+            <header class="runner-q__head">
+              <p class="runner-q__eyebrow">سؤال {{ question.number }} از {{ total_questions }}</p>
+              {% if question.passage %}
+                <p class="runner-q__passage" lang="de" dir="ltr">{{ question.passage }}</p>
+              {% endif %}
+              <h2 class="runner-q__prompt" id="question-title-{{ question.id }}" tabindex="-1">{{ question.prompt|linebreaksbr }}</h2>
+            </header>
+
+            {% if question.audio %}
+              <div class="runner-q__media">{% include "includes/audio_control.html" with audio=question.audio prefix="q" pk=question.id label=question.prompt %}</div>
+            {% endif %}
+            {% if question.image %}
+              <img class="runner-q__image" src="{{ question.image.url }}" alt="" loading="lazy">
+            {% endif %}
+
+            {% if question.kind == 'choice' %}
+              <fieldset class="runner-options" data-runner-options>
+                <legend class="sr-only">گزینه‌ها</legend>
+                {% for option in question.options %}
+                  <label class="runner-option">
+                    <input type="radio" name="answer-{{ question.id }}" value="{{ option.id }}">
+                    <span class="runner-option__text" dir="auto">{{ option.text|linebreaksbr }}</span>
+                    <span class="runner-option__flag runner-option__flag--correct" data-flag="correct" hidden>درست</span>
+                    <span class="runner-option__flag runner-option__flag--wrong" data-flag="wrong" hidden>نادرست</span>
+                  </label>
+                {% endfor %}
+              </fieldset>
+            {% elif question.kind == 'text' %}
+              <div class="runner-answer">
+                <label class="runner-answer__label" for="answer-{{ question.id }}">پاسخ را به آلمانی بنویس</label>
+                <input class="runner-answer__input" id="answer-{{ question.id }}" name="answer-{{ question.id }}"
+                       type="text" lang="de" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
+              </div>
+            {% else %}
+              <p class="runner-note">این پرسش پاسخ تعریف‌شده‌ای ندارد و بررسی نمی‌شود.</p>
+            {% endif %}
+
+            {% if question.kind != 'none' %}
+              <div class="runner-feedback" data-runner-feedback role="status" aria-live="polite">
+                <p class="runner-result runner-result--correct" data-result="correct" hidden>
+                  <span class="runner-result__mark" aria-hidden="true">✓</span>درست است.
+                </p>
+                <p class="runner-result runner-result--wrong" data-result="wrong" hidden>
+                  <span class="runner-result__mark" aria-hidden="true">✕</span>درست نیست.
+                </p>
+                {% comment %}Filled from the submission's response: the correct answer is
+                   not part of this page, so it cannot be read out of the source.{% endcomment %}
+                <p class="runner-expected" data-expected hidden>
+                  پاسخ درست: <span class="runner-expected__value" data-expected-value lang="de" dir="ltr"></span>
+                </p>
+                <p class="runner-explanation" data-explanation hidden></p>
+              </div>
+              <p class="runner-hint" data-runner-hint role="alert" hidden>لطفاً پیش از بررسی، پاسخ را انتخاب یا وارد کن.</p>
+            {% endif %}
+
+            <div class="runner-q__actions" data-runner-actions hidden>
+              <button type="button" class="btn runner-q__prev" data-runner-prev>قبلی</button>
+              <button type="button" class="btn runner-q__check" data-runner-check>بررسی پاسخ</button>
+              <button type="button" class="btn btn--primary runner-q__next" data-runner-next hidden>
+                {% if forloop.last %}دیدن نتیجه{% else %}بعدی{% endif %}
+              </button>
+            </div>
+          </section>
+        {% endfor %}
+      </div>
+
+      <section class="runner-results" data-runner-results hidden tabindex="-1" aria-labelledby="results-title">
+        <p class="runner-results__eyebrow">تمرین تمام شد</p>
+        <h2 class="runner-results__title" id="results-title">نتیجهٔ این تمرین</h2>
+        <p class="runner-results__score">
+          <span data-results-correct>0</span> از <span data-results-total>0</span> پاسخ درست
+        </p>
+        <p class="runner-results__accuracy" data-results-accuracy-line hidden>
+          دقت: <span data-results-accuracy>0</span>٪
+        </p>
+        <p class="runner-results__perfect" data-results-perfect hidden>همهٔ پاسخ‌ها درست بود.</p>
+        <div class="runner-results__review" data-results-review hidden>
+          <h3 class="runner-results__review-title">پرسش‌هایی برای مرور</h3>
+          <ul class="runner-review" data-results-list></ul>
+        </div>
+        <div class="runner-results__actions">
+          <a class="btn btn--primary" href="{% url 'lessons:lesson-detail' exercise.lesson.pk %}">بازگشت به درس</a>
+          {% if next_exercise %}
+            <a class="btn" href="{% url 'exercises:exercise-detail' next_exercise.pk %}">تمرین بعدی · <span dir="auto">{{ next_exercise.title }}</span></a>
           {% endif %}
-        </article>
-      {% endfor %}
+          <button type="button" class="btn" data-runner-retry>تلاش دوباره</button>
+        </div>
+      </section>
     </div>
   {% else %}
-    <div class="empty-state card">
-      <p class="text-center">هیچ سؤالی برای این تمرین ثبت نشده است.</p>
-    </div>
+    <section class="exercise-empty">
+      <h2>این تمرین پرسشی ندارد.</h2>
+      <p>برای این تمرین هنوز سؤالی ثبت نشده است.</p>
+      <a class="btn" href="{% url 'lessons:lesson-detail' exercise.lesson.pk %}">بازگشت به درس</a>
+    </section>
   {% endif %}
 </div>
 {% endblock %}
-{% block extra_js %}<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const forms = document.querySelectorAll('.btn-check');
-    forms.forEach(btn => {
-      btn.addEventListener('click', function () {
-        const qid = this.getAttribute('data-question');
-        const form = this.closest('.question-card');
-        const radios = form.querySelectorAll('input[type="radio"]');
-        const checked = form.querySelector('input[type="radio"]:checked');
 
-        if (radios.length > 0) {
-          if (!checked) {
-            alert('لطفاً یک گزینه را انتخاب کنید.');
-            return;
-          }
-          const isCorrect = checked.hasAttribute('data-correct');
-          if (isCorrect) {
-            alert('✅ درست! خوب بود.');
-          } else {
-            alert('❌ غلط. دوباره سعی کنید.');
-          }
-        } else {
-          const textarea = form.querySelector('textarea');
-          const userAnswer = textarea?.value.trim();
-          if (userAnswer) {
-            alert('پاسخ شما ثبت شد. در آینده امکان بررسی وجود خواهد داشت.');
-          } else {
-            alert('لطفاً پاسخ خود را وارد کنید.');
-          }
-        }
-      });
-    });
-  });
-</script>{% endblock %}
+{% block extra_js %}
+<script src="{% static 'exercises/js/exercise_runner.js' %}" defer></script>
+{% endblock %}

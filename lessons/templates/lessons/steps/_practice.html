@@ -1,0 +1,30 @@
+{% comment %}The lesson's own published exercises. The journey hands over to the
+exercise page rather than running grading inline — the runner lives there now
+(Phase 6); see AGENT_MEMORY.md.{% endcomment %}
+<ul class="ex-list">
+  {% for exercise in step.exercises %}
+    <li class="ex-item">
+      <div class="ex-item__head">
+        <span class="ex-item__number">تمرین {{ exercise.order }}</span>
+        {% comment %}Persian labels live on the model (Exercise.type_label /
+          difficulty_label), so the journey, the exercise list and the exercise page
+          cannot drift.{% endcomment %}
+        <span class="tag tag--type">{{ exercise.type_label }}</span>
+        <span class="ex-item__difficulty">{{ exercise.difficulty_label }}</span>
+      </div>
+      <h3 class="ex-item__title" dir="auto">{{ exercise.title }}</h3>
+      {% if exercise.instruction %}<p class="ex-item__instruction" dir="auto">{{ exercise.instruction }}</p>{% endif %}
+      <div class="ex-item__foot">
+        <span class="ex-item__meta">{{ exercise.question_count }} پرسش</span>
+        <a class="btn ex-item__cta" href="{% url 'exercises:exercise-detail' exercise.pk %}">شروع تمرین</a>
+      </div>
+    </li>
+  {% endfor %}
+</ul>
+<p class="step-note">
+  {% if user.is_authenticated %}
+    پاسخ‌هایت بررسی و روی حساب کاربری‌ات ثبت می‌شوند؛ بعد از تمرین به همین درس برمی‌گردی.
+  {% else %}
+    پاسخ‌ها بررسی می‌شوند ولی جایی ذخیره نمی‌شوند؛ بعد از تمرین به همین درس برمی‌گردی.
+  {% endif %}
+</p>

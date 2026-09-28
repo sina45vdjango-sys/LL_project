@@ -1,11 +1,18 @@
+{% comment %}Prev/next only: the page number and the total are stated once, in the list
+   header above, so there is no second place they can disagree. A step that cannot be
+   taken is a span, not a link that would reload page 1.{% endcomment %}
 {% if words.has_other_pages %}
 <nav class="pagination" aria-label="صفحه‌بندی واژه‌ها">
   {% if words.has_previous %}
-    <a href="?page={{ words.previous_page_number }}" aria-label="صفحهٔ قبل">→</a>
+    <a class="pagination__step" href="?{{ page_params }}page={{ words.previous_page_number }}" rel="prev">قبلی</a>
+  {% else %}
+    <span class="pagination__step is-disabled">قبلی</span>
   {% endif %}
-  <span>صفحهٔ {{ words.number }} از {{ words.paginator.num_pages }}</span>
+  <span class="pagination__state" aria-hidden="true">{{ words.number }} / {{ words.paginator.num_pages }}</span>
   {% if words.has_next %}
-    <a href="?page={{ words.next_page_number }}" aria-label="صفحهٔ بعد">←</a>
+    <a class="pagination__step" href="?{{ page_params }}page={{ words.next_page_number }}" rel="next">بعدی</a>
+  {% else %}
+    <span class="pagination__step is-disabled">بعدی</span>
   {% endif %}
 </nav>
 {% endif %}

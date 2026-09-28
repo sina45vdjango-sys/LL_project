@@ -1,0 +1,13 @@
+{# Desktop sidebar. Placed at the inline-start edge (the right in RTL). #}
+<aside class="sidebar" aria-label="ناوبری اصلی">
+  {% include "includes/brand.html" %}
+
+  <nav class="sidebar__nav">
+    {% include "includes/nav_links.html" %}
+  </nav>
+
+  <div class="sidebar__foot">
+    {% include "includes/account_menu.html" %}
+    <span class="sidebar__latin" lang="en" dir="ltr">{{ brand.latin }}</span>
+  </div>
+</aside>

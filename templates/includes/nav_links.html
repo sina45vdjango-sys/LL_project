@@ -1,0 +1,8 @@
+{% comment %}One list of links, rendered by both the sidebar and the bottom
+   navigation. Layout differences are handled in CSS, not by duplicating markup.{% endcomment %}
+{% for item in nav_items %}
+  <a class="nav-link{% if item.active %} is-active{% endif %}" href="{{ item.url }}"{% if item.active %} aria-current="page"{% endif %}>
+    {% include "includes/nav_icon.html" with icon=item.icon %}
+    <span class="nav-link__label">{{ item.label }}</span>
+  </a>
+{% endfor %}

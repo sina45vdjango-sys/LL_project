@@ -1,282 +1,152 @@
-/* Exercise detail page styling */
+/* The exercise runner (exercises/templates/exercises/exercise_detail.html).
 
-.exercise-page {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
+   Rewritten in Phase 6 onto the canonical tokens in static/css/base.css. The previous
+   version was written for a light theme, named variables that were never defined
+   (--border / --card / --foreground / --muted-foreground / --accent-foreground) and
+   duplicated a `.card` rule that the shared primitives already cover. It was one of the
+   last two consumers of the legacy token aliases.
+
+   Only ONE question is on screen, and that hiding lives in the `.js` rule below and
+   nowhere else — with JavaScript off every question stays visible and readable, while
+   the controls stay hidden instead of pretending to work. */
+
+.content--exercise { max-width: 900px; }
+
+.exercise-page { display: flex; flex-direction: column; gap: 20px; }
+
+.exercise-back { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-size: 12px; }
+.exercise-back:hover { color: var(--accent); text-decoration: none; }
+
+/* ------------------------------------------------------------------ head ---- */
+.exercise-head { display: flex; flex-direction: column; gap: 10px; }
+.exercise-head__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
+.exercise-head__title { margin: 0; font-size: clamp(22px, 2.8vw, 30px); line-height: 1.55; overflow-wrap: anywhere; }
+.exercise-head__instruction { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.95; }
+
+/* The type/difficulty badges are the shared `.chip` primitive (static/css/components.css). */
+
+/* ------------------------------------------------------------------ run ----- */
+.runner { display: flex; flex-direction: column; gap: 16px; }
+.runner-note { margin: 0; padding: 12px 16px; border: 1px dashed var(--line); border-radius: 12px; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.runner-disclosure { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.runner-progress { display: flex; }
+.runner-progress .progress { flex: 1 1 auto; }
+
+.runner-body { display: flex; flex-direction: column; gap: 16px; }
+
+.runner-q { display: flex; flex-direction: column; gap: 14px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.js .runner-q:not(.is-active) { display: none; }
+
+.runner-q__head { display: flex; flex-direction: column; gap: 10px; }
+.runner-q__eyebrow { margin: 0; color: var(--accent); font: 11px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.runner-q__passage { margin: 0; padding: 12px 16px; border-inline-start: 3px solid var(--accent); border-radius: 4px 12px 12px 4px; background: var(--surface-alt); font: 500 19px/1.85 system-ui, sans-serif; overflow-wrap: anywhere; }
+.runner-q__prompt { margin: 0; font-size: 17px; line-height: 1.9; unicode-bidi: plaintext; overflow-wrap: anywhere; }
+.runner-q__image { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; }
+.runner-q__media { display: flex; }
+
+/* --------------------------------------------------------------- answers ---- */
+.runner-options { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; border: 0; }
+
+.runner-option { display: flex; align-items: center; gap: 12px; min-height: 54px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-alt); cursor: pointer; }
+.runner-option:hover { border-color: var(--accent); }
+.runner-option input[type="radio"] { flex: 0 0 auto; width: 20px; height: 20px; margin: 0; accent-color: var(--accent); }
+.runner-option__text { flex: 1 1 auto; min-width: 0; font-size: 15px; line-height: 1.75; overflow-wrap: anywhere; unicode-bidi: plaintext; }
+
+/* Selected state from both directions: the `:has()` selector and the JS class, so a
+   browser without `:has()` support still shows which option is chosen. */
+.runner-option:has(input:checked), .runner-option.is-selected { border-color: var(--accent); background: var(--accent-soft); }
+.runner-option:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 4px; }
+
+.runner-option.is-correct { border-color: var(--success); background: #7bd88f14; }
+.runner-option.is-wrong { border-color: var(--danger); background: #ffaaaa14; }
+.runner-option__flag { flex: 0 0 auto; padding: 3px 10px; border-radius: 999px; font: 700 11px/1.8 system-ui, sans-serif; }
+.runner-option__flag--correct { background: #7bd88f1a; color: var(--success); }
+.runner-option__flag--wrong { background: #ffaaaa1a; color: var(--danger); }
+
+.runner-answer { display: flex; flex-direction: column; gap: 8px; }
+.runner-answer__label { color: var(--muted); font-size: 12px; }
+.runner-answer__input { width: 100%; min-height: 54px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-alt); color: var(--fg); font-size: 16px; }
+.runner-answer__input:focus-visible { border-color: var(--accent); }
+.runner-answer__input.is-correct { border-color: var(--success); }
+.runner-answer__input.is-wrong { border-color: var(--danger); }
+
+/* -------------------------------------------------------------- feedback ---- */
+.runner-feedback { display: flex; flex-direction: column; gap: 8px; }
+.runner-result { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; font-weight: 700; }
+.runner-result__mark { display: grid; place-content: center; width: 20px; height: 20px; border-radius: 50%; font: 700 12px/1 system-ui, sans-serif; }
+.runner-result--correct { color: var(--success); }
+.runner-result--correct .runner-result__mark { background: #7bd88f1a; }
+.runner-result--wrong { color: var(--danger); }
+.runner-result--wrong .runner-result__mark { background: #ffaaaa1a; }
+
+.runner-expected { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin: 0; color: var(--muted); font-size: 13px; }
+.runner-expected__value { color: var(--fg); font-weight: 700; unicode-bidi: isolate; }
+
+.runner-explanation { margin: 0; padding: 12px 16px; border-radius: 12px; background: var(--surface-alt); color: var(--muted); font-size: 13px; line-height: 1.95; unicode-bidi: plaintext; }
+
+.runner-hint { margin: 0; color: var(--danger); font-size: 12px; }
+
+/* --------------------------------------------------------------- actions ---- */
+.runner-q__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.runner-q__prev { flex: 0 0 auto; }
+.runner-q__check, .runner-q__next { flex: 1 1 auto; }
+
+/* --------------------------------------------------------------- results ---- */
+.runner-results { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 28px 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); text-align: center; }
+.runner-results__eyebrow { margin: 0; color: var(--accent); font: 11px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.runner-results__title { margin: 0; font-size: clamp(19px, 2.2vw, 23px); line-height: 1.6; }
+.runner-results__score { margin: 6px 0 0; font-size: clamp(26px, 5vw, 34px); font-weight: 800; font-variant-numeric: tabular-nums; }
+.runner-results__accuracy { margin: 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.runner-results__perfect { margin: 0; color: var(--success); font-size: 13px; }
+.runner-results__review { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%; margin-block-start: 12px; padding-block-start: 14px; border-block-start: 1px solid var(--line); text-align: start; }
+.runner-results__review-title { margin: 0; font-size: 14px; }
+.runner-review { display: flex; flex-direction: column; gap: 6px; width: 100%; margin: 0; padding: 0; list-style: none; }
+.runner-review__link { display: block; width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-alt); color: var(--fg); font-size: 13px; line-height: 1.8; text-align: start; }
+.runner-review__link:hover { border-color: var(--accent); }
+.runner-results__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-block-start: 12px; }
+
+/* ----------------------------------------------------------------- empty ---- */
+.exercise-empty { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 26px 24px; border: 1px dashed var(--line); border-radius: 16px; }
+.exercise-empty h2 { margin: 0; font-size: 18px; }
+.exercise-empty p { margin: 0; max-width: 60ch; color: var(--muted); font-size: 13px; line-height: 1.95; }
+
+/* ---------------------------------------------------------------- mobile ---- */
+/* The controls stay reachable without scrolling the question out of the way, and the
+   bar ends exactly where the shell's fixed bottom navigation starts. */
+@media (max-width: 899.98px) {
+  .runner-q__actions {
+    position: sticky; bottom: var(--bottom-nav-h); z-index: 20;
+    margin-inline: -22px; margin-block-start: 0;
+    padding: 10px 22px;
+    background: var(--surface); border-block-start: 1px solid var(--line);
+  }
 }
 
-.exercise-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.85rem;
-  margin-bottom: 1.5rem;
-  color: var(--muted-foreground);
+/* --------------------------------------------------------- past result ---- */
+/* The learner's previous attempt at this exercise (exercises/history.py). It sits above
+   the runner, because the first thing someone coming back should see is where they
+   stand — a reload is not a fresh start when every answer is already stored. */
+.exercise-history { display: flex; flex-direction: column; gap: 8px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.exercise-history__title { margin: 0; font-size: 17px; }
+.exercise-history__score { margin: 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.exercise-history__score b { color: var(--fg); }
+.exercise-history__subtitle { margin: 0; font-size: 14px; }
+.exercise-history__list { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.exercise-history__item { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; font-size: 13px; line-height: 1.9; }
+.exercise-history__num { flex: 0 0 auto; padding: 2px 9px; border-radius: 999px; background: var(--surface-alt); color: var(--muted); font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.exercise-history__perfect { margin: 0; color: var(--success); font-size: 13px; }
+.exercise-history__note { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+
+@media (max-width: 560px) {
+  .exercise-page { gap: 16px; }
+  .runner-q { gap: 12px; padding: 16px; border-radius: 14px; }
+  .runner-q__prompt { font-size: 16px; }
+  .runner-q__passage { font-size: 17px; padding: 10px 14px; }
+  .runner-q__actions { margin-inline: -16px; padding: 10px 16px; }
+  .runner-option { min-height: 52px; padding: 11px 14px; }
+  .runner-results { padding: 22px 18px; }
 }
 
-.breadcrumb-link {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-.breadcrumb-link:hover {
-  text-decoration: underline;
-}
-
-.breadcrumb-separator {
-  color: var(--muted-foreground);
-}
-
-.breadcrumb-current {
-  color: var(--foreground);
-  font-weight: 500;
-}
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.exercise-header {
-  border: none;
-  padding: 2rem;
-  text-align: center;
-}
-
-.exercise-header .exercise-meta-bar {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 1rem;
-}
-
-.exercise-type-badge {
-  background: rgba(79, 70, 229, 0.1);
-  color: rgb(79, 70, 229);
-  border: 1px solid rgba(79, 70, 229, 0.3);
-  padding: 4px 14px;
-  border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.exercise-difficulty-badge {
-  padding: 4px 14px;
-  border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  border: 1px solid;
-}
-
-.exercise-difficulty-badge.easy {
-  background: rgba(34, 197, 94, 0.1);
-  color: rgb(34, 197, 94);
-  border-color: rgba(34, 197, 94, 0.3);
-}
-
-.exercise-difficulty-badge.medium {
-  background: rgba(245, 158, 11, 0.1);
-  color: rgb(245, 158, 11);
-  border-color: rgba(245, 158, 11, 0.3);
-}
-
-.exercise-difficulty-badge.hard {
-  background: rgba(239, 68, 68, 0.1);
-  color: rgb(239, 68, 68);
-  border-color: rgba(239, 68, 68, 0.3);
-}
-
-.exercise-title {
-  font-size: 1.75rem;
-  margin-bottom: 0.5rem;
-  color: var(--foreground);
-}
-
-.exercise-instruction {
-  color: var(--muted-foreground);
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.questions-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.question-card {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem;
-}
-
-.question-header {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-  margin-bottom: 1.5rem;
-}
-
-.question-number {
-  background: var(--accent);
-  color: var(--accent-foreground);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 0.9rem;
-  flex-shrink: 0;
-}
-
-.question-prompt {
-  font-size: 1.1rem;
-  line-height: 1.7;
-  color: var(--foreground);
-  flex: 1;
-}
-
-.answers-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-}
-
-.answer-option {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 1rem 1.25rem;
-  border: 2px solid var(--border);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: var(--card);
-}
-
-.answer-option:hover {
-  border-color: var(--accent);
-  background: rgba(79, 70, 229, 0.03);
-}
-
-.answer-option input[type="radio"] {
-  margin-top: 3px;
-  width: 18px;
-  height: 18px;
-  accent-color: var(--accent);
-  flex-shrink: 0;
-}
-
-.answer-bullet {
-  display: none;
-}
-
-.answer-text {
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--foreground);
-}
-
-.btn-check {
-  background: var(--accent);
-  color: var(--accent-foreground);
-  border: none;
-  padding: 10px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-  align-self: flex-start;
-  margin-top: 0.5rem;
-}
-
-.btn-check:hover {
-  opacity: 0.92;
-}
-
-.question-context {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-}
-
-.context-tag {
-  background: rgba(100, 116, 139, 0.1);
-  color: rgb(100, 116, 139);
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-}
-
-.answer-form-group {
-  margin: 1.5rem 0;
-}
-
-.answer-textarea {
-  width: 100%;
-  padding: 1rem;
-  border: 2px solid var(--border);
-  border-radius: 10px;
-  font-size: 1rem;
-  resize: vertical;
-  background: var(--card);
-  color: var(--foreground);
-}
-
-.reading-content {
-  margin: 1rem 0;
-}
-
-.reading-answer {
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--foreground);
-}
-
-.explanation-section {
-  margin-top: 1rem;
-  border-top: 1px solid var(--border);
-  padding-top: 1rem;
-}
-
-.explanation-summary {
-  font-weight: 600;
-  cursor: pointer;
-  user-select: none;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.explanation-summary::before {
-  content: "▼";
-  font-size: 0.7rem;
-  transition: transform 0.2s;
-}
-
-.explanation-content {
-  margin-top: 0.75rem;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.02);
-  border-radius: 8px;
-  font-size: 0.95rem;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 3rem 2rem;
-  border: none;
-}
-
-.text-center {
-  text-align: center;
+@media (prefers-reduced-motion: no-preference) {
+  .exercise-back, .runner-option, .runner-review__link { transition: border-color .15s, background-color .15s, color .15s; }
 }

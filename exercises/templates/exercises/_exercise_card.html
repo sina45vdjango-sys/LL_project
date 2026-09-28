@@ -1,0 +1,19 @@
+{% comment %}One exercise card, shared by the lesson-scoped list and the grouped index.
+   The whole card is the action (one primary action per exercise), so the call to
+   action is a span, not a nested link or button. `show_instruction` is only set on
+   the lesson-scoped page: the instruction is identical for every exercise of a type,
+   so repeating it across 111 cards is noise.{% endcomment %}
+<a class="ex-card" href="{% url 'exercises:exercise-detail' exercise.pk %}">
+  <span class="ex-card__top">
+    <span class="chip chip--accent">{{ exercise.type_label }}</span>
+    <span class="chip">{{ exercise.difficulty_label }}</span>
+  </span>
+  <span class="ex-card__title" dir="auto">{{ exercise.title }}</span>
+  {% if show_instruction and exercise.instruction %}
+    <span class="ex-card__instruction">{{ exercise.instruction }}</span>
+  {% endif %}
+  <span class="ex-card__foot">
+    <span class="ex-card__meta">تمرین {{ exercise.order }} · {{ exercise.question_count }} پرسش</span>
+    <span class="ex-card__cta">شروع تمرین</span>
+  </span>
+</a>

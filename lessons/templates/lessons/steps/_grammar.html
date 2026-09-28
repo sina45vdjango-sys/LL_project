@@ -1,0 +1,21 @@
+{% comment %}One grammar topic. The stored explanation is already written in paragraphs
+   (3-8 of them per topic, separated by blank lines), so it is rendered as paragraphs
+   rather than as one wall of line breaks — the text itself is untouched.{% endcomment %}
+{% include "lessons/steps/_lead.html" %}
+
+{% if step.grammar %}
+  <div class="grammar-list">
+    {% for link in step.grammar %}
+      <article class="grammar-topic">
+        <p class="grammar-topic__eyebrow">موضوع {{ forloop.counter }} از {{ step.count }}</p>
+        <h3 class="grammar-topic__title" dir="auto">{{ link.grammar.title }}</h3>
+        <div class="grammar-topic__body" dir="auto" data-lookup>{{ link.grammar.explanation|linebreaks }}</div>
+        {% comment %}Same as the prose blocks: `.grammar-topic__audio` lost its rules in Phase 7,
+           so the wrapper is gone and the shared control spaces itself.{% endcomment %}
+        {% if link.grammar.audio %}
+          {% include "includes/audio_control.html" with audio=link.grammar.audio prefix="grammar" pk=link.grammar.pk label=link.grammar.title|truncatechars:60 %}
+        {% endif %}
+      </article>
+    {% endfor %}
+  </div>
+{% endif %}
