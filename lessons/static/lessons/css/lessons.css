@@ -7,7 +7,7 @@
 
 /* ------------------------------------------------- path / course pages ----- */
 .lesson-heading { margin: 18px 0 30px; }
-.lesson-heading h1 { margin: 10px 0; font-size: clamp(25px, 3vw, 36px); line-height: 1.6; overflow-wrap: anywhere; }
+.lesson-heading h1 { margin: 12px 0; font-size: clamp(25px, 3vw, 36px); line-height: 1.6; overflow-wrap: anywhere; }
 .lesson-heading p { color: var(--muted); font-size: 13px; }
 .course-tabs { display: flex; flex-wrap: wrap; gap: 10px; padding-bottom: 24px; border-bottom: 1px solid var(--line); }
 .course-tabs a, .lesson-pagination a { padding: 9px 16px; min-height: 44px; border: 1px solid var(--line); border-radius: 9px; }

@@ -1,0 +1,68 @@
+/* «آمادگی من» (templates/readiness.html).
+
+   A reading page, not a statistics wall: four panels each state one number with its
+   definition, and the last section says what the data cannot answer. The shared
+   `.panel`, `.progress`, `.chip`, `.btn` and `.muted` primitives come from
+   components.css — nothing here re-implements them.
+
+   Canonical tokens only (static/css/base.css). */
+
+.rdy { display: flex; flex-direction: column; gap: 20px; }
+.rdy__head { display: flex; flex-direction: column; gap: 6px; }
+.rdy__eyebrow { margin: 0; color: var(--accent-text); font: 12px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.rdy__title { margin: 0; font-size: clamp(22px, 3vw, 30px); line-height: 1.5; }
+.rdy__lead { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.95; }
+
+/* ------------------------------------------------------------- panels ---- */
+.rdy-section, .rdy-goal { display: flex; flex-direction: column; gap: 14px; }
+.rdy-bar { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.rdy-bar h2 { margin: 0; font-size: 16px; }
+.rdy-bar__value { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+/* The title is the panel's own action, so it carries a real tap target. */
+.rdy-bar__link { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; }
+
+/* The facts of one panel: a label and its value, same shape as the profile page's
+   `.detail-list`, but on this page every value is a number the learner can check. */
+.rdy-facts { display: flex; flex-direction: column; margin: 0; }
+.rdy-facts > div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.rdy-facts > div:last-child { border-bottom: 0; padding-bottom: 0; }
+.rdy-facts dt { color: var(--muted); }
+.rdy-facts dd { margin: 0; min-width: 0; text-align: end; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+.rdy-note { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.95; }
+.rdy-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; }
+
+/* --------------------------------------------------------------- pace ---- */
+/* The one number on the page that is arithmetic rather than a count, so it is given
+   its own block and the arithmetic is spelled out next to it. */
+.rdy-pace { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; border: 1px solid var(--accent); border-radius: 14px; background: var(--accent-soft); }
+.rdy-pace__title { margin: 0; color: var(--muted); font-size: 12px; }
+.rdy-pace__number { margin: 0; font-size: clamp(18px, 2.4vw, 23px); line-height: 1.5; }
+.rdy-pace__meta { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.9; font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------ what is missing --- */
+/* Deliberately not a `.panel`: it is the page's caveat, not one of its findings. */
+.rdy-gaps { display: flex; flex-direction: column; gap: 12px; padding: 20px 22px; border: 1px dashed var(--line); border-radius: 16px; }
+.rdy-gaps h2 { margin: 0; font-size: 16px; }
+.rdy-gaps__list { display: flex; flex-direction: column; gap: 12px; margin: 0; padding-inline-start: 18px; color: var(--muted); font-size: 12px; line-height: 1.95; }
+
+/* -------------------------------------------------------------- empty ---- */
+.rdy-empty { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 26px 24px; border: 1px dashed var(--line); border-radius: 16px; }
+.rdy-empty h2 { margin: 0; font-size: 18px; }
+.rdy-empty p { margin: 0; max-width: 60ch; color: var(--muted); font-size: 13px; line-height: 1.95; }
+.rdy-empty__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* ---------------------------------------------------------- onboarding ---- */
+/* Only ever rendered with `?onboarding=1`, i.e. on the visit that follows saving a goal for
+   the first time. The accent border marks it as the page's one instruction rather than one of
+   its findings. */
+.rdy-onboard { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; border-color: var(--accent); }
+.rdy-onboard__eyebrow { margin: 0; color: var(--accent-text); font: 700 12px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.rdy-onboard__title { margin: 0; font-size: clamp(19px, 2.4vw, 24px); line-height: 1.55; }
+.rdy-onboard__lead { margin: 0; max-width: 62ch; color: var(--muted); font-size: 13px; line-height: 1.95; }
+.rdy-onboard .btn { margin-block-start: 6px; }
+
+@media (max-width: 560px) {
+  .rdy { gap: 16px; }
+  .rdy-gaps { padding: 18px; }
+}

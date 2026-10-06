@@ -1,0 +1,46 @@
+/* The lesson review page (see lessons/review.py).
+   A revision pass, not a re-read: the rows the journey teaches, shown as short lists.
+   The vocabulary and sentence lists reuse the journey's own styles (lesson_journey.css),
+   so a word row and a sentence card look exactly as they do in the lesson. Only this
+   page's own furniture lives here — the section headers, the condensed grammar summary
+   and the key-idea list. */
+
+.review { gap: 30px; }
+
+.review-section { display: flex; flex-direction: column; gap: 14px; }
+.review-section__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 14px; padding-block-end: 10px; border-block-end: 1px solid var(--line); }
+.review-section__title { margin: 0; font-size: clamp(18px, 2.1vw, 22px); line-height: 1.6; }
+.review-section__count { color: var(--muted); font-size: 12px; white-space: nowrap; }
+
+/* Grammar is the one entry *condensed* rather than repeated: the first paragraph of the
+   stored explanation, with a link to the full text back in the lesson. One card per
+   topic, the same panel treatment the journey's grammar step uses. */
+.review-grammar { display: flex; flex-direction: column; gap: 12px; }
+.review-grammar__item { display: flex; flex-direction: column; gap: 8px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.review-grammar__title { margin: 0; font-size: 17px; line-height: 1.6; overflow-wrap: anywhere; }
+.review-grammar__summary { margin: 0; max-width: 68ch; font-size: 14px; line-height: 2; overflow-wrap: anywhere; }
+
+.review-more { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; color: var(--accent-text); font-size: 12px; font-weight: 700; }
+.review-more:hover { text-decoration: none; }
+
+/* Key ideas are only their titles — what the lesson explained and noted. Enough to
+   recall the shape of the lesson without re-reading the prose. */
+.review-ideas { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.review-ideas__item { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 12px 10px; border-block-end: 1px solid var(--line); }
+.review-ideas__item:first-child { border-block-start: 1px solid var(--line); }
+.review-ideas__type { flex: 0 0 auto; padding: 2px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); font: 700 12px/1.9 system-ui, sans-serif; white-space: nowrap; }
+.review-ideas__title { font-size: 14px; line-height: 1.8; overflow-wrap: anywhere; }
+
+.review-empty { padding: 24px; color: var(--muted); border: 1px dashed var(--line); border-radius: 12px; }
+
+/* Completing the lesson from here. The action the journey's last step offers, at the end
+   of the short read — see lessons/static/lessons/js/lesson_review.js. */
+.review-done { padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-alt); }
+.review-done__lead { margin: 0; max-width: 62ch; color: var(--muted); font-size: 13px; line-height: 2; }
+.review-done__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.review-done__state { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+
+@media (max-width: 560px) {
+  .review { gap: 22px; }
+  .review-grammar__item { padding: 16px; border-radius: 12px; }
+}

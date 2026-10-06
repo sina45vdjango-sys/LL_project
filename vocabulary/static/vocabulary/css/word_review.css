@@ -2,7 +2,8 @@
 
    The list itself is the vocabulary list's row layout, so word_list.css supplies
    .vlist, .vrow and .chip and this file holds only what is new: the two attempt
-   counters a review row exists for, and the button row inside an empty state.
+   counters a review row exists for, the practice links a row and the page now carry,
+   and the button row inside an empty state.
 
    Canonical tokens only (static/css/base.css). */
 
@@ -14,11 +15,61 @@
   display: inline-flex; align-items: center;
   padding: 3px 10px; border-radius: 999px;
   background: var(--surface-alt); color: var(--muted);
-  font: 700 11px/1.8 system-ui, sans-serif;
+  font: 700 12px/1.8 system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
 }
 .vstat--wrong { color: var(--danger); }
 .vstat--right { color: var(--success); }
 
+/* ------------------------------------------------- where to practise ----- */
+/* The exercises that test the learner's own missed words, offered before the long
+   list. A review that is only ever read changes nothing, so this block is the
+   action and the list below it is the detail. */
+.vpractice { display: flex; flex-direction: column; gap: 14px; }
+.vpractice__list { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.vpractice__item { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.vpractice__item:hover { border-color: var(--accent); }
+.vpractice__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+/* The title is the item's one action, so it carries its own 44px tap target in the
+   whitespace the card already has — the card itself stays a plain box. */
+.vpractice__link { display: inline-flex; align-items: center; min-height: 44px; color: var(--fg); font-size: 15px; font-weight: 700; line-height: 1.7; overflow-wrap: anywhere; }
+.vpractice__link:hover { color: var(--accent-text); }
+.vpractice__meta { margin: 0; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.vpractice__words { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 0; }
+
+/* The practice link inside a review row. `.vrow` is a three-zone grid, so this spans
+   all three zones on a line of its own instead of being squeezed into one column. */
+.vrow__practice { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 2px 0 0; }
+.vrow__practice-label { color: var(--muted); font-size: 12px; }
+.vrow__practice-link { display: inline-flex; align-items: center; min-height: 36px; color: var(--accent-text); font-size: 12px; }
+
+/* ------------------------------------------------------------- grammar ---- */
+/* The rules the learner answered wrong, below the words. A question's GRAMMAR target
+   has been written on every generated drill for a while, so rules were already being
+   remembered and never shown; this block is the second half of "review my mistakes".
+   It sits after the word list, so it needs its own top margin rather than the gap the
+   practice block gets from being first on the page. The practice list inside it reuses
+   .vpractice unchanged -- the same card, one level up. */
+.vgrammar-block { display: flex; flex-direction: column; gap: 14px; margin-block-start: 34px; }
+.vgrammar { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.vgrammar__topic { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding-block: 12px; border-block-end: 1px solid var(--line); }
+.vgrammar__topic:hover { background: var(--surface); }
+/* German, so it is LTR even inside the RTL page -- the title is markup-carried
+   (lang/dir), the font weight and size are the list row's, one step down from a word
+   term: a rule title is a sentence, not a term. */
+.vgrammar__title { min-width: 0; color: var(--fg); font: 700 16px/1.7 system-ui, sans-serif; overflow-wrap: anywhere; }
+.vgrammar__counts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+
+/* -------------------------------------------------------- reached words ---- */
+/* The scheduler's *new* tier: words from lessons the learner has reached and never
+   practised. Not mistakes, so it is not mixed into the list above — it is what is
+   coming — and it deliberately offers no drill, so its rows carry no practice links and
+   need no styling of their own. Same spacing as the grammar block above it. */
+.vnew-block { display: flex; flex-direction: column; gap: 14px; margin-block-start: 34px; }
+
 /* The empty state and its button row are the list's, not this page's: they live in
    word_list.css, which this page loads first, so there is only one definition. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .vpractice__item, .vpractice__link { transition: border-color .15s, color .15s; }
+}

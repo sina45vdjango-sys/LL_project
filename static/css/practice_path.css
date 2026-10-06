@@ -1,0 +1,265 @@
+/* practice_path.css — «مسیر امروز»: today's practice as a path of skill nodes.
+ *
+ * Page CSS, like readiness.css and dashboard.css: it owns layout and NOT colour. Every
+ * value below is a var() from base.css, so both themes follow without a second block
+ * here. German text stays inside the shared `.de`/direction helpers; nothing here
+ * changes text direction.
+ */
+
+.path-head {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.path-eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--accent-text);
+}
+
+.path-title {
+  font-size: 26px;
+  letter-spacing: -.4px;
+}
+
+.path-lead {
+  max-width: 76ch;
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------------- header ------- */
+
+.path-xp {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.path-level {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: var(--accent);
+  color: var(--on-accent);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.path-xp__body {
+  flex: 1;
+  min-width: 180px;
+}
+
+.path-xp__label {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.path-xp__track {
+  margin-top: 5px;
+}
+
+.path-streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface-alt);
+  border-radius: 999px;
+  padding: 5px 13px;
+  font-size: 12.5px;
+}
+
+.path-streak b {
+  color: var(--accent-text);
+}
+
+/* -------------------------------------------------------------- session CTA ---- */
+/* The primary action of the page: one bounded sitting, not the lesson's whole list.
+   The path below stays the map; this is the guided run. */
+
+.path-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+/* ------------------------------------------------------------------- goal ------ */
+
+.path-goal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 18px;
+}
+
+.path-goal__num {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.path-goal__num b {
+  color: var(--accent-text);
+}
+
+.path-goal__label {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.path-goal .progress {
+  flex: 1;
+}
+
+/* ------------------------------------------------------------------- nodes ----- */
+
+.path-nodes {
+  display: grid;
+  gap: 0;
+}
+
+.path-node {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.path-node__dot {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  border: 2px solid var(--line);
+  background: var(--surface-alt);
+}
+
+.path-node__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.path-node__title {
+  font-weight: 700;
+}
+
+.path-node__meta {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.path-node__side {
+  white-space: nowrap;
+  align-self: center;
+}
+
+/* A finished node is marked by its success-coloured dot, not by fading the card. The
+   whole-node `opacity: .72` used to drag this node's own `--muted` meta text down to
+   3.3:1 in the light theme (about 4.2:1 in dark), which made the one line a learner
+   scans — the word count — the hardest thing on the page to read. */
+.path-node--done .path-node__title {
+  font-weight: 600;
+}
+
+.path-node--done .path-node__dot {
+  background: var(--success-soft);
+  border-color: var(--success);
+  color: var(--on-success);
+}
+
+.path-node--now {
+  border-color: var(--accent);
+}
+
+.path-node--now .path-node__dot {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+/* Same reason as `--done`: the dashed dot already says "not part of the main path", so the
+   text keeps its own contrast instead of being faded to 4.4:1. */
+.path-node--side .path-node__title {
+  color: var(--muted);
+}
+
+.path-node--side .path-node__dot {
+  border-style: dashed;
+}
+
+.path-node__link {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ------------------------------------------------------------------- chips ----- */
+
+.path-skill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 12px;
+  background: var(--surface-alt);
+  color: var(--muted);
+  border: 1px solid var(--line);
+}
+
+.path-skill--listening { background: var(--info-soft); color: var(--on-info); border-color: transparent; }
+.path-skill--reading { background: var(--accent-soft); color: var(--accent-text); border-color: transparent; }
+.path-skill--writing { background: var(--success-soft); color: var(--on-success); border-color: transparent; }
+.path-skill--speaking { background: var(--danger-soft); color: var(--on-danger); border-color: transparent; }
+
+/* How a node is delivered — concept 9's chat or concept 13's dialogue. Deliberately
+   quieter than the skill chip above: it says *how*, not *what*. */
+.path-mode {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 12px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+}
+
+.path-xp-gain {
+  font-weight: 800;
+  color: var(--success);
+}
+
+.path-empty {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+/* The guided day's styles live in static/css/components.css: the same steps are rendered on
+   the dashboard and «مسیر امروز» (templates/includes/day_steps.html), so they cannot belong
+   to one page's stylesheet. */
+
+/* Earned badges: a strip of what is already true, each with its own reason, rather than a
+   grid of locks. The star is a mark, so it takes --accent-text (readable as text) and not
+   the accent fill. */
+.path-badges { display: flex; flex-direction: column; gap: 10px; }
+.path-badges__title { margin: 0; font-size: 15px; }
+.badge-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.badge { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-alt); }
+.badge__mark { color: var(--accent-text); font-size: 13px; }
+.badge__body { display: flex; flex-direction: column; }
+.badge__label { color: var(--fg); font-size: 13px; font-weight: 700; }
+.badge__hint { color: var(--muted); font-size: 12px; }

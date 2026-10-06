@@ -15,7 +15,7 @@
 .exercise-page { display: flex; flex-direction: column; gap: 20px; }
 
 .exercise-back { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-size: 12px; }
-.exercise-back:hover { color: var(--accent); text-decoration: none; }
+.exercise-back:hover { color: var(--accent-text); text-decoration: none; }
 
 /* ------------------------------------------------------------------ head ---- */
 .exercise-head { display: flex; flex-direction: column; gap: 10px; }
@@ -38,9 +38,9 @@
 .js .runner-q:not(.is-active) { display: none; }
 
 .runner-q__head { display: flex; flex-direction: column; gap: 10px; }
-.runner-q__eyebrow { margin: 0; color: var(--accent); font: 11px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.runner-q__eyebrow { margin: 0; color: var(--accent-text); font: 12px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
 .runner-q__passage { margin: 0; padding: 12px 16px; border-inline-start: 3px solid var(--accent); border-radius: 4px 12px 12px 4px; background: var(--surface-alt); font: 500 19px/1.85 system-ui, sans-serif; overflow-wrap: anywhere; }
-.runner-q__prompt { margin: 0; font-size: 17px; line-height: 1.9; unicode-bidi: plaintext; overflow-wrap: anywhere; }
+.runner-q__prompt { margin: 0; font-size: 17px; line-height: 1.9; overflow-wrap: anywhere; }
 .runner-q__image { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 12px; }
 .runner-q__media { display: flex; }
 
@@ -50,18 +50,18 @@
 .runner-option { display: flex; align-items: center; gap: 12px; min-height: 54px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-alt); cursor: pointer; }
 .runner-option:hover { border-color: var(--accent); }
 .runner-option input[type="radio"] { flex: 0 0 auto; width: 20px; height: 20px; margin: 0; accent-color: var(--accent); }
-.runner-option__text { flex: 1 1 auto; min-width: 0; font-size: 15px; line-height: 1.75; overflow-wrap: anywhere; unicode-bidi: plaintext; }
+.runner-option__text { flex: 1 1 auto; min-width: 0; font-size: 15px; line-height: 1.75; overflow-wrap: anywhere; }
 
 /* Selected state from both directions: the `:has()` selector and the JS class, so a
    browser without `:has()` support still shows which option is chosen. */
 .runner-option:has(input:checked), .runner-option.is-selected { border-color: var(--accent); background: var(--accent-soft); }
-.runner-option:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 4px; }
+.runner-option:has(input:focus-visible) { outline: 3px solid var(--accent-text); outline-offset: 4px; }
 
-.runner-option.is-correct { border-color: var(--success); background: #7bd88f14; }
-.runner-option.is-wrong { border-color: var(--danger); background: #ffaaaa14; }
-.runner-option__flag { flex: 0 0 auto; padding: 3px 10px; border-radius: 999px; font: 700 11px/1.8 system-ui, sans-serif; }
-.runner-option__flag--correct { background: #7bd88f1a; color: var(--success); }
-.runner-option__flag--wrong { background: #ffaaaa1a; color: var(--danger); }
+.runner-option.is-correct { border-color: var(--success); background: var(--success-soft); }
+.runner-option.is-wrong { border-color: var(--danger); background: var(--danger-soft); }
+.runner-option__flag { flex: 0 0 auto; padding: 3px 12px; border-radius: 999px; font: 700 12px/1.8 system-ui, sans-serif; }
+.runner-option__flag--correct { background: var(--success-soft); color: var(--success); }
+.runner-option__flag--wrong { background: var(--danger-soft); color: var(--danger); }
 
 .runner-answer { display: flex; flex-direction: column; gap: 8px; }
 .runner-answer__label { color: var(--muted); font-size: 12px; }
@@ -70,21 +70,53 @@
 .runner-answer__input.is-correct { border-color: var(--success); }
 .runner-answer__input.is-wrong { border-color: var(--danger); }
 
+/* A scramble (kind "order"): the sentence's words shuffled, over the same typed input. */
+.runner-order { display: flex; flex-direction: column; gap: 12px; }
+.runner-order__label { margin: 0; color: var(--muted); font-size: 12px; }
+.runner-order__tokens { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.runner-order__token { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-alt); font: 500 15px/1.6 system-ui, sans-serif; unicode-bidi: isolate; }
+
 /* -------------------------------------------------------------- feedback ---- */
 .runner-feedback { display: flex; flex-direction: column; gap: 8px; }
+/* The points one answer earned (accounts/xp.py). Written from the server's own numbers
+   by exercise_runner.js, so it can never disagree with what was stored. */
+.runner-xp { margin: 0; font-size: 12.5px; font-weight: 700; color: var(--accent-text); }
 .runner-result { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; font-weight: 700; }
 .runner-result__mark { display: grid; place-content: center; width: 20px; height: 20px; border-radius: 50%; font: 700 12px/1 system-ui, sans-serif; }
 .runner-result--correct { color: var(--success); }
-.runner-result--correct .runner-result__mark { background: #7bd88f1a; }
+.runner-result--correct .runner-result__mark { background: var(--success-soft); }
 .runner-result--wrong { color: var(--danger); }
-.runner-result--wrong .runner-result__mark { background: #ffaaaa1a; }
+.runner-result--wrong .runner-result__mark { background: var(--danger-soft); }
 
 .runner-expected { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin: 0; color: var(--muted); font-size: 13px; }
 .runner-expected__value { color: var(--fg); font-weight: 700; unicode-bidi: isolate; }
 
-.runner-explanation { margin: 0; padding: 12px 16px; border-radius: 12px; background: var(--surface-alt); color: var(--muted); font-size: 13px; line-height: 1.95; unicode-bidi: plaintext; }
+/* The first miss on a practice page: a nudge to try again, before the answer is shown.
+   Amber rather than red, because nothing is settled yet — this is the moment to fix it. */
+.runner-second-try { margin: 0; padding: 12px 14px; border-radius: 12px; background: var(--warning-soft); color: var(--on-warning); font-size: 13px; font-weight: 700; }
+
+.runner-explanation { margin: 0; padding: 12px 16px; border-radius: 12px; background: var(--surface-alt); color: var(--muted); font-size: 13px; line-height: 1.95; }
+
+/* The teaching moment after a miss: the word with its article, sound, meaning and
+   plural, built from the word row rather than from an authored note (most questions
+   have none). Tinted warm because it is the one place a wrong answer becomes a lesson
+   instead of only a verdict. */
+.runner-word-card { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border-radius: 14px; background: var(--accent-soft); }
+.runner-word-card__head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
+.runner-word-card__term { color: var(--fg); font-size: 17px; font-weight: 800; unicode-bidi: isolate; }
+.runner-word-card__type { padding: 2px 12px; border-radius: 999px; background: var(--surface); color: var(--muted); font-size: 12px; }
+.runner-word-card__meaning { margin: 0; color: var(--fg); font-size: 14px; font-weight: 600; }
+.runner-word-card__sound { margin: 0; color: var(--muted); font-size: 12px; unicode-bidi: isolate; }
+.runner-word-card__plural { margin: 0; color: var(--muted); font-size: 12px; }
+.runner-word-card__link { align-self: flex-start; margin-block-start: 2px; color: var(--accent-text); font-size: 12px; font-weight: 700; }
 
 .runner-hint { margin: 0; color: var(--danger); font-size: 12px; }
+
+/* A hint the learner earned by missing the question; the button is the only thing shown
+   until they ask, and the text is written in place. */
+.runner-help { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.runner-help__button { min-height: 40px; padding: 8px 16px; font-size: 12px; }
+.runner-help__text { margin: 0; padding: 12px 14px; border-radius: 12px; background: var(--surface-alt); font-size: 13px; line-height: 1.95; unicode-bidi: plaintext; }
 
 /* --------------------------------------------------------------- actions ---- */
 .runner-q__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
@@ -93,7 +125,7 @@
 
 /* --------------------------------------------------------------- results ---- */
 .runner-results { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 28px 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); text-align: center; }
-.runner-results__eyebrow { margin: 0; color: var(--accent); font: 11px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.runner-results__eyebrow { margin: 0; color: var(--accent-text); font: 12px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
 .runner-results__title { margin: 0; font-size: clamp(19px, 2.2vw, 23px); line-height: 1.6; }
 .runner-results__score { margin: 6px 0 0; font-size: clamp(26px, 5vw, 34px); font-weight: 800; font-variant-numeric: tabular-nums; }
 .runner-results__accuracy { margin: 0; color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
@@ -101,14 +133,37 @@
 .runner-results__review { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%; margin-block-start: 12px; padding-block-start: 14px; border-block-start: 1px solid var(--line); text-align: start; }
 .runner-results__review-title { margin: 0; font-size: 14px; }
 .runner-review { display: flex; flex-direction: column; gap: 6px; width: 100%; margin: 0; padding: 0; list-style: none; }
-.runner-review__link { display: block; width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-alt); color: var(--fg); font-size: 13px; line-height: 1.8; text-align: start; }
+.runner-review__link { display: block; width: 100%; min-height: 44px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-alt); color: var(--fg); font-size: 13px; line-height: 1.8; text-align: start; }
 .runner-review__link:hover { border-color: var(--accent); }
+/* The review list's detail lines: the learner's own answer, the right answer and the
+   explanation, added under the question they belong to (item C of TODO.md). Filled by
+   exercise_runner.js from the submission's response, so nothing here is server-rendered. */
+.runner-review__line { margin: 6px 0 0; padding-inline: 14px; color: var(--muted); font-size: 12.5px; line-height: 1.9; }
+.runner-review__value { color: var(--fg); font-weight: 700; }
+.runner-review__why { margin: 4px 0 0; padding-inline: 14px; color: var(--muted); font-size: 12.5px; line-height: 1.9; }
+/* The words behind the missed questions (item C of TODO.md): a short, scannable list of
+   the German word, its meaning and how it is doing, so a review starts from vocabulary
+   rather than from a question. It is filled by exercise_runner.js from the tested word
+   each submission reports, so the block is absent when no missed question tested a word. */
+.runner-results__weak { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%; margin-block-start: 12px; padding-block-start: 14px; border-block-start: 1px solid var(--line); text-align: start; }
+.runner-results__weak-title { margin: 0; font-size: 14px; }
+.runner-results__weak-lead { margin: 0; max-width: 60ch; color: var(--muted); font-size: 12.5px; line-height: 1.95; }
+.runner-weak { display: flex; flex-direction: column; width: 100%; margin: 0; padding: 0; list-style: none; }
+.runner-weak__row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 10px 12px; border-block-end: 1px solid var(--line); }
+.runner-weak__row:first-child { border-block-start: 1px solid var(--line); }
+.runner-weak__term { color: var(--fg); font: 700 15px/1.6 system-ui, sans-serif; overflow-wrap: anywhere; }
+.runner-weak__term:hover { color: var(--accent-text); text-decoration: none; }
+.runner-weak__meaning { color: var(--muted); font-size: 13px; }
+.runner-weak__count { margin-inline-start: auto; color: var(--muted); font-size: 12px; white-space: nowrap; }
+.runner-weak__flag { margin-inline-start: auto; padding: 2px 12px; border-radius: 999px; background: var(--danger-soft); color: var(--danger); font: 700 12px/1.9 system-ui, sans-serif; white-space: nowrap; }
+.runner-results__weak-cta { align-self: flex-start; }
 .runner-results__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-block-start: 12px; }
 
 /* ----------------------------------------------------------------- empty ---- */
 .exercise-empty { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 26px 24px; border: 1px dashed var(--line); border-radius: 16px; }
 .exercise-empty h2 { margin: 0; font-size: 18px; }
 .exercise-empty p { margin: 0; max-width: 60ch; color: var(--muted); font-size: 13px; line-height: 1.95; }
+.exercise-empty__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 
 /* ---------------------------------------------------------------- mobile ---- */
 /* The controls stay reachable without scrolling the question out of the way, and the
@@ -133,7 +188,7 @@
 .exercise-history__subtitle { margin: 0; font-size: 14px; }
 .exercise-history__list { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .exercise-history__item { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; font-size: 13px; line-height: 1.9; }
-.exercise-history__num { flex: 0 0 auto; padding: 2px 9px; border-radius: 999px; background: var(--surface-alt); color: var(--muted); font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.exercise-history__num { flex: 0 0 auto; padding: 2px 12px; border-radius: 999px; background: var(--surface-alt); color: var(--muted); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .exercise-history__perfect { margin: 0; color: var(--success); font-size: 13px; }
 .exercise-history__note { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
 
@@ -141,7 +196,7 @@
   .exercise-page { gap: 16px; }
   .runner-q { gap: 12px; padding: 16px; border-radius: 14px; }
   .runner-q__prompt { font-size: 16px; }
-  .runner-q__passage { font-size: 17px; padding: 10px 14px; }
+  .runner-q__passage { font-size: 17px; padding: 12px 14px; }
   .runner-q__actions { margin-inline: -16px; padding: 10px 16px; }
   .runner-option { min-height: 52px; padding: 11px 14px; }
   .runner-results { padding: 22px 18px; }
@@ -149,4 +204,18 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .exercise-back, .runner-option, .runner-review__link { transition: border-color .15s, background-color .15s, color .15s; }
+}
+
+/* ------------------------------------------------------- verdict motion ---- */
+/* The verdict is the moment the learner must not miss, so it eases in instead of snapping
+   onto the page. Two cues only — the result of one question, and the result screen — since
+   anything more would be decoration. Guarded like every other transition in the product. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes verdict-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+  .runner-result:not([hidden]),
+  .runner-expected:not([hidden]),
+  .runner-explanation:not([hidden]),
+  .runner-word-card:not([hidden]) { animation: verdict-in .2s ease-out; }
+  @keyframes results-in { from { opacity: 0; } to { opacity: 1; } }
+  .runner-results:not([hidden]) { animation: results-in .25s ease-out; }
 }

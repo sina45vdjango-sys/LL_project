@@ -3,12 +3,14 @@
    place that needed them. Loaded globally by base.html so pages share one
    definition instead of copying it. */
 
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 22px; box-shadow: var(--shadow); }
 
-.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 11px 18px; border: 1px solid var(--line); border-radius: 10px; background: transparent; color: var(--fg); font-size: 14px; font-weight: 600; text-decoration: none; text-align: center; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 20px; border: 1px solid var(--line); border-radius: 14px; background: transparent; color: var(--fg); font-size: 14px; font-weight: 600; text-decoration: none; text-align: center; }
 .btn:hover { background: var(--surface-alt); text-decoration: none; }
-.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); box-shadow: var(--press); }
 .btn--primary:hover { background: var(--accent); color: var(--on-accent); opacity: .92; }
+/* The shadow is the press depth: the key light stays put while the button sinks. */
+.btn--primary:active:not(:disabled) { transform: translateY(2px); box-shadow: var(--press-active); }
 
 /* A disabled button must LOOK disabled: the lesson stepper disables its ends, and the
    exercise runner and the finish step disable a button while they talk to the server.
@@ -20,18 +22,39 @@
 /* Progress bar. One definition for the dashboard and the learning path, so the
    two never drift into measuring or looking different. The fill width and
    aria-valuenow are set by JS; the markup ships at 0 for a fresh visitor. */
-.progress { height: 8px; border-radius: 999px; background: var(--surface-alt); overflow: hidden; }
-.progress__fill { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
+.progress { height: 8px; border-radius: 999px; background: var(--ring-track); overflow: hidden; }
+.progress__fill { display: block; height: 100%; border-radius: 999px; background: var(--accent-grad-bar); }
 
 .muted { color: var(--muted); }
+
+/* ----------------------------------------------------------- disclosure ---- */
+/* The long, honest explanation behind a one-line summary. Used by «آمادگی من» and the exam
+   page: the number and its meaning stay on screen, the arithmetic and the caveats behind it
+   are one tap away instead of four paragraphs of preamble. Native <details>, so it works
+   with JavaScript off, is keyboard-operable and announced correctly for free. */
+.more { border: 1px solid var(--line); border-radius: 14px; background: var(--surface-alt); }
+.more > summary { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 12px 14px; cursor: pointer; color: var(--accent-text); font-size: 13px; font-weight: 700; }
+.more > summary::marker { color: var(--accent-text); }
+.more > summary:focus-visible { outline: 3px solid var(--accent-text); outline-offset: 2px; }
+.more[open] > summary { border-block-end: 1px solid var(--line); }
+.more__body { padding: 12px 14px 14px; color: var(--muted); font-size: 13px; line-height: 2; }
+.more__body > :first-child { margin-block-start: 0; }
+.more__body > :last-child { margin-block-end: 0; }
+/* A bulleted list inside the disclosure keeps the page's own list rhythm. */
+.more__body ul { margin: 0; padding-inline-start: 18px; }
+.more__body li + li { margin-block-start: 6px; }
 
 /* ------------------------------------------------------------------ chip ---- */
 /* The metadata badge: word type, level, difficulty, counts, roles. One definition for
    the whole product — the lesson journey calls it `.tag` (it grew a family of colour
    variants for content-block types), Phase 7's vocabulary and exercise badges call it
    `.chip`. Both names share this base; the journey keeps only its colour variants. */
-.chip, .tag { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; background: var(--surface-alt); color: var(--muted); font: 700 11px/1.8 system-ui, sans-serif; }
-.chip--accent { background: var(--accent-soft); color: var(--accent); }
+/* 12px rather than 11px: these pills carry meaning (level, word type, «جدید», «غلط»), and
+   at 11px bold a Persian word is legible only if the reader already knows it. One size for
+   every pill in the product — the base rule is shared, so the `.tag--*` variants and every
+   `.chip` follow it. `min-height` keeps them from collapsing on a single Latin word. */
+.chip, .tag { display: inline-flex; align-items: center; min-height: 22px; padding: 3px 12px; border-radius: 999px; background: var(--surface-alt); color: var(--muted); font: 700 12px/1.6 system-ui, sans-serif; }
+.chip--accent { background: var(--accent-soft); color: var(--accent-text); }
 .chip--value { color: var(--fg); }
 
 /* ------------------------------------------------------------- error page ---- */
@@ -39,7 +62,7 @@
    (Django renders it without a request context), so it loads base.css + this file and
    uses these rules on their own. */
 .error-page { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; max-width: 60ch; margin-inline: auto; padding-block: 48px; }
-.error-page__code { margin: 0; color: var(--accent); font: 700 13px/1.8 system-ui, sans-serif; letter-spacing: 2px; }
+.error-page__code { margin: 0; color: var(--accent-text); font: 700 13px/1.8 system-ui, sans-serif; letter-spacing: 2px; }
 .error-page__title { margin: 0; font-size: clamp(23px, 3vw, 32px); line-height: 1.55; }
 .error-page__text { margin: 0; color: var(--muted); font-size: 14px; line-height: 2; }
 .error-page__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-block-start: 10px; }
@@ -47,26 +70,31 @@
 /* ----------------------------------------------------------------- audio ----- */
 /* One control for every playable item (templates/includes/audio_control.html): lesson
    prose blocks, grammar topics, sentences, vocabulary words and exercise question audio.
-   Moved here in Phase 7 from lessons.css — four apps render it now, and the vocabulary
-   app's own second audio system is gone. The button reveals the real <audio> element and
-   plays it; static/js/audio.js stops every other player first. */
+   Four apps render it now. It is one compact 44x44 button and a real <audio> element that
+   static/js/audio.js reveals only while a clip long enough to want a scrubber is playing.
+   The state lives on the control's `data-audio-state`, so what is described here is the
+   button in each of its four states, not the timing between them. */
 .audio-control { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; }
-.audio-control audio:not([hidden]) { display: block; flex: 1 1 260px; margin-top: 6px; direction: ltr; }
-.audio-toggle { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--accent); font: 500 12px/1 system-ui, sans-serif; cursor: pointer; }
+/* A dense row (a vocabulary row, a word list row) already spaces its own items. */
+.audio-control--inline { margin-top: 0; }
+.audio-toggle { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--accent-text); cursor: pointer; }
 .audio-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
 .audio-toggle[aria-expanded="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-.audio-toggle svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.audio-toggle svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* The icon follows `aria-expanded`, so the accessible state and the visible one can never
+   disagree: a speaker while the clip is idle, a stop square while it plays. */
+.audio-toggle__stop { display: none; }
+.audio-toggle[aria-expanded="true"] .audio-toggle__play { display: none; }
+.audio-toggle[aria-expanded="true"] .audio-toggle__stop { display: block; }
+/* A clip that failed to play is the ordinary button plus one line of Persian; the control
+   is never left looking as though it is doing something. */
+.audio-control[data-audio-state="error"] .audio-toggle { border-color: var(--danger); color: var(--danger); }
+.audio-control audio:not([hidden]) { display: block; flex: 1 1 260px; margin-top: 6px; direction: ltr; }
 .audio-status { color: var(--danger); font-size: 12px; }
 .audio-fallback { font-size: 12px; }
 
-/* The icon-only variant (word cards, vocabulary rows) drops the text label and lets the
-   revealed player take a full row instead of forcing the row wide. */
-.audio-control--icon { margin-top: 0; flex-wrap: wrap; }
-.audio-control--icon .audio-toggle { min-width: 44px; min-height: 44px; padding: 9px; border-radius: 12px; }
-.audio-control--icon audio:not([hidden]) { flex: 1 1 100%; }
-
 @media (max-width: 480px) {
-  .panel { padding: 18px; border-radius: 14px; }
+  .panel { padding: 18px; border-radius: 16px; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -78,4 +106,34 @@
 @media (prefers-reduced-motion: no-preference) {
   .btn:active:not(:disabled) { transform: translateY(1px); }
   .ex-card:active, .dash-quick__item:active, .agenda__link:active { transform: translateY(1px); }
+}
+
+/* The guided day: review what is due or missed, read the lesson, practise, be measured.
+   lessons/skill_path.py::day_steps builds the steps and both the dashboard and «مسیر امروز»
+   render them through templates/includes/day_steps.html, so the styles live here with the
+   other shared components rather than in one page's stylesheet. The step that is next is
+   tinted with the accent fill; a finished step keeps its ✓ in the success tint, so the two
+   states are told apart by more than opacity alone. */
+.day { display: flex; flex-direction: column; gap: 14px; margin-block-end: 18px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+.day__head { display: flex; flex-direction: column; gap: 4px; }
+.day__eyebrow { margin: 0; color: var(--accent-text); font-size: 12px; font-weight: 700; }
+.day__title { margin: 0; font-size: 18px; }
+.day__steps { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.day-step { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-alt); }
+.day-step.is-now { border-color: var(--accent); background: var(--accent-soft); }
+.day-step.is-done { background: var(--surface); }
+.day-step__mark { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--surface); color: var(--muted); font-size: 13px; font-weight: 700; }
+.day-step.is-now .day-step__mark { background: var(--accent); color: var(--on-accent); }
+.day-step.is-done .day-step__mark { background: var(--success-soft); color: var(--on-success); }
+.day-step__body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.day-step__label { color: var(--muted); font-size: 12px; font-weight: 700; }
+.day-step__title { color: var(--fg); font-size: 15px; font-weight: 700; text-decoration: none; }
+.day-step__title:hover { text-decoration: underline; }
+.day-step__alt { align-self: flex-start; color: var(--accent-text); font-size: 12px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.day-step__hint { color: var(--muted); font-size: 12px; line-height: 1.7; }
+.day-step__size { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.day__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0; }
+@media (max-width: 560px) {
+  .day-step { grid-template-columns: 28px minmax(0, 1fr); }
+  .day-step__size { grid-column: 2; justify-self: start; }
 }

@@ -23,16 +23,24 @@
 /* The search box. `.field__input` (auth.css) is only loaded on the auth pages, so the
    same treatment is stated here for the one page that needs it. */
 .vsearch { display: flex; flex-wrap: wrap; gap: 10px; }
-.vsearch__input { flex: 1 1 220px; min-width: 0; min-height: 46px; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-alt); color: var(--fg); font: inherit; }
+.vsearch__input { flex: 1 1 220px; min-width: 0; min-height: 46px; padding: 12px 13px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-alt); color: var(--fg); font: inherit; }
 .vsearch__input:focus { border-color: var(--accent); }
+
+/* A one-line pointer to the learner's own level, between the search box and the tabs.
+   Deliberately quiet: it must not compete with either of them. */
+.vlist__suggest { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.9; }
+.vlist__suggest a { text-decoration: underline; text-underline-offset: 3px; }
 
 /* ------------------------------------------------------------------ tabs ---- */
 .vlist__levels { display: flex; flex-wrap: wrap; gap: 10px; padding-block-end: 22px; border-block-end: 1px solid var(--line); }
 .vlevel { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--fg); font-size: 13px; }
 .vlevel:hover { border-color: var(--accent); text-decoration: none; }
 .vlevel[aria-current] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
-.vlevel__count { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
-.vlevel[aria-current] .vlevel__count { color: var(--on-accent); opacity: .75; }
+.vlevel__count { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+/* No opacity fade on the count: `--on-accent` at 75% over the accent fill measured 3.6:1
+   in the light theme, under the 4.5:1 a label this size needs. At full strength it is the
+   same colour as the tab's own label, which is how the count reads as part of the tab. */
+.vlevel[aria-current] .vlevel__count { color: var(--on-accent); }
 
 /* ------------------------------------------------------------------- bar ----- */
 .vlist__bar { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; }
@@ -59,8 +67,8 @@
      width is invisible — the term has no background. */
   .vrow__term { display: inline-flex; align-items: center; justify-content: flex-start; min-height: 44px; min-width: 44px; }
 }
-.vrow__term:hover { color: var(--accent); }
-.vrow__article { color: var(--accent); font-style: italic; font-weight: 500; }
+.vrow__term:hover { color: var(--accent-text); }
+.vrow__article { color: var(--accent-text); font-style: italic; font-weight: 500; }
 
 .vrow__meaning { margin: 0; min-width: 0; font-size: 14px; line-height: 1.8; overflow-wrap: anywhere; }
 

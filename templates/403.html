@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% comment %}Rendered by Django's default `permission_denied` view, which looks for this
+   exact template name and renders it in the site shell.
+
+   The honest reasons a learner lands here: a form that was submitted without its CSRF
+   token, or a login-protected action reached without being signed in. Both are things the
+   visitor can act on, so the page says what to do rather than only refusing.{% endcomment %}
+{% block title %}دسترسی ممکن نیست | {{ brand.name }}{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <p class="error-page__code">۴۰۳</p>
+  <h1 class="error-page__title">این کار از این صفحه ممکن نیست.</h1>
+  <p class="error-page__text">
+    معمولاً یعنی فرمی که فرستادی هنوز نشانهٔ امنیتی‌اش را نداشت، یا صفحه را بعد از
+    مدتی باز نگه داشته بودی و نشستت تازه شده است. صفحه را یک بار دوباره باز کن و کارت را
+    از نو انجام بده.
+  </p>
+  <div class="error-page__actions">
+    <a class="btn btn--primary" href="{{ home_url }}">بازگشت به داشبورد</a>
+    <a class="btn" href="{% url 'accounts:login' %}">ورود</a>
+    <a class="btn" href="{% url 'lessons:lesson-list' %}">مسیر یادگیری</a>
+  </div>
+</section>
+{% endblock %}

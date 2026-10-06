@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% comment %}Django has a default view for 403, 404 and 500, but none for 405: a "method
+   not allowed" response is returned as an empty body, which reads as a broken site. This
+   template is rendered by ``config/middleware.py`` for exactly that case.
+
+   A learner reaches it by opening an address that only accepts a form submission — the
+   exam's start button, a submit endpoint. The answer is a page that says so and offers
+   the way back, not a blank screen.{% endcomment %}
+{% block title %}این آدرس با این روش باز نمی‌شود | {{ brand.name }}{% endblock %}
+
+{% block content %}
+<section class="error-page">
+  <p class="error-page__code">۴۰۵</p>
+  <h1 class="error-page__title">این آدرس را نمی‌شود با آدرس‌بار مستقیم باز کرد.</h1>
+  <p class="error-page__text">
+    این آدرس برای فرستادن یک فرم است، نه برای باز کردن. اگر می‌خواهی آزمون را شروع کنی
+    یا پاسخی را ثبت کنی، از دکمهٔ خودش در صفحه استفاده کن.
+  </p>
+  <div class="error-page__actions">
+    <a class="btn btn--primary" href="{{ home_url }}">بازگشت به داشبورد</a>
+    <a class="btn" href="{% url 'exams:exam-index' %}">صفحهٔ آزمون</a>
+    <a class="btn" href="{% url 'lessons:practice-path' %}">مسیر امروز</a>
+  </div>
+</section>
+{% endblock %}

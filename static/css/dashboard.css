@@ -3,14 +3,30 @@
 
 .dash { display: flex; flex-direction: column; gap: 20px; }
 .dash__head { display: flex; flex-direction: column; gap: 4px; }
-.dash__eyebrow { margin: 0; color: var(--accent); font: 11px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.dash__eyebrow { margin: 0; color: var(--accent-text); font: 12px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
 .dash__title { margin: 0; font-size: clamp(22px, 3vw, 30px); line-height: 1.5; }
 .dash__intro { margin: 0; color: var(--muted); font-size: 13px; }
 
+/* ------------------------------------------------------------- today ----- */
+/* «امروز» — the daily plan (lessons/today.py). It takes the place of the .dash-next card
+   below whenever we can identify the learner, because "here is the one thing" became "here
+   is today": the one guided day, then the sentence about what is already done. The accent
+   panel colour is the same one .dash-next uses, so the page still opens on one loud card. */
+.dash-today { display: flex; flex-direction: column; gap: 14px; border-color: var(--accent); background: var(--accent-soft); }
+.dash-today__head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.dash-today__eyebrow { margin: 0; color: var(--accent-text); font: 12px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.dash-today__title { margin: 0; font-size: clamp(18px, 2.4vw, 23px); line-height: 1.6; }
+/* The step list itself (.day__steps / .day-step*) is a shared component and lives in
+   static/css/components.css, because the dashboard and «مسیر امروز» render the same day. */
+.dash-today__note { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.dash-today__done { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.dash-today__ago { margin-inline-start: 6px; }
+
 /* ------------------------------------------------------- next action ----- */
+/* Only for a visitor we cannot identify: no stored rows, so no plan to build one from. */
 .dash-next { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; border-color: var(--accent); background: var(--accent-soft); }
 .dash-next__body { min-width: 0; }
-.dash-next__eyebrow { margin: 0 0 6px; color: var(--accent); font: 11px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.dash-next__eyebrow { margin: 0 0 6px; color: var(--accent-text); font: 12px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
 .dash-next__title { margin: 0; font-size: clamp(18px, 2.4vw, 23px); line-height: 1.6; overflow-wrap: anywhere; }
 .dash-next__meta { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
 .dash-next__cta { flex: 0 0 auto; }
@@ -24,28 +40,67 @@
 .dash-progress__head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
 .dash-progress__count { color: var(--muted); font-size: 12px; }
 .dash-progress .progress { margin-top: 14px; }  /* .progress itself lives in components.css */
-.dash-note { margin: 12px 0 0; color: var(--muted); font-size: 11px; line-height: 1.9; }
+.dash-note { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+
+/* ------------------------------------------------------------- goal ----- */
+/* The goal line sits inside the progress panel on purpose: it is the sentence that
+   connects "where I am" to "where I am going", and splitting them across two panels
+   would make the learner read the page twice. It exists only for a signed-in learner,
+   who is the only person who can have a goal. */
+.dash-goal { display: flex; flex-direction: column; gap: 4px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+.dash-goal__line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin: 0; font-size: 12px; line-height: 1.9; }
+.dash-goal__label { color: var(--muted); }
+.dash-goal__tag { color: var(--muted); font-size: 12px; }
+.dash-goal__pace { margin: 0; color: var(--muted); font-size: 12px; }
+/* The goal line, then its action: a button when there is no goal yet, and the quiet link to
+   the full page either way. */
+.dash-goal__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-block-start: 10px; }
+.dash-goal__link { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; }
 
 /* ---------------------------------------------------------- headings ----- */
 .dash-activity h2, .dash-empty h2, .dash-section h2,
-.dash-quick h2, .dash-course h2, .dash-account h2 { margin: 0; font-size: 16px; }
+.dash-quick h2, .dash-course h2, .dash-account h2,
+.dash-review h2 { margin: 0; font-size: 16px; }
+
+/* ------------------------------------------------------ personal review ----- */
+/* The panel only exists when the learner really has words they got wrong, so every
+   rule here may start "there is something to review" rather than "say something". */
+.dash-review__head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.dash-review__head a { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; }
+.dash-review__lead { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.dash-review__words { display: flex; flex-direction: column; gap: 4px; margin: 10px 0 0; padding: 0; list-style: none; }
+/* 8px block padding, not 13px: the term inside is a 44px tap target, and the tighter
+   row keeps a three-word list the same height as the rest of the panel. */
+.dash-review__word { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.dash-review__word:last-child { border-bottom: 0; }
+.dash-review__term { display: inline-flex; align-items: center; min-height: 44px; color: var(--fg); font: 700 15px/1.6 system-ui, sans-serif; overflow-wrap: anywhere; }
+.dash-review__term:hover { color: var(--accent-text); }
+/* The meaning sits right after the term and pushes the counters to the far end. */
+.dash-review__meaning { min-width: 0; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+.dash-review__word .chip { margin-inline-start: auto; white-space: nowrap; }
+.dash-review__word .chip + .chip { margin-inline-start: 0; }
+.dash-review__note { margin: 14px 0 0; color: var(--muted); font-size: 12px; }
+.dash-review__practice { display: flex; flex-direction: column; gap: 2px; margin: 6px 0 0; padding: 0; list-style: none; }
+.dash-review__practice li { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.dash-review__practice a { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; overflow-wrap: anywhere; }
+.dash-review__meta { color: var(--muted); font-size: 12px; white-space: nowrap; }
 
 /* ---------------------------------------------------------- activity ----- */
 .dash-activity__list { display: flex; flex-direction: column; margin: 14px 0 0; }
-.dash-activity__list > div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
+.dash-activity__list > div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
 .dash-activity__list > div:last-child { border-bottom: 0; padding-bottom: 0; }
 .dash-activity__list dt { color: var(--muted); }
 .dash-activity__list dd { margin: 0; min-width: 0; text-align: end; overflow-wrap: anywhere; }
 
 /* ------------------------------------------------------------- empty ----- */
-.dash-empty p { margin: 10px 0 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.dash-empty p { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
 
 /* ------------------------------------------------------------ course ----- */
 .dash-course__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-.dash-level { padding: 3px 10px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); font: 700 12px/1.7 system-ui, sans-serif; }
+.dash-level { padding: 3px 12px; border-radius: 6px; background: var(--accent-soft); color: var(--accent-text); font: 700 12px/1.7 system-ui, sans-serif; }
 .dash-course__count { color: var(--muted); font-size: 12px; }
 .dash-course h2 { line-height: 1.6; overflow-wrap: anywhere; }
-.dash-course__desc { margin: 10px 0 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.dash-course__desc { margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
 .dash-course__link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 6px; font-size: 12px; }
 
 /* ----------------------------------------------------- quick actions ----- */
@@ -53,7 +108,7 @@
 .dash-quick__item { display: flex; flex-direction: column; gap: 4px; min-height: 78px; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--fg); text-decoration: none; }
 .dash-quick__item:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
 .dash-quick__label { font-size: 13px; font-weight: 600; }
-.dash-quick__value { color: var(--muted); font-size: 11px; }
+.dash-quick__value { color: var(--muted); font-size: 12px; }
 
 /* -------------------------------------------------------------- path ----- */
 .dash-section { display: flex; flex-direction: column; gap: 12px; }
@@ -64,14 +119,14 @@
    slightly tighter row keeps the list the same height overall. */
 .dash-path__item { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 8px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
 .dash-path__item.is-current { border-color: var(--accent); background: var(--accent-soft); }
-.dash-path__num { display: grid; place-content: center; width: 30px; height: 30px; border-radius: 9px; background: var(--surface-alt); color: var(--muted); font: 12px system-ui, sans-serif; }
+.dash-path__num { display: grid; place-content: center; width: 30px; height: 30px; border-radius: 12px; background: var(--surface-alt); color: var(--muted); font: 12px system-ui, sans-serif; }
 .dash-path__item.is-current .dash-path__num { background: var(--accent); color: var(--on-accent); }
 .dash-path__title { display: inline-flex; align-items: center; min-height: 44px; color: var(--fg); font-size: 13px; line-height: 1.7; overflow-wrap: anywhere; }
-.dash-path__title:hover { color: var(--accent); }
+.dash-path__title:hover { color: var(--accent-text); }
 .dash-path__aside { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
-.dash-path__meta { color: var(--muted); font-size: 11px; }
-.dash-path__state { color: var(--muted); font-size: 11px; }
-.dash-path__state.is-started { color: var(--accent); }
+.dash-path__meta { color: var(--muted); font-size: 12px; }
+.dash-path__state { color: var(--muted); font-size: 12px; }
+.dash-path__state.is-started { color: var(--accent-text); }
 .dash-path__state.is-done { color: var(--success); }
 
 /* ----------------------------------------------------------- account ----- */
@@ -89,3 +144,16 @@
 @media (prefers-reduced-motion: no-preference) {
   .dash-quick__item { transition: border-color .15s, background-color .15s; }
 }
+
+/* Seven days of the learner's own answers. The daily loop is what keeps a learner coming
+   back, so the shortest span over which effort is visible gets drawn: one column per day,
+   scaled to the learner's own busiest day. Today is marked in the accent-text colour
+   rather than the accent, because it has to be readable as a mark and not only as a fill. */
+.dash-week { display: flex; flex-direction: column; gap: 8px; margin-block-start: 14px; padding-block-start: 14px; border-block-start: 1px solid var(--line); }
+.dash-week__title { margin: 0; color: var(--muted); font-size: 12px; font-weight: 700; }
+.dash-week__days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 0; padding: 0; list-style: none; }
+.dash-week__day { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px; height: 74px; }
+.dash-week__bar { width: 100%; min-height: 3px; border-radius: 6px; background: var(--accent); }
+.dash-week__day.is-today .dash-week__bar { background: var(--accent-text); }
+.dash-week__letter { color: var(--muted); font-size: 12px; }
+.dash-week__day.is-today .dash-week__letter { color: var(--accent-text); font-weight: 700; }
