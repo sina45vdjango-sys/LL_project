@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}آزمون گام | {{ brand.name }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'exercises/css/exercise.css' %}">
+<link rel="stylesheet" href="{% static 'exams/css/exam.css' %}">
+{% endblock %}
+{% block content_class %}content--exercise{% endblock %}
+{% block content %}
+{% comment %}Concept 20 — «آزمون گام». The ★ node's page: twelve questions from the three
+   written skills, chosen by exams/step.py, run through the ordinary exercise runner. Every
+   answer goes to exercises:exercise-submit, so grading, XP and the word-review schedule are
+   the same code as any other practice. The page is short and skippable by design — a test
+   that blocks the path turns practice into an obligation — and it carries no official
+   score, because the full exam's 100 points are arithmetic on 45 questions, not on twelve.
+{% endcomment %}
+<div class="exam">
+  <a class="exercise-back" href="{% url 'lessons:practice-path' %}">
+    ← <span>مسیر امروز</span>
+  </a>
+
+  <header class="exam-head">
+    <p class="exam-eyebrow">آزمون گام</p>
+    <h1 class="exam-title">یک ایستگاه کوتاه، نه یک نشست کامل</h1>
+    <p class="exam-lead">
+      {{ total_questions }} پرسش از سه مهارت نوشتاری، به همان شکلی که تمرین‌های روزانه
+      پرسیده می‌شوند. کوتاه است و می‌توانی هر وقت خواستی رهایش کنی؛ پاسخ‌هایی که داده‌ای
+      همان لحظه ثبت شده‌اند، پس چیزی از دست نمی‌رود.
+    </p>
+  </header>
+
+  <section class="exam-panel" aria-labelledby="step-what-title">
+    <div class="exam-panel__bar">
+      <h2 id="step-what-title">این آزمون چه چیزی است و چه چیزی نیست</h2>
+      <p class="exam-panel__meta">{{ total_questions }} پرسش</p>
+    </div>
+    <ul class="exam-facts">
+      <li>
+        <b>نمرهٔ رسمی ندارد.</b> حساب رسمی آزمون از ۴۵ پرسش و ضریب ۱٫۶۶ می‌آید؛ همان حساب
+        روی {{ step_size }} پرسش عددی می‌ساخت که شبیه نمرهٔ آزمون باشد و نباشد.
+      </li>
+      <li>
+        چیزی که نشان می‌دهد: <b>چند پاسخ درست از چند پرسش</b>، و واژه‌های اشتباه که خودشان
+        به فهرست مرور می‌روند.
+      </li>
+      <li>
+        برای نمره در قالب واقعی آزمون: <a href="{% url 'exams:exam-index' %}">آزمون آزمایشی کامل</a>
+        — ۶۵ دقیقه، سه بخش، با نمرهٔ ۱۰۰ و خط قبولی ۶۰.
+      </li>
+    </ul>
+  </section>
+
+  {% if questions %}
+    {% url 'lessons:practice-path' as runner_back_url %}
+    {% include "exercises/_runner.html" with results_eyebrow="آزمون گام تمام شد" results_title="نتیجهٔ آزمون گام" back_url=runner_back_url back_label="بازگشت به مسیر امروز" %}
+  {% else %}
+    <section class="exam-panel">
+      <h2>برای امروز پرسشی نمانده.</h2>
+      <p class="exam-note">
+        یا همهٔ پرسش‌های این ایستگاه را امروز پاسخ داده‌ای، یا هنوز محتوای منتشرشده کافی نیست.
+      </p>
+      <div class="exam-actions">
+        <a class="btn btn--primary" href="{% url 'lessons:practice-path' %}">بازگشت به مسیر امروز</a>
+        <a class="btn" href="{% url 'exams:exam-index' %}">آزمون کامل</a>
+      </div>
+    </section>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if questions %}<script src="{% static 'exercises/js/exercise_runner.js' %}" defer></script>{% endif %}
+{% endblock %}

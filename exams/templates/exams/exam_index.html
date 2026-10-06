@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}آزمون A1 | {{ brand.name }}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'exams/css/exam.css' %}">{% endblock %}
+{% block content %}
+{% comment %}The exam's shape, and an honest account of what this product can and cannot do
+   with it. Every number comes from exams/spec.py, which records the official source, and
+   the score of a sitting is computed by exams/paper.py — this page adds no arithmetic of
+   its own. The page is public: the shape is content and the goal is a passed exam. Only
+   the learner's own sittings are personal, and a visitor simply does not get them.{% endcomment %}
+<div class="exam">
+  <header class="exam-head">
+    <p class="exam-eyebrow">آزمون</p>
+    <h1 class="exam-title">آزمون آزمایشی در شکل آزمون واقعی</h1>
+    {% comment %}The preamble is one sentence. What follows it is the exam's own numbers; the
+       reasoning that used to sit here is now the disclosure in panel 2, where it belongs.
+       «پرسش‌ها تمرین‌های خودِ این دوره‌اند، نه برگهٔ رسمی گوته» stays visible because it is
+       the one thing a learner must not misunderstand before reading any number.{% endcomment %}
+    <p class="exam-lead">
+      یک بار <b>آزمون نوشتاری</b> را با همان شکل رسمی بنشین: همان بخش‌ها به همان ترتیب، همان تعداد پرسش،
+      همان زمان و همان نمره‌دهی. پرسش‌ها تمرین‌های خودِ همین دوره‌اند، نه برگهٔ رسمی گوته.
+    </p>
+  </header>
+
+  {% comment %}1. What the official exam is. The table is the exam's own numbers, so a learner
+     can plan around them rather than around a guess.{% endcomment %}
+  <section class="exam-panel" aria-labelledby="exam-shape-title">
+    <div class="exam-panel__bar">
+      <h2 id="exam-shape-title">آزمون رسمی چه شکلی است</h2>
+      <p class="exam-panel__meta">مجموع: {{ duration_minutes }} دقیقه · {{ max_points }} امتیاز</p>
+    </div>
+
+    <table class="exam-table">
+      <thead>
+        <tr>
+          <th scope="col">بخش</th>
+          <th scope="col">زمان</th>
+          <th scope="col">پرسش</th>
+          <th scope="col">امتیاز</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for section in sections %}
+          <tr>
+            <th scope="row">
+              <span class="exam-table__german" lang="de" dir="ltr">{{ section.german }}</span>
+              <span class="exam-table__label">{{ section.label }}</span>
+            </th>
+            <td>{{ section.minutes }} دقیقه</td>
+            <td>{{ section.items }}</td>
+            <td>{{ section.items }} خام</td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <th scope="row">
+            <span class="exam-table__german" lang="de" dir="ltr">SPRECHEN</span>
+            <span class="exam-table__label">گفتن</span>
+          </th>
+          <td>{{ sprechen.minutes }} دقیقه</td>
+          <td>۳ بخش</td>
+          <td>{{ sprechen.points }} خام</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ul class="exam-facts">
+      <li>امتیاز خام هر بخش در <b>{{ score_factor }}</b> ضرب می‌شود و بعد جمع می‌شوند: نوشتاری تا <b>{{ written_max_points }}</b> و گفتن تا <b>{{ spoken_max_points }}</b>، مجموع <b>{{ max_points }}</b>.</li>
+      <li>قبولی: <b>{{ pass_points }}</b> امتیاز از {{ max_points }} — و همهٔ بخش‌ها باید داده شوند.</li>
+      <li>اگر بخش نوشتاری زیر <b>{{ written_minimum }}</b> امتیاز باشد، حتی نمرهٔ کامل گفتن هم به ۶۰ نمی‌رساند؛ آزمون خودش همین را می‌گوید.</li>
+      <li>منبع این عددها: <span lang="en" dir="ltr">{{ source }}</span></li>
+    </ul>
+  </section>
+
+  {% comment %}2. What a sitting here does — and the two things it deliberately does not
+     claim. The second half is the same honest-disclosure rule «آمادگی من» follows.{% endcomment %}
+  <section class="exam-panel" aria-labelledby="exam-mock-title">
+    <div class="exam-panel__bar">
+      <h2 id="exam-mock-title">اینجا چه اتفاقی می‌افتد</h2>
+      <p class="exam-panel__meta">{{ items_per_section }} پرسش در هر بخش · {{ duration_minutes }} دقیقه یک‌سره</p>
+    </div>
+
+    <ul class="exam-facts">
+      {% comment %}What each section is really made of, said plainly — including the part
+         that is a limitation. This replaced a line that described the pools as a query
+         ("questions that have an audio file"), which was also how the paper used to be
+         picked: a new drill could join the exam without anyone deciding it should. The set
+         is curated and fixed now, so the page says what was chosen.{% endcomment %}
+      <li>برای هر بخش {{ items_per_section }} پرسش از یک <b>مجموعهٔ ثابت</b> انتخاب شده است: شنیدن از پرسشی که یک جملهٔ کامل پخش می‌شود و باید معنایش را بفهمی، خواندن از یک متن چندخطی با پرسش دربارهٔ همان متن، و نوشتن از پرسش‌هایی که خودت آلمانی را می‌نویسی (تا حد ممکن بیشتر از یک واژه). تمرین‌های تازه‌ای که بعداً به درس‌ها اضافه شوند، آزمون را عوض نمی‌کنند.</li>
+      <li>این مجموعه از پرسش‌های خودِ همین دوره انتخاب شده، پس برگهٔ رسمی گوته نیست: شکل و زمان و نمره‌دهی رسمی است، ولی نوعِ تمرین‌ها (مکالمهٔ کوتاه، اعلان، ایمیل، فرم، پیام کوتاه) همان چیزی نیست که سرِ آزمون واقعی می‌بینی.</li>
+      <li>زمان از لحظهٔ شروع روی سرور حساب می‌شود؛ بستن تب آزمون را متوقف نمی‌کند و رفرش آن را تازه نمی‌کند. با تمام شدن زمان، پاسخ‌ها دیگر ثبت نمی‌شوند.</li>
+      <li>نمره با همان حساب رسمی محاسبه و روی حساب تو ذخیره می‌شود، پس بعداً می‌توانی نتیجه‌هایت را با هم مقایسه کنی.</li>
+      <li>هر پاسخ تو مثل هر تمرین دیگری ذخیره می‌شود؛ یعنی واژه‌های غلط این آزمون در فهرست مرور، «آمادگی من» و برنامهٔ «امروز» می‌آیند.</li>
+    </ul>
+
+    {% comment %}The whole honesty paragraph, behind one line. The summary keeps the single
+       claim a learner must not miss («نمرهٔ اینجا نمرهٔ همین محتواست، نه پیش‌بینی نمرهٔ رسمی»),
+       so collapsing it hides the working, not the verdict.{% endcomment %}
+    <details class="more exam-more">
+      <summary>این آزمون چه چیزی نیست — نمرهٔ اینجا نمرهٔ همین محتواست، نه پیش‌بینی نمرهٔ رسمی</summary>
+      <div class="more__body">
+        <p>
+          این آزمون برگهٔ رسمی گوته نیست. در آزمون واقعی بخش‌های شنیدن و خواندن فقط شمردن پاسخ درست‌اند،
+          ولی نوشتن را دو تصحیح‌کننده با معیار نمره می‌دهند و گفتن را دو ممتحن — و هیچ‌کدام «چند تا درست زدی» نیست.
+          بخش گفتن هم اینجا نمره نمی‌گیرد؛ <a href="{% url 'exams:sprechen' %}">تمرین گفتن</a> توضیح می‌دهد چرا
+          و چه‌کار می‌شود کرد.
+        </p>
+      </div>
+    </details>
+  </section>
+
+  {% comment %}3. Starting, or continuing, a sitting. A visitor is told what an account is
+     for instead of being redirected to a login page with no explanation.{% endcomment %}
+  <section class="exam-panel exam-start" aria-labelledby="exam-start-title">
+    <div class="exam-panel__bar">
+      <h2 id="exam-start-title">آماده‌ای؟</h2>
+      {% if running %}<p class="exam-panel__meta">یک آزمون نیمه‌کاره داری</p>{% endif %}
+    </div>
+
+    {% if problems %}
+      <p class="exam-note">
+        محتوای فعلی برای ساختن یک آزمون کامل کافی نیست: {% for problem in problems %}{{ problem.facts.german }} فقط {{ problem.available }} پرسش قابل نمره‌دهی دارد{% if not forloop.last %} · {% endif %}{% endfor %}.
+        آزمون کوتاه‌تر از آزمون واقعی ساخته نمی‌شود، پس تا کامل شدن محتوا این دکمه کار نمی‌کند.
+      </p>
+    {% elif running %}
+      <p class="exam-note">آزمون را شروع کرده‌ای و تمام نشده. همان ادامه داده می‌شود تا آزمون دوم روی اولی سوار نشود؛ زمان از همان لحظهٔ شروع می‌گذرد.</p>
+      <a class="btn btn--primary" href="{% url 'exams:exam-run' running.pk %}">ادامهٔ آزمون</a>
+      <p class="exam-start__meta">شروع: {{ running.started_at|date:"Y/m/d H:i" }}</p>
+    {% elif user.is_authenticated %}
+      <p class="exam-lead">
+        نمره و کارنامه روی حساب کاربری‌ات ذخیره می‌شود. با زدن دکمه، {{ duration_minutes }} دقیقه زمان می‌گیری؛
+        هر وقت بخواهی می‌توانی زودتر تمامش کنی و نمره‌ات را ببینی.
+      </p>
+      <form method="post" action="{% url 'exams:exam-start' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn--primary">شروع آزمون نوشتاری · {{ duration_minutes }} دقیقه</button>
+      </form>
+    {% else %}
+      <p class="exam-lead">آزمون ذخیره می‌شود تا نمره‌هایت را با هم مقایسه کنی و اشتباه‌هایت به فهرست مرورت بیاید. برای همین یک حساب لازم است.</p>
+      <p class="exam-start__actions">
+        <a class="btn btn--primary" href="{% url 'accounts:login' %}?next={% url 'exams:exam-index' %}">ورود</a>
+        <a class="btn" href="{% url 'accounts:signup' %}">ساخت حساب</a>
+        <a class="btn" href="{% url 'exams:sprechen' %}">تمرین گفتن (بدون حساب)</a>
+      </p>
+    {% endif %}
+  </section>
+
+  {% comment %}4. The instruction words. They are checked against real Word rows, so a word
+     the course does not teach is shown as a gap rather than quietly assumed to be known.{% endcomment %}
+  <section class="exam-panel" aria-labelledby="exam-words-title">
+    <div class="exam-panel__bar">
+      <h2 id="exam-words-title">واژه‌های دستور کار</h2>
+      <p class="exam-panel__meta">روی برگهٔ رسمی</p>
+    </div>
+    <p class="exam-note">این واژه‌ها دستورهای برگهٔ آزمون‌اند، نه واژگان موضوعی. کسی که «ankreuzen» را نفهمد، نه به‌خاطر آلمانی‌اش بلکه به‌خاطر واژه‌اش گیر می‌کند.</p>
+
+    <ul class="exam-words">
+      {% for row in instructions %}
+        <li class="exam-words__item">
+          <span class="exam-words__german" lang="de" dir="ltr">{{ row.german }}</span>
+          <span class="exam-words__fa">{{ row.fa }}</span>
+          {% if row.taught %}
+            <span class="chip chip--accent">در دوره هست</span>
+          {% else %}
+            <span class="chip">در دوره نیست</span>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  {% comment %}5. The learner's own sittings. A visitor gets no table at all rather than an
+     empty one that would look like a bug.{% endcomment %}
+  {% if user.is_authenticated %}
+    <section class="exam-panel" aria-labelledby="exam-runs-title">
+      <div class="exam-panel__bar">
+        <h2 id="exam-runs-title">آزمون‌های تو</h2>
+        <p class="exam-panel__meta">{{ finished|length }} آزمون تمام‌شده</p>
+      </div>
+
+      {% if finished %}
+        <ul class="exam-runs">
+          {% for item in finished %}
+            <li class="exam-runs__item">
+              <a class="exam-runs__link" href="{% url 'exams:exam-run' item.run.pk %}">
+                <span class="exam-runs__date">{{ item.run.started_at|date:"Y/m/d H:i" }}</span>
+                <span class="exam-runs__score">{{ item.score.points }} از {{ item.score.max_points }}</span>
+              </a>
+              <p class="exam-runs__sections">
+                {% for section in item.score.sections %}
+                  <span class="chip">{{ section.facts.german }}: {{ section.correct }} از {{ section.asked }}</span>
+                {% endfor %}
+              </p>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="exam-note">هنوز آزمونی تمام نکرده‌ای. اولین آزمون که تمام شود، نتیجه‌اش همین‌جا می‌آید تا پیشرفتت را ببینی.</p>
+      {% endif %}
+    </section>
+  {% endif %}
+</div>
+{% endblock %}

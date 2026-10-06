@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}آزمون نوشتاری | {{ brand.name }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'exercises/css/exercise.css' %}">
+<link rel="stylesheet" href="{% static 'exams/css/exam.css' %}">
+{% endblock %}
+{% block content_class %}content--exercise{% endblock %}
+{% block content %}
+{% comment %}One sitting, in the state it is in. While it is open this is the exercise runner's
+   own markup and its own browser module (exercises/js/exercise_runner.js) — every question
+   rendered server-side, one on screen at a time, each answer graded by the server through
+   exams:exam-submit — with two additions: a clock, and a way to close the paper. Once the
+   run is finished the same URL shows what it was worth, because a sitting that has not
+   finished yet and one that has are two states of one thing, not two pages.{% endcomment %}
+<div class="exam">
+  {% if run.finished_at %}
+    {% comment %}What the sitting was worth. The arithmetic is exams/paper.py's, rendered
+       as it is: raw points per section, the official factor, the written total out of 75 —
+       and the honest sentence about the 25 points this product cannot mark.{% endcomment %}
+    <header class="exam-head">
+      <p class="exam-eyebrow">آزمون نوشتاری · {{ run.started_at|date:"Y/m/d H:i" }}</p>
+      <h1 class="exam-title">نتیجهٔ این آزمون</h1>
+      <p class="exam-lead">
+        {{ result.raw_total }} پاسخ درست از {{ result.raw_max }} پرسش · {{ result.answered_total }} پرسش پاسخ داده شد.
+      </p>
+    </header>
+
+    <section class="exam-panel exam-result" aria-labelledby="exam-result-title">
+      <div class="exam-score">
+        <p class="exam-score__value">{{ result.points }}<span class="exam-score__max"> از {{ result.max_points }}</span></p>
+        <p class="exam-score__label">بخش نوشتاری</p>
+      </div>
+
+      <ul class="exam-facts">
+        {% if result.spoken_can_reach %}
+          <li>
+            برای رسیدن به {{ result.pass_points }} امتیاز از {{ result.max_points }}، از {{ result.spoken_max_points }} امتیاز بخش گفتن حداقل
+            <b>{{ result.needed_from_spoken }}</b> لازم داری.
+          </li>
+        {% else %}
+          <li>
+            با این نمره، حتی {{ result.spoken_max_points }} امتیاز کامل بخش گفتن هم به {{ result.pass_points }} نمی‌رساند
+            ({{ result.points }} + {{ result.spoken_max_points }}). آزمون رسمی هم همین را می‌گوید: بخش نوشتاری باید حداقل
+            {{ result.written_minimum }} امتیاز بگیرد.
+          </li>
+        {% endif %}
+        {% if not result.written_above_minimum %}
+          <li>بخش نوشتاری زیر {{ result.written_minimum }} امتیاز است — همان مرزی که آزمون برای رفتن به بخش گفتن می‌گذارد.</li>
+        {% endif %}
+        <li>بخش گفتن اینجا نمره نمی‌گیرد؛ <a href="{% url 'exams:sprechen' %}">تمرین گفتن</a> توضیح می‌دهد چه چیزی از آن می‌شود سنجید و چه چیزی نه.</li>
+        <li>حساب رسمی: امتیاز خام هر بخش ضربدر {{ score_factor }} — منبع: <span lang="en" dir="ltr">{{ source }}</span></li>
+      </ul>
+
+      <table class="exam-table">
+        <thead>
+          <tr>
+            <th scope="col">بخش</th>
+            <th scope="col">پاسخ‌داده‌شده</th>
+            <th scope="col">درست</th>
+            <th scope="col">امتیاز</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for section in result.sections %}
+            <tr>
+              <th scope="row"><span class="exam-table__german" lang="de" dir="ltr">{{ section.facts.german }}</span></th>
+              <td>{{ section.answered }} از {{ section.asked }}</td>
+              <td>{{ section.correct }}</td>
+              <td>{{ section.points }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="exam-panel" aria-labelledby="exam-missed-title">
+      <div class="exam-panel__bar">
+        <h2 id="exam-missed-title">پرسش‌هایی که نادرست بود</h2>
+        <p class="exam-panel__meta">{{ missed|length }} پرسش</p>
+      </div>
+
+      {% if missed %}
+        <ul class="exam-missed">
+          {% for row in missed %}
+            <li class="exam-missed__item">
+              <span class="exam-missed__meta">پرسش {{ row.order }} · {{ row.section_label }}</span>
+              <span class="exam-missed__prompt">{{ row.prompt|direction }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+        <p class="exam-note">پاسخ درست اینجا نوشته نمی‌شود — همان قاعدهٔ تمرین‌ها: برای دیدن پاسخ، تمرین را دوباره بزن. واژه‌های همین پرسش‌ها در <a href="{% url 'vocabulary:word-review' %}">فهرست مرور</a> تو نشسته‌اند.</p>
+      {% else %}
+        <p class="exam-note">هر پرسشی که پاسخ دادی درست بود.</p>
+      {% endif %}
+
+      <div class="exam-actions">
+        <form method="post" action="{% url 'exams:exam-start' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn--primary">آزمون تازه</button>
+        </form>
+        <a class="btn" href="{% url 'exams:exam-index' %}">شکل آزمون و نمره‌های قبلی</a>
+      </div>
+    </section>
+  {% elif expired %}
+    {% comment %}The clock ran out before this page was opened. The server refuses answers
+       after the deadline, so the page must not pretend the runner still works; it offers the
+       one thing that is left, which is closing the paper and reading the score.{% endcomment %}
+    <header class="exam-head">
+      <p class="exam-eyebrow">آزمون نوشتاری · {{ run.started_at|date:"Y/m/d H:i" }}</p>
+      <h1 class="exam-title">زمان تمام شد</h1>
+      <p class="exam-lead">۶۵ دقیقهٔ این آزمون تمام شده است. پاسخی که تا حالا ثبت نشده باشد، ثبت نمی‌شود.</p>
+    </header>
+
+    <section class="exam-panel">
+      <form method="post" action="{% url 'exams:exam-finish' run.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn--primary">دیدن نتیجه</button>
+      </form>
+    </section>
+  {% else %}
+    <header class="exam-head">
+      <p class="exam-eyebrow">آزمون نوشتاری · {{ questions|length }} پرسش</p>
+      <h1 class="exam-title">آزمون را جدی بگیر: یک‌سره و بی‌وقفه</h1>
+      <p class="exam-lead">
+        همین‌طور که آزمون رسمی برگزار می‌شود: بخش‌ها به ترتیب شنیدن، خواندن و نوشتن، در یک نشست.
+        پاسخ درست هیچ‌جا در این صفحه نیست و هر پاسخ روی سرور بررسی می‌شود.
+      </p>
+    </header>
+
+    <section class="exam-bar" aria-label="وضعیت آزمون">
+      <p class="exam-timer" data-exam-timer data-exam-deadline="{{ deadline|date:'c' }}" data-exam-finish-url="{% url 'exams:exam-finish' run.pk %}">
+        <span class="exam-timer__label">زمان مانده</span>
+        <span class="exam-timer__value">{{ minutes_left }} دقیقه</span>
+      </p>
+      <p class="exam-bar__sections">
+        {% for section in sections %}
+          <span class="chip"><span lang="de" dir="ltr">{{ section.german }}</span> · {{ section.asked }}</span>
+        {% endfor %}
+      </p>
+      <button type="button" class="btn exam-bar__finish" data-exam-finish data-exam-finish-url="{% url 'exams:exam-finish' run.pk %}">پایان آزمون و ثبت نتیجه</button>
+    </section>
+
+    <div class="runner" data-runner data-submit-url="{% url 'exams:exam-submit' run.pk %}">
+      <noscript>
+        <p class="runner-note">برای بررسی پاسخ‌ها جاوااسکریپت لازم است. با خاموش بودن آن می‌توانی پرسش‌ها را بخوانی، ولی پاسخی بررسی و ثبت نمی‌شود.</p>
+      </noscript>
+
+      <p class="runner-disclosure">هر پاسخ همان لحظه بررسی و روی حساب کاربری‌ات ثبت می‌شود؛ با تمام شدن زمان، پاسخ تازه‌ای پذیرفته نمی‌شود.</p>
+
+      <div class="runner-progress" data-runner-progress hidden>
+        <div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="{{ total_questions }}"
+             aria-valuenow="1" aria-label="پیشرفت آزمون" data-runner-bar>
+          <span class="progress__fill" data-runner-fill style="width:{% widthratio 1 total_questions 100 %}%"></span>
+        </div>
+      </div>
+
+      <div class="runner-body">
+        {% for question in questions %}
+          <section class="runner-q{% if forloop.first %} is-active{% endif %}"
+                   data-question="{{ question.id }}" data-kind="{{ question.kind }}"
+                   aria-labelledby="question-title-{{ question.id }}">
+            <header class="runner-q__head">
+              <p class="runner-q__eyebrow">
+                بخش <span lang="de" dir="ltr">{{ question.section_german }}</span> · پرسش {{ question.number }} از {{ total_questions }}
+              </p>
+              {% if question.passage %}
+                <p class="runner-q__passage" lang="de" dir="ltr">{{ question.passage }}</p>
+              {% endif %}
+              <h2 class="runner-q__prompt" id="question-title-{{ question.id }}" tabindex="-1">{{ question.prompt|direction|linebreaksbr }}</h2>
+            </header>
+
+            {% if question.audio %}
+              <div class="runner-q__media">{% include "includes/audio_control.html" with audio=question.audio prefix="exam-q" pk=question.id label=question.prompt %}</div>
+            {% endif %}
+            {% if question.image %}
+              <img class="runner-q__image" src="{{ question.image.url }}" alt="" loading="lazy">
+            {% endif %}
+
+            {% if question.kind == 'choice' %}
+              <fieldset class="runner-options" data-runner-options>
+                <legend class="sr-only">گزینه‌ها</legend>
+                {% for option in question.options %}
+                  <label class="runner-option">
+                    <input type="radio" name="answer-{{ question.id }}" value="{{ option.id }}">
+                    <span class="runner-option__text">{{ option.text|direction|linebreaksbr }}</span>
+                    <span class="runner-option__flag runner-option__flag--correct" data-flag="correct" hidden>درست</span>
+                    <span class="runner-option__flag runner-option__flag--wrong" data-flag="wrong" hidden>نادرست</span>
+                  </label>
+                {% endfor %}
+              </fieldset>
+            {% elif question.kind == 'text' %}
+              <div class="runner-answer">
+                <label class="runner-answer__label" for="answer-{{ question.id }}">پاسخ را به آلمانی بنویس</label>
+                <input class="runner-answer__input" id="answer-{{ question.id }}" name="answer-{{ question.id }}"
+                       type="text" lang="de" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
+              </div>
+            {% else %}
+              <p class="runner-note">این پرسش پاسخ تعریف‌شده‌ای ندارد و بررسی نمی‌شود.</p>
+            {% endif %}
+
+            {% if question.kind != 'none' %}
+              <div class="runner-feedback" data-runner-feedback role="status" aria-live="polite">
+                <p class="runner-result runner-result--correct" data-result="correct" hidden>
+                  <span class="runner-result__mark" aria-hidden="true">✓</span>درست است.
+                </p>
+                <p class="runner-result runner-result--wrong" data-result="wrong" hidden>
+                  <span class="runner-result__mark" aria-hidden="true">✕</span>درست نیست.
+                </p>
+                <p class="runner-expected" data-expected hidden>
+                  پاسخ درست: <span class="runner-expected__value" data-expected-value lang="de" dir="ltr"></span>
+                </p>
+                <p class="runner-explanation" data-explanation hidden></p>
+              </div>
+              <p class="runner-hint" data-runner-hint role="alert" hidden>لطفاً پیش از بررسی، پاسخ را انتخاب یا وارد کن.</p>
+            {% endif %}
+
+            <div class="runner-q__actions" data-runner-actions hidden>
+              <button type="button" class="btn runner-q__prev" data-runner-prev>قبلی</button>
+              <button type="button" class="btn runner-q__check" data-runner-check>بررسی پاسخ</button>
+              <button type="button" class="btn btn--primary runner-q__next" data-runner-next
+                      {% if forloop.last %}data-exam-finish data-exam-finish-url="{% url 'exams:exam-finish' run.pk %}"{% endif %}>
+                {% if forloop.last %}پایان آزمون{% else %}بعدی{% endif %}
+              </button>
+            </div>
+          </section>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% comment %}Only the sitting that is still open needs a client: the runner module that
+   reveals one question at a time, and the clock. The closed states are plain links and
+   forms, so they work with JavaScript switched off.{% endcomment %}
+{% if not run.finished_at and not expired %}
+  <script src="{% static 'exercises/js/exercise_runner.js' %}" defer></script>
+  <script src="{% static 'exams/js/exam_timer.js' %}" defer></script>
+{% endif %}
+{% endblock %}

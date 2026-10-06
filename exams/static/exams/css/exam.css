@@ -1,0 +1,140 @@
+/* The exam pages (exams/templates/exams/*.html).
+ *
+ * The sitting itself reuses the exercise runner's classes — it is the same one-question-at-
+ * a-time interface — so this file holds what the exam adds: the shape tables, the clock,
+ * the score panel, the instruction words and the spoken rehearsal. Canonical tokens only
+ * (static/css/base.css).
+ */
+
+.exam { display: flex; flex-direction: column; gap: 22px; }
+
+.exam-head { display: flex; flex-direction: column; gap: 8px; }
+.exam-eyebrow { margin: 0; color: var(--accent-text); font: 700 12px/1.6 system-ui, sans-serif; letter-spacing: .04em; }
+.exam-title { margin: 0; font-size: clamp(22px, 3vw, 30px); line-height: 1.5; }
+.exam-lead { margin: 0; max-width: 68ch; color: var(--muted); font-size: 14px; line-height: 1.95; }
+
+.exam-panel { display: flex; flex-direction: column; gap: 14px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.exam-panel__bar { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.exam-panel__bar h2 { margin: 0; font-size: 17px; }
+.exam-panel__meta { margin: 0; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------------ shape ---- */
+/* The official numbers, as a table rather than as a paragraph: a learner planning around
+   the exam wants to see the sections line up. */
+.exam-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.exam-table th, .exam-table td { padding: 10px 12px; text-align: start; border-block-end: 1px solid var(--line); }
+.exam-table thead th { color: var(--muted); font-weight: 600; font-size: 12px; }
+.exam-table tbody tr:last-child th, .exam-table tbody tr:last-child td { border-block-end: 0; }
+.exam-table__german { display: block; color: var(--fg); font-weight: 700; letter-spacing: .02em; }
+.exam-table__label { display: block; color: var(--muted); font-size: 12px; font-weight: 400; }
+
+.exam-facts { display: flex; flex-direction: column; gap: 8px; margin: 0; padding-inline-start: 20px; color: var(--muted); font-size: 13px; line-height: 1.9; }
+.exam-facts b { color: var(--fg); font-variant-numeric: tabular-nums; }
+.exam-note { margin: 0; max-width: 70ch; color: var(--muted); font-size: 13px; line-height: 1.95; }
+.exam-note a { color: var(--accent-text); }
+
+/* ------------------------------------------------------------------ start ---- */
+.exam-start__actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
+.exam-start__meta { margin: 0; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------------ words ---- */
+/* The task-sheet words. The chip says whether the course teaches the word, so a gap is
+   visible instead of being quietly assumed. */
+.exam-words { display: flex; flex-direction: column; gap: 0; margin: 0; padding: 0; list-style: none; }
+.exam-words__item { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding-block: 10px; border-block-end: 1px solid var(--line); }
+.exam-words__item:last-child { border-block-end: 0; }
+.exam-words__german { min-width: 0; color: var(--fg); font: 700 15px/1.7 system-ui, sans-serif; }
+.exam-words__fa { flex: 1 1 12rem; min-width: 0; color: var(--muted); font-size: 13px; }
+
+/* ------------------------------------------------------------- past sittings ---- */
+.exam-runs { display: flex; flex-direction: column; gap: 0; margin: 0; padding: 0; list-style: none; }
+.exam-runs__item { display: flex; flex-direction: column; gap: 6px; padding-block: 12px; border-block-end: 1px solid var(--line); }
+.exam-runs__item:last-child { border-block-end: 0; }
+.exam-runs__link { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; color: var(--fg); }
+.exam-runs__link:hover { color: var(--accent-text); }
+.exam-runs__date { font-variant-numeric: tabular-nums; font-size: 13px; }
+.exam-runs__score { font-weight: 700; font-variant-numeric: tabular-nums; }
+.exam-runs__sections { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.exam-runs__sections .chip { font-variant-numeric: tabular-nums; }
+
+/* -------------------------------------------------------------- the sitting ---- */
+/* The bar above the runner: the clock on one side, what the paper contains on the other,
+   and the way out of it. It is sticky so the remaining time stays visible while a long
+   question is scrolled. */
+.exam-bar { position: sticky; inset-block-start: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.exam-bar__sections { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.exam-bar__finish { flex: 0 0 auto; }
+
+.exam-timer { display: flex; align-items: baseline; gap: 8px; margin: 0; }
+.exam-timer__label { color: var(--muted); font-size: 12px; }
+.exam-timer__value { color: var(--fg); font: 700 18px/1.4 system-ui, sans-serif; font-variant-numeric: tabular-nums; }
+/* Colour is reinforcement, never the only signal: the clock also carries the words, and
+   the page says the time is over in text once it is. */
+.exam-timer.is-low .exam-timer__value { color: var(--warning); }
+.exam-timer.is-expired .exam-timer__value { color: var(--danger); }
+
+/* ---------------------------------------------------------------- the score ---- */
+.exam-result { gap: 18px; }
+.exam-score { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.exam-score__value { margin: 0; color: var(--fg); font: 700 42px/1.2 system-ui, sans-serif; font-variant-numeric: tabular-nums; }
+.exam-score__max { color: var(--muted); font-size: 18px; font-weight: 600; }
+.exam-score__label { margin: 0; color: var(--muted); font-size: 13px; }
+
+.exam-missed { display: flex; flex-direction: column; gap: 0; margin: 0; padding: 0; list-style: none; }
+.exam-missed__item { display: flex; flex-direction: column; gap: 4px; padding-block: 10px; border-block-end: 1px solid var(--line); }
+.exam-missed__item:last-child { border-block-end: 0; }
+.exam-missed__meta { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.exam-missed__prompt { font-size: 14px; line-height: 1.8; overflow-wrap: anywhere; }
+
+.exam-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* ----------------------------------------------------------- the rehearsal ---- */
+.exam-part { display: flex; flex-direction: column; gap: 12px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.exam-part__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; }
+.exam-part__title { margin: 0; font-size: 16px; }
+.exam-part__title span { color: var(--muted); font-size: 13px; font-weight: 400; }
+.exam-phrases { display: flex; flex-direction: column; gap: 0; margin: 0; padding: 0; list-style: none; }
+.exam-phrase { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding-block: 10px; border-block-end: 1px solid var(--line); }
+.exam-phrase:last-child { border-block-end: 0; }
+.exam-phrase__text { min-width: 0; flex: 1 1 18rem; font: 600 15px/1.8 system-ui, sans-serif; overflow-wrap: anywhere; }
+/* --- concept 24: say it, hear it, judge it (sprechen_recorder.js) ------------
+ * Tokens only, like the rest of this file. The recording stays in the page; nothing
+ * here has a colour of its own.
+ */
+.phrase-record.is-recording {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.phrase-playback {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.phrase-playback audio {
+  height: 34px;
+  max-width: 240px;
+}
+
+.phrase-verdict {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* --- concept 24: the model recording and the self-report ---------------------
+ * The self-report is a class on the phrase, and the counter above is the real signal,
+ * so the coloured text is reinforcement rather than the message. Tokens only.
+ */
+.exam-phrase__model { display: inline-flex; }
+
+.phrase-self { display: inline-flex; align-items: center; gap: 6px; }
+
+.exam-phrase.is-said .exam-phrase__text { color: var(--success); }
+
+.exam-said { font-variant-numeric: tabular-nums; }
+
+.exam-phrase__fa { flex: 1 1 12rem; min-width: 0; color: var(--muted); font-size: 13px; }
+.exam-phrase__drill { display: inline-flex; align-items: center; min-height: 36px; color: var(--accent-text); font-size: 12px; }

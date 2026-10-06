@@ -1,0 +1,687 @@
+{
+  "level": "A1",
+  "items_per_section": 45,
+  "sections": {
+    "HOEREN": [
+      {
+        "lesson_order": 1,
+        "exercise_order": 146,
+        "question_order": 960
+      },
+      {
+        "lesson_order": 2,
+        "exercise_order": 124,
+        "question_order": 744
+      },
+      {
+        "lesson_order": 3,
+        "exercise_order": 146,
+        "question_order": 1007
+      },
+      {
+        "lesson_order": 4,
+        "exercise_order": 167,
+        "question_order": 1253
+      },
+      {
+        "lesson_order": 5,
+        "exercise_order": 161,
+        "question_order": 1168
+      },
+      {
+        "lesson_order": 6,
+        "exercise_order": 159,
+        "question_order": 1242
+      },
+      {
+        "lesson_order": 7,
+        "exercise_order": 168,
+        "question_order": 1312
+      },
+      {
+        "lesson_order": 8,
+        "exercise_order": 142,
+        "question_order": 1058
+      },
+      {
+        "lesson_order": 9,
+        "exercise_order": 176,
+        "question_order": 1317
+      },
+      {
+        "lesson_order": 10,
+        "exercise_order": 163,
+        "question_order": 1227
+      },
+      {
+        "lesson_order": 11,
+        "exercise_order": 199,
+        "question_order": 1525
+      },
+      {
+        "lesson_order": 12,
+        "exercise_order": 105,
+        "question_order": 777
+      },
+      {
+        "lesson_order": 13,
+        "exercise_order": 181,
+        "question_order": 1329
+      },
+      {
+        "lesson_order": 14,
+        "exercise_order": 149,
+        "question_order": 1054
+      },
+      {
+        "lesson_order": 15,
+        "exercise_order": 124,
+        "question_order": 812
+      },
+      {
+        "lesson_order": 16,
+        "exercise_order": 160,
+        "question_order": 1175
+      },
+      {
+        "lesson_order": 17,
+        "exercise_order": 196,
+        "question_order": 1407
+      },
+      {
+        "lesson_order": 18,
+        "exercise_order": 152,
+        "question_order": 1059
+      },
+      {
+        "lesson_order": 19,
+        "exercise_order": 206,
+        "question_order": 1566
+      },
+      {
+        "lesson_order": 20,
+        "exercise_order": 142,
+        "question_order": 989
+      },
+      {
+        "lesson_order": 21,
+        "exercise_order": 192,
+        "question_order": 1528
+      },
+      {
+        "lesson_order": 22,
+        "exercise_order": 195,
+        "question_order": 1461
+      },
+      {
+        "lesson_order": 23,
+        "exercise_order": 142,
+        "question_order": 1057
+      },
+      {
+        "lesson_order": 24,
+        "exercise_order": 426,
+        "question_order": 3522
+      },
+      {
+        "lesson_order": 1,
+        "exercise_order": 146,
+        "question_order": 961
+      },
+      {
+        "lesson_order": 2,
+        "exercise_order": 124,
+        "question_order": 745
+      },
+      {
+        "lesson_order": 3,
+        "exercise_order": 146,
+        "question_order": 1008
+      },
+      {
+        "lesson_order": 4,
+        "exercise_order": 167,
+        "question_order": 1254
+      },
+      {
+        "lesson_order": 5,
+        "exercise_order": 161,
+        "question_order": 1169
+      },
+      {
+        "lesson_order": 6,
+        "exercise_order": 159,
+        "question_order": 1243
+      },
+      {
+        "lesson_order": 7,
+        "exercise_order": 168,
+        "question_order": 1313
+      },
+      {
+        "lesson_order": 8,
+        "exercise_order": 142,
+        "question_order": 1059
+      },
+      {
+        "lesson_order": 9,
+        "exercise_order": 176,
+        "question_order": 1318
+      },
+      {
+        "lesson_order": 10,
+        "exercise_order": 163,
+        "question_order": 1228
+      },
+      {
+        "lesson_order": 11,
+        "exercise_order": 199,
+        "question_order": 1526
+      },
+      {
+        "lesson_order": 12,
+        "exercise_order": 105,
+        "question_order": 778
+      },
+      {
+        "lesson_order": 13,
+        "exercise_order": 181,
+        "question_order": 1330
+      },
+      {
+        "lesson_order": 14,
+        "exercise_order": 149,
+        "question_order": 1055
+      },
+      {
+        "lesson_order": 15,
+        "exercise_order": 124,
+        "question_order": 813
+      },
+      {
+        "lesson_order": 16,
+        "exercise_order": 160,
+        "question_order": 1176
+      },
+      {
+        "lesson_order": 17,
+        "exercise_order": 196,
+        "question_order": 1408
+      },
+      {
+        "lesson_order": 18,
+        "exercise_order": 152,
+        "question_order": 1060
+      },
+      {
+        "lesson_order": 19,
+        "exercise_order": 206,
+        "question_order": 1567
+      },
+      {
+        "lesson_order": 20,
+        "exercise_order": 142,
+        "question_order": 990
+      },
+      {
+        "lesson_order": 21,
+        "exercise_order": 192,
+        "question_order": 1529
+      }
+    ],
+    "LESEN": [
+      {
+        "lesson_order": 1,
+        "exercise_order": 147,
+        "question_order": 966
+      },
+      {
+        "lesson_order": 2,
+        "exercise_order": 125,
+        "question_order": 750
+      },
+      {
+        "lesson_order": 3,
+        "exercise_order": 147,
+        "question_order": 1013
+      },
+      {
+        "lesson_order": 4,
+        "exercise_order": 168,
+        "question_order": 1259
+      },
+      {
+        "lesson_order": 5,
+        "exercise_order": 162,
+        "question_order": 1174
+      },
+      {
+        "lesson_order": 6,
+        "exercise_order": 160,
+        "question_order": 1248
+      },
+      {
+        "lesson_order": 7,
+        "exercise_order": 169,
+        "question_order": 1318
+      },
+      {
+        "lesson_order": 8,
+        "exercise_order": 143,
+        "question_order": 1064
+      },
+      {
+        "lesson_order": 9,
+        "exercise_order": 177,
+        "question_order": 1323
+      },
+      {
+        "lesson_order": 10,
+        "exercise_order": 164,
+        "question_order": 1233
+      },
+      {
+        "lesson_order": 11,
+        "exercise_order": 200,
+        "question_order": 1531
+      },
+      {
+        "lesson_order": 12,
+        "exercise_order": 106,
+        "question_order": 783
+      },
+      {
+        "lesson_order": 13,
+        "exercise_order": 182,
+        "question_order": 1335
+      },
+      {
+        "lesson_order": 14,
+        "exercise_order": 150,
+        "question_order": 1060
+      },
+      {
+        "lesson_order": 15,
+        "exercise_order": 125,
+        "question_order": 818
+      },
+      {
+        "lesson_order": 16,
+        "exercise_order": 161,
+        "question_order": 1181
+      },
+      {
+        "lesson_order": 17,
+        "exercise_order": 197,
+        "question_order": 1413
+      },
+      {
+        "lesson_order": 18,
+        "exercise_order": 153,
+        "question_order": 1065
+      },
+      {
+        "lesson_order": 19,
+        "exercise_order": 207,
+        "question_order": 1572
+      },
+      {
+        "lesson_order": 20,
+        "exercise_order": 143,
+        "question_order": 995
+      },
+      {
+        "lesson_order": 21,
+        "exercise_order": 193,
+        "question_order": 1534
+      },
+      {
+        "lesson_order": 22,
+        "exercise_order": 196,
+        "question_order": 1467
+      },
+      {
+        "lesson_order": 23,
+        "exercise_order": 143,
+        "question_order": 1063
+      },
+      {
+        "lesson_order": 24,
+        "exercise_order": 427,
+        "question_order": 3528
+      },
+      {
+        "lesson_order": 1,
+        "exercise_order": 147,
+        "question_order": 967
+      },
+      {
+        "lesson_order": 2,
+        "exercise_order": 125,
+        "question_order": 751
+      },
+      {
+        "lesson_order": 3,
+        "exercise_order": 147,
+        "question_order": 1014
+      },
+      {
+        "lesson_order": 4,
+        "exercise_order": 168,
+        "question_order": 1260
+      },
+      {
+        "lesson_order": 5,
+        "exercise_order": 162,
+        "question_order": 1175
+      },
+      {
+        "lesson_order": 6,
+        "exercise_order": 160,
+        "question_order": 1249
+      },
+      {
+        "lesson_order": 7,
+        "exercise_order": 169,
+        "question_order": 1319
+      },
+      {
+        "lesson_order": 8,
+        "exercise_order": 143,
+        "question_order": 1065
+      },
+      {
+        "lesson_order": 9,
+        "exercise_order": 177,
+        "question_order": 1324
+      },
+      {
+        "lesson_order": 10,
+        "exercise_order": 164,
+        "question_order": 1234
+      },
+      {
+        "lesson_order": 11,
+        "exercise_order": 200,
+        "question_order": 1532
+      },
+      {
+        "lesson_order": 12,
+        "exercise_order": 106,
+        "question_order": 784
+      },
+      {
+        "lesson_order": 13,
+        "exercise_order": 182,
+        "question_order": 1336
+      },
+      {
+        "lesson_order": 14,
+        "exercise_order": 150,
+        "question_order": 1061
+      },
+      {
+        "lesson_order": 15,
+        "exercise_order": 125,
+        "question_order": 819
+      },
+      {
+        "lesson_order": 16,
+        "exercise_order": 161,
+        "question_order": 1182
+      },
+      {
+        "lesson_order": 17,
+        "exercise_order": 197,
+        "question_order": 1414
+      },
+      {
+        "lesson_order": 18,
+        "exercise_order": 153,
+        "question_order": 1066
+      },
+      {
+        "lesson_order": 19,
+        "exercise_order": 207,
+        "question_order": 1573
+      },
+      {
+        "lesson_order": 20,
+        "exercise_order": 143,
+        "question_order": 996
+      },
+      {
+        "lesson_order": 21,
+        "exercise_order": 193,
+        "question_order": 1535
+      }
+    ],
+    "SCHREIBEN": [
+      {
+        "lesson_order": 1,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 2,
+        "exercise_order": 134,
+        "question_order": 816
+      },
+      {
+        "lesson_order": 6,
+        "exercise_order": 169,
+        "question_order": 1329
+      },
+      {
+        "lesson_order": 15,
+        "exercise_order": 132,
+        "question_order": 869
+      },
+      {
+        "lesson_order": 18,
+        "exercise_order": 166,
+        "question_order": 1170
+      },
+      {
+        "lesson_order": 19,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 20,
+        "exercise_order": 151,
+        "question_order": 1062
+      },
+      {
+        "lesson_order": 22,
+        "exercise_order": 209,
+        "question_order": 1576
+      },
+      {
+        "lesson_order": 23,
+        "exercise_order": 152,
+        "question_order": 1139
+      },
+      {
+        "lesson_order": 24,
+        "exercise_order": 433,
+        "question_order": 3586
+      },
+      {
+        "lesson_order": 3,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 4,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 5,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 7,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 8,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 9,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 10,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 11,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 13,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 14,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 16,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 17,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 21,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 1,
+        "exercise_order": 2,
+        "question_order": 6
+      },
+      {
+        "lesson_order": 2,
+        "exercise_order": 134,
+        "question_order": 817
+      },
+      {
+        "lesson_order": 6,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 15,
+        "exercise_order": 132,
+        "question_order": 870
+      },
+      {
+        "lesson_order": 18,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 19,
+        "exercise_order": 214,
+        "question_order": 1634
+      },
+      {
+        "lesson_order": 20,
+        "exercise_order": 152,
+        "question_order": 1063
+      },
+      {
+        "lesson_order": 22,
+        "exercise_order": 209,
+        "question_order": 1577
+      },
+      {
+        "lesson_order": 23,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 24,
+        "exercise_order": 2,
+        "question_order": 5
+      },
+      {
+        "lesson_order": 3,
+        "exercise_order": 2,
+        "question_order": 6
+      },
+      {
+        "lesson_order": 4,
+        "exercise_order": 2,
+        "question_order": 6
+      },
+      {
+        "lesson_order": 5,
+        "exercise_order": 2,
+        "question_order": 6
+      },
+      {
+        "lesson_order": 7,
+        "exercise_order": 2,
+        "question_order": 6
+      },
+      {
+        "lesson_order": 8,
+        "exercise_order": 2,
+        "question_order": 6
+      },
+      {
+        "lesson_order": 9,
+        "exercise_order": 2,
+        "question_order": 6
+      },
+      {
+        "lesson_order": 10,
+        "exercise_order": 2,
+        "question_order": 6
+      },
+      {
+        "lesson_order": 11,
+        "exercise_order": 2,
+        "question_order": 6
+      },
+      {
+        "lesson_order": 13,
+        "exercise_order": 2,
+        "question_order": 6
+      },
+      {
+        "lesson_order": 14,
+        "exercise_order": 2,
+        "question_order": 6
+      },
+      {
+        "lesson_order": 16,
+        "exercise_order": 2,
+        "question_order": 6
+      },
+      {
+        "lesson_order": 17,
+        "exercise_order": 2,
+        "question_order": 6
+      }
+    ]
+  }
+}

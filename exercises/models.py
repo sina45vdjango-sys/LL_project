@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+from exams.sections import Section
+
 
 class Exercise(models.Model):
     class ExerciseType(models.TextChoices):
@@ -12,6 +14,7 @@ class Exercise(models.Model):
         TRUE_FALSE = "TRUE_FALSE", "True / False"
         SPEAKING = "SPEAKING", "Speaking"
         WRITING = "WRITING", "Writing"
+        SCRAMBLE = "SCRAMBLE", "Scramble"
 
     class Difficulty(models.TextChoices):
         EASY = "EASY", "Easy"
@@ -63,6 +66,7 @@ class Exercise(models.Model):
         ExerciseType.TRUE_FALSE: "درست / نادرست",
         ExerciseType.SPEAKING: "گفتن",
         ExerciseType.WRITING: "نوشتن",
+        ExerciseType.SCRAMBLE: "مرتب کردن جمله",
     }
     DIFFICULTY_LABELS = {
         Difficulty.EASY: "آسان",
@@ -95,6 +99,23 @@ class Question(models.Model):
 
     prompt = models.TextField()
 
+    #: The exam section this question was curated for, or blank for practice-only.
+    #:
+    #: The mock exam's paper is drawn from these rows and from nothing else. Before this
+    #: field existed the paper was "every published question that fits the skill", which
+    #: meant a newly generated drill silently changed the exam — the audit found a reading
+    #: generator supplying a third of LESEN. Now the exam only moves when someone marks a
+    #: question on purpose, and the marks live in ``exams/data/a1_exam_items.json``.
+    #:
+    #: The codes come from ``exams/sections.py``, which both this app and the exams app can
+    #: import without a circular import. Blank is the default and the normal case: almost
+    #: every question in the database is practice content.
+    exam_section = models.CharField(
+        max_length=20,
+        choices=Section.choices,
+        blank=True,
+    )
+
     audio = models.FileField(
         upload_to="questions/audio/",
         blank=True,
@@ -125,6 +146,12 @@ class Question(models.Model):
 class QuestionTarget(models.Model):
     class Role(models.TextChoices):
         TESTED_ITEM = "TESTED_ITEM", "Tested Item"
+        # The grammar rule the question exercises, when it exercises one. A question can
+        # test a word *and* exercise a rule — "which article does Abend take?" asks for
+        # a stored fact and for the Artikel rule at once — so the rule needs a role of
+        # its own: `unique_tested_item_per_question` allows only one TESTED_ITEM row per
+        # question, and `CONTEXT` means words the question merely uses.
+        GRAMMAR = "GRAMMAR", "Grammar"
         CONTEXT = "CONTEXT", "Context"
         PROMPT = "PROMPT", "Prompt"
 

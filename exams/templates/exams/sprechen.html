@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}تمرین گفتن | {{ brand.name }}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'exams/css/exam.css' %}">{% endblock %}
+{% block extra_js %}<script src="{% static 'exams/js/sprechen_recorder.js' %}" defer></script>{% endblock %}
+{% block content %}
+{% comment %}The oral section. It is 15 of the official 100 points, and it is the one part
+   this product cannot mark: the exam's own grading is two examiners against criteria, not a
+   count of right answers. So this page does the honest thing instead of inventing a score —
+   it says what the three parts are, gives the phrases a candidate has to be able to say,
+   and points each phrase at the real questions that practise the course sentence it matches
+   (exams/paper.py::spoken_practice). A phrase with no such sentence is shown as a phrase to
+   learn, not as a drill that does not exist.{% endcomment %}
+<div class="exam">
+  <header class="exam-head">
+    <p class="exam-eyebrow">آزمون · بخش گفتن</p>
+    <h1 class="exam-title">بخش گفتن، بدون نمرهٔ الکی</h1>
+    <p class="exam-lead">
+      بخش گفتن آزمون {{ sprechen.minutes }} دقیقه و {{ sprechen.points }} امتیاز از {{ max_points }} امتیاز است —
+      یعنی یک‌چهارم نتیجه. هیچ‌جای این محصول گفتار تو را نمره نمی‌دهد و ما هم نمره‌ای برایش نمی‌سازیم.
+      چیزی که می‌شود کرد این است: بدانی چه اتفاقی می‌افتد و جمله‌هایی را که لازم داری تمرین کنی.
+    </p>
+  </header>
+
+  <section class="exam-panel" aria-labelledby="sprechen-shape-title">
+    <div class="exam-panel__bar">
+      <h2 id="sprechen-shape-title">در آزمون واقعی</h2>
+      <p class="exam-panel__meta">۳ بخش · هر کدام حدود ۵ دقیقه</p>
+    </div>
+    <ul class="exam-facts">
+      <li>{{ sprechen.note }}</li>
+      <li>دو ممتحن هستند؛ یکی گفت‌وگو را می‌گرداند. هر بخش پیش از شروع با یک مثال توضیح داده می‌شود.</li>
+      <li>امتیاز بخش‌ها: بخش ۱ سه امتیاز، بخش ۲ و ۳ هر کدام شش امتیاز — و نمرهٔ نهایی میانگین دو ممتحن است.</li>
+      <li>منبع: <span lang="en" dir="ltr">{{ source }}</span></li>
+    </ul>
+    {% comment %}Concept 24 («بلند بگو»). The product cannot mark speaking, so the honest
+       addition is a microphone and your own ears. The clip is never uploaded — it lives in
+       the page and dies with it — so this sentence is a statement of fact, not a promise.
+       Without JavaScript, or without a microphone, the buttons are simply not there.{% endcomment %}
+    <p class="exam-note">
+      کنار هر جمله دو کار می‌توانی بکنی: <b>صوت الگو</b> را بشنوی و بعد خودت را ضبط کنی و
+      مقایسه کنی. ضبط فقط روی همین صفحه می‌ماند و هیچ‌جا فرستاده نمی‌شود.
+    </p>
+    {% comment %}Concept 24's self-report. It is a class on a list item and a number on
+       the page — nothing leaves the browser and nothing is written down, because speaking
+       cannot be graded here and a self-report is not a result. The counter is what makes
+       a bounded node out of a long list of phrases: you can see how far you got.{% endcomment %}
+    <p class="exam-note exam-said" data-said-progress>
+      <b data-said-count>0</b> از <b>{{ phrase_total }}</b> جمله را گفتی.
+      این عدد فقط روی همین صفحه است و جایی ثبت نمی‌شود؛ چون گفتار نمره نمی‌گیرد،
+      تنها کسی که می‌تواند قضاوت کند خودت هستی.
+    </p>
+    <p class="exam-note">
+      نمرهٔ بخش گفتن در حساب «قبولی یا نه» آزمون نوشتاری اثر دارد: در <a href="{% url 'exams:exam-index' %}">آزمون آزمایشی</a>
+      می‌بینی از {{ pass_points }} امتیاز قبولی چند امتیاز از این بخش لازم داری.
+    </p>
+  </section>
+
+  {% for part in parts %}
+    <section class="exam-part" aria-labelledby="sprechen-part-{{ part.number }}">
+      <div class="exam-part__head">
+        <h2 class="exam-part__title" id="sprechen-part-{{ part.number }}">
+          بخش {{ part.number }} · {{ part.title }}
+          <span lang="de" dir="ltr">{{ part.german }}</span>
+        </h2>
+        <p class="exam-panel__meta">{{ part.minutes }} دقیقه · {{ part.points }} امتیاز</p>
+      </div>
+
+      <p class="exam-note">{{ part.what }}</p>
+
+      <ul class="exam-phrases">
+        {% for phrase in part.phrases %}
+          <li class="exam-phrase" data-phrase>
+            <span class="exam-phrase__text" lang="de" dir="ltr">{{ phrase.de }}</span>
+            <span class="exam-phrase__fa">{{ phrase.fa }}</span>
+            {% comment %}The model recording, when the course really has the sentence — the
+               same rule spoken_practice uses for the drill link. A phrase with no course
+               sentence has no model audio either, and says nothing rather than playing an
+               unrelated clip.{% endcomment %}
+            {% if phrase.sentence and phrase.sentence.audio %}
+              <span class="exam-phrase__model">
+                {% include "includes/audio_control.html" with audio=phrase.sentence.audio prefix="model" pk=phrase.sentence.pk label=phrase.de inline=True %}
+              </span>
+            {% endif %}
+            {% if phrase.practice %}
+              {% for exercise in phrase.practice %}
+                <a class="exam-phrase__drill" href="{% url 'exercises:exercise-detail' exercise.pk %}">تمرین همین جمله</a>
+              {% endfor %}
+            {% else %}
+              <span class="chip">بدون تمرین در دوره</span>
+            {% endif %}
+            {% comment %}Removed by the script when the browser has no recorder, so the
+               page degrades to exactly what it was before this feature.{% endcomment %}
+            <button type="button" class="btn btn--sm phrase-record js-record">🎙️ ضبط و مقایسه</button>
+            {% comment %}The self-report needs no microphone, so it is never removed —
+               saying the phrase out loud and marking it is the whole node.{% endcomment %}
+            <span class="phrase-self">
+              <button type="button" class="btn btn--sm js-said">گفتم</button>
+              <button type="button" class="btn btn--sm js-not-said">هنوز نه</button>
+            </span>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endfor %}
+
+  <section class="exam-panel">
+    <div class="exam-panel__bar">
+      <h2>چرا نمره نمی‌گیرد</h2>
+    </div>
+    <p class="exam-note">
+      آزمون رسمی این بخش را با معیار نمره می‌دهد، نه با شمردن پاسخ درست؛ پس هر عددی که اینجا برای گفتار تو
+      بسازیم، عددی ساختگی است. آن‌چه این صفحه می‌تواند بکند این است که جمله‌های لازم را نشان بدهد و
+      به تمرین‌های واقعی همان جمله‌ها وصل کند. برای نمرهٔ واقعی این بخش، تنها راه، ممتحن است.
+    </p>
+    <div class="exam-actions">
+      <a class="btn btn--primary" href="{% url 'exams:exam-index' %}">آزمون نوشتاری</a>
+      <a class="btn" href="{% url 'vocabulary:word-review' %}">مرور اشتباه‌های من</a>
+    </div>
+  </section>
+</div>
+{% endblock %}
