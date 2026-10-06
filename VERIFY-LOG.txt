@@ -147,3 +147,14 @@ PASS  1440x900 · a JSON client still gets a plain 405, not a page  ({"status":4
 PASS  1440x900 · a signed-in GET /exam/start/ lands on the exam  (http://127.0.0.1:8765/exam/)
 
 147/147 checks passed
+PASS  the page starts with nothing focused  (BODY)
+PASS  the served HTML never says which option is right
+PASS  the options on the page are the question's own  (خداحافظ (خودی) | ببخشید، چه گفتید؟ | چطوری؟ | اسمت چیه؟)
+PASS  pressing 2 selects the second option  ({"index":1,"marked":1,"disabled":false})
+PASS  the selected option is drawn as selected  ({"index":1,"marked":1,"disabled":false})
+PASS  Enter after a digit sends the answer  (submits: 200)
+PASS  the right answer is graded correct  (option 1)
+PASS  a correct answer shows the written explanation  («tschüss» یعنی «خداحافظ (خودی)».)
+PASS  no wrong-answer correction is shown for a right answer
+PASS  the page was clean
+10/10 checks passed

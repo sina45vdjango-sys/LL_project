@@ -20,6 +20,11 @@
   const runner = document.querySelector('[data-runner]');
   if (!runner) return;
 
+  // Practice pages give a missed question a second try before showing the answer (the
+  // template sets this). A test does not, because a second try there would inflate the
+  // score, so the flag is the page's decision rather than this file's.
+  const secondTry = 'secondTry' in runner.dataset;
+
   const questions = Array.from(runner.querySelectorAll('[data-question]'));
   if (!questions.length) return;
 
@@ -31,14 +36,21 @@
   const fill = runner.querySelector('[data-runner-fill]');
   const results = runner.querySelector('[data-runner-results]');
 
-  const state = questions.map(() => ({ submitted: false, outcome: null }));
+  const state = questions.map(() => ({ submitted: false, outcome: null, attempts: 0 }));
   let index = 0;
 
   /* ------------------------------------------------------------ submission ---- */
 
-  // Where the answers go, and the token the POST needs.
-  const submitUrl = runner.dataset.submitUrl || '';
+  // Where the answers go, and the token the POST needs. One exercise's page puts a
+  // single URL on the runner; a session gathers questions from several exercises at
+  // once, so each question carries its own and that one wins. Either way the server
+  // grades the answer against the exercise the question really belongs to.
+  const runnerSubmitUrl = runner.dataset.submitUrl || '';
   const csrfToken = document.querySelector('meta[name="csrf-token"]');
+
+  function submitUrlFor(question) {
+    return question.dataset.submitUrl || runnerSubmitUrl;
+  }
 
   // When the current question came on screen. The learner's response time is measured
   // from here to the moment they submit — a rough number for learning analytics, which
@@ -111,6 +123,48 @@
     if (hint) hint.hidden = true;
   }
 
+  /* ---------------------------------------------------------------- hint ---- */
+
+  // Where a hint is fetched from. The text is not in the page — the server decides
+  // whether the learner has missed this question enough times to be owed one. Like the
+  // submit URL, the question's own wins over the runner's, so a session can ask the
+  // right exercise for a hint.
+  const runnerHintUrl = runner.dataset.hintUrl || '';
+
+  function hintUrlFor(question) {
+    return question.dataset.hintUrl || runnerHintUrl;
+  }
+
+  function revealHelp(question) {
+    const block = question.querySelector('[data-runner-help-block]');
+    if (block) block.hidden = false;
+  }
+
+  function showHelpText(question, message) {
+    const text = question.querySelector('[data-runner-help]');
+    if (!text) return;
+    text.textContent = message;
+    text.hidden = false;
+  }
+
+  function requestHint(question) {
+    const hintUrl = hintUrlFor(question);
+    if (!hintUrl) return;
+
+    const button = question.querySelector('[data-runner-hint-request]');
+    if (button) button.disabled = true;
+
+    fetch(`${hintUrl}?question=${Number(question.dataset.question)}`, { headers: { Accept: 'application/json' } })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => {
+        if (button) button.disabled = false;
+        if (data && data.hint) showHelpText(question, data.hint);
+      })
+      .catch(() => {
+        if (button) button.disabled = false;
+      });
+  }
+
   // Never colour alone: each revealed option also gains a text flag.
   function flagOption(label, name) {
     if (!label) return;
@@ -143,6 +197,9 @@
     const input = question.querySelector('.runner-answer__input');
     if (!input) return;
     input.readOnly = true;
+    // Clear first: a first miss left the field marked wrong, and a second try that is
+    // right must not keep both marks.
+    input.classList.remove('is-correct', 'is-wrong');
     input.classList.add(correct ? 'is-correct' : 'is-wrong');
   }
 
@@ -166,6 +223,99 @@
       explanation.textContent = verdict.explanation;
       explanation.hidden = false;
     }
+
+    if (!verdict.correct && verdict.tested_word) {
+      showWordCard(feedback, verdict.tested_word);
+    }
+  }
+
+  /*
+   * The word a missed question tested, said properly: the article, the plural, how it
+   * sounds, what it means. This is the teaching moment a miss otherwise lacks — most
+   * questions carry no authored explanation, but almost every one tests a real word, so
+   * the facts come from the word itself. The response already carried them, because the
+   * word is public lesson content; this only draws them.
+   */
+  function showWordCard(feedback, word) {
+    const card = feedback.querySelector('[data-runner-word-card]');
+    if (!card) return;
+
+    card.textContent = '';
+
+    const head = document.createElement('p');
+    head.className = 'runner-word-card__head';
+
+    const term = document.createElement('span');
+    term.className = 'runner-word-card__term';
+    term.lang = 'de';
+    term.dir = 'ltr';
+    if (word.article) term.textContent = word.article + ' ' + word.word;
+    else term.textContent = word.word;
+    head.appendChild(term);
+
+    if (word.word_type) {
+      const type = document.createElement('span');
+      type.className = 'runner-word-card__type';
+      type.textContent = word.word_type;
+      head.appendChild(type);
+    }
+
+    card.appendChild(head);
+
+    const meaning = document.createElement('p');
+    meaning.className = 'runner-word-card__meaning';
+    meaning.textContent = word.meaning_fa;
+    card.appendChild(meaning);
+
+    if (word.pronunciation) {
+      const sound = document.createElement('p');
+      sound.className = 'runner-word-card__sound';
+      sound.lang = 'de';
+      sound.dir = 'ltr';
+      sound.textContent = word.pronunciation;
+      card.appendChild(sound);
+    }
+
+    if (word.plural) {
+      const plural = document.createElement('p');
+      plural.className = 'runner-word-card__plural';
+      plural.textContent = 'جمع: ';
+
+      const value = document.createElement('span');
+      value.lang = 'de';
+      value.dir = 'ltr';
+      value.textContent = word.plural;
+      plural.appendChild(value);
+      card.appendChild(plural);
+    }
+
+    const link = document.createElement('a');
+    link.className = 'runner-word-card__link';
+    link.href = word.url;
+    link.textContent = 'واژه را کامل ببین ←';
+    card.appendChild(link);
+
+    card.hidden = false;
+  }
+
+  /*
+   * The points this answer earned, straight from the response (accounts/xp.py).
+   * Nothing is added up here on purpose: the server decides XP, so the page can only
+   * ever echo it. A visitor has no totals to show, and the response says so with null.
+   */
+  function showXp(question, verdict) {
+    const feedback = question.querySelector('[data-runner-feedback]');
+    if (!feedback) return;
+    if (!verdict.xp || !verdict.xp_gained) return;
+
+    const previous = feedback.querySelector('[data-runner-xp]');
+    if (previous) previous.remove();
+
+    const note = document.createElement('p');
+    note.setAttribute('data-runner-xp', '');
+    note.className = 'runner-xp';
+    note.textContent = `+${verdict.xp_gained} امتیاز · سطح ${verdict.xp.level}`;
+    feedback.appendChild(note);
   }
 
   /* ------------------------------------------------------------- actions ---- */
@@ -182,8 +332,8 @@
     return typed ? { answer: null, response_text: typed } : null;
   }
 
-  function sendSubmission(question, submission) {
-    return fetch(submitUrl, {
+  function sendSubmission(question, submission, retry) {
+    return fetch(submitUrlFor(question), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -194,6 +344,9 @@
         answer: submission.answer,
         response_text: submission.response_text,
         response_time: secondsSince(questionShownAt),
+        // A second try at the same question. The server still grades and records it, but
+        // the points were already decided by the first attempt, so none are awarded now.
+        retry: retry,
       }),
     })
       .then((response) => (response.ok ? response.json() : null))
@@ -219,10 +372,15 @@
       return;
     }
 
+    // How many tries this question has had. The first miss is answered again rather than
+    // handed the answer, and a retry is sent as such so the server knows the points were
+    // already decided by the first attempt.
+    const attempt = current.attempts + 1;
+
     hideHint(question);
     setChecking(question, true);
 
-    sendSubmission(question, submission).then((verdict) => {
+    sendSubmission(question, submission, attempt > 1).then((verdict) => {
       setChecking(question, false);
 
       if (!verdict) {
@@ -230,15 +388,79 @@
         return;
       }
 
-      state[position] = { submitted: true, outcome: verdict.correct ? 'correct' : 'wrong' };
+      // Held back once on a practice page: the learner is told their answer was wrong —
+      // the useful half — but not which one is right, so the second try is real work
+      // instead of copying the answer. The question stays open and the check button
+      // stays visible, because nothing has been settled yet.
+      if (!verdict.correct && secondTry && attempt === 1) {
+        current.attempts = attempt;
+        offerSecondTry(question, submission);
+        return;
+      }
+
+      // Keep what the learner actually answered alongside the verdict, so the results
+      // screen can show their own answer next to the right one (see showResults) instead
+      // of only naming the question. A choice answer is read from the option's text — the
+      // page still never holds which option is correct, only what was picked.
+      let answerText = '';
+      if (question.dataset.kind === 'choice') {
+        const label = optionLabel(question, submission.answer);
+        const text = label ? label.querySelector('.runner-option__text') : null;
+        answerText = text ? text.textContent.trim() : '';
+      } else {
+        const input = question.querySelector('.runner-answer__input');
+        answerText = input ? input.value.trim() : '';
+      }
+
+      const secondTryNote = question.querySelector('[data-runner-second-try]');
+      if (secondTryNote) secondTryNote.hidden = true;
+
+      state[position] = {
+        submitted: true,
+        outcome: verdict.correct ? 'correct' : 'wrong',
+        attempts: attempt,
+        answerText: answerText,
+        verdict: verdict,
+        // The word this question tested, with the learner's counters, or null. It comes
+        // only with a missed answer from a signed-in learner; the results screen uses it
+        // to list the weak words (see showWeakWords).
+        word: verdict.tested_word || null,
+      };
       if (question.dataset.kind === 'choice') markOptions(question, submission.answer, verdict);
       else markTyped(question, verdict.correct);
       showFeedback(question, verdict);
+      showXp(question, verdict);
+      // A repeated mistake now owes a hint, so the button appears without a reload.
+      if (Number(verdict.hint_strength) > 0) revealHelp(question);
       syncActions(question);
 
       const next = question.querySelector('[data-runner-next]');
       if (next) next.focus();
     });
+  }
+
+  /*
+   * One more go at a missed question, before the right answer is shown. What the learner
+   * picked is marked wrong and taken out of the running, but the other options stay live
+   * and a typed answer is cleared and left editable, so the second try is a real attempt
+   * rather than a copy. The answer and the word card wait for a second miss.
+   */
+  function offerSecondTry(question, submission) {
+    if (question.dataset.kind === 'choice') {
+      flagOption(optionLabel(question, submission.answer), 'wrong');
+      const chosen = question.querySelector('input[type="radio"]:checked');
+      if (chosen) chosen.disabled = true;
+    } else {
+      const input = question.querySelector('.runner-answer__input');
+      if (input) {
+        input.classList.add('is-wrong');
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    const note = question.querySelector('[data-runner-second-try]');
+    if (note) note.hidden = false;
   }
 
   function advance(question) {
@@ -291,10 +513,29 @@
         const prompt = question.querySelector('.runner-q__prompt');
         button.textContent = `${eyebrow ? eyebrow.textContent.trim() : ''} — ${prompt ? prompt.textContent.trim() : ''}`;
         item.appendChild(button);
+
+        // What the learner answered, the answer they should have given, and the stored
+        // explanation: the three things a review list exists for, all from the
+        // submission's own response and kept per question as it was answered. The right
+        // answer is not on this page, so a reload could not reconstruct it.
+        const entry = state[position];
+        if (entry.answerText) item.appendChild(reviewLine('پاسخ تو:', entry.answerText));
+        if (entry.verdict && entry.verdict.expected.length > 0) {
+          item.appendChild(reviewLine('پاسخ درست:', entry.verdict.expected.join(' · ')));
+        }
+        if (entry.verdict && entry.verdict.explanation) {
+          const why = document.createElement('p');
+          why.className = 'runner-review__why';
+          why.textContent = entry.verdict.explanation;
+          item.appendChild(why);
+        }
+
         list.appendChild(item);
       });
       review.hidden = missed.length === 0;
     }
+
+    showWeakWords(results);
 
     questions.forEach((question) => question.classList.remove('is-active'));
     if (progress) progress.hidden = true;
@@ -302,9 +543,84 @@
     results.focus();
   }
 
+  /*
+   * The words behind the missed questions, each named once even when two questions tested
+   * the same word. A word the learner has now missed enough times to count as repeatedly
+   * wrong is flagged with the same wording the lesson rows use (the server decides that,
+   * so the threshold is never stated here). The block stays absent when the missed
+   * questions tested no word (a reading or grammar question), which is a normal exercise.
+   */
+  function showWeakWords(results) {
+    const block = results.querySelector('[data-results-weak]');
+    const list = results.querySelector('[data-results-weak-list]');
+    if (!block || !list) return;
+
+    list.textContent = '';
+
+    const seen = [];
+    const words = [];
+    questions.forEach((question, position) => {
+      const entry = state[position];
+      if (entry.outcome !== 'wrong' || !entry.word) return;
+      if (seen.indexOf(entry.word.id) !== -1) return;
+      seen.push(entry.word.id);
+      words.push(entry.word);
+    });
+
+    words.forEach((word) => {
+      const item = document.createElement('li');
+      item.className = 'runner-weak__row';
+
+      const link = document.createElement('a');
+      link.className = 'runner-weak__term';
+      link.href = word.url;
+      link.lang = 'de';
+      link.dir = 'ltr';
+      link.textContent = word.article ? `${word.article} ${word.word}` : word.word;
+      item.appendChild(link);
+
+      const meaning = document.createElement('span');
+      meaning.className = 'runner-weak__meaning';
+      meaning.textContent = word.meaning_fa;
+      item.appendChild(meaning);
+
+      if (word.repeated) {
+        const flag = document.createElement('span');
+        flag.className = 'runner-weak__flag';
+        flag.textContent = 'اشتباه پرتکرار';
+        item.appendChild(flag);
+      } else {
+        const count = document.createElement('span');
+        count.className = 'runner-weak__count';
+        count.textContent = `غلط: ${word.wrong_count}`;
+        item.appendChild(count);
+      }
+
+      list.appendChild(item);
+    });
+
+    block.hidden = words.length === 0;
+  }
+
+  /** One "label: value" line in the review list, with the German value kept LTR. */
+  function reviewLine(label, value) {
+    const line = document.createElement('p');
+    line.className = 'runner-review__line';
+    line.textContent = `${label} `;
+
+    const strong = document.createElement('span');
+    strong.className = 'runner-review__value';
+    strong.lang = 'de';
+    strong.dir = 'ltr';
+    strong.textContent = value;
+    line.appendChild(strong);
+
+    return line;
+  }
+
   function reset() {
     state.forEach((entry, position) => {
-      state[position] = { submitted: false, outcome: null };
+      state[position] = { submitted: false, outcome: null, attempts: 0 };
     });
 
     questions.forEach((question) => {
@@ -318,9 +634,12 @@
       question.querySelectorAll('[data-flag]').forEach((flag) => {
         flag.hidden = true;
       });
-      question.querySelectorAll('[data-result], [data-expected], [data-explanation]').forEach((element) => {
+      question.querySelectorAll('[data-result], [data-expected], [data-explanation], [data-runner-word-card], [data-runner-second-try]').forEach((element) => {
         element.hidden = true;
       });
+
+      const wordCard = question.querySelector('[data-runner-word-card]');
+      if (wordCard) wordCard.textContent = '';
 
       const input = question.querySelector('.runner-answer__input');
       if (input) {
@@ -329,7 +648,16 @@
         input.classList.remove('is-correct', 'is-wrong');
       }
       hideHint(question);
+
+      const helpText = question.querySelector('[data-runner-help]');
+      if (helpText) {
+        helpText.textContent = '';
+        helpText.hidden = true;
+      }
     });
+
+    const weak = results ? results.querySelector('[data-results-weak]') : null;
+    if (weak) weak.hidden = true;
 
     apply(0, { focus: true });
   }
@@ -355,6 +683,12 @@
       return;
     }
 
+    const hintButton = event.target.closest('[data-runner-hint-request]');
+    if (hintButton) {
+      requestHint(hintButton.closest('[data-question]'));
+      return;
+    }
+
     const review = event.target.closest('[data-review-index]');
     if (review) {
       apply(Number(review.dataset.reviewIndex), { focus: true });
@@ -376,15 +710,58 @@
     });
   });
 
-  // Enter is what a learner expects to do after typing an answer.
-  runner.addEventListener('keydown', (event) => {
+  /* The keyboard: Enter submits, and 1–9 pick an option.
+   *
+   * Enter after typing is what a learner already expects. The digits are the faster half
+   * of a multiple-choice question: the option's own number is the key, so a learner who is
+   * reading with the keyboard never has to reach for the mouse — and Enter right after a
+   * digit sends the answer, which makes "2, Enter" the whole interaction.
+   *
+   * Both are listened for on the document, because neither is useful if it only works while
+   * the focus happens to be inside the widget — the page is a lesson page and the exercise
+   * sits in the middle of it. Nothing else on the page may lose its keyboard to this:
+   *   * a learner typing an answer keeps their digits (the text input is left alone);
+   *   * if another control on the page holds the focus, the keys are not ours, with the one
+   *     exception of the page body, which is what is focused before the learner touches
+   *     anything — the case where the shortcuts have to work.
+   */
+  document.addEventListener('keydown', (event) => {
+    const typing = event.target.closest ? event.target.closest('.runner-answer__input') : null;
+
+    if (/^[1-9]$/.test(event.key)) {
+      if (typing) return;
+
+      const focused = document.activeElement;
+      if (focused && focused !== document.body && !runner.contains(focused)) return;
+
+      const question = questions[index];
+      if (!question) return;
+
+      const options = question.querySelectorAll('.runner-option input[type="radio"]');
+      const chosen = options[Number(event.key) - 1];
+      if (!chosen || chosen.disabled) return;
+
+      event.preventDefault();
+      chosen.checked = true;
+      // The `change` event is what draws the selected state (the same listener the mouse
+      // goes through), so the keyboard and the mouse cannot end up looking different.
+      chosen.dispatchEvent(new Event('change', { bubbles: true }));
+      return;
+    }
+
     if (event.key !== 'Enter') return;
-    const input = event.target.closest('.runner-answer__input');
-    if (!input) return;
-    const question = input.closest('[data-question]');
+
+    const question = typing ? typing.closest('[data-question]') : questions[index];
     if (!question) return;
+
     event.preventDefault();
     submit(question);
+  });
+
+  // A question that already owes a hint shows its button from the start; the button was
+  // rendered for every question, because a mistake in this sitting can earn one later.
+  questions.forEach((question) => {
+    if (Number(question.dataset.hintStrength) > 0) revealHelp(question);
   });
 
   apply(0, { focus: false });
