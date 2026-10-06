@@ -1,0 +1,58 @@
+{% comment %}The front door: what this is, who it is for, what is in it, and one action.
+
+   Shown on the home page to a visitor we cannot identify, above the dashboard panels —
+   because a stranger landing on a page titled «داشبورد» (dashboard) had arrived in the
+   middle of something they had not been told about. The audit found this to be the
+   product's worst first impression, and the only paragraph anywhere that explained the
+   product was written in English.
+
+   Every number below is counted from the database (``lessons/views.py::DashboardView``)
+   and every one is the *course's* own scope: the lessons on the path, the words those
+   lessons teach, the exercises in them. Nothing is estimated, nothing is a promise, and
+   nothing here says or implies a result (no «در چند هفته», no «تضمینی»). The one claim it
+   does make — that a part of it needs no account — is the same claim the rest of the
+   product already keeps.{% endcomment %}
+<section class="panel front-door" aria-labelledby="front-door-title">
+  <p class="front-door__eyebrow">آلمانی A1، به زبان فارسی</p>
+
+  <h2 class="front-door__title" id="front-door-title">
+    آلمانی را از صفر یاد بگیر — با توضیح فارسی، از همان درس اول.
+  </h2>
+
+  <p class="front-door__lead">
+    اینجا یک دورهٔ کامل آلمانی در سطح <bdi lang="en" dir="ltr">A1</bdi> است:
+    درس‌های گام‌به‌گام، واژه‌ها با صدا، تمرین‌های تصحیح‌شده و مرور واژه‌هایی که اشتباه زده‌ای.
+    همهٔ محتوا برای فارسی‌زبان‌ها نوشته شده و متن آلمانی همیشه از چپ به راست است،
+    تا چشم یاد بگیرد دو زبان را از هم جدا ببیند.
+  </p>
+
+  <p class="front-door__for">
+    برای کسی است که هیچ آلمانی نمی‌داند یا خیلی کم می‌داند و می‌خواهد از الفبا و سلام‌و‌احوال
+    شروع کند و به خرید، سفر و گذشتهٔ ساده برسد.
+  </p>
+
+  <dl class="front-door__facts">
+    <div><dt>درس</dt><dd>{{ lesson_total }}</dd></div>
+    <div><dt>واژه</dt><dd>{{ word_total }}</dd></div>
+    <div><dt>تمرین</dt><dd>{{ exercise_total }}</dd></div>
+    <div><dt>پرسش</dt><dd>{{ question_total }}</dd></div>
+  </dl>
+
+  <p class="front-door__note">
+    این عددها از خودِ محتوای منتشرشدهٔ همین دوره شمرده شده‌اند؛ واژه‌های درس‌ها، تمرین‌های خودِ درس‌ها.
+  </p>
+
+  <div class="front-door__actions">
+    {% if first_lesson %}
+      <a class="btn btn--primary" href="{% url 'lessons:lesson-detail' first_lesson.pk %}">
+        شروع درس {{ first_lesson.order }}
+      </a>
+    {% endif %}
+    <a class="btn" href="{% url 'lessons:lesson-list' %}">دیدن مسیر یادگیری</a>
+  </div>
+
+  <p class="front-door__note front-door__note--quiet">
+    برای شروع هیچ حساب کاربری‌ای لازم نیست. حساب فقط برای این است که پیشرفت، هدف و
+    آمادگی‌ات روی خودت نگه داشته شود.
+  </p>
+</section>

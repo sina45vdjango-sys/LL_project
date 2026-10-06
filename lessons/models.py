@@ -22,10 +22,26 @@ class Course(models.Model):
     language_level = models.OneToOneField(LanguageLevel, on_delete=models.CASCADE, related_name="course")
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
+    # The Persian summary of the course, shown on the pages a Persian-speaking visitor
+    # reads. `description` above is kept as the German/English one — the admin and the
+    # export show it — and the same rule as Lesson applies: the Persian page shows the
+    # Persian text, falling back to the other one only while a translation is missing.
+    # An English paragraph on the front page of a Persian product read as unfinished, and
+    # the audit found it as the only text that explained what the product is.
+    description_fa = models.TextField(
+        blank=True,
+        help_text="Persian summary, shown on the learner pages. The other description stays as the course's own.",
+    )
     is_published = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["language_level__order"]
+
+    @property
+    def display_description(self):
+        if self.description_fa:
+            return self.description_fa
+        return self.description
 
     def __str__(self):
         return self.title
@@ -34,10 +50,38 @@ class Course(models.Model):
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="lessons")
     title = models.CharField(max_length=250)
+    title_fa = models.CharField(
+        max_length=250,
+        blank=True,
+        help_text=(
+            "Persian title, shown as the lesson's own title on every learner page. "
+            "The German title stays beside it as the lesson's German name."
+        ),
+    )
     description = models.TextField(blank=True)
+    description_fa = models.TextField(
+        blank=True,
+        help_text="Persian one-line summary, shown under the title on the learner pages.",
+    )
     is_published = models.BooleanField(default=False)
     order = models.PositiveIntegerField()
     estimated_time = models.PositiveIntegerField()
+
+    # The Persian page shows a Persian title; the German one is the lesson's German
+    # name and is displayed beside it, not instead of it. Falling back to the German
+    # title means a lesson whose translation is not written yet still reads as itself
+    # rather than as an empty heading. Properties only — the fields above are the data.
+    @property
+    def display_title(self):
+        if self.title_fa:
+            return self.title_fa
+        return self.title
+
+    @property
+    def display_description(self):
+        if self.description_fa:
+            return self.description_fa
+        return self.description
 
     class Meta:
         ordering = ["course", "order"]

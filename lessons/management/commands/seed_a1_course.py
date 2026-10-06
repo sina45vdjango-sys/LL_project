@@ -48,6 +48,14 @@ COURSES = {
         "greeting someone to describing your home, A1.2 (lessons 13–24) covers free time, "
         "travelling, health, the past tense and everyday situations. Original material, "
         "aligned with the CEFR A1 level.",
+        # The Persian summary, which is the one the learner pages show. It says the same
+        # three things as the paragraph above — where the course starts, how far it goes
+        # and that the material is this project's own — because those are the three facts
+        # a visitor is trying to establish. No claim about the official exam is made here:
+        # the exam page is where that is handled, and it handles it honestly.
+        "دورهٔ آلمانی از صفر تا سطح A1، در ۲۴ درس پشت سر هم. از سلام‌و‌احوال و معرفی خودت "
+        "شروع می‌شود و به خرید، سفر، سلامت و گذشتهٔ ساده می‌رسد. همهٔ متن‌ها، جمله‌ها و "
+        "تمرین‌های این دوره محتوای خودِ همین پروژه است، نه برگهٔ رسمی گوته.",
     ),
 }
 
@@ -184,6 +192,13 @@ class Command(BaseCommand):
                         f"{label}: {word.word!r} is REVIEW but is not introduced as NEW in this or an earlier lesson"
                     )
 
+            # The Persian pages show the Persian title, so a lesson without one would
+            # fall back to its German name on every learner screen. That is a gap in the
+            # data rather than a broken reference, so it is a warning, not an error.
+            for field in ("title_fa", "description_fa"):
+                if not item.get(field, ""):
+                    warnings.append(f"{label}: has no {field} – the German text will be shown instead")
+
             for title in item.get("grammar", []):
                 if title not in a1_grammar.GRAMMAR:
                     errors.append(f"{label}: unknown grammar topic {title!r}")
@@ -223,7 +238,9 @@ class Command(BaseCommand):
             order=item["order"],
             defaults={
                 "title": item["title"],
+                "title_fa": item.get("title_fa", ""),
                 "description": item.get("description", ""),
+                "description_fa": item.get("description_fa", ""),
                 "estimated_time": item.get("estimated_time", 60),
                 "is_published": publish,
             },
@@ -237,16 +254,25 @@ class Command(BaseCommand):
             fields = []
             if lesson.title != item["title"]:
                 fields.append(f"title: {lesson.title!r} vs {item['title']!r}")
+            if lesson.title_fa != item.get("title_fa", ""):
+                fields.append(f"title_fa: {lesson.title_fa!r} vs {item.get('title_fa', '')!r}")
             if lesson.estimated_time != item.get("estimated_time", 60):
                 fields.append(f"estimated_time: {lesson.estimated_time} vs {item.get('estimated_time', 60)}")
             if fields and not update:
                 counters["lesson_differences"].append(f"lesson {item['order']}: " + "; ".join(fields))
             if update and not dry:
                 lesson.title = item["title"]
+                lesson.title_fa = item.get("title_fa", "")
                 lesson.description = item.get("description", "")
+                lesson.description_fa = item.get("description_fa", "")
                 lesson.estimated_time = item.get("estimated_time", 60)
                 lesson.is_published = publish
-                lesson.save(update_fields=["title", "description", "estimated_time", "is_published"])
+                lesson.save(
+                    update_fields=[
+                        "title", "title_fa", "description", "description_fa",
+                        "estimated_time", "is_published",
+                    ]
+                )
                 counters["lessons_updated"] += 1
 
         # ---- content blocks
@@ -388,14 +414,23 @@ class Command(BaseCommand):
         counters["lesson_differences"] = []
         counters["problems"] = []
 
-        title, description = COURSES.get(level_code, (f"Deutsch {level_code}", ""))
+        title, description, description_fa = COURSES.get(
+            level_code, (f"Deutsch {level_code}", "", "")
+        )
         course, course_created = Course.objects.get_or_create(
             language_level=level,
-            defaults={"title": title, "description": description, "is_published": publish},
+            defaults={
+                "title": title,
+                "description": description,
+                "description_fa": description_fa,
+                "is_published": publish,
+            },
         )
         if not course_created and update and not dry:
-            course.title, course.description = title, description
-            course.save(update_fields=["title", "description"])
+            course.title = title
+            course.description = description
+            course.description_fa = description_fa
+            course.save(update_fields=["title", "description", "description_fa"])
 
         with transaction.atomic():
             for item in lessons:

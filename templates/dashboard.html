@@ -1,28 +1,110 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}داشبورد | {{ brand.name }}{% endblock %}
+{% comment %}The title a stranger sees in the tab and in a shared link. «داشبورد» is the
+   right name for a learner who has been here before and the wrong one for a visitor who
+   is trying to find out what this is.{% endcomment %}
+{% block title %}{% if user.is_authenticated %}داشبورد | {{ brand.name }}{% else %}آموزش آلمانی A1 برای فارسی‌زبان‌ها | {{ brand.name }}{% endif %}{% endblock %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">{% endblock %}
 {% block content %}
 <div class="dash" data-dashboard>
 
   <header class="dash__head">
-    <p class="dash__eyebrow">داشبورد</p>
+    <p class="dash__eyebrow">{% if user.is_authenticated %}داشبورد{% else %}آلمانی A1 برای فارسی‌زبان‌ها{% endif %}</p>
     <h1 class="dash__title">
       {% if user.is_authenticated %}خوش آمدی، <bdi>{{ user.get_username }}</bdi>.{% else %}به {{ brand.name }} خوش آمدی.{% endif %}
     </h1>
-    <p class="dash__intro">اینجا می‌بینی کجای مسیر هستی و قدم بعدی‌ات چیست.</p>
+    <p class="dash__intro">
+      {% if user.is_authenticated %}
+        اینجا می‌بینی کجای مسیر هستی و قدم بعدی‌ات چیست.
+      {% else %}
+        اینجا مسیر یادگیری آلمانی‌ات را می‌بینی و همان‌جا شروع می‌کنی — بدون حساب کاربری.
+      {% endif %}
+    </p>
   </header>
 
+  {% comment %}The front door, for a visitor we cannot identify: what this is, who it is
+     for, what is inside it and one action. Above everything else on the page, because
+     everything else on the page assumes the visitor already decided to use the product.
+     A signed-in learner never sees it — they came in through a different door.{% endcomment %}
+  {% if not user.is_authenticated %}
+    {% include "includes/front_door.html" %}
+  {% endif %}
+
   {% if course %}
-    {# ---- the one thing to do next -------------------------------------- #}
-    <section class="panel dash-next" aria-labelledby="dash-next-title">
-      <div class="dash-next__body">
-        <p class="dash-next__eyebrow" data-continue-eyebrow>از اینجا شروع کن</p>
-        <h2 class="dash-next__title" id="dash-next-title" data-continue-title>{{ first_lesson.title }}</h2>
-        <p class="dash-next__meta" data-continue-meta>درس {{ first_lesson.order }} · {{ first_lesson.estimated_time }} دقیقه{% if level %} · <bdi>{{ level }}</bdi>{% endif %}</p>
-      </div>
-      <a class="btn btn--primary dash-next__cta" href="{% url 'lessons:lesson-detail' first_lesson.pk %}" data-continue-link>شروع درس {{ first_lesson.order }}</a>
-    </section>
+    {% if board %}
+      {# ---- امروز: the one guided day, for a learner we can identify ----- #}
+      {% comment %}Built by lessons/skill_path.py::today_board from rows this learner already
+         has — the lesson they are inside (or the next one they have not finished), the words
+         the schedule says are due, and the words they answered wrong — and rendered by the
+         same include as «مسیر امروز», so the two pages cannot show two different days. A
+         signed-in learner only, because an anonymous visitor has no stored rows to plan
+         from; the panel below serves them instead. There is no streak and no score here on
+         purpose.{% endcomment %}
+      <section class="panel dash-today" aria-labelledby="dash-today-title">
+        <div class="dash-today__head">
+          <p class="dash-today__eyebrow">امروز</p>
+          <h2 class="dash-today__title" id="dash-today-title">برنامهٔ امروز تو</h2>
+        </div>
+
+        {% comment %}The same guided day «مسیر امروز» shows, so the learner sees one answer to
+           «امروز» and not two (lessons/skill_path.py::today_board). The day can be absent
+           even for a signed-in learner — a finished course with nothing due and nothing
+           missed — and then only the note below is left to say so.{% endcomment %}
+        {% if board.day %}
+          {% include "includes/day_steps.html" with day=board.day %}
+        {% endif %}
+
+        {% comment %}The goal's own projection: "how much do I need to do" is today's question,
+           so the one sentence that answers it belongs beside the day. Only rendered when the
+           learner actually set a date (lessons/readiness.py).{% endcomment %}
+        {% if pace and pace.state == 'planned' %}
+          <p class="dash-today__note">{{ pace.lessons_per_week }} درس در هفته تا تاریخ هدفت کافی است.</p>
+        {% endif %}
+
+        {% if not board.path.lesson %}
+          <p class="dash-today__note">همهٔ درس‌های منتشرشده را تمام کرده‌ای؛ درس تازه‌ای برای امروز نمانده.</p>
+        {% endif %}
+
+        <p class="dash-today__done">
+          {% if today_stats.answered %}
+            امروز {{ today_stats.answered }} پاسخ داده‌ای{% if today_stats.correct %} · {{ today_stats.correct }} درست{% endif %}.
+          {% else %}
+            امروز هنوز پاسخی ثبت نشده است.
+          {% endif %}
+          {% if last_activity %}<span class="dash-today__ago">آخرین فعالیت: {{ last_activity|timesince }} پیش</span>{% endif %}
+        </p>
+
+        {% comment %}A week of the learner's own answers, counted from the same
+           ``ExerciseAttempt`` rows the line above counts (lessons/today.py::weekly_activity),
+           so the two cannot disagree about today. The daily loop is what pulls people back,
+           and a week is the shortest span over which effort is visible. Bars are scaled to
+           this learner's busiest day rather than to a number invented here, and a week with
+           nothing in it draws no chart rather than an empty one.{% endcomment %}
+        {% if weekly and weekly.peak %}
+          <div class="dash-week" aria-labelledby="dash-week-title">
+            <p class="dash-week__title" id="dash-week-title">هفت روز اخیر</p>
+            <ol class="dash-week__days">
+              {% for day in weekly.days %}
+                <li class="dash-week__day{% if day.is_today %} is-today{% endif %}" title="{{ day.answered }} پاسخ · {{ day.correct }} درست">
+                  <span class="dash-week__bar" style="height:{% widthratio day.correct weekly.peak 100 %}%"></span>
+                  <span class="dash-week__letter">{{ day.letter }}</span>
+                </li>
+              {% endfor %}
+            </ol>
+          </div>
+        {% endif %}
+      </section>
+    {% else %}
+      {# ---- the one thing to do next, for a visitor we cannot identify --- #}
+      <section class="panel dash-next" aria-labelledby="dash-next-title">
+        <div class="dash-next__body">
+          <p class="dash-next__eyebrow" data-continue-eyebrow>از اینجا شروع کن</p>
+          <h2 class="dash-next__title" id="dash-next-title" data-continue-title>{{ first_lesson.display_title }}</h2>
+          <p class="dash-next__meta" data-continue-meta>درس {{ first_lesson.order }} · {{ first_lesson.estimated_time }} دقیقه{% if level %} · <bdi>{{ level }}</bdi>{% endif %}</p>
+        </div>
+        <a class="btn btn--primary dash-next__cta" href="{% url 'lessons:lesson-detail' first_lesson.pk %}" data-continue-link>شروع درس {{ first_lesson.order }}</a>
+      </section>
+    {% endif %}
 
     <div class="dash__cols">
       <div class="dash__col">
@@ -44,7 +126,81 @@
               پیشرفت فعلاً در همین مرورگر ذخیره می‌شود؛ روی حساب کاربری نگه داشته نمی‌شود.
             {% endif %}
           </p>
+
+          {% comment %}Only the learner can say where they are going, so the goal line is
+             theirs and nobody else's. The numbers come from lessons/readiness.py, which
+             «آمادگی من» reads too — the two pages cannot disagree.{% endcomment %}
+          {% if user.is_authenticated %}
+            <div class="dash-goal">
+              {% if goal %}
+                <p class="dash-goal__line">
+                  <span class="dash-goal__label">هدف</span>
+                  {% if goal.current_level %}<bdi>{{ goal.current_level }}</bdi> ←{% endif %}
+                  {% if goal.target_level %}<bdi>{{ goal.target_level }}</bdi>{% else %}<span class="muted">سطحی تعیین نشده</span>{% endif %}
+                  {% if goal.reason_label %}<span class="dash-goal__tag">{{ goal.reason_label }}</span>{% endif %}
+                  {% if goal.target_date %}<span class="dash-goal__tag">تا {{ goal.target_date|jalali }}</span>{% endif %}
+                </p>
+                {% comment %}The planned-goal pace sentence now lives in the «امروز» panel
+                   above, where "how much do I need to do today" is the question being
+                   answered. A date that has passed is a fact about the goal itself, so it
+                   stays here beside the goal.{% endcomment %}
+                {% if pace and pace.state == 'passed' %}
+                  <p class="dash-goal__pace">تاریخ هدفت گذشته است؛ از «هدف من» تاریخ تازه بگذار.</p>
+                {% endif %}
+              {% else %}
+                <p class="dash-goal__line">هدف یادگیری‌ات را تعیین کن تا بدانی چقدر از مسیر مانده و با چه سرعتی.</p>
+              {% endif %}
+              {% comment %}A learner without a goal gets a button, not only a sentence and a link
+                 to a page they have not filled in yet. This is the same call to action the
+                 profile page carries, in the place a learner actually lands.{% endcomment %}
+              <div class="dash-goal__actions">
+                {% if not goal %}
+                  <a class="btn btn--primary" href="{% url 'accounts:goal' %}">تعیین هدف</a>
+                {% endif %}
+                <a class="dash-goal__link" href="{% url 'readiness' %}">آمادگی من ←</a>
+              </div>
+            </div>
+          {% endif %}
         </section>
+
+        {# ---- what your own mistakes say to do next ---------------------- #}
+        {% comment %}Shown only when there really are missed words: a learner with a clean
+           record gets no panel rather than a summary invented to fill the space. The
+           panel and the review page read the same module (vocabulary/review.py), so they
+           cannot disagree about which words are the weak ones.{% endcomment %}
+        {% if review %}
+          <section class="panel dash-review" aria-labelledby="dash-review-title">
+            <div class="dash-review__head">
+              <h2 id="dash-review-title">مرور شخصی</h2>
+              <a href="{% url 'vocabulary:word-review' %}">همهٔ مرور ←</a>
+            </div>
+            <p class="dash-review__lead">{{ review.wrong_word_count }} واژه را در تمرین‌ها اشتباه زده‌ای؛ بیشترین اشتباه اول.</p>
+
+            <ul class="dash-review__words">
+              {% for row in review.words %}
+                <li class="dash-review__word">
+                  <a class="dash-review__term" href="{% url 'vocabulary:word-detail' row.word.pk %}" lang="de" dir="ltr">{% if row.word.article %}{{ row.word.article }} {% endif %}{{ row.word.word }}</a>
+                  <span class="dash-review__meaning">{{ row.word.meaning_fa }}</span>
+                  <span class="chip">غلط: {{ row.wrong_count }}</span>
+                  <span class="chip">درست: {{ row.correct_count }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+
+            {% if review.exercises %}
+              {# Not "every word above": an exercise tests at least one of them. #}
+              <p class="dash-review__note">این تمرین‌ها واژه‌های اشتباه تو را می‌سنجند:</p>
+              <ul class="dash-review__practice">
+                {% for item in review.exercises %}
+                  <li>
+                    <a href="{% url 'exercises:exercise-detail' item.exercise.pk %}">{{ item.exercise.title|direction }}</a>
+                    <span class="dash-review__meta">درس {{ item.exercise.lesson.order }} · {{ item.question_count }} پرسش</span>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </section>
+        {% endif %}
 
         {# ---- recent local activity (only real localStorage data) -------- #}
         <section class="panel dash-activity" aria-labelledby="dash-activity-title" data-activity hidden>
@@ -58,11 +214,13 @@
           </dl>
         </section>
 
-        {# ---- empty state for a brand new learner ------------------------ #}
-        <section class="panel dash-empty" data-empty hidden>
-          <h2>هنوز درسی را شروع نکرده‌ای</h2>
-          <p>با درس اول شروع کن؛ هر وقت درسی را باز کنی، همین‌جا نشان داده می‌شود.</p>
-        </section>
+        {% comment %}There used to be a «هنوز درسی را شروع نکرده‌ای» panel here. It was the
+           worst kind of empty state: it announced that nothing had happened while the same
+           screen already showed exactly what to do — the «امروز» board above names the
+           lesson and links it, the progress card says 0 of 24, and every row of the path
+           says «شروع نشده». Three panels answering one question, and the newest learner got
+           the least useful of them. The honest place for "nothing here yet" is «فعالیت
+           اخیر», which stays hidden until there is something real to show.{% endcomment %}
       </div>
 
       <div class="dash__col">
@@ -72,8 +230,8 @@
             <span class="dash-level" lang="en" dir="ltr">{{ level }}</span>
             <span class="dash-course__count">{{ lesson_total }} درس</span>
           </div>
-          <h2 id="dash-course-title" dir="auto">{{ course.title }}</h2>
-          {% if course.description %}<p class="dash-course__desc" dir="auto">{{ course.description }}</p>{% endif %}
+          <h2 id="dash-course-title">{{ course.title|direction }}</h2>
+          {% if course.display_description %}<p class="dash-course__desc">{{ course.display_description|direction }}</p>{% endif %}
           <a class="dash-course__link" href="{% url 'lessons:course-detail' course.pk %}">نمای کلی دوره ←</a>
         </section>
 
@@ -108,7 +266,7 @@
         {% for lesson in preview_lessons %}
           <li class="dash-path__item" data-path-item="{{ lesson.pk }}">
             <span class="dash-path__num" aria-hidden="true">{{ lesson.order }}</span>
-            <a class="dash-path__title" href="{% url 'lessons:lesson-detail' lesson.pk %}" dir="auto">{{ lesson.title }}</a>
+            <a class="dash-path__title" href="{% url 'lessons:lesson-detail' lesson.pk %}">{{ lesson.display_title|direction }}</a>
             <span class="dash-path__aside">
               <span class="dash-path__meta">{{ lesson.estimated_time }} دقیقه</span>
               <span class="dash-path__state" data-path-state>شروع نشده</span>
@@ -130,7 +288,7 @@
     <section class="panel dash-account">
       <div>
         <h2>حساب کاربری (اختیاری)</h2>
-        <p>برای یادگیری لازم نیست. ساخت حساب برای زمانی است که بخواهیم پیشرفت را روی حساب نگه داریم.</p>
+        <p>برای یادگیری لازم نیست. ساخت حساب برای زمانی است که بخواهیم پیشرفت، هدف و آمادگی را روی حساب تو نگه داریم.</p>
       </div>
       <div class="dash-account__actions">
         <a class="btn btn--primary" href="{% url 'accounts:signup' %}">ساخت حساب</a>

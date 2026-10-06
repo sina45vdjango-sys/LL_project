@@ -1,4 +1,4 @@
 {% extends "lessons/lesson_list.html" %}
 {% block title %}{{ course.title }} | {{ brand.name }}{% endblock %}
 {% block heading %}<bdi>{{ course.title }}</bdi>{% endblock %}
-{% block description %}<p dir="auto">{{ course.description }}</p>{% endblock %}
+{% block description %}<p>{{ course.display_description|direction }}</p>{% endblock %}

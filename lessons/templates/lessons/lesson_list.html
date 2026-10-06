@@ -35,7 +35,7 @@
     <div class="path__next">
       <p class="path__next-text">
         <span class="path__next-label">قدم بعدی</span>
-        <bdi data-path-next-title>{{ first_lesson.title }}</bdi>
+        <bdi data-path-next-title>{{ first_lesson.display_title }}</bdi>
       </p>
       <a class="btn btn--primary path__next-cta" data-path-next-link
          href="{% url 'lessons:lesson-detail' first_lesson.pk %}">شروع درس {{ first_lesson.order }}</a>
@@ -52,8 +52,8 @@
       <header class="path-group__head">
         <div>
           <span class="path-level" lang="en" dir="ltr">{{ group.level }}</span>
-          {% if not course %}<h2 id="path-course-{{ group.course.pk }}" dir="auto">{{ group.course.title }}</h2>{% endif %}
-          {% if group.course.description %}<p class="path-group__desc" dir="auto">{{ group.course.description }}</p>{% endif %}
+          {% if not course %}<h2 id="path-course-{{ group.course.pk }}">{{ group.course.title|direction }}</h2>{% endif %}
+          {% if group.course.display_description %}<p class="path-group__desc">{{ group.course.display_description|direction }}</p>{% endif %}
         </div>
         <p class="path-group__count">
           <span>{{ group.lessons|length }} درس</span>
@@ -77,9 +77,9 @@
                 <span class="path-step__state" data-step-state>شروع نشده</span>
               </div>
               <h3 class="path-step__title">
-                <a class="path-step__link" href="{% url 'lessons:lesson-detail' lesson.pk %}" dir="auto">{{ lesson.title }}</a>
+                <a class="path-step__link" href="{% url 'lessons:lesson-detail' lesson.pk %}">{{ lesson.display_title|direction }}</a>
               </h3>
-              {% if lesson.description %}<p class="path-step__desc" dir="auto">{{ lesson.description }}</p>{% endif %}
+              {% if lesson.display_description %}<p class="path-step__desc">{{ lesson.display_description|without_english|direction }}</p>{% endif %}
               <div class="path-step__foot">
                 {% comment %}A span, not a second link: the title above is the card's one
                    action and it covers the whole card (see lesson_path.css), so a second
