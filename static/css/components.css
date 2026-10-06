@@ -77,6 +77,11 @@
 .audio-control { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; }
 /* A dense row (a vocabulary row, a word list row) already spaces its own items. */
 .audio-control--inline { margin-top: 0; }
+/* The icon shapes every audio control references (base.html). Zero-sized rather than
+   display:none, because a symbol inside a display:none subtree is still referenced but the
+   box is what browsers have historically disagreed about. */
+.icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
 .audio-toggle { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--accent-text); cursor: pointer; }
 .audio-toggle:hover { background: var(--accent-soft); border-color: var(--accent); }
 .audio-toggle[aria-expanded="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }

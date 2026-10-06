@@ -1,16 +1,31 @@
 {% comment %}One audio control for every playable item in the product: lesson prose blocks,
    grammar topics, sentences, vocabulary words and exercise question audio.
 
-   Phase 7 moved it here out of lessons/ because four apps needed it, and moved its
-   stylesheet into static/css/components.css and its behaviour into static/js/audio.js
-   (both loaded everywhere). The vocabulary app used to ship its own second audio
-   implementation; that one is gone.
+   The control is a single 44x44 button with a play icon, and the real <audio> element is
+   kept hidden until static/js/audio.js decides it earns its place. A vocabulary word is
+   over in about a second, so a player there would only make the row taller; a grammar
+   topic runs half a minute and is worth a scrubber to seek inside. That decision is made
+   from the clip's real length in the browser rather than guessed here, which is why this
+   template has no short/long switch and no second variant.
 
-   The generated id is `{{ prefix }}-{{ pk }}` — the prefix scheme is asserted by tests,
-   so keep it unique per player on a page. Pass icon_only=True in dense lists to drop the
-   text label; the button is still a 44px tap target with a spoken label.
+   The button ships `hidden` and the script reveals it, exactly like the lesson stepper's
+   controls: with JavaScript off there is no button that would do nothing, only the plain
+   download link in the <noscript> block.
 
-   The button ships `hidden` and static/js/audio.js reveals it, exactly like the lesson
-   stepper's controls: with JavaScript off there is no button that would do nothing, only
-   the plain download link in the <noscript> block.{% endcomment %}
-{% if audio %}<span class="audio-control{% if icon_only %} audio-control--icon{% endif %}"><button type="button" class="audio-toggle" hidden aria-expanded="false" aria-controls="{{ prefix }}-{{ pk }}" aria-label="پخش {{ label }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4zM17 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></svg>{% if not icon_only %}<span>گوش کن</span>{% endif %}</button><span class="audio-status" role="status" hidden></span><audio id="{{ prefix }}-{{ pk }}" controls preload="none" hidden src="{{ audio.url }}" aria-label="پخش {{ label }}">مرورگر شما پخش صوت را پشتیبانی نمی‌کند.</audio><noscript><a class="audio-fallback" href="{{ audio.url }}">دریافت فایل صوتی</a></noscript></span>{% endif %}
+   The generated id is `{{ prefix }}-{{ pk }}` -- the prefix scheme is asserted by tests,
+   so keep it unique per player on a page. Pass `inline=True` where the control sits in a
+   dense row (a word row, a word list row) and needs no space above it.
+
+   `data-label` carries the clip's name on its own, without the verb, so the script can
+   build "پخش …" or "توقف …" from it instead of having to take its own label apart.{% endcomment %}
+{% if audio %}<span class="audio-control{% if inline %} audio-control--inline{% endif %}">
+  <button type="button" class="audio-toggle" hidden aria-expanded="false" aria-controls="{{ prefix }}-{{ pk }}" aria-label="پخش {{ label }}" data-label="{{ label }}">
+    {% comment %}Shapes live once in base.html's sprite: this control is repeated dozens of
+       times on one lesson page, and the two paths were most of the page's icon bytes.{% endcomment %}
+    <svg class="audio-toggle__play" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-audio-play"/></svg>
+    <svg class="audio-toggle__stop" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-audio-stop"/></svg>
+  </button>
+  <span class="audio-status" role="status" hidden></span>
+  <audio id="{{ prefix }}-{{ pk }}" controls preload="none" hidden src="{{ audio.url }}" aria-label="{{ label }}">مرورگر شما پخش صوت را پشتیبانی نمی‌کند.</audio>
+  <noscript><a class="audio-fallback" href="{{ audio.url }}">دریافت فایل صوتی</a></noscript>
+</span>{% endif %}

@@ -1,16 +1,27 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-theme-mode="{{ theme_mode }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% comment %}Set before anything renders: the lesson stepper hides inactive steps
      with a .js rule, so with JavaScript off every step stays visible and readable.{% endcomment %}
   <script>document.documentElement.classList.add('js');</script>
-  <meta name="color-scheme" content="dark">
-  {% comment %}Mobile browser chrome follows the dark surface instead of flashing white.
-     The favicon is the brand monogram; without it every page logged one 404.{% endcomment %}
-  <meta name="theme-color" content="#0f1116">
+  <meta name="color-scheme" content="light dark">
+  {% comment %}Resolve the theme BEFORE the stylesheets paint. The learner's saved choice
+     is already on <html> as data-theme-mode, put there by the shell context processor;
+     "system" (a signed-out visitor, or a profile that has not chosen) means follow the
+     operating system. Running this after the first paint would flash the wrong theme on
+     every navigation, which is the whole reason it is inline and up here.{% endcomment %}
+  <script>
+    (() => {
+      const mode = document.documentElement.dataset.themeMode;
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = mode === 'dark' || (mode !== 'light' && prefersDark);
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    })();
+  </script>
+  {% comment %}The favicon is the brand monogram; without it every page logged one 404.{% endcomment %}
   <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
   {% comment %}Read by the two scripts that POST JSON — the lesson stepper and the
      exercise runner — and sent back in an X-CSRFToken header.{% endcomment %}
@@ -28,6 +39,20 @@
   <script src="{% static 'js/audio.js' %}" defer></script>
 </head>
 <body>
+  {% comment %}The icons a page repeats many times over. A lesson page carries one audio
+     control per word, per sentence and per rule — 110 copies of the same two 145-byte
+     paths, ~16 KB of the page — so the shapes are written here once and referenced with
+     <use> (P-17: the lesson page's HTML weight). Nothing is fetched and nothing depends on
+     JavaScript; <use> points at a symbol in this same document and the CSS stroke and fill
+     are inherited properties, so the icons look exactly as they did inline.{% endcomment %}
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-audio-play" viewBox="0 0 24 24">
+      <path d="M4 9h4l5-4v14l-5-4H4zM17 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/>
+    </symbol>
+    <symbol id="icon-audio-stop" viewBox="0 0 24 24">
+      <rect x="7.5" y="7.5" width="9" height="9" rx="1.5"/>
+    </symbol>
+  </svg>
   <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
   <div class="app-shell">
     {% include "includes/sidebar.html" %}
@@ -53,6 +78,20 @@
           document.getElementById('main-content').focus();
         });
       });
+    })();
+  </script>
+  {% comment %}Mobile browser chrome follows --bg instead of a hardcoded hex, so the chrome
+     and the page cannot drift apart. A custom property cannot be read until the
+     stylesheet has been parsed, which is why this sits at the end of the body and not in
+     the head. Without JavaScript the browser simply picks its own chrome colour.{% endcomment %}
+  <script>
+    (() => {
+      const background = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+      if (!background) { return; }
+      const meta = document.createElement('meta');
+      meta.name = 'theme-color';
+      meta.content = background;
+      document.head.appendChild(meta);
     })();
   </script>
   {% block extra_js %}{% endblock %}
