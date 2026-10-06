@@ -18,7 +18,7 @@ Every write goes through this module, so the rules are stated exactly once:
 
 from django.utils import timezone
 
-from .models import LessonProgress
+from .models import Lesson, LessonProgress
 
 #: How a stored status is reported to the browser. ``static/js/lesson_status.js``
 #: knows exactly two words, and a lesson that has not been opened simply has no entry
@@ -83,6 +83,53 @@ def complete_lesson(user, lesson, step):
     return row
 
 
+def import_guest_progress(user, reported):
+    """Record the lessons a browser says the learner finished before signing up.
+
+    A visitor works without an account, so their progress lives in ``localStorage``
+    (``static/js/progress.js``). Signing up used to leave that memory behind the moment the
+    dashboard switched to the server's answer — the work was still on the device and the
+    product stopped looking at it, which is a silent loss, not a migration. The dashboard
+    now asks first and posts what the browser has (``LessonImportView``); this is the write.
+
+    ``reported`` maps a lesson id to the word the browser used, ``"started"`` or
+    ``"completed"``. Three rules, and they are the same rules every other write follows:
+
+    * a lesson already ``COMPLETED`` keeps its own ``completed_at`` and is not rewritten —
+      importing a browser's memory of lesson 3 must not move the date lesson 9 was finished;
+    * a ``"started"`` report creates an in-progress row (``record_step``), never a complete
+      one, because the browser said the lesson was opened and not that it was finished;
+    * a report the server does not understand is ignored rather than guessed at.
+
+    Returns how many lessons the server wrote or moved forward.
+    """
+    written = 0
+
+    for lesson_id, status in reported.items():
+        lesson = Lesson.objects.filter(
+            pk=lesson_id, is_published=True, course__is_published=True
+        ).first()
+        if lesson is None:
+            continue
+
+        row = LessonProgress.objects.filter(user=user, lesson=lesson).first()
+
+        if status == "completed":
+            if row is not None and row.status == LessonProgress.Status.COMPLETED:
+                continue
+            complete_lesson(user, lesson, LessonProgress.Step.FINISH)
+            written += 1
+        elif status == "started":
+            # Already on the server: the browser has nothing to add here, and rewriting
+            # last_activity_at would move a date the account knows better than a browser.
+            if row is not None:
+                continue
+            record_step(user, lesson, LessonProgress.Step.INTRO)
+            written += 1
+
+    return written
+
+
 def progress_dict(row):
     """One lesson's stored progress, the way the lesson page's endpoint reports it.
 
@@ -98,15 +145,40 @@ def progress_dict(row):
     }
 
 
-def progress_state(user):
+def progress_rows(user):
+    """Every lesson row this learner has, newest activity first — the table, read once.
+
+    One page asks this table several different questions — where the learner stopped, how
+    many lessons are finished, whether today's lesson is done, when they were last here,
+    and the whole payload the page scripts read. Each of those used to be its own query,
+    which made the dashboard read the same handful of rows five times over. They are read
+    here instead and handed to whoever needs them.
+
+    ``select_related`` is not decoration: ``lessons/today.py::started_row`` tests the
+    lesson's own ``is_published`` flags, and without the join that would be one query per
+    row.
+    """
+    return list(
+        LessonProgress.objects.filter(user=user)
+        .select_related("lesson__course")
+        .order_by("-last_activity_at", "-pk")
+    )
+
+
+def progress_state(user, rows=None):
     """Every lesson this learner has touched, in the shape the page scripts read.
 
     ``static/js/progress.js`` exposes ``read()`` and ``summary()`` built from exactly
     this object, so the dashboard, the learning path and the lesson page keep working
     as they are — none of them has to know whether the numbers came from the server or
     from ``localStorage``.
+
+    ``rows`` is the caller's own ``progress_rows(user)`` when it already read them, so a
+    page that also asks the other questions above reads the table once.
     """
-    rows = LessonProgress.objects.filter(user=user).order_by("-last_activity_at")
+    if rows is None:
+        rows = progress_rows(user)
+
     lessons = {}
     last_lesson_id = None
 

@@ -134,12 +134,25 @@
 .dash-account p { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
 .dash-account__actions { display: flex; gap: 10px; }
 
+/* ------------------------------------------------- progress this browser --------- */
+/* The one panel that asks the learner a question. It is hidden until the browser's
+   progress and the account's have actually been compared, so it never shows an empty
+   offer; the layout only has to hold one line of text and two buttons. */
+.dash-import { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; border-inline-start: 3px solid var(--accent); }
+.dash-import__text { min-width: 0; }
+.dash-import h2 { margin: 0; font-size: 16px; }
+.dash-import p { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.dash-import__actions { display: flex; gap: 10px; }
+.dash-import__state { flex-basis: 100%; margin: 0; color: var(--accent-text); font-size: 12px; }
+
 @media (max-width: 560px) {
   .dash-path__item { grid-template-columns: auto minmax(0, 1fr); gap: 8px 12px; }
   .dash-path__aside { grid-column: 2; }
   .dash-next__cta { width: 100%; }
   .dash-account__actions { width: 100%; }
   .dash-account__actions .btn { flex: 1; }
+  .dash-import__actions { width: 100%; }
+  .dash-import__actions .btn { flex: 1; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .dash-quick__item { transition: border-color .15s, background-color .15s; }

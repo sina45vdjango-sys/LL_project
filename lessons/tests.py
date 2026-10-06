@@ -1991,7 +1991,16 @@ class LessonJourneyTests(TestCase):
         response = self.client.get(self.url)
         self.assertContains(response, reverse("lessons:lesson-detail", args=[self.follow_up.pk]))
         self.assertContains(response, reverse("lessons:lesson-list"))
-        self.assertContains(self.client.get(self.bare_url), "این آخرین درس این دوره است")
+
+    def test_the_last_lesson_closes_the_course_instead_of_only_going_back(self):
+        """The last page of the course used to be one sentence and then nothing (P-30)."""
+        response = self.client.get(self.bare_url)
+
+        self.assertContains(response, "پایان دورهٔ A1")
+        # The marker belongs to the next-lesson button itself, so its absence says the
+        # button is gone rather than that the words happen to be missing from the page
+        # («به درس بعدی بروی» is still said by a lesson with no content of its own).
+        self.assertNotContains(response, "data-finish-next")
 
     def test_unpublished_lessons_are_not_reachable(self):
         response = self.client.get(reverse("lessons:lesson-detail", args=[self.draft.pk]))
@@ -2007,6 +2016,92 @@ class LessonJourneyTests(TestCase):
         response = self.client.get(self.url)
         for word in ("قفل", "پریمیوم", "اشتراک", "خرید"):
             self.assertNotContains(response, word)
+
+
+class CourseFinishTests(TestCase):
+    """The end of the course: the last lesson says the course is finished and what is next.
+
+    A complete course used to stop at lesson 24 with nothing but a link back to the path,
+    which is the one moment a learner decides whether to stay (P-30). The panel is built
+    from the content — how many lessons the course has and whether a later course exists —
+    so it cannot promise an A2 that is not there.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.level = LanguageLevel.objects.create(level="A1", title="مقدماتی", order=1)
+        cls.course = Course.objects.create(
+            language_level=cls.level, title="Deutsch A1", is_published=True
+        )
+        cls.first = Lesson.objects.create(
+            course=cls.course, title="Hallo", order=1, estimated_time=45, is_published=True
+        )
+        cls.last = Lesson.objects.create(
+            course=cls.course, title="Abschluss", order=2, estimated_time=45, is_published=True
+        )
+        cls.user = User.objects.create_user(username="sina", password="a-strong-password")
+
+    def url(self, lesson=None):
+        return reverse("lessons:lesson-detail", args=[(lesson or self.last).pk])
+
+    def test_a_lesson_in_the_middle_of_the_course_says_nothing_about_finishing(self):
+        response = self.client.get(self.url(self.first))
+
+        self.assertNotContains(response, "پایان دورهٔ A1")
+        self.assertContains(response, "data-finish-next")
+
+    def test_the_last_lesson_names_the_finish_and_counts_the_course(self):
+        response = self.client.get(self.url())
+
+        self.assertContains(response, "پایان دورهٔ A1")
+        self.assertContains(response, "2 درس از 2")
+
+    def test_the_finish_offers_the_three_things_that_are_really_next(self):
+        response = self.client.get(self.url())
+
+        self.assertContains(response, reverse("exams:exam-index"))
+        self.assertContains(response, reverse("vocabulary:word-review"))
+        self.assertContains(response, reverse("lessons:practice-path"))
+
+    def test_a_finished_learner_is_told_the_course_is_finished(self):
+        self.client.force_login(self.user)
+        complete_lesson(self.user, self.last, "finish")
+
+        response = self.client.get(self.url())
+
+        self.assertContains(response, "دورهٔ A1 را کامل کردی")
+
+    def test_a_learner_who_has_not_finished_is_not_told_they_have(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(self.url())
+
+        self.assertContains(response, "پایان دورهٔ A1")
+        self.assertNotContains(response, "دورهٔ A1 را کامل کردی")
+
+    def test_without_a_later_course_the_page_says_so_instead_of_promising_one(self):
+        response = self.client.get(self.url())
+
+        self.assertContains(response, "دورهٔ بعدی (A2) هنوز اینجا نیست")
+
+    def test_a_later_course_is_offered_when_one_exists(self):
+        higher = LanguageLevel.objects.create(level="A2", title="میانی", order=2)
+        next_course = Course.objects.create(
+            language_level=higher, title="Deutsch A2", is_published=True
+        )
+
+        response = self.client.get(self.url())
+
+        self.assertContains(response, reverse("lessons:course-detail", args=[next_course.pk]))
+        self.assertNotContains(response, "هنوز اینجا نیست")
+
+    def test_a_later_course_that_is_still_a_draft_is_not_offered(self):
+        higher = LanguageLevel.objects.create(level="A2", title="میانی", order=2)
+        Course.objects.create(language_level=higher, title="Deutsch A2", is_published=False)
+
+        response = self.client.get(self.url())
+
+        self.assertContains(response, "دورهٔ بعدی (A2) هنوز اینجا نیست")
 
 
 class LessonProgressTests(TestCase):
@@ -2291,6 +2386,144 @@ class LessonProgressEndpointTests(TestCase):
 
         self.assertContains(response, 'id="progress-state"')
         self.assertIn(self.lesson.pk, response.context["progress_state"]["lessons"])
+
+
+class GuestProgressImportTests(TestCase):
+    """Moving a browser's guest progress onto the account that just signed in.
+
+    A visitor learns without an account and their lessons live in localStorage. Signing up
+    switches the dashboard to the server's answer, which knows nothing about them — so the
+    dashboard asks, and posts what the browser claims. These tests are about what that
+    claim is allowed to do: create a lesson the account never opened, move a started lesson
+    to completed, and nothing else. It can never un-finish a lesson or reach another
+    learner's rows.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.level = LanguageLevel.objects.create(level="A1", title="مقدماتی", order=1)
+        cls.course = Course.objects.create(
+            language_level=cls.level, title="دورهٔ آلمانی A1", is_published=True
+        )
+        cls.lesson = Lesson.objects.create(
+            course=cls.course, title="Hallo", order=1, estimated_time=45, is_published=True
+        )
+        cls.other = Lesson.objects.create(
+            course=cls.course, title="Tschüss", order=2, estimated_time=30, is_published=True
+        )
+        cls.draft = Lesson.objects.create(
+            course=cls.course, title="Entwurf", order=3, estimated_time=5, is_published=False
+        )
+        cls.user = User.objects.create_user(username="sina", password="a-strong-password")
+
+    def post(self, payload, raw=None):
+        return self.client.post(
+            reverse("lessons:lesson-import"),
+            data=raw if raw is not None else json.dumps(payload),
+            content_type="application/json",
+        )
+
+    def rows(self):
+        return LessonProgress.objects.filter(user=self.user)
+
+    def test_an_anonymous_visitor_cannot_import(self):
+        response = self.post({"lessons": {str(self.lesson.pk): "completed"}})
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(LessonProgress.objects.exists())
+
+    def test_a_get_is_not_a_write(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse("lessons:lesson-import"))
+        self.assertEqual(response.status_code, 405)
+        self.assertFalse(LessonProgress.objects.exists())
+
+    def test_a_finished_lesson_becomes_a_real_completion(self):
+        self.client.force_login(self.user)
+
+        response = self.post({"lessons": {str(self.lesson.pk): "completed"}})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["imported"], 1)
+        row = self.rows().get()
+        self.assertEqual(row.status, LessonProgress.Status.COMPLETED)
+        self.assertIsNotNone(row.completed_at)
+
+    def test_a_started_lesson_becomes_an_unfinished_one(self):
+        """The browser said the lesson was opened, so nothing may claim it was finished."""
+        self.client.force_login(self.user)
+
+        self.post({"lessons": {str(self.lesson.pk): "started"}})
+
+        row = self.rows().get()
+        self.assertEqual(row.status, LessonProgress.Status.IN_PROGRESS)
+        self.assertIsNone(row.completed_at)
+
+    def test_importing_never_un_finishes_a_lesson(self):
+        self.client.force_login(self.user)
+        done = complete_lesson(self.user, self.other, "finish")
+        finished_at = done.completed_at
+
+        response = self.post({"lessons": {str(self.other.pk): "started"}})
+
+        self.assertEqual(response.json()["imported"], 0)
+        done.refresh_from_db()
+        self.assertEqual(done.status, LessonProgress.Status.COMPLETED)
+        self.assertEqual(done.completed_at, finished_at)
+
+    def test_a_second_import_of_the_same_lesson_writes_nothing_new(self):
+        self.client.force_login(self.user)
+
+        first = self.post({"lessons": {str(self.lesson.pk): "completed"}}).json()
+        second = self.post({"lessons": {str(self.lesson.pk): "completed"}}).json()
+
+        self.assertEqual(first["imported"], 1)
+        self.assertEqual(second["imported"], 0)
+        self.assertEqual(self.rows().count(), 1)
+
+    def test_a_lesson_that_is_not_published_is_ignored(self):
+        self.client.force_login(self.user)
+
+        response = self.post({"lessons": {str(self.draft.pk): "completed"}})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["imported"], 0)
+        self.assertFalse(self.rows().exists())
+
+    def test_a_lesson_that_does_not_exist_is_ignored(self):
+        self.client.force_login(self.user)
+
+        response = self.post({"lessons": {"999999": "completed"}})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["imported"], 0)
+
+    def test_broken_input_is_refused_rather_than_guessed_at(self):
+        self.client.force_login(self.user)
+
+        self.assertEqual(self.post(None, raw="{").status_code, 400)
+        self.assertEqual(self.post({"lessons": []}).status_code, 400)
+        self.assertEqual(self.post({"lessons": {"7": "almost"}}).status_code, 400)
+        self.assertEqual(self.post({"lessons": {"sieben": "completed"}}).status_code, 400)
+        self.assertFalse(self.rows().exists())
+
+    def test_the_import_only_writes_for_the_learner_who_asks(self):
+        self.client.force_login(self.user)
+        someone_else = User.objects.create_user(username="ali", password="a-strong-password")
+
+        self.post({"lessons": {str(self.lesson.pk): "completed"}})
+
+        self.assertTrue(self.rows().exists())
+        self.assertFalse(LessonProgress.objects.filter(user=someone_else).exists())
+
+    def test_the_dashboard_offers_the_import_only_to_a_signed_in_learner(self):
+        """The panel ships hidden, so a visitor is never shown an offer that cannot work."""
+        visitor = self.client.get(reverse("home"))
+        self.assertNotContains(visitor, "data-progress-import")
+
+        self.client.force_login(self.user)
+        member = self.client.get(reverse("home"))
+        self.assertContains(member, "data-progress-import")
+        self.assertContains(member, reverse("lessons:lesson-import"))
 
 
 class TodayFactsTests(ReadinessFixture):

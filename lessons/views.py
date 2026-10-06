@@ -23,7 +23,14 @@ from vocabulary.review import lesson_mistakes, review_plan
 from .check import check_questions, pass_needed
 from .journey import build_journey, content_step_count
 from .models import Course, Lesson, LessonProgress, LessonWord
-from .progress import complete_lesson, progress_dict, progress_rows, progress_state, record_step
+from .progress import (
+    complete_lesson,
+    import_guest_progress,
+    progress_dict,
+    progress_rows,
+    progress_state,
+    record_step,
+)
 from .readiness import course_progress, goal_of, learning_pace, readiness
 from .review import build_review
 from .skill_path import lesson_practice, today_board
@@ -395,6 +402,31 @@ class LessonDetailView(View):
             progress = progress_state(request.user)
 
         siblings = lesson.course.lessons.filter(is_published=True).order_by("order", "pk")
+        next_lesson = siblings.filter(order__gt=lesson.order).first()
+
+        # The last lesson of the course has no «درس بعدی» to offer, so it says what finishing
+        # the course means instead (P-30: the course used to simply stop here). Both numbers
+        # are read from the content, never written into the page: how many lessons the course
+        # has, and whether a later course exists to point at. The extra queries run only on
+        # that one page, which is the only page that needs them.
+        course_lesson_total = siblings.count()
+        next_course = None
+        lesson_finished = False
+
+        if request.user.is_authenticated and lesson_progress is not None:
+            lesson_finished = lesson_progress.status == LessonProgress.Status.COMPLETED
+
+        if next_lesson is None:
+            next_course = (
+                Course.objects.filter(
+                    is_published=True,
+                    language_level__order__gt=lesson.course.language_level.order,
+                )
+                .select_related("language_level")
+                .order_by("language_level__order")
+                .first()
+            )
+
         return render(request, "lessons/lesson_detail.html", {
             "lesson": lesson,
             "steps": steps,
@@ -406,7 +438,12 @@ class LessonDetailView(View):
             # Progress on arrival: step 1 of N, for visitors with no JavaScript.
             "journey_percent": journey_percent,
             "previous_lesson": siblings.filter(order__lt=lesson.order).last(),
-            "next_lesson": siblings.filter(order__gt=lesson.order).first(),
+            "next_lesson": next_lesson,
+            # What the finish step says when there is no next lesson: how long the course is,
+            # whether the learner has finished it, and whether a later course exists.
+            "course_lesson_total": course_lesson_total,
+            "lesson_finished": lesson_finished,
+            "next_course": next_course,
             "resume_step": resume_step,
             "progress_state": progress,
             # What this learner got wrong *in this lesson*, so the finish step can name
@@ -449,6 +486,51 @@ class LessonProgressView(LoginRequiredMixin, View):
             row = record_step(request.user, lesson, step)
 
         return JsonResponse(progress_dict(row))
+
+
+class LessonImportView(LoginRequiredMixin, View):
+    """Takes the progress a visitor made in this browser and puts it on their account.
+
+    A visitor learns without an account and their progress lives in ``localStorage``
+    (``static/js/progress.js``). The moment they sign up, the dashboard starts showing the
+    server's answer — which is empty — so the work they did is not wrong, it is simply no
+    longer looked at. That is a silent loss, and this endpoint is the way back: the
+    dashboard reads the browser, asks «بیاورم؟», and posts what the browser reported.
+
+    The browser is a claim, not a source of truth, so the rules live in
+    ``lessons/progress.py::import_guest_progress``: an unknown or unpublished lesson is
+    ignored, a lesson cannot be un-finished, and a report of «started» never writes a
+    completion the browser never claimed. Nothing here reads another learner's rows — the
+    write is always against ``request.user``.
+
+    ``raise_exception``, like ``LessonProgressView``: a redirect to the login page is not a
+    useful answer to a fetch().
+    """
+
+    raise_exception = True
+
+    def post(self, request, *args, **kwargs):
+        try:
+            payload = json.loads(request.body or "{}")
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "invalid JSON"}, status=400)
+
+        reported = payload.get("lessons")
+        if not isinstance(reported, dict):
+            return JsonResponse({"error": "lessons must be an object"}, status=400)
+
+        cleaned = {}
+        for key, status in reported.items():
+            # The keys arrive as JSON object keys, so they are strings: "7", not 7.
+            if not str(key).isdigit():
+                return JsonResponse({"error": "lesson ids must be numbers"}, status=400)
+            if status not in ("started", "completed"):
+                return JsonResponse({"error": "unknown status"}, status=400)
+            cleaned[int(key)] = status
+
+        written = import_guest_progress(request.user, cleaned)
+
+        return JsonResponse({"imported": written})
 
 
 class LessonReviewView(View):

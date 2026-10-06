@@ -19,6 +19,9 @@
  *   available            -> false when localStorage is blocked (private mode)
  *   serverBacked         -> true when the page shipped the learner's real progress
  *   read()               -> full state, always a valid object
+ *   guestRead()          -> what this browser remembers, even when read() is server-backed
+ *                           (the sign-up import asks for exactly this — see
+ *                           static/js/progress_import.js)
  *   markVisited(id)      -> record "started"
  *   markCompleted(id)    -> record "completed" (never downgraded back to started)
  *   setLessonPosition(id, index) / lessonPosition(id) -> step within a lesson
@@ -78,8 +81,11 @@
 
   const serverState = readServerState();
 
-  function read() {
-    if (serverState) return serverState;
+  /* What this browser itself remembers, read the same way whether or not the page is
+   * server-backed. read() prefers the server's answer; the sign-up import needs the
+   * browser's own memory *while* the server is the source of truth, which is the only
+   * moment the two can be compared — so the read is split rather than rewritten. */
+  function readLocal() {
     if (!available) return empty();
     try {
       const raw = window.localStorage.getItem(KEY);
@@ -93,6 +99,11 @@
     } catch (_) {
       return empty();
     }
+  }
+
+  function read() {
+    if (serverState) return serverState;
+    return readLocal();
   }
 
   function write(state) {
@@ -126,6 +137,7 @@
     STARTED,
     COMPLETED,
     read,
+    guestRead: readLocal,
     markVisited: (id) => mark(id, STARTED),
     markCompleted: (id) => mark(id, COMPLETED),
     /** Remember which step of a lesson the learner was on. */

@@ -30,6 +30,29 @@
     {% include "includes/front_door.html" %}
   {% endif %}
 
+  {% comment %}The bridge between the two kinds of progress. A visitor learns without an
+     account, so their lessons live in this browser's localStorage; signing up switches the
+     dashboard to the server's answer, which knows nothing about them. The panel ships
+     hidden and with no button that works until progress_import.js has compared the two and
+     found something to move — so a learner is never offered an import that would import
+     nothing, and with JavaScript off the page says nothing about it at all.{% endcomment %}
+  {% if user.is_authenticated %}
+    <section class="panel dash-import" data-progress-import data-import-url="{% url 'lessons:lesson-import' %}" hidden aria-labelledby="dash-import-title">
+      <div class="dash-import__text">
+        <h2 id="dash-import-title">پیشرفت این مرورگر</h2>
+        <p>
+          پیش از ساختن حساب، <b data-import-count>0</b> درس را روی همین مرورگر شروع یا تمام کرده‌ای.
+          اگر بخواهی، همین حالا به حسابت منتقل می‌شود تا از هر دستگاهی ادامه بدهی.
+        </p>
+      </div>
+      <div class="dash-import__actions">
+        <button type="button" class="btn btn--primary" data-import-accept>به حسابم منتقل کن</button>
+        <button type="button" class="btn" data-import-dismiss>نه، پاکش کن</button>
+      </div>
+      <p class="dash-import__state" data-import-state hidden role="status" aria-live="polite"></p>
+    </section>
+  {% endif %}
+
   {% if course %}
     {% if board %}
       {# ---- امروز: the one guided day, for a learner we can identify ----- #}
@@ -305,4 +328,5 @@
 
 {% block extra_js %}
 <script src="{% static 'js/dashboard.js' %}" defer></script>
+<script src="{% static 'js/progress_import.js' %}" defer></script>
 {% endblock %}

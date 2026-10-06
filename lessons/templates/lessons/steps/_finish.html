@@ -2,7 +2,56 @@
   این درس را تا آخر دیدی. اگر آماده‌ای، همین‌جا کاملش کن تا در مسیر یادگیری و داشبورد کامل نشان داده شود.
 </p>
 
-{% include "lessons/steps/_agenda.html" %}
+{% comment %}The recap: what this lesson actually held, counted from the journey's own steps
+   (lessons/journey.py decides every count, so this card cannot disagree with the agenda
+   or the step itself). It replaces the plain agenda here — the same list, but read as a
+   finish rather than a table of contents. A step with nothing in it is left out, the rule
+   the whole journey follows.{% endcomment %}
+<section class="finish-summary" aria-labelledby="finish-summary-title">
+  {% comment %}Neutral until the lesson is actually recorded as complete. Claiming "درس را
+     تمام کردی" while the button below was still waiting made the screen contradict itself at
+     the one moment the reward should land; lesson_steps.js flips this text when the save
+     succeeds, from the same place that flips the button to «کامل‌شده».{% endcomment %}
+  <p class="finish-summary__eyebrow" data-finish-eyebrow>جمع‌بندی این درس</p>
+  <h3 class="finish-summary__title" id="finish-summary-title">این درس چه چیزی داشت</h3>
+  <p class="finish-summary__lead">همهٔ اینها را پشت سر گذاشتی. اگر خواستی، هر کدام را دوباره باز کن.</p>
+  <ul class="finish-summary__list">
+    {% for item in steps %}
+      {% if item.key != "intro" and item.key != "finish" %}
+        <li class="finish-summary__item">
+          <a class="finish-summary__link" href="#step-{{ item.key }}">
+            <span class="finish-summary__label">{{ item.label }}</span>
+            <span class="finish-summary__count">{{ item.count }} {{ item.unit }}</span>
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</section>
+
+{% comment %}The lesson's own mistakes, and the way back into practising them. The rows are
+   this learner's real WordProgress counters for the words this lesson teaches or
+   revisits (vocabulary/review.py), so a visitor we cannot identify sees no block rather
+   than an empty one — they have no stored answers to read.{% endcomment %}
+{% if lesson_mistakes %}
+  <section class="finish-missed" aria-labelledby="finish-missed-title">
+    <h3 class="finish-missed__title" id="finish-missed-title">واژه‌هایی که در این درس اشتباه زدی</h3>
+    <p class="finish-missed__lead">
+      {{ lesson_mistakes|length }} واژه از این درس را در تمرین‌ها اشتباه زده‌ای. تازه خوانده‌ای‌شان،
+      پس همین حالا بهترین وقت تمرین دوباره است.
+    </p>
+    <ul class="finish-missed__list">
+      {% for row in lesson_mistakes %}
+        <li class="finish-missed__word">
+          <a class="finish-missed__term" href="{% url 'vocabulary:word-detail' row.word.pk %}" lang="de" dir="ltr">{% if row.word.article %}<span class="finish-missed__article">{{ row.word.article }}</span> {% endif %}{{ row.word.word }}</a>
+          <span class="finish-missed__meaning">{{ row.word.meaning_fa }}</span>
+          <span class="finish-missed__count">غلط: {{ row.wrong_count }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+    <a class="btn finish-missed__cta" href="{% url 'vocabulary:word-review' %}">تمرین این واژه‌ها</a>
+  </section>
+{% endif %}
 
 <div class="step-finish__actions">
   {% comment %}Revealed by lesson_steps.js and only then clickable: without
@@ -22,11 +71,74 @@
   {% endif %}
 </p>
 
+{% comment %}On the short path, the one thing left to say before the exits: what this path
+   did not cover, and that it is all still there. Without it the learner has no way to know
+   the lesson held more than they saw.{% endcomment %}
+{% if mode == "short" %}
+  <p class="step-note">
+    این نسخهٔ ۱۵ دقیقه‌ای همین درس بود. قدم‌های «خواندن» و «شنیدن» و بقیهٔ واژه‌ها و مثال‌های درس در
+    <a href="{% url 'lessons:lesson-detail' lesson.pk %}">درس کامل</a> هستند؛ هر وقت خواستی بخوانشان.
+  </p>
+{% endif %}
+
 <div class="step-finish__nav">
   {% if next_lesson %}
-    <a class="btn" href="{% url 'lessons:lesson-detail' next_lesson.pk %}">درس بعدی <bdi dir="auto">{{ next_lesson.title }}</bdi> ←</a>
-  {% else %}
-    <span class="step-note">این آخرین درس این دوره است.</span>
+    <a class="btn" data-finish-next href="{% url 'lessons:lesson-detail' next_lesson.pk %}">درس بعدی {{ next_lesson.display_title|direction }} ←</a>
   {% endif %}
+  <a class="btn" href="{% url 'lessons:lesson-review' lesson.pk %}">مرور این درس</a>
   <a class="btn" href="{% url 'lessons:lesson-list' %}">بازگشت به مسیر یادگیری</a>
 </div>
+
+{% comment %}The end of the course. It used to be one sentence — «این آخرین درس این دوره است»
+   — and then the product simply stopped, at exactly the point where a learner decides
+   whether to keep going (P-30). So it names the finish, counts the course from the course
+   itself, and gives the three things that are really there to do next. It does **not**
+   announce an A2 course: whether one exists is read from the content, and when none does
+   the page says so rather than promising a date nobody can keep.{% endcomment %}
+{% if not next_lesson %}
+  <section class="finish-summary course-done" aria-labelledby="course-done-title">
+    <p class="finish-summary__eyebrow">آخرین درس دوره</p>
+    <h3 class="finish-summary__title" id="course-done-title">
+      {% if lesson_finished %}دورهٔ A1 را کامل کردی{% else %}پایان دورهٔ A1{% endif %}
+    </h3>
+    <p class="finish-summary__lead">
+      {% if lesson_finished %}
+        این درس را کامل کردی و به آخر خط رسیدی: {{ course_lesson_total }} درس از {{ course_lesson_total }}.
+        یعنی واژه‌ها و گرامر A1 را یک‌بار از اول تا آخر دیده‌ای.
+      {% else %}
+        با کامل کردن همین درس، دوره را تمام می‌کنی: {{ course_lesson_total }} درس از {{ course_lesson_total }}.
+      {% endif %}
+    </p>
+    <p class="finish-summary__lead">
+      راهِ نگه داشتنش خواندن دوباره نیست، تمرین دوباره است. سه کار که همین حالا ارزش دارند:
+    </p>
+    <ul class="finish-summary__list">
+      <li class="finish-summary__item">
+        <a class="finish-summary__link" href="{% url 'exams:exam-index' %}">
+          <span class="finish-summary__label">آزمون آزمایشی A1</span>
+          <span class="finish-summary__count">در شکل آزمون رسمی</span>
+        </a>
+      </li>
+      <li class="finish-summary__item">
+        <a class="finish-summary__link" href="{% url 'vocabulary:word-review' %}">
+          <span class="finish-summary__label">واژه‌های اشتباه</span>
+          <span class="finish-summary__count">همان‌هایی که جایی گیر کردی</span>
+        </a>
+      </li>
+      <li class="finish-summary__item">
+        <a class="finish-summary__link" href="{% url 'lessons:practice-path' %}">
+          <span class="finish-summary__label">مرور روزانه</span>
+          <span class="finish-summary__count">مسیر امروز، هر روز چند دقیقه</span>
+        </a>
+      </li>
+    </ul>
+    <p class="step-note">
+      این محصول فعلاً یک دوره دارد و آن همین A1 است؛
+      {% if next_course %}
+        ادامه‌اش <a href="{% url 'lessons:course-detail' next_course.pk %}">{{ next_course.title }}</a> است.
+      {% else %}
+        دورهٔ بعدی (A2) هنوز اینجا نیست و ما تاریخی هم وعده نمی‌دهیم که نتوانیم نگهش داریم.
+      {% endif %}
+    </p>
+  </section>
+{% endif %}
