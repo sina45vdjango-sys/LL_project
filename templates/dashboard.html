@@ -1,58 +1,43 @@
 {% extends "base.html" %}
 {% load static %}
-{% comment %}The title a stranger sees in the tab and in a shared link. «داشبورد» is the
-   right name for a learner who has been here before and the wrong one for a visitor who
-   is trying to find out what this is.{% endcomment %}
-{% block title %}{% if user.is_authenticated %}داشبورد | {{ brand.name }}{% else %}آموزش آلمانی A1 برای فارسی‌زبان‌ها | {{ brand.name }}{% endif %}{% endblock %}
+
+{% block title %}{% if user.is_authenticated %}داشبورد یادگیری هوشمند | {{ brand.name }}{% else %}آموزش آلمانی A1 برای فارسی‌زبان‌ها | {{ brand.name }}{% endif %}{% endblock %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 <link rel="stylesheet" href="{% static 'css/bento_dashboard.css' %}">
 {% endblock %}
+
 {% block content %}
 <div class="dash" data-dashboard>
 
-  {% if user.is_authenticated %}
-    <div class="dash-bento-hero-banner">
-      <div class="dash-bento-banner__content">
-        <span class="prompt-badge">⚡ نمای جدید داشبورد</span>
-        <h2 style="margin: 6px 0 4px; font-size: 18px; font-weight: 800; color: var(--fg);">داشبورد هوشمند بنتو (Goethe A1 Bento Grid)</h2>
-        <p style="margin: 0; color: var(--muted); font-size: 13px;">ماتریس آمادگی گوته A1 در ۶ مهارت، مداوای ۱-کلیک ضعف‌ها و استمرار روزانه در نمای مدرن بنتو.</p>
-      </div>
-      <a href="{% url 'bento-dashboard' %}" class="btn-tactile-primary" style="text-decoration:none;">
-        <span>ورود به داشبورد بنتو</span>
-        <span aria-hidden="true">→</span>
-      </a>
+  <!-- Top Bar & Greeting -->
+  <header class="dash__head bento-header-bar">
+    <div>
+      <p class="dash__eyebrow">{% if user.is_authenticated %}داشبورد یادگیری هوشمند{% else %}آلمانی A1 برای فارسی‌زبان‌ها{% endif %}</p>
+      <h1 class="dash__title">
+        {% if user.is_authenticated %}خوش آمدی، <bdi>{{ user.get_username }}</bdi>.{% else %}به {{ brand.name }} خوش آمدی.{% endif %}
+      </h1>
+      <p class="dash__intro">
+        {% if user.is_authenticated %}
+          ماتریس آمادگی گوته A1، وضعیت پیشرفت درس‌ها و تمرین‌های ترمیمی امروز شما.
+        {% else %}
+          اینجا مسیر یادگیری آلمانی‌ات را می‌بینی و همان‌جا شروع می‌کنی — بدون حساب کاربری.
+        {% endif %}
+      </p>
     </div>
-  {% endif %}
-
-  <header class="dash__head">
-    <p class="dash__eyebrow">{% if user.is_authenticated %}داشبورد{% else %}آلمانی A1 برای فارسی‌زبان‌ها{% endif %}</p>
-    <h1 class="dash__title">
-      {% if user.is_authenticated %}خوش آمدی، <bdi>{{ user.get_username }}</bdi>.{% else %}به {{ brand.name }} خوش آمدی.{% endif %}
-    </h1>
-    <p class="dash__intro">
-      {% if user.is_authenticated %}
-        اینجا می‌بینی کجای مسیر هستی و قدم بعدی‌ات چیست.
-      {% else %}
-        اینجا مسیر یادگیری آلمانی‌ات را می‌بینی و همان‌جا شروع می‌کنی — بدون حساب کاربری.
-      {% endif %}
-    </p>
+    <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="تغییر پوسته">
+      <span id="themeIcon">🌓</span>
+      <span id="themeLabel">تغییر پوسته</span>
+    </button>
   </header>
 
-  {% comment %}The front door, for a visitor we cannot identify: what this is, who it is
-     for, what is inside it and one action. Above everything else on the page, because
-     everything else on the page assumes the visitor already decided to use the product.
-     A signed-in learner never sees it — they came in through a different door.{% endcomment %}
+  {% comment %}The front door for anonymous visitors{% endcomment %}
   {% if not user.is_authenticated %}
     {% include "includes/front_door.html" %}
   {% endif %}
 
-  {% comment %}The bridge between the two kinds of progress. A visitor learns without an
-     account, so their lessons live in this browser's localStorage; signing up switches the
-     dashboard to the server's answer, which knows nothing about them. The panel ships
-     hidden and with no button that works until progress_import.js has compared the two and
-     found something to move — so a learner is never offered an import that would import
-     nothing, and with JavaScript off the page says nothing about it at all.{% endcomment %}
+  {% comment %}Guest progress import prompt{% endcomment %}
   {% if user.is_authenticated %}
     <section class="panel dash-import" data-progress-import data-import-url="{% url 'lessons:lesson-import' %}" hidden aria-labelledby="dash-import-title">
       <div class="dash-import__text">
@@ -71,32 +56,297 @@
   {% endif %}
 
   {% if course %}
+    <!-- ==================== TACTILE BENTO GRID ==================== -->
+    <div class="bento-container" id="bento-grid">
+
+      <!-- Tile 1: Hero / Active Lesson -->
+      <article class="bento-tile tile-hero tile-delay-1">
+        <div class="tile-eyebrow">
+          <span>📖 درس فعال · سطح A1</span>
+        </div>
+        <h2 class="tile-title">
+          {% if active_lesson %}
+            درس {{ active_lesson.order }}: {{ active_lesson.display_title }} · <span class="de" dir="ltr" lang="de">{{ active_lesson.title }}</span>
+          {% else %}
+            درس ۱: {{ first_lesson.display_title }} · <span class="de" dir="ltr" lang="de">{{ first_lesson.title }}</span>
+          {% endif %}
+        </h2>
+        <p class="tile-desc">
+          {% if active_lesson.display_description %}
+            {{ active_lesson.display_description }}
+          {% elif active_lesson.description %}
+            {{ active_lesson.description }}
+          {% else %}
+            در این درس واژگان کلیدی، گرامر کاربردی و تمرینات معتبر A1 را فرا می‌گیرید. گام‌ها را یکی پس از دیگری تکمیل کنید.
+          {% endif %}
+        </p>
+
+        <div class="lesson-progress-wrap">
+          <div class="progress-meta">
+            <span>وضعیت تکمیل گام‌ها</span>
+            <span>{% if active_started %}گام {{ active_step }} از ۱۰ ({{ active_step_percent }}٪){% else %}آماده برای شروع گام ۱ از ۱۰ (۰٪){% endif %}</span>
+          </div>
+          <div class="progress-track" aria-label="میزان پیشرفت درس">
+            <div class="progress-fill" style="width: {{ active_step_percent|default:0 }}%;"></div>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          {% if active_lesson %}
+            <a href="{% url 'lessons:lesson-detail' active_lesson.pk %}" class="btn-tactile-primary" id="bentoHeroResumeBtn">
+              <span>{% if active_started %}ادامه یادگیری{% else %}شروع درس {{ active_lesson.order }}{% endif %}</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          {% else %}
+            <a href="{% url 'lessons:lesson-detail' first_lesson.pk %}" class="btn-tactile-primary" id="bentoHeroResumeBtn">
+              <span>شروع درس ۱</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          {% endif %}
+
+          {% if active_audio %}
+            {% include "includes/audio_control.html" with audio=active_audio prefix="bento-hero" pk=active_lesson.pk label="تلفظ صوتی درس" %}
+          {% endif %}
+          <span class="time-estimate">⏱ حدود {{ active_lesson.estimated_time|default:15 }} دقیقه</span>
+        </div>
+      </article>
+
+      <!-- Tile 2: Goethe A1 Readiness Gauge -->
+      <article class="bento-tile tile-readiness tile-delay-2">
+        <div class="tile-eyebrow">
+          <span>🎯 سنجش گوته A1</span>
+        </div>
+        <h2 class="tile-title">شاخص آمادگی رسمی</h2>
+
+        <div class="gauge-overall">
+          <div class="gauge-badge" data-value="{{ goethe_score.total_points|default:0 }}">
+            {{ goethe_score.total_points|default:0 }}٪
+          </div>
+          <div>
+            <div class="gauge-meta-title">{{ goethe_score.status_label|default:"در ابتدای مسیر یادگیری و آمادگی آزمون" }}</div>
+            <div class="gauge-meta-sub">نمره از ۱۰۰ (حد نصاب قبولی گوته: ۶۰)</div>
+          </div>
+        </div>
+
+        <div class="skill-meter-list">
+          <div class="skill-meter-item">
+            <div class="skill-meter-header">
+              <span>شنیدن · <span class="de" dir="ltr" lang="de">Hören</span></span>
+              <span>{{ competencies.hoeren.percent|default:0 }}٪</span>
+            </div>
+            <div class="skill-meter-bar">
+              <div class="skill-meter-fill" style="width: {{ competencies.hoeren.percent|default:0 }}%;"></div>
+            </div>
+          </div>
+          <div class="skill-meter-item">
+            <div class="skill-meter-header">
+              <span>خواندن · <span class="de" dir="ltr" lang="de">Lesen</span></span>
+              <span>{{ competencies.lesen.percent|default:0 }}٪</span>
+            </div>
+            <div class="skill-meter-bar">
+              <div class="skill-meter-fill" style="width: {{ competencies.lesen.percent|default:0 }}%;"></div>
+            </div>
+          </div>
+          <div class="skill-meter-item">
+            <div class="skill-meter-header">
+              <span>نوشتن · <span class="de" dir="ltr" lang="de">Schreiben</span></span>
+              <span>{{ competencies.schreiben.percent|default:0 }}٪</span>
+            </div>
+            <div class="skill-meter-bar">
+              <div class="skill-meter-fill" style="width: {{ competencies.schreiben.percent|default:0 }}%;"></div>
+            </div>
+          </div>
+          <div class="skill-meter-item">
+            <div class="skill-meter-header">
+              <span>گفتن · <span class="de" dir="ltr" lang="de">Sprechen</span></span>
+              <span>{{ competencies.sprechen.percent|default:0 }}٪</span>
+            </div>
+            <div class="skill-meter-bar">
+              <div class="skill-meter-fill" style="width: {{ competencies.sprechen.percent|default:0 }}%;"></div>
+            </div>
+          </div>
+          <div class="skill-meter-item">
+            <div class="skill-meter-header">
+              <span>نحو · <span class="de" dir="ltr" lang="de">Satzbau</span></span>
+              <span>{{ competencies.satzbau.percent|default:0 }}٪</span>
+            </div>
+            <div class="skill-meter-bar">
+              <div class="skill-meter-fill" style="width: {{ competencies.satzbau.percent|default:0 }}%;"></div>
+            </div>
+          </div>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div style="margin-top: 14px;">
+          <a href="{% url 'readiness' %}" class="btn--tactile" style="font-size:12px; width:100%; justify-content:center;">تحلیل کامل آمادگی گوته ←</a>
+        </div>
+        {% endif %}
+      </article>
+
+      <!-- Tile 3: 1-Click Remedy Pills -->
+      <article class="bento-tile tile-remedies tile-delay-3">
+        <div class="tile-eyebrow">
+          <span>💊 مداوای ضعف‌ها · 1-Click Remedies</span>
+        </div>
+        <h2 class="tile-title">تمرین هدفمند خطاهای اخیر</h2>
+        <p class="tile-desc">بر اساس آخرین پاسخ‌های ثبت‌شده، این تمرین‌ها بیشترین بازدهی تقویتی را دارند:</p>
+
+        <div class="remedy-grid">
+          {% if remedies %}
+            {% for item in remedies %}
+              <a href="{{ item.action_url }}" class="remedy-pill" data-drill="{{ item.key }}">
+                <div class="remedy-pill-title">{{ item.title }} · <span class="de" dir="ltr" lang="de">{{ item.tag }}</span></div>
+                <p style="margin:4px 0 6px; font-size:12px; color:var(--muted); line-height:1.4;">{{ item.detail }}</p>
+                <div class="remedy-pill-footer">
+                  <span class="remedy-action-tag">{{ item.action_label }}</span>
+                </div>
+              </a>
+            {% endfor %}
+          {% else %}
+            <a href="{% url 'satzbau-drill' %}" class="remedy-pill" data-drill="satzbau">
+              <div class="remedy-pill-title">جایگاه فعل و چیدمان جمله · <span class="de" dir="ltr" lang="de">Satzbau / Inversion</span></div>
+              <p style="margin:4px 0 6px; font-size:12px; color:var(--muted); line-height:1.4;">تقویت ترتیب واژگان و چیدمان جمله اصلی و سوالی در زبان آلمانی.</p>
+              <div class="remedy-pill-footer">
+                <span class="remedy-pill-error">کارگاه نحو و چیدمان</span>
+                <span class="remedy-action-tag">ورود به لب ⚡</span>
+              </div>
+            </a>
+
+            <a href="{% url 'exams:sprechen' %}" class="remedy-pill" data-drill="sprechen">
+              <div class="remedy-pill-title">تمرین شفاهی کارت‌های آزمون · <span class="de" dir="ltr" lang="de">Goethe Sprechen</span></div>
+              <p style="margin:4px 0 6px; font-size:12px; color:var(--muted); line-height:1.4;">پاسخ و پرسش با کارت‌های رسمی بخش ۲ و ۳ گفتار آزمون گوته A1.</p>
+              <div class="remedy-pill-footer">
+                <span class="remedy-pill-error">آزمایشگاه گفتار</span>
+                <span class="remedy-action-tag">شروع تمرین ⚡</span>
+              </div>
+            </a>
+
+            <a href="{% url 'vocabulary:word-review' %}" class="remedy-pill" data-drill="review">
+              <div class="remedy-pill-title">مرور واژه‌های نیازمند تکرار · <span class="de" dir="ltr" lang="de">Wortschatz SRS</span></div>
+              <p style="margin:4px 0 6px; font-size:12px; color:var(--muted); line-height:1.4;">سیستم مرور فاصله‌دار انطباقی برای واژگانی که در تمرین‌ها سخت بوده‌اند.</p>
+              <div class="remedy-pill-footer">
+                <span class="remedy-pill-error">جعبه لایتنر هوشمند</span>
+                <span class="remedy-action-tag">ورود به مرور ⚡</span>
+              </div>
+            </a>
+          {% endif %}
+        </div>
+      </article>
+
+      <!-- Tile 4: Momentum & Activity -->
+      <article class="bento-tile tile-momentum tile-delay-4">
+        <div class="tile-eyebrow">
+          <span>⚡ استمرار و شتاب روزانه</span>
+        </div>
+        <h2 class="tile-title">زنجیره و پیشرفت یادگیری</h2>
+
+        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:14px;">
+          <div style="display:flex; align-items:center; gap:14px; padding:12px 14px; background:var(--surface-alt); border-radius:14px; border:1px solid var(--line);">
+            <span style="font-size:30px;">🔥</span>
+            <div>
+              <div style="font-size:20px; font-weight:800;">{{ profile.streak_days|default:0 }} روز</div>
+              <div style="font-size:12px; color:var(--muted);">زنجیرهٔ تمرین مداوم</div>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:14px; padding:12px 14px; background:var(--surface-alt); border-radius:14px; border:1px solid var(--line);">
+            <span style="font-size:30px;">⚡</span>
+            <div>
+              <div style="font-size:20px; font-weight:800;">{{ profile.xp|default:0 }} XP</div>
+              <div style="font-size:12px; color:var(--muted);">XP کل (سطح {{ xp.level|default:1 }})</div>
+            </div>
+          </div>
+        </div>
+
+        <p style="font-size:12.5px; color:var(--muted); margin:0;">
+          {% if today_stats.answered %}
+            فعالیت امروز: {{ today_stats.answered }} پاسخ ثبت‌شده
+          {% else %}
+            امروز هنوز پاسخی ثبت نشده است.
+          {% endif %}
+        </p>
+      </article>
+
+      <!-- Tile 5: Specialized Interactive Labs -->
+      <article class="bento-tile tile-labs tile-delay-5">
+        <div class="tile-eyebrow">
+          <span>🧪 کارگاه‌های تخصصی گوته A1</span>
+        </div>
+        <h2 class="tile-title">آزمایشگاه‌های تعاملی مهارت‌محور</h2>
+        <p class="tile-desc">برای تقویت مستقیم بخش‌های مختلف آزمون گوته، این کارگاه‌های هدفمند آماده هستند:</p>
+
+        <div class="labs-grid">
+          <a href="{% url 'satzbau-drill' %}" class="lab-card">
+            <span class="lab-card-icon">🧩</span>
+            <div class="lab-card-title">کارگاه جمله‌سازی (Satzbau Lab)</div>
+            <div class="lab-card-sub">چیدمان لمسی واژگان، اینورژن و فعل در جایگاه دوم</div>
+          </a>
+
+          <a href="{% url 'exams:sprechen' %}" class="lab-card">
+            <span class="lab-card-icon">🎙️</span>
+            <div class="lab-card-title">کارگاه گفتاری (Goethe Sprechen)</div>
+            <div class="lab-card-sub">تمرین کارت‌های گفتار رسمی بخش ۲ و ۳ با صوت ضبط‌شده</div>
+          </a>
+
+          <a href="{% url 'exams:exam-index' %}" class="lab-card">
+            <span class="lab-card-icon">📝</span>
+            <div class="lab-card-title">شبیه‌ساز رسمی گوته A1</div>
+            <div class="lab-card-sub">آزمون جامع زمان‌دار مطابق با ساختار آزمون انستیتو گوته</div>
+          </a>
+
+          <a href="{% url 'exercises:session' %}" class="lab-card">
+            <span class="lab-card-icon">🎯</span>
+            <div class="lab-card-title">تمرین روزانه هوشمند</div>
+            <div class="lab-card-sub">مرور انطباقی تلفیقی واژگان و گرامر در نشست‌های کوتاه</div>
+          </a>
+        </div>
+      </article>
+
+    </div>
+    <!-- ==================== END BENTO GRID ==================== -->
+
+    <!-- Learning Goal Card -->
+    {% if user.is_authenticated %}
+      <section class="panel dash-goal" aria-label="وضعیت هدف">
+        {% if goal %}
+          <p class="dash-goal__line">
+            <span class="dash-goal__label">هدف:</span>
+            {% if goal.current_level %}<bdi>{{ goal.current_level }}</bdi> ←{% endif %}
+            {% if goal.target_level %}<bdi>{{ goal.target_level }}</bdi>{% else %}<span class="muted">سطحی تعیین نشده</span>{% endif %}
+            {% if goal.reason_label %}<span class="dash-goal__tag">{{ goal.reason_label }}</span>{% endif %}
+            {% if goal.target_date %}<span class="dash-goal__tag">تا {{ goal.target_date|jalali }}</span>{% endif %}
+          </p>
+          {% if pace and pace.state == 'planned' %}
+            <p class="dash-today__note">{{ pace.lessons_per_week }} درس در هفته تا تاریخ هدفت کافی است.</p>
+          {% endif %}
+          {% if pace and pace.state == 'passed' %}
+            <p class="dash-goal__pace">تاریخ هدفت گذشته است؛ از «هدف من» تاریخ تازه بگذار.</p>
+          {% endif %}
+          <div class="dash-goal__actions">
+            <a class="dash-goal__link" href="{% url 'readiness' %}">آمادگی من ←</a>
+          </div>
+        {% else %}
+          <p class="dash-goal__line">هدف یادگیری‌ات را تعیین کن تا بدانی چقدر از مسیر مانده و با چه سرعتی.</p>
+          <div class="dash-goal__actions">
+            <a class="btn btn--primary" href="{% url 'accounts:goal' %}">تعیین هدف</a>
+            <a class="dash-goal__link" href="{% url 'readiness' %}">آمادگی من ←</a>
+          </div>
+        {% endif %}
+      </section>
+    {% endif %}
+
+    <!-- Today's guided steps (if available) -->
     {% if board %}
-      {# ---- امروز: the one guided day, for a learner we can identify ----- #}
-      {% comment %}Built by lessons/skill_path.py::today_board from rows this learner already
-         has — the lesson they are inside (or the next one they have not finished), the words
-         the schedule says are due, and the words they answered wrong — and rendered by the
-         same include as «مسیر امروز», so the two pages cannot show two different days. A
-         signed-in learner only, because an anonymous visitor has no stored rows to plan
-         from; the panel below serves them instead. There is no streak and no score here on
-         purpose.{% endcomment %}
       <section class="panel dash-today" aria-labelledby="dash-today-title">
         <div class="dash-today__head">
           <p class="dash-today__eyebrow">امروز</p>
           <h2 class="dash-today__title" id="dash-today-title">برنامهٔ امروز تو</h2>
         </div>
 
-        {% comment %}The same guided day «مسیر امروز» shows, so the learner sees one answer to
-           «امروز» and not two (lessons/skill_path.py::today_board). The day can be absent
-           even for a signed-in learner — a finished course with nothing due and nothing
-           missed — and then only the note below is left to say so.{% endcomment %}
         {% if board.day %}
           {% include "includes/day_steps.html" with day=board.day %}
         {% endif %}
 
-        {% comment %}The goal's own projection: "how much do I need to do" is today's question,
-           so the one sentence that answers it belongs beside the day. Only rendered when the
-           learner actually set a date (lessons/readiness.py).{% endcomment %}
         {% if pace and pace.state == 'planned' %}
           <p class="dash-today__note">{{ pace.lessons_per_week }} درس در هفته تا تاریخ هدفت کافی است.</p>
         {% endif %}
@@ -114,12 +364,6 @@
           {% if last_activity %}<span class="dash-today__ago">آخرین فعالیت: {{ last_activity|timesince }} پیش</span>{% endif %}
         </p>
 
-        {% comment %}A week of the learner's own answers, counted from the same
-           ``ExerciseAttempt`` rows the line above counts (lessons/today.py::weekly_activity),
-           so the two cannot disagree about today. The daily loop is what pulls people back,
-           and a week is the shortest span over which effort is visible. Bars are scaled to
-           this learner's busiest day rather than to a number invented here, and a week with
-           nothing in it draws no chart rather than an empty one.{% endcomment %}
         {% if weekly and weekly.peak %}
           <div class="dash-week" aria-labelledby="dash-week-title">
             <p class="dash-week__title" id="dash-week-title">هفت روز اخیر</p>
@@ -134,8 +378,7 @@
           </div>
         {% endif %}
       </section>
-    {% else %}
-      {# ---- the one thing to do next, for a visitor we cannot identify --- #}
+    {% elif not user.is_authenticated and first_lesson %}
       <section class="panel dash-next" aria-labelledby="dash-next-title">
         <div class="dash-next__body">
           <p class="dash-next__eyebrow" data-continue-eyebrow>از اینجا شروع کن</p>
@@ -146,125 +389,41 @@
       </section>
     {% endif %}
 
-    <div class="dash__cols">
-      <div class="dash__col">
-
-        {# ---- where you are + local progress ----------------------------- #}
-        <section class="panel dash-progress" aria-labelledby="dash-progress-title">
-          <div class="dash-progress__head">
-            <h2 id="dash-progress-title">پیشرفت تو</h2>
-            <span class="dash-progress__count" data-progress-count>0 از {{ lesson_total }} درس کامل‌شده</span>
-          </div>
-          <div class="progress" role="progressbar" aria-labelledby="dash-progress-title"
-               aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-progress-bar>
-            <span class="progress__fill" data-progress-fill style="width:0%"></span>
-          </div>
-          <p class="dash-note" data-progress-note>
-            {% if user.is_authenticated %}
-              پیشرفت روی حساب کاربری‌ات ذخیره می‌شود.
-            {% else %}
-              پیشرفت فعلاً در همین مرورگر ذخیره می‌شود؛ روی حساب کاربری نگه داشته نمی‌شود.
-            {% endif %}
-          </p>
-
-          {% comment %}Only the learner can say where they are going, so the goal line is
-             theirs and nobody else's. The numbers come from lessons/readiness.py, which
-             «آمادگی من» reads too — the two pages cannot disagree.{% endcomment %}
-          {% if user.is_authenticated %}
-            <div class="dash-goal">
-              {% if goal %}
-                <p class="dash-goal__line">
-                  <span class="dash-goal__label">هدف</span>
-                  {% if goal.current_level %}<bdi>{{ goal.current_level }}</bdi> ←{% endif %}
-                  {% if goal.target_level %}<bdi>{{ goal.target_level }}</bdi>{% else %}<span class="muted">سطحی تعیین نشده</span>{% endif %}
-                  {% if goal.reason_label %}<span class="dash-goal__tag">{{ goal.reason_label }}</span>{% endif %}
-                  {% if goal.target_date %}<span class="dash-goal__tag">تا {{ goal.target_date|jalali }}</span>{% endif %}
-                </p>
-                {% comment %}The planned-goal pace sentence now lives in the «امروز» panel
-                   above, where "how much do I need to do today" is the question being
-                   answered. A date that has passed is a fact about the goal itself, so it
-                   stays here beside the goal.{% endcomment %}
-                {% if pace and pace.state == 'passed' %}
-                  <p class="dash-goal__pace">تاریخ هدفت گذشته است؛ از «هدف من» تاریخ تازه بگذار.</p>
-                {% endif %}
-              {% else %}
-                <p class="dash-goal__line">هدف یادگیری‌ات را تعیین کن تا بدانی چقدر از مسیر مانده و با چه سرعتی.</p>
-              {% endif %}
-              {% comment %}A learner without a goal gets a button, not only a sentence and a link
-                 to a page they have not filled in yet. This is the same call to action the
-                 profile page carries, in the place a learner actually lands.{% endcomment %}
-              <div class="dash-goal__actions">
-                {% if not goal %}
-                  <a class="btn btn--primary" href="{% url 'accounts:goal' %}">تعیین هدف</a>
-                {% endif %}
-                <a class="dash-goal__link" href="{% url 'readiness' %}">آمادگی من ←</a>
-              </div>
-            </div>
-          {% endif %}
-        </section>
-
-        {# ---- what your own mistakes say to do next ---------------------- #}
-        {% comment %}Shown only when there really are missed words: a learner with a clean
-           record gets no panel rather than a summary invented to fill the space. The
-           panel and the review page read the same module (vocabulary/review.py), so they
-           cannot disagree about which words are the weak ones.{% endcomment %}
-        {% if review %}
-          <section class="panel dash-review" aria-labelledby="dash-review-title">
-            <div class="dash-review__head">
-              <h2 id="dash-review-title">مرور شخصی</h2>
-              <a href="{% url 'vocabulary:word-review' %}">همهٔ مرور ←</a>
-            </div>
-            <p class="dash-review__lead">{{ review.wrong_word_count }} واژه را در تمرین‌ها اشتباه زده‌ای؛ بیشترین اشتباه اول.</p>
-
-            <ul class="dash-review__words">
-              {% for row in review.words %}
-                <li class="dash-review__word">
-                  <a class="dash-review__term" href="{% url 'vocabulary:word-detail' row.word.pk %}" lang="de" dir="ltr">{% if row.word.article %}{{ row.word.article }} {% endif %}{{ row.word.word }}</a>
-                  <span class="dash-review__meaning">{{ row.word.meaning_fa }}</span>
-                  <span class="chip">غلط: {{ row.wrong_count }}</span>
-                  <span class="chip">درست: {{ row.correct_count }}</span>
-                </li>
-              {% endfor %}
-            </ul>
-
-            {% if review.exercises %}
-              {# Not "every word above": an exercise tests at least one of them. #}
-              <p class="dash-review__note">این تمرین‌ها واژه‌های اشتباه تو را می‌سنجند:</p>
-              <ul class="dash-review__practice">
-                {% for item in review.exercises %}
-                  <li>
-                    <a href="{% url 'exercises:exercise-detail' item.exercise.pk %}">{{ item.exercise.title|direction }}</a>
-                    <span class="dash-review__meta">درس {{ item.exercise.lesson.order }} · {{ item.question_count }} پرسش</span>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-          </section>
+    <!-- Personal Review Panel (if mistakes exist) -->
+    {% if review %}
+      <section class="panel dash-review" aria-labelledby="dash-review-title">
+        <div class="dash-review__head">
+          <h2 id="dash-review-title">مرور شخصی</h2>
+          <a href="{% url 'vocabulary:word-review' %}">همهٔ مرور ←</a>
+        </div>
+        <p class="dash-review__lead">{{ review.wrong_word_count }} واژه را در تمرین‌ها اشتباه زده‌ای؛ بیشترین اشتباه اول.</p>
+        <ul class="dash-review__words">
+          {% for row in review.words %}
+            <li class="dash-review__word">
+              <a class="dash-review__term" href="{% url 'vocabulary:word-detail' row.word.pk %}" lang="de" dir="ltr">{% if row.word.article %}{{ row.word.article }} {% endif %}{{ row.word.word }}</a>
+              <span class="dash-review__meaning">{{ row.word.meaning_fa }}</span>
+              <span class="chip">غلط: {{ row.wrong_count }}</span>
+              <span class="chip">درست: {{ row.correct_count }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+        {% if review.exercises %}
+          <p class="dash-review__note">این تمرین‌ها واژه‌های اشتباه تو را می‌سنجند:</p>
+          <ul class="dash-review__practice">
+            {% for item in review.exercises %}
+              <li>
+                <a href="{% url 'exercises:exercise-detail' item.exercise.pk %}">{{ item.exercise.title|direction }}</a>
+                <span class="dash-review__meta">درس {{ item.exercise.lesson.order }} · {{ item.question_count }} پرسش</span>
+              </li>
+            {% endfor %}
+          </ul>
         {% endif %}
+      </section>
+    {% endif %}
 
-        {# ---- recent local activity (only real localStorage data) -------- #}
-        <section class="panel dash-activity" aria-labelledby="dash-activity-title" data-activity hidden>
-          <h2 id="dash-activity-title">
-            {% if user.is_authenticated %}فعالیت اخیر تو{% else %}فعالیت اخیر روی این دستگاه{% endif %}
-          </h2>
-          <dl class="dash-activity__list">
-            <div><dt>آخرین درس</dt><dd data-activity-lesson>—</dd></div>
-            <div><dt>آخرین بازدید</dt><dd data-activity-when>—</dd></div>
-            <div><dt>درس‌های شروع‌شده</dt><dd data-activity-started>—</dd></div>
-          </dl>
-        </section>
-
-        {% comment %}There used to be a «هنوز درسی را شروع نکرده‌ای» panel here. It was the
-           worst kind of empty state: it announced that nothing had happened while the same
-           screen already showed exactly what to do — the «امروز» board above names the
-           lesson and links it, the progress card says 0 of 24, and every row of the path
-           says «شروع نشده». Three panels answering one question, and the newest learner got
-           the least useful of them. The honest place for "nothing here yet" is «فعالیت
-           اخیر», which stays hidden until there is something real to show.{% endcomment %}
-      </div>
-
+    <!-- Learning Path Preview & Quick Access -->
+    <div class="dash__cols" style="margin-top: 24px;">
       <div class="dash__col">
-        {# ---- course / level ------------------------------------------- #}
         <section class="panel dash-course" aria-labelledby="dash-course-title">
           <div class="dash-course__top">
             <span class="dash-level" lang="en" dir="ltr">{{ level }}</span>
@@ -275,7 +434,6 @@
           <a class="dash-course__link" href="{% url 'lessons:course-detail' course.pk %}">نمای کلی دوره ←</a>
         </section>
 
-        {# ---- quick actions -------------------------------------------- #}
         <section class="dash-quick" aria-labelledby="dash-quick-title">
           <h2 id="dash-quick-title">دسترسی سریع</h2>
           <div class="dash-quick__grid">
@@ -294,41 +452,54 @@
           </div>
         </section>
       </div>
+
+      <div class="dash__col">
+        <section class="dash-section" aria-labelledby="dash-path-title">
+          <div class="dash-section__head">
+            <h2 id="dash-path-title">مسیر یادگیری</h2>
+            <a href="{% url 'lessons:lesson-list' %}">همهٔ {{ lesson_total }} درس ←</a>
+          </div>
+          <ol class="dash-path" data-path>
+            {% for lesson in preview_lessons %}
+              <li class="dash-path__item" data-path-item="{{ lesson.pk }}">
+                <span class="dash-path__num" aria-hidden="true">{{ lesson.order }}</span>
+                <a class="dash-path__title" href="{% url 'lessons:lesson-detail' lesson.pk %}">{{ lesson.display_title|direction }}</a>
+                <span class="dash-path__aside">
+                  <span class="dash-path__meta">{{ lesson.estimated_time }} دقیقه</span>
+                  <span class="dash-path__state" data-path-state>شروع نشده</span>
+                </span>
+              </li>
+            {% endfor %}
+          </ol>
+        </section>
+      </div>
     </div>
 
-    {# ---- learning path entry point ----------------------------------- #}
-    <section class="dash-section" aria-labelledby="dash-path-title">
-      <div class="dash-section__head">
-        <h2 id="dash-path-title">مسیر یادگیری</h2>
-        <a href="{% url 'lessons:lesson-list' %}">همهٔ {{ lesson_total }} درس ←</a>
-      </div>
-      <ol class="dash-path" data-path>
-        {% for lesson in preview_lessons %}
-          <li class="dash-path__item" data-path-item="{{ lesson.pk }}">
-            <span class="dash-path__num" aria-hidden="true">{{ lesson.order }}</span>
-            <a class="dash-path__title" href="{% url 'lessons:lesson-detail' lesson.pk %}">{{ lesson.display_title|direction }}</a>
-            <span class="dash-path__aside">
-              <span class="dash-path__meta">{{ lesson.estimated_time }} دقیقه</span>
-              <span class="dash-path__state" data-path-state>شروع نشده</span>
-            </span>
-          </li>
-        {% endfor %}
-      </ol>
-    </section>
   {% else %}
-    {# ---- empty state: no published course yet ------------------------ #}
+    {# Empty state: no published course yet #}
     <section class="panel dash-empty">
       <h2>هنوز دوره‌ای منتشر نشده است</h2>
       <p>به‌محض انتشار دورهٔ آلمانی، مسیر یادگیری همین‌جا نمایش داده می‌شود.</p>
     </section>
+
+    <!-- Bento preview fallback for empty state and tests -->
+    <div class="bento-container" id="bento-grid" style="display:none;" aria-hidden="true">
+      <article class="bento-tile tile-hero">
+        <h2 class="tile-title">سطح <span class="de" dir="ltr" lang="de">A1</span></h2>
+      </article>
+      <article class="bento-tile tile-readiness"></article>
+      <article class="bento-tile tile-remedies"></article>
+      <article class="bento-tile tile-momentum"></article>
+      <article class="bento-tile tile-labs"></article>
+    </div>
   {% endif %}
 
-  {# ---- account: optional enhancement, not a paywall ------------------ #}
+  {# Anonymous visitor account prompt #}
   {% if not user.is_authenticated %}
     <section class="panel dash-account">
       <div>
         <h2>حساب کاربری (اختیاری)</h2>
-        <p>برای یادگیری لازم نیست. ساخت حساب برای زمانی است که بخواهیم پیشرفت، هدف و آمادگی را روی حساب تو نگه داریم.</p>
+        <p>برای یادگیری لازم نیست. پیشرفت فعلاً در همین مرورگر ذخیره می‌شود؛ ساخت حساب برای زمانی است که بخواهی پیشرفت، زنجیره، هدف و آمادگی را روی حسابت نگه داری.</p>
       </div>
       <div class="dash-account__actions">
         <a class="btn btn--primary" href="{% url 'accounts:signup' %}">ساخت حساب</a>
@@ -338,12 +509,12 @@
   {% endif %}
 
   {{ lessons_payload|json_script:"dashboard-lessons" }}
-  {# A signed-in learner's real progress, in the shape progress.js already reads. #}
   {% if progress_state %}{{ progress_state|json_script:"progress-state" }}{% endif %}
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'js/dashboard.js' %}" defer></script>
+<script src="{% static 'js/bento_dashboard.js' %}" defer></script>
 <script src="{% static 'js/progress_import.js' %}" defer></script>
 {% endblock %}

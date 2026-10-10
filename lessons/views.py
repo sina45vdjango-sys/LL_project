@@ -31,10 +31,24 @@ from .progress import (
     progress_state,
     record_step,
 )
-from .readiness import course_progress, goal_of, learning_pace, readiness
+from .readiness import (
+    actionable_micro_weaknesses,
+    course_progress,
+    goal_of,
+    goethe_competencies,
+    goethe_readiness_score,
+    learning_pace,
+    readiness,
+)
 from .review import build_review
 from .skill_path import lesson_practice, today_board
-from .today import day_summary, last_activity, weekly_activity
+from .today import (
+    day_summary,
+    last_activity,
+    lesson_to_work_on,
+    started_row,
+    weekly_activity,
+)
 
 #: Words shown per page inside the lesson's vocabulary step. Lessons carry up to
 #: ~170 words, so the step is paginated rather than one enormous scroll.
@@ -141,31 +155,35 @@ class DashboardView(View):
         last_seen = None
         progress = None
         weekly = None
-        rows = None
+        profile = None
+        user_xp = None
+        user_badges = []
+        competencies = None
+        goethe_score = None
+        remedies = []
+        active_lesson = None
+        active_started = False
+        active_step = 1
+        active_step_percent = 0
+        active_audio = None
 
         if request.user.is_authenticated:
             profile = UserProfile.objects.filter(user=request.user).first()
+            if profile is not None:
+                user_xp = xp.summary(profile)
+                user_badges = badges_for(request.user, profile)
+
             goal = goal_of(profile)
             # The learner's own progress rows and the course's own lesson list, read once
-            # and handed to everything below. Each of the questions this page asks — where
-            # the learner stopped, which lessons are finished, which lessons they may
-            # practise, what is due, when they were last here — used to read one or both of
-            # these tables for itself, which made one page load read the same handful of
-            # rows five times over.
+            # and handed to everything below.
             rows = progress_rows(request.user)
             all_lessons = course_lessons()
             lesson_ids = eligible_lesson_ids(request.user, all_lessons, rows)
             course_stats = course_progress(request.user, all_lessons, rows)
             pace = learning_pace(course_stats, goal, today)
-            # The learner's own missed words and the exercises that test them — the
-            # personal review panel, two exercises deep. Built once and handed to
-            # ``today_board`` below so one page does not compute the same plan twice.
             review = review_plan(
                 request.user, word_limit=3, exercise_limit=2, lesson_ids=lesson_ids
             )
-            # «امروز»: the one guided day both this page and «مسیر امروز» render, so the
-            # two pages cannot disagree about what today is
-            # (lessons/skill_path.py::today_board).
             board = today_board(
                 request.user,
                 today,
@@ -175,15 +193,53 @@ class DashboardView(View):
                 lesson_ids=lesson_ids,
                 rows=rows,
             )
-            # What the learner has already answered today, and when they were last here,
-            # counted from their stored rows (lessons/today.py).
             today_stats = day_summary(request.user, today)
             last_seen = last_activity(request.user, rows)
-            # The learner's own progress payload and their last seven days of answers,
-            # both built from the rows already read above (lessons/today.py owns the rule
-            # for the weekly chart).
             progress = progress_state(request.user, rows)
             weekly = weekly_activity(request.user, today)
+
+            # Live Goethe Readiness & Diagnosis
+            competencies = goethe_competencies(request.user)
+            goethe_score = goethe_readiness_score(competencies)
+            remedies = actionable_micro_weaknesses(request.user)
+
+            # Real active lesson to work on
+            work_on = lesson_to_work_on(request.user, all_lessons, rows)
+            if work_on is not None and "lesson" in work_on and work_on["lesson"] is not None:
+                active_lesson = work_on["lesson"]
+                active_started = work_on.get("started", False)
+                if active_started:
+                    row = started_row(request.user, rows)
+                    active_step = 1
+                    if row is not None and row.current_step:
+                        step_keys = [
+                            "intro", "explanation", "vocabulary", "grammar", "examples",
+                            "dialogue", "reading", "listening", "practice", "finish"
+                        ]
+                        if row.current_step in step_keys:
+                            active_step = step_keys.index(row.current_step) + 1
+                        elif isinstance(row.current_step, int):
+                            active_step = row.current_step
+                        elif str(row.current_step).isdigit():
+                            active_step = int(row.current_step)
+                    active_step_percent = round((active_step / 10) * 100)
+
+        # Fallback active lesson for new users or anonymous
+        if active_lesson is None and lessons:
+            active_lesson = lessons[0]
+            active_started = False
+            active_step = 1
+            active_step_percent = 0
+
+        # Sample audio from the active lesson if available
+        if active_lesson is not None:
+            content_with_audio = (
+                active_lesson.contents.filter(audio__isnull=False)
+                .exclude(audio="")
+                .first()
+            )
+            if content_with_audio is not None and content_with_audio.audio:
+                active_audio = content_with_audio.audio
 
         # The course's level and its first lesson, or None when the course does not exist
         # yet. Read once here rather than re-deciding both inside the page's context.
@@ -205,14 +261,6 @@ class DashboardView(View):
                 "first_lesson": first_lesson,
                 "preview_lessons": lessons[:4],
                 "lessons_payload": lessons_payload,
-                # Real counts for the quick actions — nothing here is estimated, and they
-                # are the *course's* numbers rather than the database's. The dashboard used
-                # to advertise every published word row (3,226 of them), including the 2,208
-                # that belong to no lesson and no course at all: a 24-lesson A1 course that
-                # claimed three thousand words was describing a different thing from the one
-                # it teaches. These three queries count what the path in `lessons` above
-                # actually contains, which is the only number a learner can check by
-                # studying.
                 "word_total": LessonWord.objects.filter(
                     lesson__in=lessons,
                     word__is_published=True,
@@ -226,73 +274,29 @@ class DashboardView(View):
                     exercise__is_published=True,
                     exercise__lesson__in=lessons,
                 ).count(),
-                # The learner's own progress, or None for a visitor we cannot identify.
                 "progress_state": progress,
-                # The only answer on this page that comes from the learner's own answers
-                # instead of from where the course happens to be: the words they got
-                # wrong and the exercises that test them (vocabulary/review.py). None
-                # for a visitor, and None for a learner who has not missed anything —
-                # the panel is omitted rather than filled with an invented summary.
                 "review": review,
-                # The learner's stated goal and the one line that connects it to where
-                # the course is. All three are None for a visitor we cannot identify, so
-                # the page says nothing rather than showing an empty goal.
-                # (lessons/readiness.py owns the arithmetic.)
                 "goal": goal,
                 "pace": pace,
                 "course_stats": course_stats,
-                # «امروز»: the one guided day — review what is due or missed, read the
-                # lesson, practise, be measured — built by the same function that builds
-                # «مسیر امروز», so the two pages agree. None for a visitor we cannot
-                # identify, who has no stored rows to plan from.
                 "board": board,
-                # What the learner has answered today and when they were last here. None
-                # for a visitor we cannot identify, who has no stored rows to read.
                 "today_stats": today_stats,
                 "last_activity": last_seen,
-                # The last seven days of the learner's own answers, counted from the same
-                # rows «امروز» counts. None for a visitor we cannot identify, who has no
-                # stored answers to chart (lessons/today.py owns the rule).
                 "weekly": weekly,
+                # Dynamic Bento Dashboard context:
+                "profile": profile,
+                "xp": user_xp,
+                "badges": user_badges,
+                "competencies": competencies,
+                "goethe_score": goethe_score,
+                "remedies": remedies,
+                "active_lesson": active_lesson,
+                "active_started": active_started,
+                "active_step": active_step,
+                "active_step_percent": active_step_percent,
+                "active_audio": active_audio,
             },
         )
-
-
-class BentoDashboardView(View):
-    """Bento Grid Dashboard view for interactive learner overview."""
-
-    def get(self, request, *args, **kwargs):
-        course = (
-            Course.objects.filter(is_published=True)
-            .select_related("language_level")
-            .order_by("language_level__order", "pk")
-            .first()
-        )
-        lessons = []
-        active_lesson = None
-        sample_audio = None
-        if course is not None:
-            lessons = list(course.lessons.filter(is_published=True).order_by("order", "pk"))
-            if lessons:
-                if len(lessons) > 5:
-                    active_lesson = lessons[5]
-                else:
-                    active_lesson = lessons[0]
-
-        from vocabulary.models import Sentence
-        sample_sentence = Sentence.objects.filter(audio__isnull=False).exclude(audio="").first()
-        if sample_sentence is not None:
-            if sample_sentence.audio:
-                sample_audio = sample_sentence.audio
-
-        context = {
-            "course": course,
-            "active_lesson": active_lesson,
-            "sample_audio": sample_audio,
-            "readiness_score": 78,
-            "brand": {"name": "ولینگو", "tagline": "یادگیری آلمانی برای فارسی‌زبان‌ها"},
-        }
-        return render(request, "bento_dashboard.html", context)
 
 
 class TactileRunnerView(View):

@@ -13,12 +13,12 @@ from django.views.generic import RedirectView
 from django.templatetags.static import static
 
 from config.media import serve_media
-from lessons.views import BentoDashboardView, DashboardView, ReadinessView, TactileRunnerView
+from lessons.views import DashboardView, ReadinessView, TactileRunnerView
 
 urlpatterns = [
     path('', DashboardView.as_view(), name='home'),
-    path('bento/', BentoDashboardView.as_view(), name='bento-dashboard'),
-    path('dashboard/', BentoDashboardView.as_view(), name='bento-dashboard-alias'),
+    path('bento/', DashboardView.as_view(), name='bento-dashboard'),
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('drills/satzbau/', TactileRunnerView.as_view(), name='satzbau-drill'),
     path('runner/tactile/', TactileRunnerView.as_view(), name='tactile-runner'),
     path('readiness/', ReadinessView.as_view(), name='readiness'),
