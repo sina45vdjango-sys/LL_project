@@ -118,15 +118,25 @@
               {{ readiness.goethe_score.status_label }}
             </span>
           </div>
-          <p class="rdy-goethe__desc">
-            محاسبه‌شده بر اساس ساختار رسمی گوته: ۴ مهارت، هرکدام ۲۵ امتیاز خام و تراز ۱۰۰. حد نصاب قبولی در آزمون رسمی <b>۶۰ از ۱۰۰</b> است.
-          </p>
+          <div class="rdy-goethe__threshold-wrapper">
+            <div class="rdy-goethe__threshold-meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ readiness.goethe_score.total_points }}" aria-label="تراز نمره نسبت به حد نصاب قبولی ۶۰">
+              <div class="rdy-goethe__threshold-track">
+                <span class="rdy-goethe__threshold-fill" style="width: {{ readiness.goethe_score.total_points }}%;"></span>
+                <span class="rdy-goethe__threshold-marker" style="right: 60%;" title="حد نصاب قبولی: ۶۰ امتیاز">
+                  <span class="rdy-goethe__threshold-flag">مرز قبولی: ۶۰</span>
+                </span>
+              </div>
+            </div>
+            <p class="rdy-goethe__desc">
+              محاسبه‌شده بر اساس ساختار رسمی گوته: ۴ مهارت، هرکدام ۲۵ امتیاز خام و تراز ۱۰۰. حد نصاب قبولی در آزمون رسمی <b>۶۰ از ۱۰۰</b> است.
+            </p>
+          </div>
         </div>
 
         <div class="rdy-competencies-grid">
           <div class="rdy-comp-card">
             <div class="rdy-comp-card__head">
-              <span class="rdy-comp-card__de" lang="de" dir="ltr">HÖREN</span>
+              <span class="rdy-comp-card__de de" lang="de" dir="ltr">HÖREN</span>
               <span class="rdy-comp-card__fa">شنیدن و درک صوت</span>
             </div>
             <div class="rdy-comp-card__body">
@@ -137,7 +147,7 @@
 
           <div class="rdy-comp-card">
             <div class="rdy-comp-card__head">
-              <span class="rdy-comp-card__de" lang="de" dir="ltr">LESEN</span>
+              <span class="rdy-comp-card__de de" lang="de" dir="ltr">LESEN</span>
               <span class="rdy-comp-card__fa">خواندن و درک مطلب</span>
             </div>
             <div class="rdy-comp-card__body">
@@ -148,7 +158,7 @@
 
           <div class="rdy-comp-card">
             <div class="rdy-comp-card__head">
-              <span class="rdy-comp-card__de" lang="de" dir="ltr">SCHREIBEN</span>
+              <span class="rdy-comp-card__de de" lang="de" dir="ltr">SCHREIBEN</span>
               <span class="rdy-comp-card__fa">نگارش و فرم اداری</span>
             </div>
             <div class="rdy-comp-card__body">
@@ -159,12 +169,34 @@
 
           <div class="rdy-comp-card">
             <div class="rdy-comp-card__head">
-              <span class="rdy-comp-card__de" lang="de" dir="ltr">SPRECHEN</span>
+              <span class="rdy-comp-card__de de" lang="de" dir="ltr">SPRECHEN</span>
               <span class="rdy-comp-card__fa">گفتار و مکالمه</span>
             </div>
             <div class="rdy-comp-card__body">
               <span class="rdy-comp-card__score">{{ readiness.goethe_competencies.sprechen.points }} از ۲۵</span>
               <span class="rdy-comp-card__sub">دقت: {{ readiness.goethe_competencies.sprechen.percent }}٪ ({{ readiness.goethe_competencies.sprechen.correct }} از {{ readiness.goethe_competencies.sprechen.answered }})</span>
+            </div>
+          </div>
+
+          <div class="rdy-comp-card">
+            <div class="rdy-comp-card__head">
+              <span class="rdy-comp-card__de de" lang="de" dir="ltr">SATZBAU</span>
+              <span class="rdy-comp-card__fa">ساختار و نحو جمله</span>
+            </div>
+            <div class="rdy-comp-card__body">
+              <span class="rdy-comp-card__score">دقت: {{ readiness.goethe_competencies.satzbau.percent }}٪</span>
+              <span class="rdy-comp-card__sub">{{ readiness.goethe_competencies.satzbau.correct }} از {{ readiness.goethe_competencies.satzbau.answered }} پاسخ درست</span>
+            </div>
+          </div>
+
+          <div class="rdy-comp-card">
+            <div class="rdy-comp-card__head">
+              <span class="rdy-comp-card__de de" lang="de" dir="ltr">GRAMMATIK</span>
+              <span class="rdy-comp-card__fa">قواعد دستوری</span>
+            </div>
+            <div class="rdy-comp-card__body">
+              <span class="rdy-comp-card__score">دقت: {{ readiness.grammar.percent }}٪</span>
+              <span class="rdy-comp-card__sub">{{ readiness.grammar.topics_practised }} از {{ readiness.grammar.topics_total }} موضوع تمرین‌شده</span>
             </div>
           </div>
         </div>
@@ -187,13 +219,13 @@
             <li class="rdy-remedy-item">
               <div class="rdy-remedy-item__main">
                 <div class="rdy-remedy-item__header">
-                  <span class="chip chip--accent">{{ item.tag }}</span>
+                  <span class="chip chip--accent de" lang="de" dir="ltr">{{ item.tag }}</span>
                   <h3 class="rdy-remedy-item__title">{{ item.title }}</h3>
                 </div>
                 <p class="rdy-remedy-item__desc">{{ item.detail }}</p>
               </div>
               <div class="rdy-remedy-item__action">
-                <a class="btn btn--secondary rdy-remedy-btn" href="{{ item.action_url }}">{{ item.action_label }}</a>
+                <a class="btn btn--secondary rdy-remedy-btn rdy-remedy-pill" href="{{ item.action_url }}">{{ item.action_label }}</a>
               </div>
             </li>
           {% endfor %}
@@ -326,7 +358,7 @@
             <ul class="rdy-weak-grammar__list">
               {% for topic in readiness.weak_grammar_topics %}
                 <li class="rdy-weak-grammar__item">
-                  <span class="rdy-weak-grammar__name" lang="de" dir="ltr">{{ topic.grammar.title }}</span>
+                  <span class="rdy-weak-grammar__name de" lang="de" dir="ltr">{{ topic.grammar.title }}</span>
                   <span class="vstat vstat--wrong">غلط: {{ topic.wrong }}</span>
                   {% if topic.practice_exercise %}
                     <a class="rdy-weak-grammar__link" href="{% url 'exercises:exercise-detail' topic.practice_exercise.pk %}">تمرین این قاعده ←</a>

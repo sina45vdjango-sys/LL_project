@@ -13,7 +13,8 @@
    result screen are the same code the exercise page runs, not a second copy.{% endcomment %}
 <div class="exercise-page">
   <a class="exercise-back" href="{% url 'lessons:practice-path' %}">
-    ← <span>مسیر امروز</span>
+    <span aria-hidden="true">←</span>
+    <span>مسیر امروز</span>
   </a>
 
   <header class="exercise-head">
@@ -22,7 +23,7 @@
       {% for skill in skills %}<span class="chip">{{ skill }}</span>{% endfor %}
     </p>
     {% if lesson %}
-      <h1 class="exercise-head__title">{{ lesson.display_title }}</h1>
+      <h1 class="exercise-head__title">{{ lesson.display_title|direction }}</h1>
     {% else %}
       <h1 class="exercise-head__title">جلسهٔ امروز</h1>
     {% endif %}

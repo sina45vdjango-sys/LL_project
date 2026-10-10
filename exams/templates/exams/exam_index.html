@@ -27,7 +27,34 @@
   <section class="exam-panel" aria-labelledby="exam-shape-title">
     <div class="exam-panel__bar">
       <h2 id="exam-shape-title">آزمون رسمی چه شکلی است</h2>
-      <p class="exam-panel__meta">مجموع: {{ duration_minutes }} دقیقه · {{ max_points }} امتیاز</p>
+      <p class="exam-panel__meta">شبیه‌ساز ۶۵ دقیقه‌ای کتبی (شنیدن ۲۰m · خواندن ۲۵m · نوشتن ۲۰m) · مجموع: {{ duration_minutes }} دقیقه · {{ max_points }} امتیاز</p>
+    </div>
+
+    <div class="exam-cockpit-cards">
+      {% for section in sections %}
+        <div class="exam-cockpit-card">
+          <div class="exam-cockpit-card__head">
+            <span class="exam-cockpit-card__german de" lang="de" dir="ltr">{{ section.german }}</span>
+            <span class="chip">{{ section.minutes }} دقیقه</span>
+          </div>
+          <p class="exam-cockpit-card__label">{{ section.label }}</p>
+          <div class="exam-cockpit-card__stats">
+            <span>{{ section.items }} پرسش</span>
+            <span>{{ section.items }} امتیاز خام</span>
+          </div>
+        </div>
+      {% endfor %}
+      <div class="exam-cockpit-card exam-cockpit-card--spoken">
+        <div class="exam-cockpit-card__head">
+          <span class="exam-cockpit-card__german de" lang="de" dir="ltr">SPRECHEN</span>
+          <span class="chip">{{ sprechen.minutes }} دقیقه</span>
+        </div>
+        <p class="exam-cockpit-card__label">گفتن و مکالمه</p>
+        <div class="exam-cockpit-card__stats">
+          <span>۳ بخش</span>
+          <span>{{ sprechen.points }} امتیاز خام</span>
+        </div>
+      </div>
     </div>
 
     <table class="exam-table">
@@ -43,7 +70,7 @@
         {% for section in sections %}
           <tr>
             <th scope="row">
-              <span class="exam-table__german" lang="de" dir="ltr">{{ section.german }}</span>
+              <span class="exam-table__german de" lang="de" dir="ltr">{{ section.german }}</span>
               <span class="exam-table__label">{{ section.label }}</span>
             </th>
             <td>{{ section.minutes }} دقیقه</td>
@@ -53,7 +80,7 @@
         {% endfor %}
         <tr>
           <th scope="row">
-            <span class="exam-table__german" lang="de" dir="ltr">SPRECHEN</span>
+            <span class="exam-table__german de" lang="de" dir="ltr">SPRECHEN</span>
             <span class="exam-table__label">گفتن</span>
           </th>
           <td>{{ sprechen.minutes }} دقیقه</td>
@@ -151,12 +178,12 @@
       <h2 id="exam-words-title">واژه‌های دستور کار</h2>
       <p class="exam-panel__meta">روی برگهٔ رسمی</p>
     </div>
-    <p class="exam-note">این واژه‌ها دستورهای برگهٔ آزمون‌اند، نه واژگان موضوعی. کسی که «<span lang="de" dir="ltr">ankreuzen</span>» را نفهمد، نه به‌خاطر آلمانی‌اش بلکه به‌خاطر واژه‌اش گیر می‌کند.</p>
+    <p class="exam-note">این واژه‌ها دستورهای برگهٔ آزمون‌اند، نه واژگان موضوعی. کسی که «<span class="de" lang="de" dir="ltr">ankreuzen</span>» را نفهمد، نه به‌خاطر آلمانی‌اش بلکه به‌خاطر واژه‌اش گیر می‌کند.</p>
 
     <ul class="exam-words">
       {% for row in instructions %}
         <li class="exam-words__item">
-          <span class="exam-words__german" lang="de" dir="ltr">{{ row.german }}</span>
+          <span class="exam-words__german de" lang="de" dir="ltr">{{ row.german }}</span>
           <span class="exam-words__fa">{{ row.fa }}</span>
           {% if row.taught %}
             <span class="chip chip--accent">در دوره هست</span>

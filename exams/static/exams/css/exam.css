@@ -1,31 +1,90 @@
 /* The exam pages (exams/templates/exams/*.html).
  *
- * The sitting itself reuses the exercise runner's classes — it is the same one-question-at-
- * a-time interface — so this file holds what the exam adds: the shape tables, the clock,
- * the score panel, the instruction words and the spoken rehearsal. Canonical tokens only
- * (static/css/base.css).
+ * 65-minute Goethe simulation cockpit, tactile section tabs, answer sheet controls,
+ * sticky submission drawer, and Thema- & Bitte-Karten 3D tactile flashcards.
+ * Strictly canonical tokens only (static/css/base.css). All font-size declarations >= 12px.
  */
 
-.exam { display: flex; flex-direction: column; gap: 22px; }
+.exam { display: flex; flex-direction: column; gap: 24px; }
 
 .exam-head { display: flex; flex-direction: column; gap: 8px; }
 .exam-eyebrow { margin: 0; color: var(--accent-text); font: 700 12px/1.6 system-ui, sans-serif; letter-spacing: .04em; }
-.exam-title { margin: 0; font-size: clamp(22px, 3vw, 30px); line-height: 1.5; }
+.exam-title { margin: 0; font-size: clamp(22px, 3vw, 30px); line-height: 1.5; font-weight: 800; color: var(--fg); }
 .exam-lead { margin: 0; max-width: 68ch; color: var(--muted); font-size: 14px; line-height: 1.95; }
 
-.exam-panel { display: flex; flex-direction: column; gap: 14px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.exam-panel { display: flex; flex-direction: column; gap: 16px; padding: 22px 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
 .exam-panel__bar { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.exam-panel__bar h2 { margin: 0; font-size: 17px; }
+.exam-panel__bar h2 { margin: 0; font-size: 18px; font-weight: 700; color: var(--fg); }
 .exam-panel__meta { margin: 0; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
 
+/* ---------------------------------------------------- cockpit cards ---- */
+.exam-cockpit-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-block: 4px 12px;
+}
+
+.exam-cockpit-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+.exam-cockpit-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+.exam-cockpit-card--spoken {
+  border-inline-start: 3px solid var(--accent);
+}
+
+.exam-cockpit-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.exam-cockpit-card__german {
+  font: 800 16px/1.3 system-ui, sans-serif;
+  color: var(--fg);
+  letter-spacing: .02em;
+}
+
+.exam-cockpit-card__label {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.exam-cockpit-card__stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ------------------------------------------------------------------ shape ---- */
-/* The official numbers, as a table rather than as a paragraph: a learner planning around
-   the exam wants to see the sections line up. */
 .exam-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.exam-table th, .exam-table td { padding: 10px 12px; text-align: start; border-block-end: 1px solid var(--line); }
+.exam-table th, .exam-table td { padding: 12px 14px; text-align: start; border-block-end: 1px solid var(--line); }
 .exam-table thead th { color: var(--muted); font-weight: 600; font-size: 12px; }
 .exam-table tbody tr:last-child th, .exam-table tbody tr:last-child td { border-block-end: 0; }
-.exam-table__german { display: block; color: var(--fg); font-weight: 700; letter-spacing: .02em; }
+.exam-table tbody tr:hover { background: var(--surface-alt); }
+.exam-table__german { display: block; color: var(--fg); font-weight: 700; letter-spacing: .02em; font-size: 14px; }
 .exam-table__label { display: block; color: var(--muted); font-size: 12px; font-weight: 400; }
 
 .exam-facts { display: flex; flex-direction: column; gap: 8px; margin: 0; padding-inline-start: 20px; color: var(--muted); font-size: 13px; line-height: 1.9; }
@@ -34,44 +93,256 @@
 .exam-note a { color: var(--accent-text); }
 
 /* ------------------------------------------------------------------ start ---- */
+.exam-start { border-inline-start: 4px solid var(--accent); }
 .exam-start__actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
 .exam-start__meta { margin: 0; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
 
 /* ------------------------------------------------------------------ words ---- */
-/* The task-sheet words. The chip says whether the course teaches the word, so a gap is
-   visible instead of being quietly assumed. */
 .exam-words { display: flex; flex-direction: column; gap: 0; margin: 0; padding: 0; list-style: none; }
-.exam-words__item { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding-block: 10px; border-block-end: 1px solid var(--line); }
+.exam-words__item { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding-block: 12px; border-block-end: 1px solid var(--line); transition: background-color .15s ease; }
 .exam-words__item:last-child { border-block-end: 0; }
 .exam-words__german { min-width: 0; color: var(--fg); font: 700 15px/1.7 system-ui, sans-serif; }
 .exam-words__fa { flex: 1 1 12rem; min-width: 0; color: var(--muted); font-size: 13px; }
 
 /* ------------------------------------------------------------- past sittings ---- */
 .exam-runs { display: flex; flex-direction: column; gap: 0; margin: 0; padding: 0; list-style: none; }
-.exam-runs__item { display: flex; flex-direction: column; gap: 6px; padding-block: 12px; border-block-end: 1px solid var(--line); }
+.exam-runs__item { display: flex; flex-direction: column; gap: 8px; padding-block: 14px; border-block-end: 1px solid var(--line); }
 .exam-runs__item:last-child { border-block-end: 0; }
-.exam-runs__link { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; color: var(--fg); }
+.exam-runs__link { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; color: var(--fg); }
 .exam-runs__link:hover { color: var(--accent-text); }
 .exam-runs__date { font-variant-numeric: tabular-nums; font-size: 13px; }
-.exam-runs__score { font-weight: 700; font-variant-numeric: tabular-nums; }
+.exam-runs__score { font-weight: 700; font-size: 15px; font-variant-numeric: tabular-nums; }
 .exam-runs__sections { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
-.exam-runs__sections .chip { font-variant-numeric: tabular-nums; }
+.exam-runs__sections .chip { font-variant-numeric: tabular-nums; font-size: 12px; }
 
-/* -------------------------------------------------------------- the sitting ---- */
-/* The bar above the runner: the clock on one side, what the paper contains on the other,
-   and the way out of it. It is sticky so the remaining time stays visible while a long
-   question is scrolled. */
-.exam-bar { position: sticky; inset-block-start: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
-.exam-bar__sections { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
-.exam-bar__finish { flex: 0 0 auto; }
+/* ------------------------------------------------ the sitting cockpit bar ---- */
+.exam-bar {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 18px;
+  padding: 12px 18px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
 
-.exam-timer { display: flex; align-items: baseline; gap: 8px; margin: 0; }
-.exam-timer__label { color: var(--muted); font-size: 12px; }
-.exam-timer__value { color: var(--fg); font: 700 18px/1.4 system-ui, sans-serif; font-variant-numeric: tabular-nums; }
-/* Colour is reinforcement, never the only signal: the clock also carries the words, and
-   the page says the time is over in text once it is. */
-.exam-timer.is-low .exam-timer__value { color: var(--warning); }
-.exam-timer.is-expired .exam-timer__value { color: var(--danger); }
+.exam-bar__actions { display: flex; align-items: center; gap: 10px; }
+.exam-bar__finish { flex: 0 0 auto; min-height: 44px; font-size: 13px; }
+
+/* Tactile Section Navigation Tabs */
+.exam-section-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-block: 2px;
+}
+
+.exam-section-tabs::-webkit-scrollbar { display: none; }
+
+.exam-section-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-alt);
+  position: relative;
+  transition: all .2s ease;
+  user-select: none;
+  min-width: 110px;
+}
+
+.exam-section-tab.is-active {
+  background: var(--surface);
+  border-color: var(--accent);
+  box-shadow: 0 4px 14px rgba(255, 122, 26, .15);
+}
+
+.exam-section-tab__name {
+  font: 800 13px/1.3 system-ui, sans-serif;
+  color: var(--fg);
+}
+
+.exam-section-tab.is-active .exam-section-tab__name {
+  color: var(--accent-text);
+}
+
+.exam-section-tab__meta {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.exam-section-tab__indicator {
+  position: absolute;
+  inset-inline: 12px;
+  inset-block-end: -2px;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: transparent;
+  transition: background-color .2s ease;
+}
+
+.exam-section-tab.is-active .exam-section-tab__indicator {
+  background: var(--accent);
+}
+
+/* Countdown Timer Badge with Clean Tabular Nums */
+.exam-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-alt);
+  transition: border-color .2s ease, background-color .2s ease;
+}
+
+.exam-timer__badge { font-size: 18px; line-height: 1; }
+.exam-timer__content { display: flex; flex-direction: column; gap: 0; }
+.exam-timer__label { color: var(--muted); font-size: 12px; line-height: 1.2; }
+.exam-timer__value {
+  color: var(--fg);
+  font: 800 17px/1.2 system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .02em;
+}
+
+.exam-timer.is-low {
+  border-color: var(--warning);
+  background: var(--warning-soft);
+}
+.exam-timer.is-low .exam-timer__value { color: var(--on-warning); }
+
+.exam-timer.is-expired {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+}
+.exam-timer.is-expired .exam-timer__value { color: var(--on-danger); }
+
+/* --------------------------------- runner answer sheet form controls ---- */
+.runner-q__media {
+  margin-block: 14px;
+  padding: 14px 18px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.runner-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 0;
+  padding: 0;
+  margin: 16px 0;
+}
+
+.runner-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  padding: 12px 18px;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--fg);
+  cursor: pointer;
+  transition: all .18s ease;
+  font-size: 14px;
+}
+
+.runner-option:hover {
+  border-color: var(--accent);
+  background: var(--surface-alt);
+  transform: translateY(-1px);
+}
+
+.runner-option:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.runner-option input[type="radio"] {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--accent);
+  cursor: pointer;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.runner-option__text { flex: 1; min-width: 0; line-height: 1.6; }
+
+.runner-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-block: 16px;
+}
+
+.runner-answer__label { font-size: 13px; font-weight: 600; color: var(--muted); }
+
+.runner-answer__input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--fg);
+  font-size: 15px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.runner-answer__input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* Sticky Submission Drawer with Safe-Area Padding */
+.runner-q__actions {
+  position: sticky;
+  inset-block-end: 0;
+  z-index: 15;
+  background: var(--surface);
+  border-block-start: 1px solid var(--line);
+  box-shadow: 0 -6px 22px rgba(0, 0, 0, .07);
+  padding: 14px 20px;
+  padding-block-end: max(16px, env(safe-area-inset-bottom));
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block-start: 24px;
+}
+
+.runner-q__actions .btn {
+  min-height: 44px;
+  padding-inline: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 12px;
+}
 
 /* ---------------------------------------------------------------- the score ---- */
 .exam-result { gap: 18px; }
@@ -88,19 +359,142 @@
 
 .exam-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 
-/* ----------------------------------------------------------- the rehearsal ---- */
-.exam-part { display: flex; flex-direction: column; gap: 12px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+/* ------------------ Sprechen: Thema- & Bitte-Karten 3D Tactile Flashcards ---- */
+.exam-part { display: flex; flex-direction: column; gap: 14px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
 .exam-part__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; }
-.exam-part__title { margin: 0; font-size: 16px; }
+.exam-part__title { margin: 0; font-size: 17px; font-weight: 700; color: var(--fg); }
 .exam-part__title span { color: var(--muted); font-size: 13px; font-weight: 400; }
-.exam-phrases { display: flex; flex-direction: column; gap: 0; margin: 0; padding: 0; list-style: none; }
-.exam-phrase { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding-block: 10px; border-block-end: 1px solid var(--line); }
-.exam-phrase:last-child { border-block-end: 0; }
-.exam-phrase__text { min-width: 0; flex: 1 1 18rem; font: 600 15px/1.8 system-ui, sans-serif; overflow-wrap: anywhere; }
-/* --- concept 24: say it, hear it, judge it (sprechen_recorder.js) ------------
- * Tokens only, like the rest of this file. The recording stays in the page; nothing
- * here has a colour of its own.
- */
+
+.exam-phrases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 16px;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.exam-card-3d {
+  perspective: 1200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.exam-card-3d__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  transition: transform .22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .22s ease, border-color .22s ease;
+  height: 100%;
+}
+
+.exam-card-3d:hover .exam-card-3d__inner {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .08);
+}
+
+.exam-card-3d.is-said .exam-card-3d__inner {
+  border-color: var(--success);
+  background: var(--surface);
+  box-shadow: 0 6px 20px rgba(15, 124, 68, .09);
+}
+
+.exam-card-3d__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.exam-card-3d__tag { font-size: 12px; font-weight: 700; }
+
+.exam-card-3d__flip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--line);
+  background: var(--surface-alt);
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.exam-card-3d__flip-btn:hover {
+  background: var(--surface);
+  border-color: var(--accent);
+}
+
+.exam-card-3d__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.exam-card-3d__body .exam-phrase__text {
+  font: 800 17px/1.6 system-ui, sans-serif;
+  color: var(--fg);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.exam-card-3d.is-said .exam-phrase__text { color: var(--success); }
+
+.exam-phrase__reveal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.exam-phrase__fa {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+
+.exam-card-3d__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+/* Fallback for regular list layout if ever used */
+.exam-phrases:not(.exam-phrases-grid) { display: flex; flex-direction: column; gap: 0; margin: 0; padding: 0; list-style: none; }
+.exam-phrase:not(.exam-card-3d) { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; padding-block: 10px; border-block-end: 1px solid var(--line); }
+.exam-phrase:not(.exam-card-3d):last-child { border-block-end: 0; }
+.exam-phrase:not(.exam-card-3d) .exam-phrase__text { min-width: 0; flex: 1 1 18rem; font: 600 15px/1.8 system-ui, sans-serif; overflow-wrap: anywhere; }
+
+/* Recording and self-report buttons with >= 44x44px touch targets */
+.phrase-record {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
 .phrase-record.is-recording {
   border-color: var(--danger);
   color: var(--danger);
@@ -112,10 +506,11 @@
   gap: 8px;
   flex-wrap: wrap;
   margin-top: 8px;
+  width: 100%;
 }
 
 .phrase-playback audio {
-  height: 34px;
+  height: 36px;
   max-width: 240px;
 }
 
@@ -124,17 +519,54 @@
   color: var(--muted);
 }
 
-/* --- concept 24: the model recording and the self-report ---------------------
- * The self-report is a class on the phrase, and the counter above is the real signal,
- * so the coloured text is reinforcement rather than the message. Tokens only.
- */
-.exam-phrase__model { display: inline-flex; }
+.exam-phrase__model { display: inline-flex; align-items: center; }
 
-.phrase-self { display: inline-flex; align-items: center; gap: 6px; }
+.phrase-self {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
 
-.exam-phrase.is-said .exam-phrase__text { color: var(--success); }
+.phrase-self .btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.phrase-self .js-said {
+  background: var(--success-soft);
+  color: var(--on-success);
+  border: 1px solid var(--success);
+}
+
+.phrase-self .js-said:hover {
+  filter: brightness(0.95);
+}
+
+.phrase-self .js-not-said {
+  background: var(--surface-alt);
+  color: var(--muted);
+  border: 1px solid var(--line);
+}
 
 .exam-said { font-variant-numeric: tabular-nums; }
+.exam-phrase__drill { display: inline-flex; align-items: center; min-height: 44px; color: var(--accent-text); font-size: 12px; font-weight: 600; }
 
-.exam-phrase__fa { flex: 1 1 12rem; min-width: 0; color: var(--muted); font-size: 13px; }
-.exam-phrase__drill { display: inline-flex; align-items: center; min-height: 36px; color: var(--accent-text); font-size: 12px; }
+@media (max-width: 768px) {
+  .exam-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .exam-section-tabs {
+    width: 100%;
+  }
+  .exam-phrases-grid {
+    grid-template-columns: 1fr;
+  }
+  .runner-q__actions {
+    padding-inline: 14px;
+  }
+}

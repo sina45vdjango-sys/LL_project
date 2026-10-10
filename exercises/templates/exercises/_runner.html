@@ -31,9 +31,9 @@
   </p>
 
   <div class="runner-progress" data-runner-progress hidden>
-    <div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="{{ total_questions }}"
+    <div class="spring-progress-track progress" role="progressbar" aria-valuemin="1" aria-valuemax="{{ total_questions }}"
          aria-valuenow="1" aria-label="پیشرفت تمرین" data-runner-bar>
-      <span class="progress__fill" data-runner-fill style="width:{% widthratio 1 total_questions 100 %}%"></span>
+      <span class="spring-progress-fill progress__fill" data-runner-fill style="width:{% widthratio 1 total_questions 100 %}%"></span>
     </div>
   </div>
 
@@ -54,7 +54,7 @@
                 <div class="form-lab-sheet__header">
                   <span class="form-lab-sheet__emblem" aria-hidden="true">🏛️</span>
                   <div class="form-lab-sheet__titles">
-                    <span class="form-lab-sheet__gov">BUNDESREPUBLIK DEUTSCHLAND</span>
+                    <span class="form-lab-sheet__gov" lang="de" dir="ltr">BUNDESREPUBLIK DEUTSCHLAND</span>
                     <strong class="form-lab-sheet__doc">{{ exercise.title|direction }}</strong>
                   </div>
                   <span class="form-lab-sheet__badge">A1 Schreiben · Teil 1</span>
@@ -68,13 +68,13 @@
                     <span class="email-lab-dot email-lab-dot--yellow"></span>
                     <span class="email-lab-dot email-lab-dot--green"></span>
                   </div>
-                  <span class="email-lab-card__title">✉️ E-Mail Entwurf (A1 Schreiben · Teil 2)</span>
+                  <span class="email-lab-card__title" lang="de" dir="ltr">✉️ E-Mail Entwurf (A1 Schreiben · Teil 2)</span>
                 </div>
                 <div class="email-lab-stepper" aria-label="مراحل ساختار ایمیل">
-                  <span class="email-lab-step{% if question.number == 1 %} is-current{% elif question.number > 1 %} is-done{% endif %}">۱. عنوان (Anrede)</span>
-                  <span class="email-lab-step{% if question.number == 2 %} is-current{% elif question.number > 2 %} is-done{% endif %}">۲. دلیل (Grund)</span>
-                  <span class="email-lab-step{% if question.number == 3 %} is-current{% elif question.number > 3 %} is-done{% endif %}">۳. درخواست (Bitte/Termin)</span>
-                  <span class="email-lab-step{% if question.number == 4 %} is-current{% elif question.number > 4 %} is-done{% endif %}">۴. پایان‌بندی (Gruß)</span>
+                  <span class="email-lab-step{% if question.number == 1 %} is-current{% elif question.number > 1 %} is-done{% endif %}">۱. عنوان <bdi lang="de" dir="ltr">(Anrede)</bdi></span>
+                  <span class="email-lab-step{% if question.number == 2 %} is-current{% elif question.number > 2 %} is-done{% endif %}">۲. دلیل <bdi lang="de" dir="ltr">(Grund)</bdi></span>
+                  <span class="email-lab-step{% if question.number == 3 %} is-current{% elif question.number > 3 %} is-done{% endif %}">۳. درخواست <bdi lang="de" dir="ltr">(Bitte/Termin)</bdi></span>
+                  <span class="email-lab-step{% if question.number == 4 %} is-current{% elif question.number > 4 %} is-done{% endif %}">۴. پایان‌بندی <bdi lang="de" dir="ltr">(Gruß)</bdi></span>
                 </div>
               </div>
             {% endif %}
@@ -84,19 +84,19 @@
                 <div class="sprecher-card__header">
                   <span class="sprecher-card__icon" aria-hidden="true">🎙️</span>
                   <div class="sprecher-card__titles">
-                    <span class="sprecher-card__badge-sub">GOETHE-ZERTIFIKAT A1 · SPRECHEN</span>
-                    <strong class="sprecher-card__title">Teil 1: Sich vorstellen (معرفی خود)</strong>
+                    <span class="sprecher-card__badge-sub" lang="de" dir="ltr">GOETHE-ZERTIFIKAT A1 · SPRECHEN</span>
+                    <strong class="sprecher-card__title">Teil 1: <span class="de" lang="de" dir="ltr">Sich vorstellen</span> (معرفی خود)</strong>
                   </div>
                   <span class="chip chip--accent">۳ امتیاز</span>
                 </div>
                 <div class="card-vorstellung__bullets" aria-label="کلیدواژه‌های کارت آزمون">
-                  <span class="card-bullet">Name</span>
-                  <span class="card-bullet">Alter</span>
-                  <span class="card-bullet">Land</span>
-                  <span class="card-bullet">Wohnort</span>
-                  <span class="card-bullet">Sprachen</span>
-                  <span class="card-bullet">Beruf</span>
-                  <span class="card-bullet">Hobby</span>
+                  <span class="card-bullet de" lang="de" dir="ltr">Name</span>
+                  <span class="card-bullet de" lang="de" dir="ltr">Alter</span>
+                  <span class="card-bullet de" lang="de" dir="ltr">Land</span>
+                  <span class="card-bullet de" lang="de" dir="ltr">Wohnort</span>
+                  <span class="card-bullet de" lang="de" dir="ltr">Sprachen</span>
+                  <span class="card-bullet de" lang="de" dir="ltr">Beruf</span>
+                  <span class="card-bullet de" lang="de" dir="ltr">Hobby</span>
                 </div>
               </div>
             {% elif 'Teil 2' in exercise.title or 'موضوعی' in exercise.title %}
@@ -104,13 +104,13 @@
                 <div class="sprecher-card__header">
                   <span class="sprecher-card__icon" aria-hidden="true">💬</span>
                   <div class="sprecher-card__titles">
-                    <span class="sprecher-card__badge-sub">GOETHE-ZERTIFIKAT A1 · SPRECHEN</span>
-                    <strong class="sprecher-card__title">Teil 2: Thema-Karte (تبادل اطلاعات)</strong>
+                    <span class="sprecher-card__badge-sub" lang="de" dir="ltr">GOETHE-ZERTIFIKAT A1 · SPRECHEN</span>
+                    <strong class="sprecher-card__title">Teil 2: <span class="de" lang="de" dir="ltr">Thema-Karte</span> (تبادل اطلاعات)</strong>
                   </div>
                   <span class="chip chip--accent">۶ امتیاز</span>
                 </div>
                 <div class="card-thema__banner">
-                  <span class="card-thema__tag">THEMA-KARTE</span>
+                  <span class="card-thema__tag de" lang="de" dir="ltr">THEMA-KARTE</span>
                   <span class="card-thema__inst">سؤال با کلمهٔ روی کارت و پاسخ طرف مقابل</span>
                 </div>
               </div>
@@ -119,13 +119,13 @@
                 <div class="sprecher-card__header">
                   <span class="sprecher-card__icon" aria-hidden="true">🤝</span>
                   <div class="sprecher-card__titles">
-                    <span class="sprecher-card__badge-sub">GOETHE-ZERTIFIKAT A1 · SPRECHEN</span>
-                    <strong class="sprecher-card__title">Teil 3: Bitte-Karte (درخواست و واکنش)</strong>
+                    <span class="sprecher-card__badge-sub" lang="de" dir="ltr">GOETHE-ZERTIFIKAT A1 · SPRECHEN</span>
+                    <strong class="sprecher-card__title">Teil 3: <span class="de" lang="de" dir="ltr">Bitte-Karte</span> (درخواست و واکنش)</strong>
                   </div>
                   <span class="chip chip--accent">۶ امتیاز</span>
                 </div>
                 <div class="card-bitte__banner">
-                  <span class="card-bitte__tag">BITTE & REAKTION</span>
+                  <span class="card-bitte__tag de" lang="de" dir="ltr">BITTE & REAKTION</span>
                   <span class="card-bitte__inst">درخواست مؤدبانه در موقعیت روزمره</span>
                 </div>
               </div>
@@ -174,14 +174,14 @@
              scramble ignores punctuation too, so nothing shown here has to be guessed.{% endcomment %}
           <div class="runner-order satzbau-playground" data-satzbau-playground>
             <div class="satzbau-header">
-              <span class="chip chip--accent">🧩 کارگاه چیدمان نحو (Satzbau)</span>
+              <span class="chip chip--accent">🧩 کارگاه چیدمان نحو <bdi class="de" lang="de" dir="ltr">(Satzbau)</bdi></span>
               <p class="satzbau-hint">کلمات را به ترتیب لمس کن تا در سطر جمله قرار گیرند. با لمس مجدد، کلمه به جعبه بازمی‌گردد.</p>
             </div>
 
             <!-- Assembled sentence construction zone -->
             <div class="satzbau-zone-wrapper">
               <div class="satzbau-zone-header">
-                <span class="satzbau-zone-title">سطر ساخت جمله (Satzleiste):</span>
+                <span class="satzbau-zone-title">سطر ساخت جمله <bdi class="de" lang="de" dir="ltr">(Satzleiste)</bdi>:</span>
                 <button type="button" class="btn-text satzbau-reset" data-satzbau-reset aria-label="بازنشانی جمله">⟲ پاک کردن</button>
               </div>
               <div class="satzbau-zone" data-satzbau-zone lang="de" dir="ltr" aria-live="polite">
@@ -191,10 +191,10 @@
 
             <!-- Word Bank -->
             <div class="satzbau-bank-wrapper">
-              <span class="satzbau-bank-title">جعبهٔ واژگان (Wortbank):</span>
+              <span class="satzbau-bank-title">جعبهٔ واژگان <bdi class="de" lang="de" dir="ltr">(Wortbank)</bdi>:</span>
               <div class="satzbau-bank" data-satzbau-bank lang="de" dir="ltr">
                 {% for token in question.tokens %}
-                  <button type="button" class="runner-order__token" data-satzbau-token="{{ token }}">{{ token }}</button>
+                  <button type="button" class="runner-order__token" data-satzbau-token="{{ token }}" lang="de" dir="ltr">{{ token }}</button>
                 {% endfor %}
               </div>
             </div>
@@ -250,7 +250,7 @@
             {% comment %}Filled from the submission's response: the correct answer is
                not part of this page, so it cannot be read out of the source.{% endcomment %}
             <p class="runner-expected" data-expected hidden>
-              پاسخ درست: <span class="runner-expected__value" data-expected-value lang="de" dir="ltr"></span>
+              پاسخ درست: <span class="runner-expected__value de" data-expected-value lang="de" dir="ltr"></span>
             </p>
             <p class="runner-explanation" data-explanation hidden></p>
             {% comment %}The word behind a missed question, filled from the submission's

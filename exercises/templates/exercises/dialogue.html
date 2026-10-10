@@ -20,7 +20,8 @@
    lesson stays one link away.{% endcomment %}
 <div class="exercise-page chat-page dialogue-page">
   <a class="exercise-back" href="{% url 'lessons:practice-path' %}">
-    ← <span>مسیر امروز</span>
+    <span aria-hidden="true">←</span>
+    <span>مسیر امروز</span>
   </a>
 
   <header class="exercise-head">
@@ -32,13 +33,13 @@
     {% if scenario %}
       <div class="situations-briefing" data-situations-briefing>
         <div class="situations-briefing__header">
-          <span class="chip chip--accent">🎭 سناریوی نقش‌آفرینی واقعی (Situationsdialog)</span>
-          <h2 class="situations-briefing__title">{{ scenario.title }}</h2>
+          <span class="chip chip--accent">🎭 سناریوی نقش‌آفرینی واقعی <bdi class="de" lang="de" dir="ltr">(Situationsdialog)</bdi></span>
+          <h2 class="situations-briefing__title">{{ scenario.title|direction }}</h2>
         </div>
         <div class="situations-briefing__meta">
           <div class="situations-meta-item">
             <span class="situations-meta-label">مکان / صحنه:</span>
-            <span class="situations-meta-val" lang="de" dir="ltr">{{ scenario.setting }}</span>
+            <span class="situations-meta-val de" lang="de" dir="ltr">{{ scenario.setting }}</span>
           </div>
           <div class="situations-meta-item">
             <span class="situations-meta-label">نقش شما:</span>

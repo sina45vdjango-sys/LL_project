@@ -14,7 +14,8 @@
    instead of pretending to work.{% endcomment %}
 <div class="exercise-page">
   <a class="exercise-back" href="{% url 'lessons:lesson-detail' exercise.lesson.pk %}">
-    ← <span>{{ exercise.lesson.title|direction }}</span>
+    <span aria-hidden="true">←</span>
+    <span>{{ exercise.lesson.title|direction }}</span>
   </a>
 
   <header class="exercise-head">

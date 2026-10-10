@@ -20,7 +20,8 @@
    the link at the end.{% endcomment %}
 <div class="exercise-page chat-page">
   <a class="exercise-back" href="{% url 'lessons:practice-path' %}">
-    ← <span>مسیر امروز</span>
+    <span aria-hidden="true">←</span>
+    <span>مسیر امروز</span>
   </a>
 
   <header class="exercise-head">
@@ -34,10 +35,10 @@
          turns with the character's own name: without this line the learner meets a bubble
          signed «Ben» and has no way to tell that Ben is the side the teacher is reading.{% endcomment %}
       <p class="exercise-head__instruction">
-        صحنه: {{ lesson.display_title }}. تو نقش
-        {% if you %}<bdi lang="de" dir="ltr">{{ you }}</bdi>{% else %}خودت{% endif %}
+        صحنه: {{ lesson.display_title|direction }}. تو نقش
+        {% if you %}<bdi class="de" lang="de" dir="ltr">{{ you }}</bdi>{% else %}خودت{% endif %}
         را داری و معلم جای
-        {% if partner %}<bdi lang="de" dir="ltr">{{ partner }}</bdi>{% else %}طرف مقابل{% endif %}
+        {% if partner %}<bdi class="de" lang="de" dir="ltr">{{ partner }}</bdi>{% else %}طرف مقابل{% endif %}
         حرف می‌زند. هر جواب را با واژه‌های خودت بنویس؛ بعد خط همان درس را می‌بینی تا
         خودت بسنجی چقدر نزدیک بودی. هیچ‌کدام نمره ندارد و جایی ثبت نمی‌شود.
       </p>

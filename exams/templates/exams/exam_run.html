@@ -64,7 +64,7 @@
         <tbody>
           {% for section in result.sections %}
             <tr>
-              <th scope="row"><span class="exam-table__german" lang="de" dir="ltr">{{ section.facts.german }}</span></th>
+              <th scope="row"><span class="exam-table__german de" lang="de" dir="ltr">{{ section.facts.german }}</span></th>
               <td>{{ section.answered }} از {{ section.asked }}</td>
               <td>{{ section.correct }}</td>
               <td>{{ section.points }}</td>
@@ -129,13 +129,25 @@
     </header>
 
     <section class="exam-bar" aria-label="وضعیت آزمون">
-      <p class="exam-timer" data-exam-timer data-exam-deadline="{{ deadline|date:'c' }}" data-exam-finish-url="{% url 'exams:exam-finish' run.pk %}">
-        <span class="exam-timer__label">زمان مانده</span>
-        <span class="exam-timer__value">{{ minutes_left }} دقیقه</span>
-      </p>
-      <p class="exam-bar__sections">
+      <div class="exam-timer" data-exam-timer data-exam-deadline="{{ deadline|date:'c' }}" data-exam-finish-url="{% url 'exams:exam-finish' run.pk %}">
+        <span class="exam-timer__badge" aria-hidden="true">⏱️</span>
+        <div class="exam-timer__content">
+          <span class="exam-timer__label">زمان مانده</span>
+          <span class="exam-timer__value">{{ minutes_left }} دقیقه</span>
+        </div>
+      </div>
+      <nav class="exam-section-tabs" aria-label="بخش‌های آزمون">
         {% for section in sections %}
-          <span class="chip"><span lang="de" dir="ltr">{{ section.german }}</span> · {{ section.asked }}</span>
+          <div class="exam-section-tab{% if forloop.first %} is-active{% endif %}" data-exam-tab="{{ section.german }}">
+            <span class="exam-section-tab__name de" lang="de" dir="ltr">{{ section.german }}</span>
+            <span class="exam-section-tab__meta">{{ section.asked }} پرسش · {% if section.german == 'HÖREN' %}۲۰ دقیقه{% elif section.german == 'LESEN' %}۲۵ دقیقه{% elif section.german == 'SCHREIBEN' %}۲۰ دقیقه{% else %}۲۰ دقیقه{% endif %}</span>
+            <span class="exam-section-tab__indicator" aria-hidden="true"></span>
+          </div>
+        {% endfor %}
+      </nav>
+      <p class="exam-bar__sections sr-only">
+        {% for section in sections %}
+          <span class="chip"><span class="de" lang="de" dir="ltr">{{ section.german }}</span> · {{ section.asked }}</span>
         {% endfor %}
       </p>
       <button type="button" class="btn exam-bar__finish" data-exam-finish data-exam-finish-url="{% url 'exams:exam-finish' run.pk %}">پایان آزمون و ثبت نتیجه</button>
@@ -162,10 +174,10 @@
                    aria-labelledby="question-title-{{ question.id }}">
             <header class="runner-q__head">
               <p class="runner-q__eyebrow">
-                بخش <span lang="de" dir="ltr">{{ question.section_german }}</span> · پرسش {{ question.number }} از {{ total_questions }}
+                بخش <span class="de" lang="de" dir="ltr">{{ question.section_german }}</span> · پرسش {{ question.number }} از {{ total_questions }}
               </p>
               {% if question.passage %}
-                <p class="runner-q__passage" lang="de" dir="ltr">{{ question.passage }}</p>
+                <p class="runner-q__passage de" lang="de" dir="ltr">{{ question.passage }}</p>
               {% endif %}
               <h2 class="runner-q__prompt" id="question-title-{{ question.id }}" tabindex="-1">{{ question.prompt|direction|linebreaksbr }}</h2>
             </header>
@@ -238,5 +250,25 @@
 {% if not run.finished_at and not expired %}
   <script src="{% static 'exercises/js/exercise_runner.js' %}" defer></script>
   <script src="{% static 'exams/js/exam_timer.js' %}" defer></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      function syncSectionTab() {
+        const activeQ = document.querySelector('.runner-q.is-active');
+        if (!activeQ) return;
+        const eyebrow = activeQ.querySelector('.runner-q__eyebrow [lang="de"]');
+        if (!eyebrow) return;
+        const secName = eyebrow.textContent.trim();
+        document.querySelectorAll('[data-exam-tab]').forEach(tab => {
+          tab.classList.toggle('is-active', tab.dataset.examTab === secName);
+        });
+      }
+      const runner = document.querySelector('[data-runner]');
+      if (runner) {
+        const observer = new MutationObserver(syncSectionTab);
+        observer.observe(runner, { subtree: true, attributes: true, attributeFilter: ['class'] });
+        syncSectionTab();
+      }
+    });
+  </script>
 {% endif %}
 {% endblock %}

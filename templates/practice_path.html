@@ -57,9 +57,9 @@
             <span class="path-xp__label">
               سطح <b>{{ xp.level }}</b> · {{ xp.into_level }} از {{ xp.per_level }} امتیاز
             </span>
-            <span class="progress path-xp__track" role="img"
+            <span class="spring-progress-track progress path-xp__track" role="img"
                   aria-label="{{ xp.percent }} درصد تا سطح بعدی">
-              <span class="progress__fill" style="width:{{ xp.percent }}%"></span>
+              <span class="spring-progress-fill progress__fill" style="width:{{ xp.percent }}%"></span>
             </span>
           </span>
           {% if xp.streak_days %}
@@ -94,8 +94,8 @@
         <span class="path-goal__num">{{ path.done }} از <b>{{ path.goal }}</b></span>
         <span class="path-goal__label">گرهٔ امروز · {{ path.lesson.display_title }}</span>
         {% if path.goal %}
-          <span class="progress" role="img" aria-label="پیشرفت امروز">
-            <span class="progress__fill" style="width:{% widthratio path.done path.goal 100 %}%"></span>
+          <span class="spring-progress-track progress" role="img" aria-label="پیشرفت امروز">
+            <span class="spring-progress-fill progress__fill" style="width:{% widthratio path.done path.goal 100 %}%"></span>
           </span>
         {% endif %}
       </div>

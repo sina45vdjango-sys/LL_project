@@ -2,7 +2,20 @@
 {% load static %}
 {% block title %}تمرین گفتن | {{ brand.name }}{% endblock %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'exams/css/exam.css' %}">{% endblock %}
-{% block extra_js %}<script src="{% static 'exams/js/sprechen_recorder.js' %}" defer></script>{% endblock %}
+{% block extra_js %}
+<script src="{% static 'exams/js/sprechen_recorder.js' %}" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.js-card-flip').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.exam-card-3d');
+        if (card) card.classList.toggle('is-flipped');
+      });
+    });
+  });
+</script>
+{% endblock %}
 {% block content %}
 {% comment %}The oral section. It is 15 of the official 100 points, and it is the one part
    this product cannot mark: the exam's own grading is two examiners against criteria, not a
@@ -61,46 +74,60 @@
       <div class="exam-part__head">
         <h2 class="exam-part__title" id="sprechen-part-{{ part.number }}">
           بخش {{ part.number }} · {{ part.title }}
-          <span lang="de" dir="ltr">{{ part.german }}</span>
+          <span class="de" lang="de" dir="ltr">{{ part.german }}</span>
         </h2>
         <p class="exam-panel__meta">{{ part.minutes }} دقیقه · {{ part.points }} امتیاز</p>
       </div>
 
       <p class="exam-note">{{ part.what }}</p>
 
-      <ul class="exam-phrases">
+      <div class="exam-phrases exam-phrases-grid">
         {% for phrase in part.phrases %}
-          <li class="exam-phrase" data-phrase>
-            <span class="exam-phrase__text" lang="de" dir="ltr">{{ phrase.de }}</span>
-            <span class="exam-phrase__fa">{{ phrase.fa }}</span>
-            {% comment %}The model recording, when the course really has the sentence — the
-               same rule spoken_practice uses for the drill link. A phrase with no course
-               sentence has no model audio either, and says nothing rather than playing an
-               unrelated clip.{% endcomment %}
-            {% if phrase.sentence and phrase.sentence.audio %}
-              <span class="exam-phrase__model">
-                {% include "includes/audio_control.html" with audio=phrase.sentence.audio prefix="model" pk=phrase.sentence.pk label=phrase.de inline=True %}
-              </span>
-            {% endif %}
-            {% if phrase.practice %}
-              {% for exercise in phrase.practice %}
-                <a class="exam-phrase__drill" href="{% url 'exercises:exercise-detail' exercise.pk %}">تمرین همین جمله</a>
-              {% endfor %}
-            {% else %}
-              <span class="chip">بدون تمرین در دوره</span>
-            {% endif %}
-            {% comment %}Removed by the script when the browser has no recorder, so the
-               page degrades to exactly what it was before this feature.{% endcomment %}
-            <button type="button" class="btn btn--sm phrase-record js-record">🎙️ ضبط و مقایسه</button>
-            {% comment %}The self-report needs no microphone, so it is never removed —
-               saying the phrase out loud and marking it is the whole node.{% endcomment %}
-            <span class="phrase-self">
-              <button type="button" class="btn btn--sm js-said">گفتم</button>
-              <button type="button" class="btn btn--sm js-not-said">هنوز نه</button>
-            </span>
-          </li>
+          <article class="exam-phrase exam-card-3d" data-phrase>
+            <div class="exam-card-3d__inner">
+              <header class="exam-card-3d__header">
+                {% if part.number == 1 %}
+                  <span class="chip exam-card-3d__tag">کارت معرفی · Teil 1</span>
+                {% elif part.number == 2 %}
+                  <span class="chip chip--accent exam-card-3d__tag">Thema-Karte · کارت موضوعی</span>
+                {% elif part.number == 3 %}
+                  <span class="chip chip--accent exam-card-3d__tag">Bitte-Karte · کارت درخواست</span>
+                {% endif %}
+                <button type="button" class="btn btn--sm exam-card-3d__flip-btn js-card-flip" aria-label="نمایش ترجمه و جزئیات">
+                  <span>ترجمه و راهنما</span> ↻
+                </button>
+              </header>
+
+              <div class="exam-card-3d__body">
+                <p class="exam-phrase__text de" lang="de" dir="ltr">{{ phrase.de }}</p>
+                <div class="exam-phrase__reveal">
+                  <p class="exam-phrase__fa">{{ phrase.fa }}</p>
+                  {% if phrase.practice %}
+                    {% for exercise in phrase.practice %}
+                      <a class="exam-phrase__drill" href="{% url 'exercises:exercise-detail' exercise.pk %}">تمرین همین جمله</a>
+                    {% endfor %}
+                  {% else %}
+                    <span class="chip">بدون تمرین در دوره</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <footer class="exam-card-3d__footer">
+                {% if phrase.sentence and phrase.sentence.audio %}
+                  <span class="exam-phrase__model">
+                    {% include "includes/audio_control.html" with audio=phrase.sentence.audio prefix="model" pk=phrase.sentence.pk label=phrase.de inline=True %}
+                  </span>
+                {% endif %}
+                <button type="button" class="btn btn--sm phrase-record js-record">🎙️ ضبط و مقایسه</button>
+                <span class="phrase-self">
+                  <button type="button" class="btn btn--sm js-said">گفتم</button>
+                  <button type="button" class="btn btn--sm js-not-said">هنوز نه</button>
+                </span>
+              </footer>
+            </div>
+          </article>
         {% endfor %}
-      </ul>
+      </div>
     </section>
   {% endfor %}
 

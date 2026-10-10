@@ -26,7 +26,7 @@
                 <p class="chat-branches__label">یک پاسخ را انتخاب کن:</p>
                 <div class="chat-branches__list">
                   {% for branch in turn.branches %}
-                    <button type="button" class="chat-branch-btn{% if branch.is_recommended %} chat-branch-btn--rec{% endif %}"
+                    <button type="button" class="chat-branch-btn de{% if branch.is_recommended %} chat-branch-btn--rec{% endif %}"
                             data-branch-btn
                             data-branch-text="{{ branch.text }}"
                             data-branch-note="{{ branch.etiquette_note }}"
@@ -49,7 +49,7 @@
             </div>
 
             <div class="chat-etiquette-toast" data-etiquette-toast hidden>
-              <span class="chat-etiquette-badge">🇩🇪 نکتهٔ آداب معاشرت (Etikette):</span>
+              <span class="chat-etiquette-badge">🇩🇪 نکتهٔ آداب معاشرت <bdi class="de" lang="de" dir="ltr">(Etikette)</bdi>:</span>
               <p class="chat-etiquette-msg" data-etiquette-msg></p>
             </div>
 

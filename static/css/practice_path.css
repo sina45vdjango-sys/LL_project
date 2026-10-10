@@ -125,15 +125,48 @@
   gap: 0;
 }
 
+.spring-progress-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--ring-track);
+  overflow: hidden;
+  padding: 1px;
+}
+
+.spring-progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent-grad-bar);
+  transition: width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 .path-node {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 14px;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 18px;
   background: var(--surface);
-  padding: 14px;
-  margin-bottom: 10px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  box-shadow: 0 3px 0 var(--line);
+  text-decoration: none;
+  color: var(--fg);
+  transition: transform .08s ease, box-shadow .08s ease, border-color .15s ease, background-color .15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.path-node:hover {
+  border-color: var(--accent);
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 var(--line);
+}
+
+.path-node:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--line);
 }
 
 .path-node__dot {
@@ -183,6 +216,16 @@
 
 .path-node--now {
   border-color: var(--accent);
+  box-shadow: 0 3px 0 var(--accent);
+}
+
+.path-node--now:hover {
+  box-shadow: 0 4px 0 var(--accent);
+}
+
+.path-node--now:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--accent);
 }
 
 .path-node--now .path-node__dot {
