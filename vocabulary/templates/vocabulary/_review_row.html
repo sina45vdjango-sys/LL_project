@@ -1,0 +1,35 @@
+{% comment %}One row of a review list: the word itself, the two counters it is listed for, and
+   a way back into the exercises that test it. Shared by today's sitting and by the longer
+   list of the learner's own mistakes, so the same word cannot be presented two different
+   ways on one page.
+
+   The row arrives already stamped by vocabulary/views.py: `row.practice` (the real exercises
+   that test this word) and `row.is_due` (whether its review time has passed), because a
+   template cannot index a dict with a variable key.
+
+   `audio_prefix` is passed by each caller because the audio control's element id is
+   `{{ prefix }}-{{ pk }}`: the same word can sit in the sitting *and* in the mistakes list,
+   and two players with one id is broken HTML.{% endcomment %}
+<li class="vrow">
+  <div class="vrow__main">
+    <a class="vrow__term" href="{% url 'vocabulary:word-detail' row.word.pk %}" lang="de" dir="ltr">{% if row.word.article %}<span class="vrow__article">{{ row.word.article }}</span> {% endif %}{{ row.word.word }}</a>
+    {% if row.word.audio %}
+      {% include "includes/audio_control.html" with audio=row.word.audio prefix=audio_prefix pk=row.pk label=row.word.word inline=True %}
+    {% endif %}
+  </div>
+  <p class="vrow__meaning">{{ row.word.meaning_fa }}</p>
+  <p class="vrow__meta">
+    <span class="vstat vstat--wrong">غلط: {{ row.wrong_count }}</span>
+    <span class="vstat vstat--right">درست: {{ row.correct_count }}</span>
+    {% if row.is_due %}<span class="chip chip--accent">وقت مرور</span>{% endif %}
+    <span class="chip chip--accent" lang="en" dir="ltr">{{ row.word.level }}</span>
+  </p>
+  {% if row.practice %}
+    <p class="vrow__practice">
+      <span class="vrow__practice-label">تمرین</span>
+      {% for exercise in row.practice %}
+        <a class="vrow__practice-link" href="{% url 'exercises:exercise-detail' exercise.pk %}">{{ exercise.title|direction }}</a>
+      {% endfor %}
+    </p>
+  {% endif %}
+</li>

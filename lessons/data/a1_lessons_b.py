@@ -10,7 +10,9 @@ LESSONS.append(
     {
         "order": 13,
         "title": "Freizeit und Hobbys",
+        "title_fa": "وقت آزاد و سرگرمی‌ها",
         "description": "وقت آزاد، سرگرمی و قرار گذاشتن. English: free time, hobbies and making arrangements.",
+        "description_fa": "وقت آزاد، سرگرمی و قرار گذاشتن.",
         "estimated_time": 70,
         "contents": [
             (
@@ -137,6 +139,8 @@ English: Sentences about hobbies and free-time activities.""",
             "wollen",
             "interessant",
             "langweilig",
+            "Idee",
+            "kulturell",
         ],
         "words_review": [
             "gern",
@@ -176,6 +180,7 @@ English: Sentences about hobbies and free-time activities.""",
             ("Ich lese gern Bücher.", "کتاب خواندن را دوست دارم.", "EXAMPLE", ""),
             ("Am Wochenende gehen wir ins Kino.", "آخر هفته به سینما می‌رویم.", "EXAMPLE", ""),
             ("Er geht gern ins Schwimmbad.", "او دوست دارد به استخر برود.", "EXAMPLE", ""),
+            ("Mein Hobby ist Musik.", "سرگرمی‌ام موسیقی است.", "EXAMPLE", ""),
         ],
     }
 )
@@ -185,7 +190,9 @@ LESSONS.append(
     {
         "order": 14,
         "title": "Wetter und Jahreszeiten",
+        "title_fa": "هوا و فصل‌ها",
         "description": "هوا، فصل‌ها و ماه‌ها. English: weather, seasons and months.",
+        "description_fa": "هوا، فصل‌ها و ماه‌های سال.",
         "estimated_time": 60,
         "contents": [
             (
@@ -201,7 +208,6 @@ English: Talking about the weather, the seasons and the months – a standard sm
                 "VOCABULARY",
                 "Wortschatz: Wetter und Jahreszeiten",
                 """das Wetter · der Regen · der Schnee · die Sonne · der Wind · der Grad
-Das Wort „Wetter“ ist ein Neutrum: Das Wetter ist gut. (هوا خوب است.)
 
 فصل‌ها: der Frühling · der Sommer · der Herbst · der Winter · die Jahreszeit
 ماه‌ها: der Januar · der Februar · der März · der April · der Mai · der Juni · der Juli · der August · der September · der Oktober · der November · der Dezember
@@ -305,6 +311,8 @@ English: Weather sentences with the impersonal es and the comparative.""",
             "besser",
             "heute",
             "morgen",
+            "Nachbar",
+            "groß",
         ],
         "words_review": [
             "Tag",
@@ -368,7 +376,9 @@ LESSONS.append(
     {
         "order": 15,
         "title": "Sport, Verabredungen und Termine",
+        "title_fa": "ورزش، قرار گذاشتن و وقت ملاقات",
         "description": "قرار گذاشتن، دعوت کردن و اجبار/اجازه. English: appointments, invitations, and must / may / should.",
+        "description_fa": "قرار گذاشتن، دعوت کردن و گفتن اینکه چه کاری لازم یا مجاز است.",
         "estimated_time": 70,
         "contents": [
             (
@@ -480,6 +490,9 @@ English: Sentences with the modal verbs and appointment vocabulary.""",
             "weil",
             "denn",
             "leider",
+            "mehr",
+            "mich",
+            "rauchen",
         ],
         "words_review": [
             "Kalender",
@@ -534,7 +547,9 @@ LESSONS.append(
     {
         "order": 16,
         "title": "Orientierung in der Stadt",
+        "title_fa": "راه یافتن در شهر",
         "description": "راه پرسیدن، آدرس دادن و وسایل نقلیه. English: asking for and giving directions, public transport.",
+        "description_fa": "راه پرسیدن، آدرس دادن و وسایل نقلیهٔ عمومی.",
         "estimated_time": 75,
         "contents": [
             (
@@ -557,7 +572,7 @@ der Eingang · der Ausgang · der Bahnhof · die Haltestelle
 وسایل نقلیه: der Bus · das Taxi · die U-Bahn · die S-Bahn · die Straßenbahn · die Fahrkarte
 فعل‌ها: fahren · einsteigen (سوار شدن) · aussteigen (پیاده شدن) · gehen
 
-weit (دور) · nah? • nicht weit = نزدیک
+weit (دور) · nicht weit (نزدیک)
 
 English: Places in town, direction words, means of transport and the verbs fahren, einsteigen, aussteigen.""",
             ),
@@ -665,6 +680,7 @@ English: Describing and asking for ways, with dative and accusative prepositions
             "aussteigen",
             "weit",
             "Wo ist die Toilette?",
+            "weg",
         ],
         "words_review": [
             "Stadt",
@@ -728,7 +744,9 @@ LESSONS.append(
     {
         "order": 17,
         "title": "Reisen, Verkehr und Hotel",
+        "title_fa": "سفر، رفت‌وآمد و هتل",
         "description": "سفر، بلیت، فرودگاه و هتل. English: travelling, tickets, airports and hotels.",
+        "description_fa": "سفر، بلیت، فرودگاه و هتل.",
         "estimated_time": 75,
         "contents": [
             (
@@ -855,9 +873,11 @@ English: Sentences about buying tickets, travelling and asking for help.""",
             "reisen",
             "fliegen",
             "abfliegen",
+            "abfahren",
             "ankommen",
             "übernachten",
             "besichtigen",
+            "ab",
         ],
         "words_review": [
             "fahren",
@@ -916,7 +936,9 @@ LESSONS.append(
     {
         "order": 18,
         "title": "Körper und Gesundheit",
+        "title_fa": "بدن و سلامت",
         "description": "اعضای بدن، درد و مطب دکتر. English: the body, pain and visiting the doctor.",
+        "description_fa": "اعضای بدن، درد و رفتن به مطب دکتر.",
         "estimated_time": 70,
         "contents": [
             (
@@ -1091,7 +1113,9 @@ LESSONS.append(
     {
         "order": 19,
         "title": "Gestern und heute: das Perfekt mit „haben“",
+        "title_fa": "دیروز و امروز: گذشته با haben",
         "description": "حرف زدن درباره گذشته با Perfekt. English: talking about the past with the perfect tense.",
+        "description_fa": "حرف زدن دربارهٔ گذشته با زمان Perfekt.",
         "estimated_time": 80,
         "contents": [
             (
@@ -1247,6 +1271,7 @@ English: Sentences about yesterday and last week.""",
             "früher",
             "von",
             "bis",
+            "nichts",
         ],
         "words_review": [
             "machen",
@@ -1328,7 +1353,9 @@ LESSONS.append(
     {
         "order": 20,
         "title": "Feste, Feiern und Glückwünsche",
+        "title_fa": "جشن‌ها، مهمانی و تبریک",
         "description": "جشن، هدیه، تاریخ و تبریک. English: parties, presents, dates and congratulations.",
+        "description_fa": "جشن، هدیه، تاریخ و تبریک گفتن.",
         "estimated_time": 70,
         "contents": [
             (
@@ -1450,6 +1477,7 @@ English: Sentences for birthdays, presents and parties.""",
             "wichtig",
             "für",
             "ohne",
+            "dich",
         ],
         "words_review": [
             "einladen",
@@ -1531,7 +1559,9 @@ LESSONS.append(
     {
         "order": 21,
         "title": "Telefonieren, E-Mail und Post",
+        "title_fa": "تلفن زدن، ایمیل و پست",
         "description": "تلفن، ایمیل، نامه و پیام. English: phone calls, e-mails, letters and messages.",
+        "description_fa": "تلفن زدن، ایمیل، نامه و پیام فرستادن.",
         "estimated_time": 75,
         "contents": [
             (
@@ -1580,14 +1610,13 @@ English: Indirect questions with ob / W-word (verb at the end) and the standard 
                 "DIALOGUE",
                 "Dialog: ein Telefongespräch",
                 """Anrufer: Guten Tag, hier ist Ahmadi. Kann ich bitte mit Herrn Klein sprechen?  (روز بخیر، احمدی صحبت می‌کند. می‌توانم لطفاً با آقای کلاین صحبت کنم؟)
-Sekretärin: Einen Moment, bitte.  (یک لحظه لطفاً.)
-Anrufer: Danke. Können Sie das bitte wiederholen?  (ممنون. می‌توانید لطفاً تکرار کنید؟)
-Sekretärin: Natürlich.  (البته.)
-Anrufer: Ich verstehe nicht. Können Sie langsamer sprechen?  (نمی‌فهمم. می‌توانید آهسته‌تر صحبت کنید؟)
-Anrufer: Kein Problem. Ich rufe später wieder an.  (مشکلی نیست. بعداً دوباره زنگ می‌زنم.)
-Sekretärin: Auf Wiederhören!  (خداحافظ! (تلفنی))
+Sekretärin: Einen Moment, bitte. … Es tut mir leid, Herr Klein ist heute nicht im Büro.  (یک لحظه لطفاً. … متأسفم، آقای کلاین امروز در دفتر نیست.)
+Anrufer: Können Sie das bitte wiederholen?  (می‌توانید لطفاً تکرار کنید؟)
+Sekretärin: Herr Klein ist heute nicht im Büro.  (آقای کلاین امروز در دفتر نیست.)
+Anrufer: Ach so. Dann rufe ich später wieder an. Danke.  (آهان. پس بعداً دوباره زنگ می‌زنم. ممنون.)
+Sekretärin: Gern. Auf Wiederhören!  (خواهش می‌کنم. خداحافظ! (تلفنی))
 
-English: A phone call with polite questions, repetition and the telephone goodbye.""",
+English: A phone call with polite questions, a real reason to ask for a repetition, and the telephone goodbye.""",
             ),
             (
                 "NOTE",
@@ -1667,6 +1696,7 @@ English: Sentences for writing, sending and understanding messages.""",
             "klar",
             "gleich",
             "offen",
+            "natürlich",
         ],
         "words_review": [
             "Telefon",
@@ -1692,27 +1722,37 @@ English: Sentences for writing, sending and understanding messages.""",
                 "DIALOGUE",
                 "Anrufer",
             ),
-            ("Einen Moment, bitte.", "یک لحظه لطفاً.", "DIALOGUE", "Sekretärin"),
             (
-                "Danke. Können Sie das bitte wiederholen?",
-                "ممنون. می‌توانید لطفاً تکرار کنید؟",
+                "Einen Moment, bitte. Es tut mir leid, Herr Klein ist heute nicht im Büro.",
+                "یک لحظه لطفاً. متأسفم، آقای کلاین امروز در دفتر نیست.",
+                "DIALOGUE",
+                "Sekretärin",
+            ),
+            (
+                "Können Sie das bitte wiederholen?",
+                "می‌توانید لطفاً تکرار کنید؟",
                 "DIALOGUE",
                 "Anrufer",
             ),
-            ("Natürlich.", "البته.", "DIALOGUE", "Sekretärin"),
+            (
+                "Herr Klein ist heute nicht im Büro.",
+                "آقای کلاین امروز در دفتر نیست.",
+                "DIALOGUE",
+                "Sekretärin",
+            ),
+            (
+                "Ach so. Dann rufe ich später wieder an. Danke.",
+                "آهان. پس بعداً دوباره زنگ می‌زنم. ممنون.",
+                "DIALOGUE",
+                "Anrufer",
+            ),
+            ("Gern. Auf Wiederhören!", "خواهش می‌کنم. خداحافظ! (تلفنی)", "DIALOGUE", "Sekretärin"),
             (
                 "Ich verstehe nicht. Können Sie langsamer sprechen?",
                 "نمی‌فهمم. می‌توانید آهسته‌تر صحبت کنید؟",
-                "DIALOGUE",
-                "Anrufer",
+                "EXAMPLE",
+                "",
             ),
-            (
-                "Kein Problem. Ich rufe später wieder an.",
-                "مشکلی نیست. بعداً دوباره زنگ می‌زنم.",
-                "DIALOGUE",
-                "Anrufer",
-            ),
-            ("Auf Wiederhören!", "خداحافظ! (تلفنی)", "DIALOGUE", "Sekretärin"),
             ("Ich schreibe eine E-Mail.", "یک ایمیل می‌نویسم.", "EXAMPLE", ""),
             ("Der Brief kommt aus Deutschland.", "نامه از آلمان می‌آید.", "EXAMPLE", ""),
             ("Was bedeutet das?", "این یعنی چه؟", "EXAMPLE", ""),
@@ -1727,6 +1767,10 @@ English: Sentences for writing, sending and understanding messages.""",
             ),
             ("Ich verstehe die Aufgabe nicht.", "تمرین را نمی‌فهمم.", "READING", ""),
             ("Mit freundlichen Grüßen, Sara Ahmadi", "با احترام، سارا احمدی", "READING", ""),
+            ("Kannst du mir bitte helfen?", "می‌شود لطفاً کمکم کنی؟", "EXAMPLE", ""),
+            ("Kann ich dein Handy haben?", "می‌توانم گوشی‌ات را داشته باشم؟", "EXAMPLE", ""),
+            ("Ja, natürlich.", "بله، البته.", "EXAMPLE", ""),
+            ("Tut mir leid, das geht nicht.", "متأسفم، نمی‌شود.", "EXAMPLE", ""),
         ],
     }
 )
@@ -1736,7 +1780,9 @@ LESSONS.append(
     {
         "order": 22,
         "title": "Schule, Lernen und Prüfungen",
+        "title_fa": "مدرسه، درس خواندن و امتحان",
         "description": "مدرسه، درس، امتحان و یادگیری. English: school, studying, exams and learning.",
+        "description_fa": "مدرسه، درس خواندن، امتحان و یادگیری.",
         "estimated_time": 70,
         "contents": [
             (
@@ -1843,6 +1889,7 @@ English: Sentences about studying, asking questions and doing homework.""",
             "Heft",
             "Wörterbuch",
             "Bibliothek",
+            "Lieblingsfach",
             "studieren",
             "sich interessieren",
             "sich kümmern",
@@ -1862,6 +1909,10 @@ English: Sentences about studying, asking questions and doing homework.""",
             "lang",
             "neu",
             "seit",
+            "Antwortbogen",
+            "Hörtext",
+            "ergänzen",
+            "zuordnen",
         ],
         "words_review": [
             "lernen",
@@ -1923,6 +1974,7 @@ English: Sentences about studying, asking questions and doing homework.""",
             ("Das ist falsch.", "غلط است.", "EXAMPLE", ""),
             ("Ich habe die Hausaufgaben gemacht.", "تکلیف‌ها را انجام دادم.", "EXAMPLE", ""),
             ("Meine Lösung ist richtig.", "راه‌حل من درست است.", "EXAMPLE", ""),
+            ("Gib mir bitte das Buch.", "لطفاً کتاب را به من بده.", "EXAMPLE", ""),
         ],
     }
 )
@@ -1932,7 +1984,9 @@ LESSONS.append(
     {
         "order": 23,
         "title": "Amt, Bank und Formulare",
+        "title_fa": "اداره، بانک و فرم‌ها",
         "description": "اداره، بانک، فرم و اسناد. English: offices, banks, forms and documents.",
+        "description_fa": "اداره، بانک، پر کردن فرم و مدارک.",
         "estimated_time": 70,
         "contents": [
             (
@@ -2056,6 +2110,7 @@ English: Sentences for the bank, the office and moving house.""",
             "Vorsicht",
             "wegen",
             "also",
+            "Geburtsort",
         ],
         "words_review": [
             "Bank",
@@ -2122,15 +2177,17 @@ LESSONS.append(
     {
         "order": 24,
         "title": "Abschluss A1: Wiederholung und Wortschatz-Bank",
+        "title_fa": "پایان A1: مرور و بانک واژگان",
         "description": "مرور کل A1 و بانک واژگان پایانی. English: final A1 review plus a reference word bank.",
+        "description_fa": "مرور کل A1 و یک بانک واژگان پایانی برای مراجعه.",
         "estimated_time": 90,
         "contents": [
             (
                 "EXPLANATION",
                 "Du bist am Ende von A1!",
-                """این درس دو بخش دارد:
-۱) مرور کل A1 — همان قواعدی که در ۲۳ درس یاد گرفتید، این بار در یک نگاه.
-۲) بانک واژگان پایانی — واژه‌های پرکاربرد و کوچکی که تا حالا جداگانه درس نگرفته‌اید (ضمیرها، قیدها، حروف ربط، صفت‌ها و واژه‌های روزمره).
+                """این درس دو بخش متمایز دارد:
+۱) ماتریس هستهٔ آزمون گوته A1: سه جدول کلیدی جمع‌بندی گرامر (فعل‌ها، جایگاه کلمه و حالت‌ها)، نمونه پرسش‌های آزمون شفاهی و راهبردهای روز امتحان.
+۲) بانک واژگان مرجع A1: مجموعه‌ای از واژه‌های پرکاربرد، قیدها و صفت‌ها برای مراجعه، یادآوری و مرور تدریجی در جعبهٔ مرور شما — نه برای حفظ کردن یک‌شبه در این درس!
 
 حالا می‌توانید خودتان را معرفی کنید، درباره خانواده، کار، روزمرگی، غذا، خرید، خانه، سفر، سلامتی و گذشته حرف بزنید و در موقعیت‌های روزمره آلمانی منظور خود را برسانید.
 
@@ -2184,7 +2241,7 @@ English: The small words of A1: pronouns, possessives, adverbs of time and place
 stark · schwach · schwer · leicht · kurz · lang · breit · schmal · dick · dünn · tief · hoch · teuer · billig · frei · fertig · offen · geschlossen
 schön · nett · freundlich · lieb · lustig · traurig · glücklich · müde · krank · gesund · bequem · ruhig · wichtig · normal · richtig · falsch · kaputt · verboten
 
-وسایل و گـرـدش: das Auto · das Fahrrad · die Maschine · der Automat · das Licht · die Gruppe · die Halle · der Raum · das Teil · das Gewicht
+وسایل و گردش: das Auto · das Fahrrad · die Maschine · der Automat · das Licht · die Gruppe · die Halle · der Raum · das Teil · das Gewicht
 طبیعت و حیوانات: der Baum · die Blume · das Meer · der Hund · die Katze · der Vogel · das Tier · das Dorf · die Kirche
 روزمرگی: die Idee · das Problem · die Hilfe · die Meinung · die Welt · die Polizei · der Nachbar · der Kunde · das Ergebnis · die Reparatur · das Schild · der Teil · das Feuer · das Gewicht
 اشخاص: die Dame · der Bekannte · der Verwandte · der Erwachsene · der Jugendliche
@@ -2219,56 +2276,31 @@ English: A quick rehearsal of the most common A1 exam questions with answers."""
             ),
         ],
         "words_new": [
-            "wir",
-            "mich",
-            "dich",
             "ihn",
-            "uns",
-            "euch",
-            "mir",
-            "dir",
-            "ihm",
-            "ihr",
-            "sich",
             "alle",
             "beide",
             "jeder",
             "jemand",
             "niemand",
-            "etwas",
-            "nichts",
-            "man",
             "da",
             "oben",
             "unten",
             "hinten",
             "draußen",
-            "weg",
             "zurück",
             "danach",
             "daneben",
             "gerade",
             "sofort",
             "meistens",
-            "sehr",
-            "viel",
             "wenig",
-            "mehr",
             "fast",
             "etwa",
-            "natürlich",
             "wirklich",
             "vielleicht",
-            "so",
             "zurzeit",
-            "und",
-            "oder",
-            "aber",
             "wenn",
             "was für ein",
-            "ein bisschen",
-            "groß",
-            "klein",
             "schnell",
             "langsam",
             "laut",
@@ -2301,7 +2333,6 @@ English: A quick rehearsal of the most common A1 exam questions with answers."""
             "weiter",
             "wunderbar",
             "zufrieden",
-            "kulturell",
             "männlich",
             "weiblich",
             "tot",
@@ -2315,7 +2346,6 @@ English: A quick rehearsal of the most common A1 exam questions with answers."""
             "Ergebnis",
             "Aussage",
             "Geburtsjahr",
-            "Geburtsort",
             "Automat",
             "Maschine",
             "Licht",
@@ -2332,28 +2362,22 @@ English: A quick rehearsal of the most common A1 exam questions with answers."""
             "Tier",
             "Dorf",
             "Kirche",
-            "Idee",
-            "Problem",
             "Hilfe",
             "Meinung",
             "Welt",
             "Polizei",
-            "Nachbar",
             "Schild",
             "Feuer",
             "Dame",
             "Bekannte",
-            "Verwandte",
             "Erwachsene",
             "Jugendliche",
             "Ferien",
-            "Sonnabend",
             "Stock",
             "Apartment",
             "Kindergarten",
             "Pommes frites",
             "Zigarette",
-            "rauchen",
             "baden",
             "reparieren",
             "schneiden",

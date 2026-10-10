@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}بررسی «این درس را می‌دانم» | {{ lesson.display_title }} | {{ brand.name }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'exercises/css/exercise.css' %}">
+<link rel="stylesheet" href="{% static 'lessons/css/lesson_check.css' %}">
+{% endblock %}
+{% block content_class %}content--exercise{% endblock %}
+{% block content %}
+{% comment %}The short check behind the journey's «این درس را می‌دانم» action.
+
+   A learner who already knows the lesson should not have to walk eight screens to say so.
+   This page asks a small sample of the lesson's own questions (lessons/check.py chooses
+   them) through the shared runner — so grading, hints and recording are the same code every
+   other exercise uses — and, when the sample is passed, offers to record the lesson as read
+   through the same endpoint the finish button posts to.
+
+   Passing is not a grade and grants nothing: it only says the learner already knows this,
+   and records the same completion reading the lesson would have.{% endcomment %}
+<div class="check" data-check data-lesson-id="{{ lesson.pk }}"
+     data-pass-needed="{{ pass_needed }}"
+     data-progress-url="{% url 'lessons:lesson-progress' lesson.pk %}">
+  <a class="exercise-back" href="{% url 'lessons:lesson-detail' lesson.pk %}">
+    ← <span>{{ lesson.display_title }}</span>
+  </a>
+
+  <header class="exercise-head">
+    <p class="exercise-head__meta">
+      <span class="chip chip--accent">این درس را می‌دانم</span>
+      <span class="chip">درس {{ lesson.order }}</span>
+    </p>
+    <h1 class="exercise-head__title">بررسی سریع این درس</h1>
+    <p class="exercise-head__instruction">
+      {% if questions %}
+        {{ total_questions }} پرسش از خود این درس. اگر {{ pass_needed }} پاسخ را درست بدهی،
+        یعنی این درس را از قبل می‌دانی و می‌توانی مستقیم کاملش ثبت کنی.
+      {% else %}
+        برای این درس پرسش بررسی‌شدنی‌ای ثبت نشده است.
+      {% endif %}
+    </p>
+  </header>
+
+  {% if questions %}
+    {% url 'lessons:lesson-detail' lesson.pk as runner_back_url %}
+    {% include "exercises/_runner.html" with results_eyebrow="بررسی تمام شد" results_title="نتیجهٔ بررسی" back_url=runner_back_url back_label="بازگشت به درس" %}
+
+    <section class="check-done" data-check-done hidden aria-live="polite">
+      <p class="check-done__lead" data-check-pass hidden>
+        پاسخ‌های درستت کافی بود؛ یعنی این درس را از قبل می‌دانی. همین حالا کاملش ثبت کن و
+        برو سراغ درس بعدی.
+      </p>
+      <p class="check-done__lead" data-check-fail hidden>
+        چند پرسش را اشتباه زدی، پس این درس هنوز چیزهایی برای یاد دادن دارد. یک بار بخوانش و
+        بعد دوباره برگرد.
+      </p>
+      <p class="check-done__actions">
+        <button type="button" class="btn btn--primary" data-check-complete hidden>این درس را کامل ثبت کن</button>
+        <a class="btn" href="{% url 'lessons:lesson-detail' lesson.pk %}">خواندن درس</a>
+        <a class="btn" href="{% url 'lessons:practice-path' %}">مسیر امروز</a>
+      </p>
+      <p class="check-done__state" data-check-state hidden></p>
+    </section>
+  {% else %}
+    <section class="exercise-empty">
+      <h2>چیزی برای بررسی نیست.</h2>
+      <p>این درس هنوز پرسش منتشرشده‌ای ندارد؛ می‌توانی آن را بخوانی و از آخر کاملش کنی.</p>
+      <a class="btn" href="{% url 'lessons:lesson-detail' lesson.pk %}">خواندن درس</a>
+    </section>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'exercises/js/exercise_runner.js' %}" defer></script>
+<script src="{% static 'lessons/js/lesson_check.js' %}" defer></script>
+{% endblock %}

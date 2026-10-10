@@ -1,0 +1,193 @@
+{
+  "level": "A2",
+  "topic": "A2 verbs and adjectives",
+  "words": [
+    {
+      "word": "aufpassen",
+      "type": "VERB",
+      "fa": "مراقب بودن، حواست باشد",
+      "en": "to pay attention, to watch out",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "aufmachen",
+      "type": "VERB",
+      "fa": "باز کردن",
+      "en": "to open",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "zumachen",
+      "type": "VERB",
+      "fa": "بستن",
+      "en": "to close",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "ausgeben",
+      "type": "VERB",
+      "fa": "خرج کردن",
+      "en": "to spend",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "bestätigen",
+      "type": "VERB",
+      "fa": "تأیید کردن",
+      "en": "to confirm",
+      "aux": "haben"
+    },
+    {
+      "word": "beschreiben",
+      "type": "VERB",
+      "fa": "توصیف کردن",
+      "en": "to describe",
+      "aux": "haben"
+    },
+    {
+      "word": "einpacken",
+      "type": "VERB",
+      "fa": "بسته‌بندی کردن",
+      "en": "to pack",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "erinnern",
+      "type": "VERB",
+      "fa": "به یاد آوردن، یادآوری کردن",
+      "en": "to remind, to remember",
+      "aux": "haben"
+    },
+    {
+      "word": "merken",
+      "type": "VERB",
+      "fa": "متوجه شدن، به خاطر سپردن",
+      "en": "to notice",
+      "aux": "haben"
+    },
+    {
+      "word": "organisieren",
+      "type": "VERB",
+      "fa": "ترتیب دادن، سازمان‌دهی کردن",
+      "en": "to organise",
+      "aux": "haben"
+    },
+    {
+      "word": "packen",
+      "type": "VERB",
+      "fa": "بسته‌بندی کردن",
+      "en": "to pack",
+      "aux": "haben"
+    },
+    {
+      "word": "prüfen",
+      "type": "VERB",
+      "fa": "بررسی کردن، امتحان کردن",
+      "en": "to check, to examine",
+      "aux": "haben"
+    },
+    {
+      "word": "reservieren",
+      "type": "VERB",
+      "fa": "رزرو کردن",
+      "en": "to reserve",
+      "aux": "haben"
+    },
+    {
+      "word": "sammeln",
+      "type": "VERB",
+      "fa": "جمع‌آوری کردن",
+      "en": "to collect",
+      "aux": "haben"
+    },
+    {
+      "word": "schaffen",
+      "type": "VERB",
+      "fa": "انجام دادن، از عهده برآمدن",
+      "en": "to manage, to accomplish",
+      "aux": "haben"
+    },
+    {
+      "word": "sparen",
+      "type": "VERB",
+      "fa": "پس‌انداز کردن، صرفه‌جویی کردن",
+      "en": "to save",
+      "aux": "haben"
+    },
+    {
+      "word": "stattfinden",
+      "type": "VERB",
+      "fa": "برگزار شدن",
+      "en": "to take place",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "verbieten",
+      "type": "VERB",
+      "fa": "ممنوع کردن",
+      "en": "to forbid",
+      "aux": "haben"
+    },
+    {
+      "word": "wechseln",
+      "type": "VERB",
+      "fa": "عوض کردن، تغییر دادن",
+      "en": "to change, to switch",
+      "aux": "haben"
+    },
+    {
+      "word": "aktiv",
+      "type": "ADJ",
+      "fa": "فعال",
+      "en": "active"
+    },
+    {
+      "word": "aktuell",
+      "type": "ADJ",
+      "fa": "کنونی، به‌روز",
+      "en": "current"
+    },
+    {
+      "word": "deutlich",
+      "type": "ADJ",
+      "fa": "واضح، روشن",
+      "en": "clear"
+    },
+    {
+      "word": "dringend",
+      "type": "ADJ",
+      "fa": "فوری",
+      "en": "urgent"
+    },
+    {
+      "word": "dunkel",
+      "type": "ADJ",
+      "fa": "تاریک",
+      "en": "dark"
+    },
+    {
+      "word": "fleißig",
+      "type": "ADJ",
+      "fa": "سخت‌کوش، کوشا",
+      "en": "hard-working"
+    },
+    {
+      "word": "sicher",
+      "type": "ADJ",
+      "fa": "مطمئن، امن",
+      "en": "safe, sure"
+    },
+    {
+      "word": "spannend",
+      "type": "ADJ",
+      "fa": "هیجان‌انگیز",
+      "en": "exciting"
+    }
+  ]
+}

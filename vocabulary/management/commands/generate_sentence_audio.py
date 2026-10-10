@@ -1,4 +1,9 @@
-"""Generate German speech for published sentences which have no audio."""
+"""Generate German speech for published sentences which have no audio.
+
+A sentence needs no extraction step: its ``text`` field is already pure German, so it
+is narrated as it stands. The voice and the speaking rate come from
+``vocabulary.audio``, the one place they are set.
+"""
 
 import asyncio
 import os
@@ -14,9 +19,8 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Q
 
+from vocabulary import audio
 from vocabulary.models import Sentence
-
-VOICE = "de-DE-KatjaNeural"
 
 
 class Command(BaseCommand):
@@ -27,6 +31,11 @@ class Command(BaseCommand):
         parser.add_argument("--retries", type=int, default=2, help="Additional attempts per sentence.")
         parser.add_argument("--limit", type=int, default=0, help="Maximum rows; zero means all.")
         parser.add_argument("--workers", type=int, default=1, help="Concurrent synthesis workers (1-8).")
+        parser.add_argument(
+            "--force",
+            action="store_true",
+            help="Re-narrate rows that already have audio, replacing each file in place.",
+        )
 
     def generate(self, sentence, retries):
         directory = Path(settings.MEDIA_ROOT) / "sentences/audio"
@@ -35,19 +44,29 @@ class Command(BaseCommand):
         for attempt in range(retries + 1):
             fd, name = tempfile.mkstemp(prefix=f"sentence-{sentence.pk}-", suffix=".mp3", dir=directory)
             os.close(fd)
-            path = Path(name)
+            staging = Path(name)
             try:
-                asyncio.run(edge_tts.Communicate(sentence.text, voice=VOICE).save(str(path)))
+                asyncio.run(
+                    edge_tts.Communicate(sentence.text, voice=audio.VOICE, rate=audio.RATE).save(str(staging))
+                )
 
                 # The file must be a real MP3, so ffmpeg reads it once as a check.
                 command = [
                     "ffmpeg", "-v", "error", "-xerror",
-                    "-i", str(path), "-f", "null", "-",
+                    "-i", str(staging), "-f", "null", "-",
                 ]
                 subprocess.run(command, check=True, capture_output=True, timeout=30)
-                return path
+                if sentence.existing:
+                    # Re-narrating: replace the file the row already points at, so the old
+                    # recording is gone rather than left behind as an orphan. The replace
+                    # happens only after the check above passed, so a failure leaves the
+                    # existing audio untouched.
+                    target = Path(settings.MEDIA_ROOT) / sentence.existing
+                    os.replace(staging, target)
+                    return target
+                return staging
             except Exception as exc:
-                path.unlink(missing_ok=True)
+                staging.unlink(missing_ok=True)
                 last_error = exc
                 if attempt < retries:
                     time.sleep(min(2 ** attempt, 8))
@@ -57,23 +76,31 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if not 1 <= options["workers"] <= 8 or not 0 <= options["retries"] <= 5 or options["limit"] < 0:
             raise CommandError("workers must be 1-8, retries 0-5, limit nonnegative")
-        pending = Sentence.objects.filter(is_published=True).filter(Q(audio="") | Q(audio__isnull=True)).order_by("pk")
+        pending = Sentence.objects.filter(is_published=True)
+        if not options["force"]:
+            pending = pending.filter(Q(audio="") | Q(audio__isnull=True))
+        pending = pending.order_by("pk")
         self.stdout.write(f"Pending: {pending.count()}")
         if options["dry_run"]:
             return
         if options["limit"]:
             pending = pending[:options["limit"]]
         rows = []
-        for pk, text in pending.values_list("pk", "text"):
-            rows.append(SimpleNamespace(pk=pk, text=text))
+        for pk, text, existing in pending.values_list("pk", "text", "audio"):
+            # ``text`` is the sentence's own field, narrated as it stands.
+            rows.append(SimpleNamespace(pk=pk, text=text, existing=existing or ""))
         generated = 0
         failures = []
 
         def publish(sentence, path):
             relpath = f"sentences/audio/{path.name}"
-            updated = Sentence.objects.filter(pk=sentence.pk, is_published=True, text=sentence.text).filter(
-                Q(audio="") | Q(audio__isnull=True)
-            ).update(audio=relpath)
+            updated = Sentence.objects.filter(pk=sentence.pk, is_published=True, text=sentence.text)
+            if sentence.existing:
+                # Only claim the row if it still points at the file just replaced.
+                updated = updated.filter(audio=sentence.existing)
+            else:
+                updated = updated.filter(Q(audio="") | Q(audio__isnull=True))
+            updated = updated.update(audio=relpath)
             if not updated:
                 path.unlink(missing_ok=True)
             else:

@@ -4,6 +4,12 @@ Blocks such as ``Beispiele: Personen vorstellen`` or ``Dialog: Anna und Ben`` ca
 German sentences with their Persian translation next to them on the same line. Only the
 German part is narrated -- ``vocabulary.german_text`` does that extraction. Blocks that
 are Persian-only (``Was lernst du in dieser Lektion?``) are reported and skipped.
+
+A content block's own text lives in its ``body`` field; there is no ``text`` field. The
+synthesiser is fed the *spoken* text -- what ``spoken_text`` returned after stripping
+the Persian and the closing English note -- which is why each job carries it under
+``spoken`` and not under a field name. The voice and the speaking rate come from
+``vocabulary.audio``, the one place they are set.
 """
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -22,9 +28,8 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Q
 
 from lessons.models import LessonContent
+from vocabulary import audio
 from vocabulary.german_text import spoken_text
-
-VOICE = "de-DE-KatjaNeural"
 
 
 class Command(BaseCommand):
@@ -35,6 +40,11 @@ class Command(BaseCommand):
         parser.add_argument("--retries", type=int, default=2, help="Additional attempts per block.")
         parser.add_argument("--limit", type=int, default=0, help="Maximum rows; zero means all.")
         parser.add_argument("--workers", type=int, default=1, help="Concurrent synthesis workers (1-8).")
+        parser.add_argument(
+            "--force",
+            action="store_true",
+            help="Re-narrate blocks that already have audio, replacing each file in place.",
+        )
 
     def generate(self, block, retries):
         directory = Path(settings.MEDIA_ROOT) / "contents/audio"
@@ -43,19 +53,29 @@ class Command(BaseCommand):
         for attempt in range(retries + 1):
             fd, name = tempfile.mkstemp(prefix=f"content-{block.pk}-", suffix=".mp3", dir=directory)
             os.close(fd)
-            path = Path(name)
+            staging = Path(name)
             try:
-                asyncio.run(edge_tts.Communicate(block.text, voice=VOICE).save(str(path)))
+                asyncio.run(
+                    edge_tts.Communicate(block.spoken, voice=audio.VOICE, rate=audio.RATE).save(str(staging))
+                )
 
                 # The file must be a real MP3, so ffmpeg reads it once as a check.
                 command = [
                     "ffmpeg", "-v", "error", "-xerror",
-                    "-i", str(path), "-f", "null", "-",
+                    "-i", str(staging), "-f", "null", "-",
                 ]
                 subprocess.run(command, check=True, capture_output=True, timeout=120)
-                return path
+                if block.existing:
+                    # Re-narrating: replace the file the block already points at, so the old
+                    # recording is gone rather than left behind as an orphan. The replace
+                    # happens only after the check above passed, so a failure leaves the
+                    # existing audio untouched.
+                    target = Path(settings.MEDIA_ROOT) / block.existing
+                    os.replace(staging, target)
+                    return target
+                return staging
             except Exception as exc:
-                path.unlink(missing_ok=True)
+                staging.unlink(missing_ok=True)
                 last_error = exc
                 if attempt < retries:
                     time.sleep(min(2 ** attempt, 8))
@@ -64,15 +84,17 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if not 1 <= options["workers"] <= 8 or not 0 <= options["retries"] <= 5 or options["limit"] < 0:
             raise CommandError("workers must be 1-8, retries 0-5, limit nonnegative")
-        pending = LessonContent.objects.filter(lesson__is_published=True).filter(
-            Q(audio="") | Q(audio__isnull=True)
-        ).order_by("pk")
+        pending = LessonContent.objects.filter(lesson__is_published=True)
+        if not options["force"]:
+            pending = pending.filter(Q(audio="") | Q(audio__isnull=True))
+        pending = pending.order_by("pk")
         rows = []
         skipped = []
-        for pk, title, body in pending.values_list("pk", "title", "body"):
+        for pk, title, body, existing in pending.values_list("pk", "title", "body", "audio"):
             text = spoken_text(title, body)
             if text:
-                rows.append(SimpleNamespace(pk=pk, text=text))
+                # ``spoken``, not ``text``: this is the narration, not the block's field.
+                rows.append(SimpleNamespace(pk=pk, spoken=text, existing=existing or ""))
             else:
                 skipped.append(pk)
         self.stdout.write(f"Pending: {len(rows)}")
@@ -87,9 +109,13 @@ class Command(BaseCommand):
 
         def publish(block, path):
             relpath = f"contents/audio/{path.name}"
-            updated = LessonContent.objects.filter(pk=block.pk, lesson__is_published=True).filter(
-                Q(audio="") | Q(audio__isnull=True)
-            ).update(audio=relpath)
+            updated = LessonContent.objects.filter(pk=block.pk, lesson__is_published=True)
+            if block.existing:
+                # Only claim the row if it still points at the file just replaced.
+                updated = updated.filter(audio=block.existing)
+            else:
+                updated = updated.filter(Q(audio="") | Q(audio__isnull=True))
+            updated = updated.update(audio=relpath)
             if not updated:
                 path.unlink(missing_ok=True)
             else:

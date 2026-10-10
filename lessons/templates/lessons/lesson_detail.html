@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}{{ lesson.title }} | درس {{ lesson.order }} | {{ brand.name }}{% endblock %}
+{% block title %}{{ lesson.display_title }} | درس {{ lesson.order }} | {{ brand.name }}{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'lessons/css/lessons.css' %}">
 <link rel="stylesheet" href="{% static 'lessons/css/lesson_journey.css' %}">
@@ -19,15 +19,48 @@
      {% if resume_step is not None %}data-resume-step="{{ resume_step }}"{% endif %}>
 
   <header class="lesson-head">
-    <a class="lesson-head__back" href="{% url 'lessons:lesson-list' %}">← مسیر یادگیری</a>
+    <nav class="lesson-head__nav">
+      <a class="lesson-head__back" href="{% url 'lessons:lesson-list' %}">← مسیر یادگیری</a>
+      <a class="lesson-head__link" href="{% url 'lessons:lesson-review' lesson.pk %}">مرور سریع درس</a>
+    </nav>
     <p class="lesson-head__meta">
       <span class="lesson-head__level" lang="en" dir="ltr">{{ lesson.course.language_level }}</span>
       <span>درس {{ lesson.order }}</span>
       <span>{{ lesson.estimated_time }} دقیقه</span>
     </p>
-    <h1 class="lesson-head__title" dir="auto">{{ lesson.title }}</h1>
-    {% if lesson.description %}<p class="lesson-head__desc">{{ lesson.description }}</p>{% endif %}
+    <h1 class="lesson-head__title">{{ lesson.display_title|direction }}</h1>
+    {% comment %}The lesson's German name, beside the Persian title rather than instead of
+       it: the learner meets the German title everywhere else, and the Persian one is what
+       the page is called.{% endcomment %}
+    {% if lesson.title_fa %}<p class="lesson-head__de" lang="de" dir="ltr">{{ lesson.title }}</p>{% endif %}
+    {% if lesson.display_description %}
+      <p class="lesson-head__desc">{{ lesson.display_description|without_english|direction }}</p>
+    {% endif %}
 
+    {% comment %}The two ways to take one lesson, said plainly. On the short path the learner
+       gets all four answers they would otherwise have to guess at: what this is, what it
+       leaves out, that finishing it counts exactly like finishing the lesson, and where the
+       rest of the material is. On the full lesson it is a single quiet line, because a learner
+       who is not short of time does not need a banner about time.{% endcomment %}
+    {% if mode == "short" %}
+      <section class="lesson-mode" aria-labelledby="lesson-mode-title">
+        <p class="lesson-mode__eyebrow">نسخهٔ ۱۵ دقیقه‌ای</p>
+        <h2 class="lesson-mode__title" id="lesson-mode-title">همین درس، برای یک نشست کوتاه</h2>
+        <p class="lesson-mode__lead">
+          این مسیر همان درس است، فقط کم‌تر: قدم‌های «خواندن» و «شنیدن» در آن نیست و هر قدم فقط چند مورد
+          اولش را نشان می‌دهد. تکمیل همین مسیر درس را کامل‌شده ثبت می‌کند — دقیقاً مثل خودِ درس —
+          و بقیهٔ مطالب هر وقت خواستی در درس کامل هست.
+        </p>
+        <a class="btn lesson-mode__switch" href="{% url 'lessons:lesson-detail' lesson.pk %}">درس کامل</a>
+      </section>
+    {% else %}
+      <p class="lesson-mode-hint">
+        وقت کم داری؟ <a href="{% url 'lessons:lesson-detail' lesson.pk %}?mode=short">نسخهٔ ۱۵ دقیقه‌ای همین درس</a> را ببین.
+      </p>
+    {% endif %}
+  </header>
+
+  <div class="journey-stepper" data-journey-stepper>
     <div class="journey-progress">
       <div class="progress" role="progressbar" aria-labelledby="journey-progress-text"
            aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ journey_percent }}" data-journey-bar>
@@ -37,6 +70,10 @@
         قدم <span data-journey-current>1</span> از {{ journey_step_count }} — <span data-journey-label>{{ steps.0.label }}</span>
       </p>
     </div>
+
+    {% comment %}Filled by lesson_steps.js when the lesson was opened on the step the learner
+stopped at, so coming back reads as a continuation and not as starting over.{% endcomment %}
+    <p class="lesson-resume" data-journey-resume hidden></p>
 
     <nav class="journey-steps" aria-label="قدم‌های این درس">
       <ol>
@@ -51,7 +88,7 @@
         {% endfor %}
       </ol>
     </nav>
-  </header>
+  </div>
 
   <div class="journey-body">
     {% for step in steps %}
@@ -67,10 +104,16 @@
     {% endfor %}
   </div>
 
+  {% comment %}The break is safe and the learner is told so: the stepper stores every step the
+learner reaches, and this line says it. lesson_steps.js hides it when there is nowhere to store
+anything (blocked localStorage and no account), so it never promises a save that cannot happen.{% endcomment %}
   <div class="journey-nav" data-journey-nav hidden>
     <button type="button" class="btn journey-nav__btn" data-journey-prev>قبلی</button>
     <span class="journey-nav__pos" aria-hidden="true"><span data-journey-current>1</span> / {{ journey_step_count }}</span>
     <button type="button" class="btn btn--primary journey-nav__btn journey-nav__btn--next" data-journey-next>بعدی</button>
+    <p class="journey-nav__note" data-journey-note>
+      هر قدم را که باز کنی ذخیره می‌شود؛ می‌توانی وسط درس رها کنی و بعداً از همین قدم ادامه بدهی.
+    </p>
   </div>
 </div>
 

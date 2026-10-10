@@ -118,8 +118,8 @@ Woher kommst du? – Ich komme aus dem Iran.
 Wo wohnst du? – Ich wohne in Teheran.
 
 نکته: نام بیشتر کشورها و شهرها بدون حرف تعریف می‌آید:
-Ich komme aus Iran. (✅ درست‌تر و رایج‌تر: Ich komme aus dem Iran.)
-Ich wohne in Deutschland/ in Berlin. (بدون حرف تعریف)
+Ich komme aus Deutschland. (بدون حرف تعریف)
+Ich wohne in Berlin. (بدون حرف تعریف)
 
 فقط چند کشور حرف تعریف دارند: die Schweiz، die Türkei، der Iran، die USA.
 Die Schweiz → Ich komme aus der Schweiz.

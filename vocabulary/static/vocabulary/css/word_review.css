@@ -59,6 +59,8 @@
    term: a rule title is a sentence, not a term. */
 .vgrammar__title { min-width: 0; color: var(--fg); font: 700 16px/1.7 system-ui, sans-serif; overflow-wrap: anywhere; }
 .vgrammar__counts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.vgrammar__action { display: inline-flex; align-items: center; min-height: 32px; padding: 4px 12px; border: 1px solid var(--accent); border-radius: 10px; color: var(--accent-text); font-size: 12px; text-decoration: none; margin-inline-start: 6px; }
+.vgrammar__action:hover { background: var(--accent-soft); text-decoration: none; }
 
 /* -------------------------------------------------------- reached words ---- */
 /* The scheduler's *new* tier: words from lessons the learner has reached and never

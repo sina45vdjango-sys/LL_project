@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}هدف من | {{ brand.name }}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/auth.css' %}">{% endblock %}
+{% block content %}
+{% comment %}The learner says what they are working towards. Every field is optional and
+   submitting everything empty clears the goal, so this page is also how a goal is
+   removed — there is no separate delete action to misunderstand.{% endcomment %}
+<div class="auth">
+  {% comment %}Two framings of one form. During the first run this is step one of two and has
+     to say what the goal is *for*, because a new learner has never seen the pages it feeds.
+     Every later visit is the plain «هدف من» they came here for.{% endcomment %}
+  {% if onboarding %}
+    <header class="auth__head">
+      <p class="auth__eyebrow">قدم ۱ از ۲ · هدف تو</p>
+      <h1 class="auth__title">هدفت را بگو تا برنامه‌ات ساخته شود.</h1>
+      <p class="auth__intro">
+        این تنها چیزی است که در شروع از تو می‌خواهیم. با همین چند خط، «امروز» می‌داند کدام درس را جلوی تو بگذارد
+        و «آمادگی من» می‌گوید چقدر از مسیر مانده و با چه سرعتی. هر فیلدی را ندانی خالی بگذار — هیچ‌کدام اجباری نیست
+        و هر وقت خواستی عوضش می‌کنی.
+      </p>
+    </header>
+  {% else %}
+    <header class="auth__head">
+      <p class="auth__eyebrow">هدف من</p>
+      <h1 class="auth__title">چه چیزی را دنبال می‌کنی؟</h1>
+      <p class="auth__intro">این هدف یک یادداشت تشریفاتی نیست: صفحهٔ «آمادگی من» از آن می‌گوید کجای مسیری و برای رسیدن به هدفت چقدر وقت داری. هر فیلدی را ندانی خالی بگذار.</p>
+    </header>
+  {% endif %}
+
+  {% if profile.current_level or profile.target_level or profile.reason or profile.target_date %}
+    <section class="panel" aria-label="هدف فعلی">
+      <dl class="detail-list">
+        <div>
+          <dt>سطح فعلی</dt>
+          <dd>{% if profile.current_level %}<bdi>{{ profile.current_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
+        </div>
+        <div>
+          <dt>سطح هدف</dt>
+          <dd>{% if profile.target_level %}<bdi>{{ profile.target_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
+        </div>
+        <div>
+          <dt>دلیل یادگیری</dt>
+          <dd>{% if profile.reason_label %}{{ profile.reason_label }}{% else %}<span class="muted">گفته نشده</span>{% endif %}</dd>
+        </div>
+        <div>
+          <dt>تاریخ هدف</dt>
+          <dd>{% if profile.target_date %}{{ profile.target_date|jalali }}{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
+        </div>
+      </dl>
+    </section>
+  {% endif %}
+
+  <form class="panel auth__form" method="post" novalidate>
+    {% csrf_token %}
+    {% comment %}The flag travels with the submission so `post` knows to continue the first-run
+       flow. Without it, saving the goal on the first run would land on a page with no next
+       action — the same dead end the onboarding exists to remove.{% endcomment %}
+    {% if onboarding %}<input type="hidden" name="onboarding" value="1">{% endif %}
+    {% include "accounts/_form_fields.html" %}
+    <p class="field__hint">سطح‌ها همان سطح‌هایی هستند که محتوایشان ساخته شده است. اگر همهٔ فیلدها را خالی بگذاری و ذخیره کنی، هدفت پاک می‌شود.</p>
+    <button class="btn btn--primary auth__submit" type="submit">
+      {% if onboarding %}ذخیره و دیدن برنامه{% else %}ذخیرهٔ هدف{% endif %}
+    </button>
+  </form>
+
+  <p class="auth__alt"><a href="{% url 'readiness' %}">آمادگی من</a> · <a href="{% url 'accounts:profile' %}">حساب من</a></p>
+</div>
+{% endblock %}

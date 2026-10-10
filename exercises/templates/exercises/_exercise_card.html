@@ -8,12 +8,12 @@
     <span class="chip chip--accent">{{ exercise.type_label }}</span>
     <span class="chip">{{ exercise.difficulty_label }}</span>
   </span>
-  <span class="ex-card__title" dir="auto">{{ exercise.title }}</span>
+  <span class="ex-card__title">{{ exercise.title|direction }}</span>
   {% if show_instruction and exercise.instruction %}
     <span class="ex-card__instruction">{{ exercise.instruction }}</span>
   {% endif %}
   <span class="ex-card__foot">
-    <span class="ex-card__meta">تمرین {{ exercise.order }} · {{ exercise.question_count }} پرسش</span>
+    <span class="ex-card__meta">تمرین {{ number }} · {{ exercise.question_count }} پرسش</span>
     <span class="ex-card__cta">شروع تمرین</span>
   </span>
 </a>

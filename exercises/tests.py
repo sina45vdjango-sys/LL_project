@@ -30,12 +30,13 @@ from exercises.management.commands import (
     seed_a1_word_drills,
 )
 from exercises.models import Exercise, ExerciseAttempt, Question, QuestionTarget, Answer
-from exercises.runner import CHOICE, ORDER, TEXT, build_runner, extract_sentence_words
+from exercises.runner import CHOICE, ORDER, PUNCTUATION, TEXT, build_runner, extract_sentence_words
 from exercises.session import (
     SESSION_SIZE,
     build_session,
     pick_questions,
     session_lesson,
+    session_progress,
     session_skills,
 )
 from lessons.models import (
@@ -3260,6 +3261,289 @@ class ExplainA1DrillsTests(TestCase):
         self.assertIn("Already had an explanation: 1.", second)
 
 
+class ExplainAuthoredExercisesTests(TestCase):
+    """``explain_authored_exercises``: authored questions get structured Persian explanations."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.level = LanguageLevel.objects.create(level="A1", title="A1", order=1)
+        cls.course = Course.objects.create(
+            language_level=cls.level, title="Kurs", is_published=True
+        )
+        cls.lesson = Lesson.objects.create(
+            course=cls.course, title="Lektion 1", is_published=True, order=1, estimated_time=10
+        )
+        cls.word = Word.objects.create(
+            word="Name", word_type="NOUN", gender="M", article="der",
+            plural="die Namen", meaning_fa="نام", level=cls.level, is_published=True,
+        )
+        cls.plural_only = Word.objects.create(
+            word="Eltern", word_type="NOUN", article="die",
+            plural="die Eltern", meaning_fa="والدین", level=cls.level, is_published=True,
+        )
+        cls.sentence = Sentence.objects.create(
+            text="Guten Morgen!", translation_fa="صبح بخیر!", level=cls.level, is_published=True
+        )
+
+    def explain(self, dry_run=False):
+        out = StringIO()
+        args = ["explain_authored_exercises"]
+        if dry_run:
+            args.append("--dry-run")
+        call_command(*args, stdout=out)
+        return out.getvalue()
+
+    def test_authored_vocabulary_choice_explanation(self):
+        ex = Exercise.objects.create(
+            lesson=self.lesson, title="واژگان — انتخاب معنی", instruction="",
+            type=Exercise.ExerciseType.MULTIPLE_CHOICE, difficulty=Exercise.Difficulty.EASY,
+            order=1, is_published=True,
+        )
+        q = Question.objects.create(exercise=ex, prompt="واژهٔ «Name» به چه معنی است؟", order=1)
+        Answer.objects.create(question=q, text="نام", is_correct=True, order=1)
+        QuestionTarget.objects.create(question=q, word=self.word, role=QuestionTarget.Role.TESTED_ITEM)
+
+        self.explain()
+        q.refresh_from_db()
+        self.assertEqual(
+            q.explanation,
+            "«Name» اسم (مذکر) با آرتیکل «der» است و جمع آن «die Namen» است؛ یعنی «نام»."
+        )
+
+    def test_authored_translation_explanation(self):
+        ex = Exercise.objects.create(
+            lesson=self.lesson, title="واژگان — ترجمه به آلمانی", instruction="",
+            type=Exercise.ExerciseType.TRANSLATION, difficulty=Exercise.Difficulty.EASY,
+            order=2, is_published=True,
+        )
+        q = Question.objects.create(exercise=ex, prompt="ترجمهٔ «نام» به آلمانی؟", order=1)
+        Answer.objects.create(question=q, text="Name", is_correct=True, order=1)
+        QuestionTarget.objects.create(question=q, word=self.word, role=QuestionTarget.Role.TESTED_ITEM)
+
+        self.explain()
+        q.refresh_from_db()
+        self.assertEqual(q.explanation, "معادل «نام» در آلمانی «der Name» است.")
+
+    def test_reading_comprehension_explanation(self):
+        ex = Exercise.objects.create(
+            lesson=self.lesson, title="خواندن و درک مطلب", instruction="",
+            type=Exercise.ExerciseType.READING, difficulty=Exercise.Difficulty.EASY,
+            order=3, is_published=True,
+        )
+        q = Question.objects.create(
+            exercise=ex,
+            prompt='در جملهٔ زیر، معادل فارسی کدام گزینه است؟\n"Guten Morgen!"',
+            order=1,
+        )
+        Answer.objects.create(question=q, text="صبح بخیر!", is_correct=True, order=1)
+        QuestionTarget.objects.create(question=q, sentence=self.sentence, role=QuestionTarget.Role.CONTEXT)
+
+        self.explain()
+        q.refresh_from_db()
+        self.assertEqual(q.explanation, "معادل «Guten Morgen!» به فارسی «صبح بخیر!» است.")
+
+    def test_plural_only_noun_explanation(self):
+        ex = Exercise.objects.create(
+            lesson=self.lesson, title="تمرین گرامر — آرتیکل (1)", instruction="",
+            type=Exercise.ExerciseType.MULTIPLE_CHOICE, difficulty=Exercise.Difficulty.EASY,
+            order=4, is_published=True,
+        )
+        q = Question.objects.create(exercise=ex, prompt="آرتیکل درست کدام است؟ «___ Eltern»", order=1)
+        Answer.objects.create(question=q, text="die", is_correct=True, order=1)
+        QuestionTarget.objects.create(question=q, word=self.plural_only, role=QuestionTarget.Role.TESTED_ITEM)
+
+        self.explain()
+        q.refresh_from_db()
+        self.assertEqual(
+            q.explanation,
+            "«Eltern» اسمی است که فقط در حالت جمع به کار می‌رود و آرتیکل جمع آن «die» است؛ یعنی «والدین»."
+        )
+
+    def test_dry_run_leaves_database_untouched(self):
+        ex = Exercise.objects.create(
+            lesson=self.lesson, title="واژگان — ترجمه به آلمانی", instruction="",
+            type=Exercise.ExerciseType.TRANSLATION, difficulty=Exercise.Difficulty.EASY,
+            order=5, is_published=True,
+        )
+        q = Question.objects.create(exercise=ex, prompt="ترجمهٔ «نام» به آلمانی؟", order=1)
+        Answer.objects.create(question=q, text="Name", is_correct=True, order=1)
+        QuestionTarget.objects.create(question=q, word=self.word, role=QuestionTarget.Role.TESTED_ITEM)
+
+        out = self.explain(dry_run=True)
+        q.refresh_from_db()
+        self.assertEqual(q.explanation, "")
+        self.assertIn("Would write 1 explanation(s).", out)
+
+    def test_already_explained_question_is_untouched(self):
+        ex = Exercise.objects.create(
+            lesson=self.lesson, title="واژگان — ترجمه به آلمانی", instruction="",
+            type=Exercise.ExerciseType.TRANSLATION, difficulty=Exercise.Difficulty.EASY,
+            order=6, is_published=True,
+        )
+        q = Question.objects.create(
+            exercise=ex, prompt="ترجمهٔ «نام» به آلمانی؟", order=1, explanation="توضیح از قبل موجود"
+        )
+        Answer.objects.create(question=q, text="Name", is_correct=True, order=1)
+        QuestionTarget.objects.create(question=q, word=self.word, role=QuestionTarget.Role.TESTED_ITEM)
+
+        self.explain()
+        q.refresh_from_db()
+        self.assertEqual(q.explanation, "توضیح از قبل موجود")
+
+    def test_running_twice_is_idempotent(self):
+        ex = Exercise.objects.create(
+            lesson=self.lesson, title="واژگان — ترجمه به آلمانی", instruction="",
+            type=Exercise.ExerciseType.TRANSLATION, difficulty=Exercise.Difficulty.EASY,
+            order=7, is_published=True,
+        )
+        q = Question.objects.create(exercise=ex, prompt="ترجمهٔ «نام» به آلمانی؟", order=1)
+        Answer.objects.create(question=q, text="Name", is_correct=True, order=1)
+        QuestionTarget.objects.create(question=q, word=self.word, role=QuestionTarget.Role.TESTED_ITEM)
+
+        first = self.explain()
+        self.assertIn("Wrote 1 explanation(s).", first)
+        second = self.explain()
+        self.assertIn("Wrote 0 explanation(s).", second)
+
+
+class SeedA1ActiveProductionTests(TestCase):
+    """``seed_a1_active_production``: promotes pseudo-cloze and adds targeted active production."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.level = LanguageLevel.objects.create(level="A1", title="A1", order=1)
+        cls.course = Course.objects.create(language_level=cls.level, title="A1 Kurs", is_published=True)
+        cls.lesson2 = Lesson.objects.create(course=cls.course, title="L2", order=2, is_published=True, estimated_time=15)
+        cls.lesson4 = Lesson.objects.create(course=cls.course, title="L4", order=4, is_published=True, estimated_time=15)
+        cls.lesson12 = Lesson.objects.create(course=cls.course, title="L12", order=12, is_published=True, estimated_time=15)
+        cls.lesson19 = Lesson.objects.create(course=cls.course, title="L19", order=19, is_published=True, estimated_time=15)
+        cls.lesson20 = Lesson.objects.create(course=cls.course, title="L20", order=20, is_published=True, estimated_time=15)
+
+    def test_action1_cloze_distractors_removed(self):
+        ex = Exercise.objects.create(
+            lesson=self.lesson2, title="تمرین تکمیل جمله", instruction="",
+            type=Exercise.ExerciseType.FILL_BLANK, difficulty=Exercise.Difficulty.MEDIUM,
+            order=3, is_published=True,
+        )
+        q = Question.objects.create(exercise=ex, prompt='Wo _____ Sie?', order=1)
+        Answer.objects.create(question=q, text="wohnen", is_correct=True, order=1)
+        Answer.objects.create(question=q, text="lernen", is_correct=False, order=2)
+        Answer.objects.create(question=q, text="Land", is_correct=False, order=3)
+
+        out = StringIO()
+        call_command("seed_a1_active_production", stdout=out)
+        self.assertEqual(q.answers.count(), 1)
+        self.assertEqual(q.answers.first().text, "wohnen")
+
+    def test_action2_and_3_exercises_created(self):
+        out = StringIO()
+        call_command("seed_a1_active_production", stdout=out)
+
+        # L12
+        l12_scramble = Exercise.objects.filter(lesson=self.lesson12, type=Exercise.ExerciseType.SCRAMBLE).first()
+        self.assertIsNotNone(l12_scramble)
+        self.assertEqual(l12_scramble.questions.count(), 8)
+        l12_cloze = Exercise.objects.filter(lesson=self.lesson12, type=Exercise.ExerciseType.FILL_BLANK).first()
+        self.assertIsNotNone(l12_cloze)
+        self.assertEqual(l12_cloze.questions.count(), 6)
+
+        # L04, L19, L20
+        self.assertEqual(
+            Exercise.objects.filter(lesson=self.lesson4, type=Exercise.ExerciseType.SCRAMBLE).first().questions.count(),
+            6,
+        )
+        self.assertEqual(
+            Exercise.objects.filter(lesson=self.lesson19, type=Exercise.ExerciseType.SCRAMBLE).first().questions.count(),
+            6,
+        )
+        self.assertEqual(
+            Exercise.objects.filter(lesson=self.lesson20, type=Exercise.ExerciseType.SCRAMBLE).first().questions.count(),
+            6,
+        )
+
+    def test_dry_run_leaves_database_untouched(self):
+        ex = Exercise.objects.create(
+            lesson=self.lesson2, title="تمرین تکمیل جمله", instruction="",
+            type=Exercise.ExerciseType.FILL_BLANK, difficulty=Exercise.Difficulty.MEDIUM,
+            order=3, is_published=True,
+        )
+        q = Question.objects.create(exercise=ex, prompt='Wo _____ Sie?', order=1)
+        Answer.objects.create(question=q, text="wohnen", is_correct=True, order=1)
+        Answer.objects.create(question=q, text="lernen", is_correct=False, order=2)
+
+        out = StringIO()
+        call_command("seed_a1_active_production", dry_run=True, stdout=out)
+        self.assertEqual(q.answers.count(), 2)
+        self.assertFalse(Exercise.objects.filter(lesson=self.lesson12).exists())
+
+    def test_command_is_idempotent(self):
+        out = StringIO()
+        call_command("seed_a1_active_production", stdout=out)
+        first_q_count = Question.objects.count()
+
+        call_command("seed_a1_active_production", stdout=out)
+        second_q_count = Question.objects.count()
+
+        self.assertEqual(first_q_count, second_q_count)
+
+
+class SeedA1ListeningDiscriminationTests(TestCase):
+    """``seed_a1_listening_discrimination``: seeds Goethe A1 auditory discrimination exercises."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.level = LanguageLevel.objects.create(level="A1", title="A1", order=1)
+        cls.course = Course.objects.create(language_level=cls.level, title="A1 Kurs", is_published=True)
+        cls.lessons = [
+            Lesson.objects.create(course=cls.course, title=f"L{num}", order=num, is_published=True, estimated_time=15)
+            for num in (3, 6, 9, 15, 17)
+        ]
+        cls.sentence = Sentence.objects.create(
+            id=34,
+            text="Meine Telefonnummer ist null-eins-sieben-sechs...",
+            translation_fa="شماره تلفن من...",
+            level=cls.level,
+            audio="sentences/audio/s34.mp3",
+            is_published=True,
+        )
+
+    def test_dry_run_leaves_database_untouched(self):
+        out = StringIO()
+        call_command("seed_a1_listening_discrimination", dry_run=True, stdout=out)
+        self.assertIn("[DRY-RUN]", out.getvalue())
+        self.assertFalse(Exercise.objects.filter(type=Exercise.ExerciseType.LISTENING).exists())
+
+    def test_command_creates_exercises_questions_and_answers(self):
+        out = StringIO()
+        call_command("seed_a1_listening_discrimination", stdout=out)
+
+        listening_exercises = Exercise.objects.filter(type=Exercise.ExerciseType.LISTENING)
+        self.assertEqual(listening_exercises.count(), 5)
+
+        total_questions = Question.objects.filter(exercise__in=listening_exercises).count()
+        self.assertEqual(total_questions, 26)
+
+        q1_l3 = Question.objects.filter(exercise__lesson__order=3, order=1).first()
+        self.assertIsNotNone(q1_l3)
+        self.assertEqual(q1_l3.audio, "sentences/audio/s34.mp3")
+        self.assertTrue(len(q1_l3.explanation) > 0)
+        self.assertEqual(q1_l3.answers.count(), 4)
+        self.assertEqual(q1_l3.answers.filter(is_correct=True).count(), 1)
+
+    def test_command_is_idempotent(self):
+        out = StringIO()
+        call_command("seed_a1_listening_discrimination", stdout=out)
+        first_q_count = Question.objects.count()
+        first_a_count = Answer.objects.count()
+
+        call_command("seed_a1_listening_discrimination", stdout=out)
+        second_q_count = Question.objects.count()
+        second_a_count = Answer.objects.count()
+
+        self.assertEqual(first_q_count, second_q_count)
+        self.assertEqual(first_a_count, second_a_count)
+
+
 class SeedA1PronunciationDrillsTests(TestCase):
     """``seed_a1_pronunciation_drills``: hear one word, tell it from one sound away.
 
@@ -3794,8 +4078,13 @@ class SeedA1SentenceDrillsTests(TestCase):
         question = self.scramble_questions().filter(exercise__lesson=self.lesson).first()
         words = question.answers.get().text.split()
         tokens = extract_sentence_words(question)
-        self.assertEqual(sorted(tokens), sorted(words))
-        self.assertNotEqual(tokens, words)
+        # The tray shows the words without their punctuation, so the sentence's own words
+        # are compared bare too: the same words, in a different order.
+        bare = []
+        for word in words:
+            bare.append(PUNCTUATION.sub("", word))
+        self.assertEqual(sorted(tokens), sorted(bare))
+        self.assertNotEqual(tokens, bare)
 
     def test_the_scramble_page_renders_the_word_bank_and_never_the_order(self):
         self.run_command()
@@ -3843,6 +4132,45 @@ class SeedA1SentenceDrillsTests(TestCase):
         )
 
         self.assertFalse(response.json()["correct"])
+
+    def test_typing_the_words_without_the_punctuation_is_correct(self):
+        """The tray shows bare words, so bare words are what the scramble accepts: the
+        comma and the full stop are the sentence's, not something the learner was shown."""
+        self.run_command()
+        question = self.scramble_questions().first()
+        sentence = question.answers.get().text
+        bare = PUNCTUATION.sub("", sentence)
+        self.assertNotEqual(bare, sentence, "the fixture sentence should carry punctuation")
+
+        user = User.objects.create_user(username="ohnezeichen", password="test-pass-123")
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("exercises:exercise-submit", args=[question.exercise.pk]),
+            data=json.dumps(
+                {"question": question.pk, "answer": None, "response_text": bare}
+            ),
+            content_type="application/json",
+        )
+
+        self.assertTrue(response.json()["correct"])
+
+    def test_a_scramble_tray_shows_the_words_without_their_punctuation(self):
+        self.run_command()
+        question = self.scramble_questions().first()
+        sentence = question.answers.get().text
+        tokens = extract_sentence_words(question)
+
+        # The same words as the sentence, in a different order, with no mark left on any
+        # of them.
+        bare = PUNCTUATION.sub("", sentence).split()
+        self.assertEqual(sorted(tokens), sorted(bare))
+        for token in tokens:
+            with self.subTest(token=token):
+                self.assertFalse(PUNCTUATION.search(token))
+
+        # The sentence itself is what is stored, punctuation and all.
+        self.assertEqual(question.answers.get().text, sentence)
 
     def test_a_lesson_whose_sentences_are_all_asked_about_gets_no_exercise(self):
         self.run_command()
@@ -4315,6 +4643,87 @@ class SessionTests(TestCase):
 
         self.assertEqual(session["goal"], 0)
         self.assertEqual(session["questions"], [])
+
+
+class SessionProgressTests(SessionTests):
+    """What «امروز» means by practice being done (``exercises/session.py::session_progress``).
+
+    The day's practice step and «جلسهٔ امروز» are the same thing, so the verdict about it
+    lives here, beside the rules that compose a session, instead of being counted by a page.
+    The flaw this replaces: the day ticked its practice step once every skill had been
+    touched — about five answers — while the session page still had ten questions to give.
+    """
+
+    def progress(self):
+        return session_progress(self.user, timezone.localdate(), self.lesson)
+
+    def answer(self, question):
+        ExerciseAttempt.objects.create(
+            user=self.user, exercise=question.exercise, question=question,
+            answer=question.answers.get(is_correct=True), is_correct=True,
+        )
+
+    def work_through_a_sitting(self, topics):
+        """Answer one question per topic, the way a learner works through a session."""
+        for _ in range(topics):
+            session = self.build()
+            if not session["questions"]:
+                break
+            self.answer(session["questions"][0])
+
+    def test_a_short_lesson_is_one_sitting_of_what_it_has(self):
+        # Two topics, both untouched: the sitting is the two of them and it is not done, and
+        # its size is the real one rather than the session ceiling.
+        progress = self.progress()
+
+        self.assertFalse(progress["done"])
+        self.assertEqual(progress["size"], 2)
+
+    def test_a_lesson_with_nothing_left_today_has_nothing_to_ask(self):
+        self.work_through_a_sitting(2)
+
+        progress = self.progress()
+
+        self.assertTrue(progress["done"])
+        # The sitting was exactly as long as the lesson had material for.
+        self.assertEqual(progress["size"], 2)
+
+    def test_a_sitting_is_done_once_a_whole_session_of_topics_is_behind_it(self):
+        extra = Exercise.objects.create(
+            lesson=self.lesson, title="بزرگ", type=Exercise.ExerciseType.MULTIPLE_CHOICE,
+            order=3, is_published=True,
+        )
+        for index in range(SESSION_SIZE + 5):
+            word = Word.objects.create(
+                word=f"Viel{index}", word_type="OTHER", meaning_fa=f"معنی {index}",
+                level=self.level, is_published=True,
+            )
+            question = Question.objects.create(
+                exercise=extra, prompt=f"معنی {word.word}؟", order=index + 1
+            )
+            QuestionTarget.objects.create(
+                question=question, word=word, role=QuestionTarget.Role.TESTED_ITEM
+            )
+            Answer.objects.create(question=question, text=word.meaning_fa, is_correct=True, order=1)
+            Answer.objects.create(question=question, text="چیز دیگری", is_correct=False, order=2)
+
+        # One short of a sitting: the lesson still has eight topics left, so the step is not
+        # finished and its size is what is really left.
+        self.work_through_a_sitting(SESSION_SIZE - 1)
+
+        short = self.progress()
+
+        self.assertFalse(short["done"])
+        self.assertEqual(short["size"], 8)
+
+        # The question that completes the sitting finishes the day's step, even though the
+        # lesson has more to give — more practice is allowed, it is just not owed.
+        self.work_through_a_sitting(1)
+
+        done = self.progress()
+
+        self.assertTrue(done["done"])
+        self.assertEqual(done["size"], SESSION_SIZE)
 
 
 class SessionPageTests(TestCase):

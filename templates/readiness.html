@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}آمادگی من | {{ brand.name }}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/readiness.css' %}">{% endblock %}
+{% block content %}
+{% comment %}«آمادگی من»: how this learner is doing, built only from rows they created by
+   working. Every number comes from lessons/readiness.py, where each one is defined; the
+   page deliberately states no CEFR level and no single "readiness score", because the
+   data cannot support either. See the module docstring before adding a number here.{% endcomment %}
+<div class="rdy">
+  <header class="rdy__head">
+    <p class="rdy__eyebrow">آمادگی من</p>
+    <h1 class="rdy__title">الان کجای مسیری؟</h1>
+    {% comment %}One sentence. Which rows the page is built from used to be listed here too,
+       but it is an explanation, not a headline — it now lives in the «این صفحه چه چیزی را
+       نمی‌گوید» disclosure at the bottom, which is where a reader goes to question a number.{% endcomment %}
+    <p class="rdy__lead">این صفحه فقط از کارهایی ساخته شده که واقعاً انجام داده‌ای؛ هیچ عددی اینجا تخمینی یا امتیازی نیست.</p>
+  </header>
+
+  {% comment %}Step two of the first run. It is not a separate screen: saving the goal lands on
+     the real learning plan, and this banner is what says so and gives the learner somewhere to
+     go next. A visit without the flag never sees it.{% endcomment %}
+  {% if onboarding %}
+    <section class="panel rdy-onboard" aria-labelledby="rdy-onboard-title">
+      <p class="rdy-onboard__eyebrow">قدم ۲ از ۲</p>
+      <h2 class="rdy-onboard__title" id="rdy-onboard-title">هدفت ثبت شد — این برنامهٔ توست.</h2>
+      <p class="rdy-onboard__lead">
+        هر عدد این صفحه از کار خودت ساخته می‌شود، پس الان بیشترش خالی است. درس اول را که بزنی، از همان‌جا پر می‌شود.
+        قدم بعدی ساده است: برو به داشبورد و اولین درس را شروع کن.
+      </p>
+      <a class="btn btn--primary" href="{% url 'home' %}">برو به داشبورد و درس اول را شروع کن</a>
+    </section>
+  {% endif %}
+
+  {% if not readiness %}
+    <section class="rdy-empty">
+      <h2>این صفحه به حساب تو نیاز دارد.</h2>
+      <p>آمادگی از درس‌های کامل‌شده، پاسخ‌های تمرین‌ها و واژه‌های آزموده‌شده ساخته می‌شود و اینها روی حساب کاربری ذخیره می‌شوند. بدون حساب، تمرین‌ها درست بررسی می‌شوند ولی جایی برای شمردن‌شان نیست.</p>
+      <p class="rdy-empty__actions">
+        <a class="btn btn--primary" href="{% url 'accounts:login' %}">ورود</a>
+        <a class="btn" href="{% url 'accounts:signup' %}">ساخت حساب</a>
+      </p>
+    </section>
+  {% else %}
+
+    {# ---- 1. the goal, and what the date implies ------------------------ #}
+    <section class="panel rdy-goal" aria-labelledby="rdy-goal-title">
+      <div class="rdy-bar">
+        <h2 id="rdy-goal-title">هدف تو</h2>
+        <a class="rdy-bar__link" href="{% url 'accounts:goal' %}">{% if readiness.goal %}ویرایش هدف{% else %}تعیین هدف{% endif %}</a>
+      </div>
+
+      {% if readiness.goal %}
+        <dl class="rdy-facts">
+          <div>
+            <dt>سطح فعلی</dt>
+            <dd>{% if readiness.goal.current_level %}<bdi>{{ readiness.goal.current_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
+          </div>
+          <div>
+            <dt>سطح هدف</dt>
+            <dd>{% if readiness.goal.target_level %}<bdi>{{ readiness.goal.target_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
+          </div>
+          <div>
+            <dt>دلیل یادگیری</dt>
+            <dd>{% if readiness.goal.reason_label %}{{ readiness.goal.reason_label }}{% else %}<span class="muted">گفته نشده</span>{% endif %}</dd>
+          </div>
+          <div>
+            <dt>تاریخ هدف</dt>
+            <dd>{% if readiness.goal.target_date %}{{ readiness.goal.target_date|jalali }}{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
+          </div>
+        </dl>
+
+        {% if readiness.goal.target_level and not readiness.goal.covers_target %}
+          <p class="rdy-note">
+            هدفت <bdi>{{ readiness.goal.target_level }}</bdi> است، ولی محتوای ساخته‌شده فعلاً تا <bdi>{{ readiness.goal.content_level }}</bdi> است.
+            پس این صفحه فقط می‌تواند پیشرفتت را تا همان‌جا اندازه بگیرد؛ بقیهٔ مسیر هنوز درس ندارد.
+          </p>
+        {% endif %}
+
+        {% if readiness.pace %}
+          {% if readiness.pace.state == "planned" %}
+            <div class="rdy-pace">
+              <p class="rdy-pace__title">برای رسیدن به {{ readiness.goal.target_date|jalali }}</p>
+              <p class="rdy-pace__number">{{ readiness.pace.lessons_per_week }} درس در هفته</p>
+              <p class="rdy-pace__meta">
+                {{ readiness.pace.weeks_left }} هفته وقت داری و {{ readiness.pace.remaining_lessons }} درس مانده
+                · یعنی حدود {{ readiness.pace.minutes_per_week }} دقیقه در هفته.
+              </p>
+            </div>
+          {% elif readiness.pace.state == "passed" %}
+            <p class="rdy-note">
+              تاریخ هدفت گذشته است ({{ readiness.pace.days_left }} روز پیش) و {{ readiness.pace.remaining_lessons }} درس از این دوره مانده.
+              برنامهٔ زمانی نمی‌سازیم تا وقتی تاریخ تازه‌ای بگذاری.
+            </p>
+          {% else %}
+            <p class="rdy-note">محتوای منتشرشدهٔ این دوره را کامل کرده‌ای و تا تاریخ هدفت وقت داری؛ از این وقت برای مرور و تمرین بیشتر استفاده کن.</p>
+          {% endif %}
+        {% else %}
+          <p class="rdy-note">تاریخ هدفی تعیین نکرده‌ای، پس برنامهٔ زمانی نمی‌سازیم — تاریخ از خودمان درنمی‌آوریم. اگر تاریخی بگذاری، همین‌جا می‌گوییم هفته‌ای چند درس لازم داری.</p>
+        {% endif %}
+      {% else %}
+        <p class="rdy-note">هنوز هدفی تعیین نکرده‌ای. با تعیین هدف (سطح فعلی، سطح هدف، دلیل و تاریخ دلخواه) این صفحه می‌تواند بگوید چقدر از مسیر مانده و با چه سرعتی.</p>
+      {% endif %}
+    </section>
+
+    {# ---- 2. the course ------------------------------------------------- #}
+    <section class="panel rdy-section" aria-labelledby="rdy-course-title">
+      <div class="rdy-bar">
+        <h2 id="rdy-course-title">پیشرفت دوره</h2>
+        <span class="rdy-bar__value">{{ readiness.course.completed }} از {{ readiness.course.total }} درس</span>
+      </div>
+      <div class="progress" role="progressbar" aria-labelledby="rdy-course-title"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ readiness.course.percent }}">
+        <span class="progress__fill" style="width:{{ readiness.course.percent }}%"></span>
+      </div>
+      <p class="rdy-note">
+        {% if readiness.course.remaining %}
+          {{ readiness.course.remaining }} درس و حدود {{ readiness.course.minutes_remaining }} دقیقه محتوا باقی مانده است.
+        {% else %}
+          همهٔ درس‌های منتشرشده را کامل کرده‌ای.
+        {% endif %}
+        «پیشرفت» در این محصول همیشه یعنی درسِ کامل‌شده — همان عددی که در داشبورد و مسیر یادگیری هم می‌بینی.
+      </p>
+      <a class="rdy-link" href="{% url 'lessons:lesson-list' %}">مسیر یادگیری</a>
+    </section>
+
+    {# ---- 3. the exercises ---------------------------------------------- #}
+    <section class="panel rdy-section" aria-labelledby="rdy-exercise-title">
+      <div class="rdy-bar">
+        <h2 id="rdy-exercise-title">عملکرد تمرین‌ها</h2>
+        <span class="rdy-bar__value">
+          {% if readiness.exercises.answered %}دقت: {{ readiness.exercises.percent }}٪{% else %}هنوز پاسخی ثبت نشده{% endif %}
+        </span>
+      </div>
+      <dl class="rdy-facts">
+        <div>
+          <dt>پرسش‌های پاسخ‌داده‌شده</dt>
+          <dd>{{ readiness.exercises.answered }} از {{ readiness.exercises.questions_total }}</dd>
+        </div>
+        <div>
+          <dt>پاسخ درست</dt>
+          <dd>{{ readiness.exercises.correct }}</dd>
+        </div>
+        <div>
+          <dt>تمرین‌های شروع‌شده</dt>
+          <dd>{{ readiness.exercises.exercises_attempted }} از {{ readiness.exercises.exercises_total }}</dd>
+        </div>
+      </dl>
+      <details class="more">
+        <summary>دقت چطور حساب می‌شود؟</summary>
+        <div class="more__body">
+          <p>دقت یعنی از پرسش‌هایی که پاسخ داده‌ای چند تا درست بوده — نه از کل پرسش‌های دوره. اگر پرسشی را چند بار جواب داده باشی، فقط آخرین تلاش شمرده می‌شود.</p>
+        </div>
+      </details>
+      <a class="rdy-link" href="{% url 'exercises:exercise-list' %}">تمرین‌ها</a>
+    </section>
+
+    {# ---- 4. the vocabulary --------------------------------------------- #}
+    <section class="panel rdy-section" aria-labelledby="rdy-vocab-title">
+      <div class="rdy-bar">
+        <h2 id="rdy-vocab-title">واژگان</h2>
+        <span class="rdy-bar__value">{{ readiness.vocabulary.tested }} از {{ readiness.vocabulary.words_total }} واژهٔ دوره</span>
+      </div>
+
+      {% if readiness.vocabulary.tested %}
+        <div class="progress" role="progressbar" aria-labelledby="rdy-vocab-title"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ readiness.vocabulary.percent }}">
+          <span class="progress__fill" style="width:{{ readiness.vocabulary.percent }}%"></span>
+        </div>
+        <dl class="rdy-facts">
+          <div>
+            <dt>درست‌تر از غلط پاسخ داده‌ای</dt>
+            <dd>{{ readiness.vocabulary.remembered }} واژه ({{ readiness.vocabulary.percent }}٪)</dd>
+          </div>
+          <div>
+            <dt>در فهرست مرور تو</dt>
+            <dd>{{ readiness.weak_word_count }} واژه</dd>
+          </div>
+          <div>
+            <dt>هنوز آزموده نشده</dt>
+            <dd>{{ readiness.vocabulary.words_untested }} واژه</dd>
+          </div>
+        </dl>
+        <details class="more">
+          <summary>«درست‌تر از غلط» یعنی چه؟</summary>
+          <div class="more__body">
+            <p>«درست‌تر از غلط» یک مقایسهٔ ساده بین دو شمارندهٔ ثبت‌شدهٔ خودت است، نه یک درجهٔ تسلط. واژه‌ای که بیشتر غلط زده باشی در فهرست مرور می‌آید.</p>
+          </div>
+        </details>
+        <a class="rdy-link" href="{% url 'vocabulary:word-review' %}">مرور واژه‌های دشوار</a>
+      {% else %}
+        <p class="rdy-note">هنوز در هیچ تمرینی روی واژه‌ای سنجیده نشده‌ای. اولین تمرین را بزن تا این بخش از پاسخ‌های خودت پر شود.</p>
+        <a class="rdy-link" href="{% url 'exercises:exercise-list' %}">تمرین‌ها</a>
+      {% endif %}
+    </section>
+
+    {# ---- 5. the grammar ---------------------------------------------- #}
+    <section class="panel rdy-section" aria-labelledby="rdy-grammar-title">
+      <div class="rdy-bar">
+        <h2 id="rdy-grammar-title">قواعد</h2>
+        <span class="rdy-bar__value">{{ readiness.grammar.topics_practised }} از {{ readiness.grammar.topics_total }} موضوع</span>
+      </div>
+
+      {% if readiness.grammar.answered %}
+        <dl class="rdy-facts">
+          <div>
+            <dt>سؤال قواعدی پاسخ‌داده‌شده</dt>
+            <dd>{{ readiness.grammar.answered }} از {{ readiness.grammar.questions_total }}</dd>
+          </div>
+          <div>
+            <dt>پاسخ درست</dt>
+            <dd>{{ readiness.grammar.correct }}</dd>
+          </div>
+          <div>
+            <dt>موضوع‌های تمرین‌شده</dt>
+            <dd>{{ readiness.grammar.topics_practised }} موضوع</dd>
+          </div>
+          {% if readiness.weak_grammar_count %}
+            <div>
+              <dt>قاعده‌های نیازمند مرور</dt>
+              <dd>{{ readiness.weak_grammar_count }} قاعده</dd>
+            </div>
+          {% endif %}
+        </dl>
+        {% if readiness.weak_grammar_topics %}
+          <div class="rdy-weak-grammar">
+            <span class="rdy-weak-grammar__label">قاعده‌هایی که اخیراً اشتباه زدی:</span>
+            <ul class="rdy-weak-grammar__list">
+              {% for topic in readiness.weak_grammar_topics %}
+                <li class="rdy-weak-grammar__item">
+                  <span class="rdy-weak-grammar__name" lang="de" dir="ltr">{{ topic.grammar.title }}</span>
+                  <span class="vstat vstat--wrong">غلط: {{ topic.wrong }}</span>
+                  {% if topic.practice_exercise %}
+                    <a class="rdy-weak-grammar__link" href="{% url 'exercises:exercise-detail' topic.practice_exercise.pk %}">تمرین این قاعده ←</a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+        <p class="rdy-note">دقت قواعد {{ readiness.grammar.percent }}٪ است.</p>
+        <details class="more">
+          <summary>این عدد چطور از واژگان جدا می‌شود؟</summary>
+          <div class="more__body">
+            <p>فقط سؤال‌هایی شمرده می‌شوند که واقعاً به یک قاعده مربوط‌اند — تمرین‌های معنیِ واژه در این عدد نیستند — و هر سؤال به همان قاعده‌ای چسبیده که می‌پرسد، پس این عدد گرامر است و نه واژگان با نام دیگر.</p>
+          </div>
+        </details>
+        <a class="rdy-link" href="{% url 'vocabulary:word-review' %}#grammar">مرور اشتباه‌های قواعد</a>
+      {% else %}
+        <p class="rdy-note">هنوز در هیچ تمرینی روی قاعده‌ای سنجیده نشده‌ای. تمرین‌های «آرتیکل»، «جمع» و «Perfekt» در درس‌ها همین بخش را پر می‌کنند.</p>
+        <a class="rdy-link" href="{% url 'exercises:exercise-list' %}">تمرین‌ها</a>
+      {% endif %}
+    </section>
+
+    {# ---- 6. what this page does not say --------------------------------- #}
+    {% comment %}The honest half. These are computed gaps, not disclaimers: the learner can
+       see the real numbers behind every "we cannot tell you that yet".{% endcomment %}
+    {% comment %}The honest half, as a disclosure rather than a wall. The headline claim stays on
+       screen — «هیچ سطحی را تأیید نمی‌کند» is the single thing a learner must not misread —
+       and the computed gaps that back it up are one tap away.{% endcomment %}
+    <section class="rdy-gaps" aria-labelledby="rdy-gaps-title">
+      <h2 id="rdy-gaps-title">این صفحه چه چیزی را نمی‌گوید</h2>
+      <p class="rdy-note">هیچ سطحی (A1/B1) را تأیید نمی‌کند و گفتن و نوشتن را نمی‌سنجد؛ کاری که می‌کند این است که نشان می‌دهد در همین محتوا چقدر جلو رفته‌ای و کجاها ضعیف‌تری.</p>
+      <details class="more">
+        <summary>فهرست کامل چیزهایی که این صفحه نمی‌گوید</summary>
+        <div class="more__body">
+          <ul class="rdy-gaps__list">
+        <li>هیچ سطحی (A1/B1) را تأیید نمی‌کند. این عددها دربارهٔ محتوای همین دوره و عملکرد تو در آن هستند، نه گواهی زبان.</li>
+        <li>گفتن و نوشتن <b>نمره</b> نمی‌گیرد: نوشتن به شکل پاسخ‌های تایپی تمرین می‌شود — نه نوشتن آزاد — و گفتن فقط در صفحهٔ تمرین گفتار تمرین می‌شود، نه سنجیده می‌شود. پس هیچ عددی اینجا از تولید زبان ساخته نشده است.</li>
+        {% if readiness.coverage.uncovered %}
+          <li>{{ readiness.coverage.uncovered }} واژه از {{ readiness.coverage.total }} واژهٔ این دوره را هیچ پرسشی نمی‌سنجد، پس دربارهٔ آن‌ها نمی‌توانیم چیزی بگوییم.</li>
+        {% endif %}
+        {% if readiness.grammar_coverage.uncovered %}
+          <li>{{ readiness.grammar_coverage.uncovered }} موضوع از {{ readiness.grammar_coverage.total }} موضوع گرامرِ این دوره هیچ سؤالی ندارد، پس گرامر آن موضوع‌ها در عددهای بالا نیست.</li>
+        {% endif %}
+            <li>هنوز {{ readiness.exercises.questions_remaining }} پرسش را پاسخ نداده‌ای؛ تا پاسخ نداده باشی، هیچ‌چیز دربارهٔ آن‌ها نمی‌دانیم.</li>
+            {% if readiness.goal and readiness.goal.target_level and not readiness.goal.covers_target %}
+              <li>برای سطح <bdi>{{ readiness.goal.target_level }}</bdi> هنوز درسی ساخته نشده، پس این صفحه نمی‌تواند مسیر رسیدن به آن را اندازه بگیرد.</li>
+            {% endif %}
+          </ul>
+          <p>برای سنجش واقعی سطح، آزمون رسمی (Goethe یا telc) لازم است.</p>
+        </div>
+      </details>
+    </section>
+  {% endif %}
+</div>
+{% endblock %}

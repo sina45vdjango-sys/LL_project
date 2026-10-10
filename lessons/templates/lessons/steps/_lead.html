@@ -1,9 +1,13 @@
 {% comment %}A prose lead-in shared by the vocabulary, grammar, examples and dialogue
-   steps. Renders nothing when the lesson has no block of that type.{% endcomment %}
+   steps. Renders nothing when the lesson has no block of that type.
+
+   `split_lists` belongs to the vocabulary step alone: its authored body keeps the words
+   in one long `·`-separated line, and one word per line is what that text already means.
+   See the `list_lines` filter.{% endcomment %}
 {% if step.blocks %}
 <div class="step-lead">
   {% for block in step.blocks %}
-    {% include "lessons/steps/_block.html" with block=block %}
+    {% include "lessons/steps/_block.html" with block=block split_lists=split_lists suppress_block_body=suppress_block_body %}
   {% endfor %}
 </div>
 {% endif %}

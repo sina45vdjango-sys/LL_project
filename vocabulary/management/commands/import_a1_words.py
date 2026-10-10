@@ -7,6 +7,15 @@ The word data lives in JSON files under ``vocabulary/data/`` and is loaded with:
 Audio is produced once per distinct spoken text with Microsoft Edge TTS and then
 written to ``MEDIA_ROOT/words/audio/``. After that the files are served locally
 by Django -- no internet connection is needed to use them.
+
+The JSON files are the **source of truth**. Every field they carry is written on every
+import, so a re-import is also how a row that drifted out of step gets corrected. One
+field is not written from the file but read off the other fields of the same entry:
+``Word.is_exam_important``, which marks the forms the A1 exam asks the learner to produce
+(see ``exam_important``). Use ``--check`` to see the differences without writing
+anything::
+
+    python manage.py import_a1_words --check
 """
 
 import asyncio
@@ -19,11 +28,13 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
 from lessons.models import LanguageLevel
+from vocabulary import audio
 from vocabulary.models import Word
 
 DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
-DEFAULT_VOICE = "de-DE-KatjaNeural"
+#: The voice comes from ``vocabulary.audio``; ``--voice`` can still override it.
+DEFAULT_VOICE = audio.VOICE
 
 #: level -> (title, order)
 LEVELS = {
@@ -87,6 +98,31 @@ def spoken_text(entry, word_type):
     return word
 
 
+def exam_important(entry, word_type):
+    """Is this a word the exam asks the learner to *produce* rather than recognise?
+
+    The three forms below are the ones an A1 candidate has to get right themselves, and
+    the ones the lesson vocabulary step marks «مهم برای آزمون»: a separable verb (the
+    prefix has to be put in the right place at the end of the clause), a verb whose
+    perfect takes ``sein``, and a noun whose plural adds an umlaut (``das Haus – die
+    Häuser``). Nothing here is a judgement call: every one of them is read off the
+    word's own row, so re-importing keeps the flag in step with the data.
+    """
+    if entry.get("separable"):
+        return True
+
+    if (entry.get("aux") or "").lower() == "sein":
+        return True
+
+    if word_type == "NOUN":
+        plural = entry.get("plural") or ""
+        for letter in ("ä", "ö", "ü"):
+            if letter in plural:
+                return True
+
+    return False
+
+
 class Command(BaseCommand):
     help = "Import A1 words from vocabulary/data/*.json and generate their audio."
 
@@ -123,6 +159,11 @@ class Command(BaseCommand):
             "--unpublished",
             action="store_true",
             help="Leave the imported words unpublished.",
+        )
+        parser.add_argument(
+            "--check",
+            action="store_true",
+            help="Compare the data files with the database, report the differences, write nothing.",
         )
 
     # ------------------------------------------------------------------ helpers
@@ -162,6 +203,73 @@ class Command(BaseCommand):
                 entries.append(item)
         return entries
 
+    def check_consistency(self, entries, level):
+        """Report where the data files and the database disagree, and write nothing.
+
+        The files are the source of truth, so every line printed here is something a real
+        import would change. Run this first to see what an import is about to do.
+        """
+        in_file = {}
+        for entry in entries:
+            raw_type = (entry.get("type") or "OTHER").upper()
+            if raw_type not in TYPE_MAP:
+                raw_type = "OTHER"
+            in_file[(entry["word"], TYPE_MAP[raw_type])] = entry
+
+        in_database = {}
+        for word in Word.objects.filter(level=level):
+            in_database[(word.word, word.word_type)] = word
+
+        differences = 0
+
+        for key in sorted(in_file):
+            text, type_name = key
+            entry = in_file[key]
+
+            if key not in in_database:
+                self.stdout.write(f"  only in the files     {text} :: {type_name}")
+                differences += 1
+                continue
+
+            row = in_database[key]
+
+            file_fa = (entry.get("fa") or "").strip()
+            if file_fa != row.meaning_fa:
+                self.stdout.write(f"  different meaning_fa  {text} :: {type_name}")
+                self.stdout.write(f"      file: {file_fa}")
+                self.stdout.write(f"      db  : {row.meaning_fa}")
+                differences += 1
+
+            gender = entry.get("gender") or None
+            if gender:
+                gender = GENDER_MAP.get(gender.upper())
+            if type_name != "NOUN":
+                gender = None
+
+            if gender != row.gender:
+                self.stdout.write(f"  different gender      {text} :: {type_name}")
+                self.stdout.write(f"      file: {gender}")
+                self.stdout.write(f"      db  : {row.gender}")
+                differences += 1
+
+        for key in sorted(in_database):
+            if key not in in_file:
+                self.stdout.write(f"  only in the database  {key[0]} :: {key[1]}")
+                differences += 1
+
+        self.stdout.write(
+            f"Files: {len(in_file)} entries · database: {len(in_database)} rows for {level.level}."
+        )
+
+        if differences == 0:
+            self.stdout.write(self.style.SUCCESS("The files and the database agree."))
+        else:
+            self.stdout.write(
+                self.style.WARNING(
+                    f"{differences} difference(s). The files are the source of truth."
+                )
+            )
+
     # ------------------------------------------------------------------- import
 
     def import_words(self, entries, level, publish):
@@ -182,6 +290,11 @@ class Command(BaseCommand):
                 gender = None
 
             defaults = {
+                # Gender sits in defaults rather than in the lookup below. `(word, word_type)`
+                # is unique in both the files and the database, so matching on it means a
+                # re-import corrects a gender that drifted out of step instead of adding a
+                # second row for the same word.
+                "gender": gender,
                 "article": entry.get("article", "") or "",
                 "plural": entry.get("plural") or None,
                 "meaning_fa": entry.get("fa", "").strip(),
@@ -189,10 +302,11 @@ class Command(BaseCommand):
                 "pronunciation": entry.get("ipa", "") or "",
                 "is_separable": bool(entry.get("separable", False)),
                 "perfect_auxiliary": AUX_MAP.get((entry.get("aux") or "").lower()),
+                "is_exam_important": exam_important(entry, raw_type),
                 "is_published": publish,
             }
 
-            key = (entry["word"], TYPE_MAP[raw_type], gender)
+            key = (entry["word"], TYPE_MAP[raw_type])
             if key in seen:
                 skipped += 1
                 continue
@@ -201,7 +315,6 @@ class Command(BaseCommand):
             word, was_created = Word.objects.update_or_create(
                 word=entry["word"],
                 word_type=TYPE_MAP[raw_type],
-                gender=gender,
                 level=level,
                 defaults=defaults,
             )
@@ -280,7 +393,7 @@ class Command(BaseCommand):
                 # Up to three attempts: the TTS service can hiccup or answer empty.
                 for attempt in range(3):
                     try:
-                        communicate = edge_tts.Communicate(text, voice)
+                        communicate = edge_tts.Communicate(text, voice, rate=audio.RATE)
                         await communicate.save(str(path))
                         if path.stat().st_size > 0:
                             rendered = True
@@ -320,6 +433,10 @@ class Command(BaseCommand):
 
         level = self.get_level(options["level"])
         publish = not options["unpublished"]
+
+        if options["check"]:
+            self.check_consistency(entries, level)
+            return
 
         self.stdout.write(f"Loading {len(entries)} defined entries from {len(files)} file(s).")
         created, updated, skipped = self.import_words(entries, level, publish)

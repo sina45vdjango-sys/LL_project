@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}جلسهٔ امروز | {{ brand.name }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'exercises/css/exercise.css' %}">
+{% endblock %}
+{% block content_class %}content--exercise{% endblock %}
+{% block content %}
+{% comment %}«جلسهٔ امروز»: today's practice as one short sitting instead of the lesson's
+   exercise wall. Which questions are asked — how many, one per word, kinds interleaved,
+   nothing already done today — is decided in exercises/session.py; this page only shows
+   it. The runner itself is the shared partial, so grading, hint fetching, XP and the
+   result screen are the same code the exercise page runs, not a second copy.{% endcomment %}
+<div class="exercise-page">
+  <a class="exercise-back" href="{% url 'lessons:practice-path' %}">
+    ← <span>مسیر امروز</span>
+  </a>
+
+  <header class="exercise-head">
+    <p class="exercise-head__meta">
+      <span class="chip chip--accent">جلسهٔ امروز</span>
+      {% for skill in skills %}<span class="chip">{{ skill }}</span>{% endfor %}
+    </p>
+    {% if lesson %}
+      <h1 class="exercise-head__title">{{ lesson.display_title }}</h1>
+    {% else %}
+      <h1 class="exercise-head__title">جلسهٔ امروز</h1>
+    {% endif %}
+    {% if questions %}
+      <p class="exercise-head__instruction">
+        یک جلسهٔ کوتاه: {{ goal }} پرسش از این درس، هر واژه یک بار و از نوع‌های گوناگون.
+      </p>
+    {% endif %}
+  </header>
+
+  {% if questions %}
+    {% url 'lessons:practice-path' as runner_back_url %}
+    {% include "exercises/_runner.html" with results_eyebrow="جلسهٔ امروز تمام شد" results_title="نتیجهٔ جلسهٔ امروز" back_url=runner_back_url back_label="بازگشت به مسیر امروز" second_try=1 %}
+  {% else %}
+    <section class="exercise-empty">
+      {% if lesson %}
+        <h2>امروز این درس تمام شد.</h2>
+        <p>
+          تمرین‌های این درس را برای امروز انجام داده‌ای. جلسه عمداً کوچک است تا هر روز
+          یک تکهٔ تمام‌شدنی باشد، نه یک فهرست بی‌پایان. فردا برگرد؛ اگر امروز بیشتر
+          می‌خواهی، فهرست کامل تمرین‌های درس باز است.
+        </p>
+        <p class="exercise-empty__actions">
+          <a class="btn btn--primary" href="{% url 'exercises:exercise-list' %}?lesson={{ lesson.pk }}">همهٔ تمرین‌های درس</a>
+          <a class="btn" href="{% url 'lessons:practice-path' %}">مسیر امروز</a>
+        </p>
+      {% else %}
+        <h2>برای امروز درسی نمانده است.</h2>
+        <p>همهٔ درس‌های منتشرشده را تمام کرده‌ای، یا هنوز محتوایی منتشر نشده است.</p>
+        <a class="btn" href="{% url 'lessons:lesson-list' %}">مسیر یادگیری</a>
+      {% endif %}
+    </section>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'exercises/js/exercise_runner.js' %}" defer></script>
+{% endblock %}

@@ -1,6 +1,12 @@
 {% comment %}Shared by the examples, dialogue, reading and listening steps: the only
-   difference between them is the LessonSentence role the journey selected.{% endcomment %}
-{% include "lessons/steps/_lead.html" %}
+   difference between them is the LessonSentence role the journey selected.
+
+   The lead-in is asked for its heading only. The examples and dialogue steps hold the
+   same sentences twice — once authored as a content block and once as LessonSentence
+   rows — and the rows are the better rendering (audio, speaker, separated translation,
+   word lookup). Without this flag the learner read the whole list twice. The block's
+   German heading survives because it names the scene.{% endcomment %}
+{% include "lessons/steps/_lead.html" with suppress_block_body=True %}
 
 {% if step.sentences %}
   <ul class="sentence-list">

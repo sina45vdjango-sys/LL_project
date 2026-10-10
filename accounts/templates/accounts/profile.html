@@ -12,6 +12,20 @@
     </div>
   </header>
 
+  {% comment %}A new learner lands here the moment the account is made, so this page has to
+     tell them the one thing that turns the product on. Without a goal there is no countdown
+     and «امروز» has nothing to aim at, so the goal is the only call to action that matters
+     and it gets its own block rather than one button among five. An existing goal replaces
+     it with the summary below — «ویرایش هدف» in the actions is then the calm way back in.{% endcomment %}
+  {% if not has_goal %}
+    <section class="panel goal-cta" aria-labelledby="goal-cta-title">
+      <p class="auth__eyebrow">اولین قدم</p>
+      <h2 class="goal-cta__title" id="goal-cta-title">هدف یادگیری‌ات را بگو</h2>
+      <p class="auth__intro">بدون هدف، «امروز» نمی‌داند تو را به کدام سمت ببرد و شمارش روزهای مانده معنا ندارد. با یک بار گفتن سطح فعلی، سطح هدف و تاریخ امتحان، صفحهٔ «امروز» نشان می‌دهد امروز دقیقاً چه کاری تو را جلو می‌برد.</p>
+      <a class="btn btn--primary" href="{% url 'accounts:goal' %}">تعیین هدف</a>
+    </section>
+  {% endif %}
+
   <section class="panel" aria-label="اطلاعات حساب">
     <dl class="detail-list">
       <div><dt>نام کاربری</dt><dd><bdi>{{ user.get_username }}</bdi></dd></div>
@@ -25,14 +39,50 @@
         <dd>{% if profile.current_level %}<bdi>{{ profile.current_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
       </div>
       <div>
+        <dt>سطح هدف</dt>
+        <dd>{% if profile.target_level %}<bdi>{{ profile.target_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
+      </div>
+      <div>
+        <dt>دلیل یادگیری</dt>
+        <dd>{% if profile.reason_label %}{{ profile.reason_label }}{% else %}<span class="muted">گفته نشده</span>{% endif %}</dd>
+      </div>
+      <div>
+        <dt>تاریخ هدف</dt>
+        <dd>{% if profile.target_date %}{{ profile.target_date|jalali }}{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
+      </div>
+      <div>
         <dt>زبان مادری</dt>
         <dd>{% if profile.native_language == "fa" %}فارسی{% else %}<bdi>{{ profile.native_language }}</bdi>{% endif %}</dd>
       </div>
     </dl>
   </section>
 
+  <section class="panel" aria-labelledby="theme-heading">
+    <h2 class="auth__eyebrow" id="theme-heading">پوستهٔ نمایش</h2>
+    <p class="field__hint">روی حساب تو ذخیره می‌شود، پس در هر دستگاهی که وارد شوی همان می‌ماند. «سیستم» یعنی از تنظیم روشن/تاریک دستگاه پیروی کن.</p>
+    <form class="theme-form" method="post" action="{% url 'accounts:theme' %}">
+      {% csrf_token %}
+      <fieldset class="theme-form__fieldset">
+        <legend class="field__label">انتخاب پوسته</legend>
+        <div class="theme-form__options">
+          {% for option in theme_options %}
+            <label class="theme-option">
+              <input type="radio" name="theme" value="{{ option.value }}"{% if profile.theme == option.value %} checked{% endif %}>
+              <span class="theme-option__label">{{ option.label }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+      <button class="btn btn--primary" type="submit">ذخیرهٔ پوسته</button>
+    </form>
+  </section>
+
   <div class="auth__actions">
-    <a class="btn btn--primary" href="{{ home_url }}">ادامهٔ یادگیری</a>
+    <a class="btn btn--primary" href="{% url 'readiness' %}">آمادگی من</a>
+    {% if has_goal %}
+      <a class="btn" href="{% url 'accounts:goal' %}">ویرایش هدف</a>
+    {% endif %}
+    <a class="btn" href="{{ home_url }}">ادامهٔ یادگیری</a>
     <form method="post" action="{% url 'accounts:logout' %}">
       {% csrf_token %}
       <button class="btn" type="submit">خروج از حساب</button>

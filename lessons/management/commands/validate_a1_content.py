@@ -195,8 +195,23 @@ class Command(BaseCommand):
 
         # ------------------------------------------------------------ word data
         word_problems = []
+        plural_only_nouns = []
         for word in Word.objects.filter(level=level):
-            if word.word_type == Word.WordType.NOUN:
+            # A Pluraletantum — die Eltern, die Ferien, die Leute — exists only in the
+            # plural, so it has no gender for its article to agree with. Its own shape says
+            # so: no gender, the article «die», and no second form to list (the plural column
+            # is either empty or simply repeats the word). That shape is correct, so it is
+            # checked as its own case instead of being reported as a mismatch — while a noun
+            # that is merely missing its gender still fails the check below.
+            plural_only = (
+                word.word_type == Word.WordType.NOUN
+                and not word.gender
+                and word.article == "die"
+                and (not word.plural or word.plural == f"die {word.word}")
+            )
+            if plural_only:
+                plural_only_nouns.append(word.word)
+            elif word.word_type == Word.WordType.NOUN:
                 expected = {"der": "M", "die": "F", "das": "N"}.get(word.article)
                 if expected is None:
                     word_problems.append(f"noun without a valid article: {word.word!r} ({word.article!r})")
@@ -217,6 +232,11 @@ class Command(BaseCommand):
                 word_problems.append(f"verb without haben/sein: {word.word!r}")
             if not word.meaning_fa.strip():
                 word_problems.append(f"word without a Persian meaning: {word.word!r}")
+        if plural_only_nouns:
+            notes.append(
+                "plural-only nouns have no gender by definition: "
+                + ", ".join(f"die {word}" for word in plural_only_nouns)
+            )
         check("German word data is consistent", word_problems[:show])
 
         # ------------------------------------------------------------------ report

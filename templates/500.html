@@ -9,11 +9,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark">
+  <meta name="color-scheme" content="light dark">
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#0f1116">
+  {% comment %}No request context means no profile, so there is no saved theme to read and
+     no `theme_mode` to render. Following the operating system is the only honest option
+     here, and it still avoids painting a light page on a dark desktop.{% endcomment %}
+  <script>
+    (() => {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    })();
+  </script>
   <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
-  <title>خطای سرور | گام‌به‌گام</title>
+  <title>خطای سرور | ولینگو</title>
   <link rel="stylesheet" href="{% static 'css/base.css' %}">
   <link rel="stylesheet" href="{% static 'css/components.css' %}">
 </head>
@@ -21,7 +29,7 @@
   <main class="content" id="main-content">
     <section class="error-page">
       <p class="error-page__code">۵۰۰</p>
-      <h1 class="error-page__title" dir="auto">مشکلی پیش آمد.</h1>
+      <h1 class="error-page__title">مشکلی پیش آمد.</h1>
       <p class="error-page__text">
         خطای غیرمنتظره‌ای در سرور رخ داد و این صفحه ساخته نشد.
         یک‌بار دیگر تلاش کن؛ اگر باز هم همین پیام را دیدی، خبر بده تا بررسی کنیم.
@@ -29,6 +37,18 @@
       <div class="error-page__actions">
         <a class="btn btn--primary" href="/">بازگشت به داشبورد</a>
       </div>
+      {% comment %}The chrome colour comes from --bg, not from a literal, so it cannot
+         drift from the palette. See the longer note in base.html.{% endcomment %}
+      <script>
+        (() => {
+          const background = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+          if (!background) { return; }
+          const meta = document.createElement('meta');
+          meta.name = 'theme-color';
+          meta.content = background;
+          document.head.appendChild(meta);
+        })();
+      </script>
     </section>
   </main>
 </body>

@@ -1,0 +1,33 @@
+{
+  "level": "B1",
+  "topic": "nouns",
+  "words": [
+    {
+      "word": "Fernsehen",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": null,
+      "fa": "تلویزیون (رسانه، برنامه)",
+      "en": "television"
+    },
+    {
+      "word": "Hendl",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Hendln",
+      "fa": "مرغ (اتریش)",
+      "en": "chicken (A)"
+    },
+    {
+      "word": "Wissen",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": null,
+      "fa": "دانش، آگاهی",
+      "en": "knowledge"
+    }
+  ]
+}

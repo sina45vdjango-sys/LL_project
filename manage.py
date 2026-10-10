@@ -6,7 +6,12 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+    # MIRROR ONLY -- not part of the real project. This copy defaults to
+    # config.settings_mirror so every command here talks to the throwaway
+    # language_learning_mirror database. Without it, a forgotten `manage.py`
+    # command would write to the real project's database. Set
+    # DJANGO_SETTINGS_MODULE=config.settings yourself to reach the real one.
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings_mirror')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

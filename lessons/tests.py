@@ -1040,6 +1040,7 @@ class ReadinessCalculationTests(ReadinessFixture):
         self.assertEqual(review["wrong_topic_count"], 1)
         self.assertEqual(len(review["exercises"]), 1)
         self.assertEqual(review["exercise_count"], 2)
+        self.assertIsNotNone(review["topics"][0]["practice_exercise"])
 
     def test_a_learner_with_no_goal_has_none(self):
         self.assertIsNone(goal_of(None))
@@ -1084,6 +1085,9 @@ class ReadinessCalculationTests(ReadinessFixture):
         self.assertEqual(data["grammar_coverage"]["covered"], 1)
         # Same definition as the review page: a word with a wrong answer is a word to review.
         self.assertEqual(data["weak_word_count"], 1)
+        self.assertEqual(data["weak_grammar_count"], 1)
+        self.assertEqual(len(data["weak_grammar_topics"]), 1)
+        self.assertEqual(data["weak_grammar_topics"][0]["practice_exercise"], self.grammar_exercise)
         self.assertIsNone(data["goal"])
         self.assertIsNone(data["pace"])
 
@@ -1342,6 +1346,16 @@ class ReadinessPageTests(ReadinessFixture):
         self.assertContains(response, "محتوای ساخته‌شده فعلاً تا")
         self.assertContains(response, "هنوز درسی ساخته نشده")
 
+    def test_learner_with_grammar_mistakes_sees_weak_grammar_topics_with_practice_link(self):
+        self.answer_grammar(self.user, False)
+        self.client.force_login(self.user)
+        response = self.client.get(self.url)
+        self.assertContains(response, "قاعده‌های نیازمند مرور")
+        self.assertContains(response, "قاعده‌هایی که اخیراً اشتباه زدی:")
+        self.assertContains(response, self.grammar.title)
+        self.assertContains(response, reverse("exercises:exercise-detail", args=[self.grammar_exercise.pk]))
+        self.assertContains(response, reverse("vocabulary:word-review") + "#grammar")
+
 
 class GrammarReviewPageTests(ReadinessFixture):
     """The review page's rule half: a mistake the product stored and never showed.
@@ -1370,6 +1384,7 @@ class GrammarReviewPageTests(ReadinessFixture):
         self.assertContains(
             response, reverse("exercises:exercise-detail", args=[self.grammar_exercise.pk])
         )
+        self.assertContains(response, "تمرین این قاعده")
 
     def test_a_learner_who_got_every_rule_right_is_not_told_about_rules(self):
         self.answer_grammar(self.user, True)
@@ -2814,7 +2829,7 @@ class LessonFinishMistakesTests(ReadinessFixture):
         response = self.client.get(self.url)
 
         self.assertNotContains(response, "واژه‌هایی که در این درس اشتباه زدی")
-        self.assertNotContains(response, reverse("vocabulary:word-review"))
+        self.assertNotContains(response, "finish-missed__cta")
 
     def test_the_words_missed_in_this_lesson_are_named_and_practised(self):
         self.word_score(self.user, self.words[0], correct=0, wrong=2)
@@ -2840,6 +2855,12 @@ class LessonFinishMistakesTests(ReadinessFixture):
 
         self.assertEqual(other.context["lesson_mistakes"], [])
         self.assertNotContains(other, "واژه‌هایی که در این درس اشتباه زدی")
+
+    def test_finish_step_contains_srs_bridge_card(self):
+        response = self.client.get(self.url)
+        self.assertContains(response, "اتصال به سیستم مرور فاصله‌دار (SRS)")
+        self.assertContains(response, reverse("vocabulary:word-review"))
+        self.assertEqual(response.context["new_words_count"], 4)
 
 
 class SkillPathTests(TestCase):
@@ -2916,9 +2937,29 @@ class SkillPathTests(TestCase):
         for node in path["nodes"]:
             keys.append(node["key"])
 
-        self.assertEqual(keys, ["vocabulary", "grammar", "listening", "writing", "speaking", "test"])
+        self.assertEqual(keys, ["vocabulary", "grammar", "listening", "writing", "speaking"])
         # READING has no exercise in this lesson, so it is absent rather than empty.
         self.assertNotIn("reading", keys)
+
+    def test_the_step_test_waits_until_a_lesson_is_finished(self):
+        """A test measures what has been studied. On the first day that is nothing, so the
+        map does not offer one — and once a lesson is behind the learner it does."""
+        path = build_path(self.user, timezone.localdate())
+
+        self.assertFalse(path["test_ready"])
+        self.assertNotIn("test", [node["key"] for node in path["nodes"]])
+
+        Lesson.objects.create(
+            course=self.course, title="Lektion 2", title_fa="درس ۲",
+            is_published=True, order=2, estimated_time=10,
+        )
+        LessonProgress.objects.create(
+            user=self.user, lesson=self.lesson, status=LessonProgress.Status.COMPLETED
+        )
+        started = build_path(self.user, timezone.localdate())
+
+        self.assertTrue(started["test_ready"])
+        self.assertIn("test", [node["key"] for node in started["nodes"]])
 
     def test_the_goal_counts_only_the_practice_nodes_that_exist(self):
         path = build_path(self.user, timezone.localdate())
@@ -2926,7 +2967,16 @@ class SkillPathTests(TestCase):
         self.assertEqual(path["done"], 0)
 
     def test_speaking_and_the_test_sit_outside_the_goal(self):
-        """Speaking cannot be measured and the test is a whole sitting, not a drill."""
+        """Speaking cannot be measured and the test is a whole sitting, not a drill. The test
+        only joins the map once there is something to measure, so one lesson is finished and
+        a second one is waiting here."""
+        Lesson.objects.create(
+            course=self.course, title="Lektion 2", title_fa="درس ۲",
+            is_published=True, order=2, estimated_time=10,
+        )
+        LessonProgress.objects.create(
+            user=self.user, lesson=self.lesson, status=LessonProgress.Status.COMPLETED
+        )
         path = build_path(self.user, timezone.localdate())
         nodes = self.nodes_by_key(path["nodes"])
 
@@ -3068,7 +3118,9 @@ class SkillPathTests(TestCase):
         for node in path["nodes"]:
             states.append(node["state"])
 
-        self.assertEqual(states, ["now", "next", "next", "next", "side", "side"])
+        # The step test is not on the map until a lesson is finished, so the only "side"
+        # node here is the speaking rehearsal.
+        self.assertEqual(states, ["now", "next", "next", "next", "side"])
 
     def test_a_node_answered_today_is_done(self):
         ExerciseAttempt.objects.create(
@@ -3220,9 +3272,13 @@ class GuidedDayTests(SkillPathTests):
     """The guided day (``lessons/skill_path.py::day_steps``): read, practise, be measured.
 
     It reuses the path fixture because the day is built *from* the path — the same lesson
-    and the same done-count decide both. What is pinned here is the order of the three
-    steps, that an unfinished step is never claimed as finished, and that the single start
-    button resumes rather than restarts.
+    and the same done-count decide both. What is pinned here is the order of the steps, that
+    an unfinished step is never claimed as finished, that the day's goal can actually be
+    reached, and that the single start button resumes rather than restarts.
+
+    The step test is deliberately outside the goal — nothing about it is stored, so it can
+    never be marked as taken — and it is left off the day entirely until a lesson is
+    finished, because a test measures what has been studied.
 
     The lesson step is finished two ways on purpose: the row written by the journey's own
     button, and the plain fact of having reached the last step. The second one is what
@@ -3233,16 +3289,74 @@ class GuidedDayTests(SkillPathTests):
     def test_a_visitor_gets_no_guided_day(self):
         self.assertIsNone(day_steps(None, self.user, 12))
 
-    def test_the_three_steps_are_in_the_order_they_are_meant_to_be_done(self):
+    def test_the_first_day_is_read_then_practise(self):
+        """A learner who has finished nothing gets the two steps that first day is for; the
+        step test is not one of them."""
+        self.give_practice(self.lesson)
+        path = build_path(self.user, timezone.localdate())
+        day = day_steps(path, self.user, 12)
+
+        self.assertEqual([step["key"] for step in day["steps"]], ["lesson", "practice"])
+        # Sizes are the real ones, not a target invented for the page.
+        self.assertEqual(day["steps"][0]["size"], "10 دقیقه")
+        self.assertEqual(day["steps"][1]["size"], "1 پرسش")
+        self.assertEqual(day["goal"], 2)
+        self.assertEqual(day["finished"], 0)
+
+    def second_lesson(self):
+        """A second published lesson, so finishing the first leaves one to work on."""
+        return Lesson.objects.create(
+            course=self.course, title="Lektion 2", title_fa="درس ۲",
+            is_published=True, order=2, estimated_time=10,
+        )
+
+    def give_practice(self, lesson):
+        """One question of ``lesson`` that a session can really ask.
+
+        The path fixture's exercises carry no answers, so its lesson has nothing to practise
+        and therefore gets no practice step. The tests about that step give it something to
+        ask; one question is one topic, so one question is a whole sitting.
+        """
+        exercise = Exercise.objects.create(
+            lesson=lesson, title="تمرین", type=Exercise.ExerciseType.MULTIPLE_CHOICE,
+            order=9, is_published=True,
+        )
+        question = Question.objects.create(exercise=exercise, prompt="معنی؟", order=1)
+        Answer.objects.create(question=question, text="درست", is_correct=True, order=1)
+        Answer.objects.create(question=question, text="غلط", is_correct=False, order=2)
+        return question
+
+    def test_a_lesson_with_nothing_to_practise_gets_no_practice_step(self):
+        """A step with nothing behind it would be a dead link, which is the same reason the
+        skill map leaves a skill out rather than showing it empty."""
+        path = build_path(self.user, timezone.localdate())
+        day = day_steps(path, self.user, 12)
+
+        self.assertEqual([step["key"] for step in day["steps"]], ["lesson"])
+        self.assertEqual(day["goal"], 1)
+        self.assertEqual(day["start"]["key"], "lesson")
+
+    def test_the_step_test_joins_the_day_once_a_lesson_is_finished(self):
+        """It is shown, and it is *not* counted: nothing about the test is stored, so it can
+        never be ticked off, and a goal that included it could never be reached."""
+        self.give_practice(self.second_lesson())
+        LessonProgress.objects.create(
+            user=self.user, lesson=self.lesson, status=LessonProgress.Status.COMPLETED
+        )
+
         path = build_path(self.user, timezone.localdate())
         day = day_steps(path, self.user, 12)
 
         self.assertEqual(
             [step["key"] for step in day["steps"]], ["lesson", "practice", "test"]
         )
-        # Sizes are the real ones, not a target invented for the page.
-        self.assertEqual(day["steps"][0]["size"], "10 دقیقه")
         self.assertEqual(day["steps"][2]["size"], "12 پرسش")
+        self.assertFalse(day["steps"][2]["counted"])
+        self.assertFalse(day["steps"][2]["done"])
+        self.assertEqual(
+            [step["key"] for step in day["steps"] if step["counted"]],
+            ["lesson", "practice"],
+        )
 
     def test_a_new_learner_starts_at_the_lesson(self):
         path = build_path(self.user, timezone.localdate())
@@ -3269,13 +3383,16 @@ class GuidedDayTests(SkillPathTests):
         path = build_path(self.user, timezone.localdate())
         day = day_steps(path, self.user, 12)
 
-        self.assertNotIn("alt_url", day["steps"][1])
-        self.assertNotIn("alt_url", day["steps"][2])
+        for step in day["steps"]:
+            if step["key"] == "lesson":
+                continue
+            self.assertNotIn("alt_url", step)
 
     def test_a_finished_lesson_moves_the_start_to_practice(self):
         # The path is read first: this fixture has one lesson, so once it is completed there
         # is no lesson to work on and the day is empty (which the last test asserts). Here
         # the lesson is the one already chosen, and finishing it must move the start on.
+        self.give_practice(self.lesson)
         path = build_path(self.user, timezone.localdate())
         LessonProgress.objects.create(
             user=self.user, lesson=self.lesson, status=LessonProgress.Status.COMPLETED
@@ -3290,6 +3407,7 @@ class GuidedDayTests(SkillPathTests):
     def test_reaching_the_last_step_counts_as_reading_the_lesson(self):
         """The row records where the learner is; pressing the button is a separate, and
         optional, act. Reaching the finish step means every step was walked."""
+        self.give_practice(self.lesson)
         path = build_path(self.user, timezone.localdate())
         LessonProgress.objects.create(
             user=self.user,
@@ -3318,14 +3436,45 @@ class GuidedDayTests(SkillPathTests):
         self.assertFalse(day["steps"][0]["done"])
         self.assertEqual(day["start"]["key"], "lesson")
 
-    def test_the_step_test_is_never_claimed_as_finished(self):
-        """Nothing about the step test is stored, so it is never reported as done — and a
-        learner with nothing finished still starts at the lesson, not at the test."""
+    def test_the_day_can_reach_the_goal_it_prints(self):
+        """The reported flaw: the step test was counted but can never be finished, so the day
+        sat at «۲ از ۳» for ever and the button pointed back at the test. The goal counts only
+        the steps that can honestly be finished, so reading the lesson and doing its sitting
+        ends the day — and then there is nothing left to resume."""
+        question = self.give_practice(self.second_lesson())
+        LessonProgress.objects.create(
+            user=self.user, lesson=self.lesson, status=LessonProgress.Status.COMPLETED
+        )
         path = build_path(self.user, timezone.localdate())
+        today_lesson = path["lesson"]
+
         day = day_steps(path, self.user, 12)
 
-        self.assertFalse(day["steps"][2]["done"])
+        self.assertEqual(day["goal"], 2)
+        self.assertEqual(day["finished"], 0)
         self.assertEqual(day["start"]["key"], "lesson")
+
+        # Read the lesson (the stored row is what finishes that step), then answer its
+        # sitting — one question is one topic, so that one answer is the whole session.
+        LessonProgress.objects.create(
+            user=self.user, lesson=today_lesson,
+            status=LessonProgress.Status.IN_PROGRESS,
+            current_step=LessonProgress.Step.FINISH,
+        )
+        ExerciseAttempt.objects.create(
+            user=self.user, exercise=question.exercise, question=question,
+            answer=question.answers.get(is_correct=True), is_correct=True,
+        )
+
+        # Both the day and its practice step are built once per page load, so the next load
+        # is what sees the work — exactly what ``today_board`` does on every request.
+        day = day_steps(build_path(self.user, timezone.localdate()), self.user, 12)
+
+        self.assertEqual(day["finished"], day["goal"])
+        self.assertIsNone(day["start"])
+        # The test is still on the page — it is simply not part of the goal.
+        self.assertEqual(day["steps"][-1]["key"], "test")
+        self.assertFalse(day["steps"][-1]["counted"])
 
     def due_word(self):
         """A published word this learner is due to review (the scheduler's own input)."""
@@ -3380,13 +3529,12 @@ class GuidedDayTests(SkillPathTests):
         self.assertIn("اشتباه", day["steps"][0]["hint"])
 
     def test_nothing_due_leaves_the_day_as_it_was(self):
+        self.give_practice(self.lesson)
         path = build_path(self.user, timezone.localdate())
         day = day_steps(path, self.user, 12)
 
         self.assertEqual(path["due_count"], 0)
-        self.assertEqual(
-            [step["key"] for step in day["steps"]], ["lesson", "practice", "test"]
-        )
+        self.assertEqual([step["key"] for step in day["steps"]], ["lesson", "practice"])
 
     def test_a_finished_course_with_due_words_still_has_a_day(self):
         """A learner who finished the course used to get an empty day; the reviews that are

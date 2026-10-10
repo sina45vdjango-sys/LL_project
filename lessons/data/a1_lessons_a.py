@@ -24,7 +24,9 @@ LESSONS.append(
     {
         "order": 1,
         "title": "Hallo! Begrüßung und Vorstellung",
+        "title_fa": "سلام! سلام کردن و معرفی خود",
         "description": "سلام و خداحافظی، معرفی خود، پرسیدن اسم. English: greetings, introductions, asking for a name.",
+        "description_fa": "سلام و خداحافظی، معرفی خود، پرسیدن اسم.",
         "estimated_time": 45,
         "contents": [
             (
@@ -153,6 +155,11 @@ English: Introducing other people and confirming or denying an identity.""",
             "wer",
             "wo",
             "was",
+            "Problem",
+            "dir",
+            "mir",
+            "oder",
+            "und",
         ],
         "words_review": [],
         "grammar": [
@@ -188,7 +195,9 @@ LESSONS.append(
     {
         "order": 2,
         "title": "Länder, Sprachen und Herkunft",
+        "title_fa": "کشورها، زبان‌ها و اهل کجا بودن",
         "description": "از کجا آمدن، کجا زندگی کردن، زبان‌ها. English: countries, languages and where you are from.",
+        "description_fa": "از کجا آمدن، کجا زندگی کردن و چه زبان‌هایی دانستن.",
         "estimated_time": 60,
         "contents": [
             (
@@ -299,6 +308,9 @@ English: Sentences about origin, home town and languages.""",
             "in",
             "Woher kommst du?",
             "Sprechen Sie Englisch?",
+            "ein bisschen",
+            "ihr",
+            "wir",
         ],
         "words_review": ["hallo", "ich", "du", "sein", "wie", "wo", "was", "Name", "heißen"],
         "grammar": [
@@ -342,7 +354,9 @@ LESSONS.append(
     {
         "order": 3,
         "title": "Zahlen, Alphabet und Telefonnummern",
+        "title_fa": "شماره‌ها، الفبا و شمارهٔ تلفن",
         "description": "شماره‌ها، سن، قیمت و هجی کردن. English: numbers, age, prices, spelling and phone numbers.",
+        "description_fa": "شماره‌ها، گفتن سن، قیمت و هجی کردن اسم.",
         "estimated_time": 60,
         "contents": [
             (
@@ -463,6 +477,9 @@ English: Asking and giving prices, ages and phone numbers.""",
             "Jahr",
             "Euro",
             "haben",
+            "Alphabet",
+            "man",
+            "viel",
         ],
         "words_review": [
             "ich",
@@ -497,6 +514,7 @@ English: Asking and giving prices, ages and phone numbers.""",
             ("Meine Handynummer ist 0176 12345678.", "شماره موبایلم ۰۱۷۶ ۱۲۳۴۵۶۷۸ است.", "EXAMPLE", ""),
             ("Buchstabieren Sie bitte Ihren Namen.", "لطفاً نام خود را هجی کنید.", "EXAMPLE", ""),
             ("Wie schreibt man das?", "این را چطور می‌نویسند؟", "EXAMPLE", ""),
+            ("Ich bin 24 Jahre alt.", "۲۴ سال دارم.", "EXAMPLE", ""),
         ],
     }
 )
@@ -506,7 +524,9 @@ LESSONS.append(
     {
         "order": 4,
         "title": "Familie und Personen",
+        "title_fa": "خانواده و آدم‌ها",
         "description": "خانواده، وضعیت تأهل و مالکیت. English: family, marital status and possessive articles.",
+        "description_fa": "خانواده، وضعیت تأهل و مالکیت.",
         "estimated_time": 60,
         "contents": [
             (
@@ -629,6 +649,7 @@ English: Describing your own family.""",
             "alt",
             "jung",
             "geboren",
+            "Verwandte",
         ],
         "words_review": ["ich", "du", "sein", "haben", "wie viel", "Alter", "Jahr", "heißen", "Name", "wer"],
         "grammar": [
@@ -663,6 +684,8 @@ English: Describing your own family.""",
                 "EXAMPLE",
                 "",
             ),
+            ("Hast du Geschwister?", "خواهر یا برادر داری؟", "DIALOGUE", "Nina"),
+            ("Nein, leider nicht.", "نه، متأسفانه نه.", "DIALOGUE", "Omar"),
         ],
     }
 )
@@ -672,7 +695,9 @@ LESSONS.append(
     {
         "order": 5,
         "title": "Beruf und Arbeit",
+        "title_fa": "شغل و کار",
         "description": "شغل‌ها، محل کار و منفی کردن جمله. English: jobs, workplaces, and how to negate a sentence.",
+        "description_fa": "شغل‌ها، محل کار و منفی کردن جمله.",
         "estimated_time": 60,
         "contents": [
             (
@@ -755,6 +780,7 @@ English: Simple sentences about jobs, unemployment and where people work.""",
         "words_new": [
             "Beruf",
             "Arbeit",
+            "Arbeitsplatz",
             "Job",
             "Stelle",
             "Firma",
@@ -787,6 +813,7 @@ English: Simple sentences about jobs, unemployment and where people work.""",
             "machen",
             "nicht",
             "kein",
+            "klein",
         ],
         "words_review": [
             "ich",
@@ -826,6 +853,7 @@ English: Simple sentences about jobs, unemployment and where people work.""",
             ("Er arbeitet nicht.", "او کار نمی‌کند.", "EXAMPLE", ""),
             ("Die Ärztin arbeitet in Berlin.", "پزشک (زن) در برلین کار می‌کند.", "EXAMPLE", ""),
             ("Der Friseur arbeitet hier.", "آرایشگر اینجا کار می‌کند.", "EXAMPLE", ""),
+            ("Ich arbeite als Ingenieur.", "به‌عنوان مهندس کار می‌کنم.", "EXAMPLE", ""),
         ],
     }
 )
@@ -835,7 +863,9 @@ LESSONS.append(
     {
         "order": 6,
         "title": "Tagesablauf und Uhrzeit",
+        "title_fa": "برنامهٔ روز و ساعت",
         "description": "روزمرگی، ساعت، روزهای هفته و فعل‌های جداشدنی. English: daily routine, telling the time and separable verbs.",
+        "description_fa": "روزمرگی، گفتن ساعت، روزهای هفته و فعل‌های جداشدنی.",
         "estimated_time": 75,
         "contents": [
             (
@@ -967,6 +997,7 @@ English: A typical day, with times, frequency words and separable verbs.""",
             "nie",
             "zuerst",
             "dann",
+            "Sonnabend",
         ],
         "words_review": [
             "ich",
@@ -1016,7 +1047,9 @@ LESSONS.append(
     {
         "order": 7,
         "title": "Essen und Trinken",
+        "title_fa": "خوردن و نوشیدن",
         "description": "غذا، نوشیدنی و علاقه‌ها. English: food, drinks and saying what you like eating.",
+        "description_fa": "غذا، نوشیدنی و گفتن اینکه چه چیزی دوست داری.",
         "estimated_time": 65,
         "contents": [
             (
@@ -1138,6 +1171,7 @@ English: Saying what you eat and drink, and what you never eat.""",
             "lieber",
             "mögen",
             "gernhaben",
+            "sehr",
         ],
         "words_review": [
             "ich",
@@ -1194,7 +1228,9 @@ LESSONS.append(
     {
         "order": 8,
         "title": "Im Restaurant und im Café",
+        "title_fa": "در رستوران و کافه",
         "description": "سفارش دادن، صورت‌حساب و انعام. English: ordering, paying and tipping.",
+        "description_fa": "سفارش دادن، صورت‌حساب و انعام.",
         "estimated_time": 65,
         "contents": [
             (
@@ -1307,6 +1343,8 @@ English: Useful sentences for ordering, recommending and paying.""",
             "süß",
             "sauer",
             "bitter",
+            "etwas",
+            "so",
         ],
         "words_review": [
             "Kellner",
@@ -1375,7 +1413,9 @@ LESSONS.append(
     {
         "order": 9,
         "title": "Einkaufen und Preise",
+        "title_fa": "خرید کردن و قیمت‌ها",
         "description": "خرید کردن، مقدار و پرداخت. English: shopping, quantities and paying.",
+        "description_fa": "خرید کردن، مقدار و پرداخت.",
         "estimated_time": 65,
         "contents": [
             (
@@ -1497,6 +1537,7 @@ English: Asking for prices and quantities, and asking where the checkout is.""",
             "Gurke",
             "Lebensmittel",
             "Tasche",
+            "circa",
         ],
         "words_review": [
             "Kasse",
@@ -1551,7 +1592,9 @@ LESSONS.append(
     {
         "order": 10,
         "title": "Kleidung und Farben",
+        "title_fa": "لباس و رنگ‌ها",
         "description": "لباس، رنگ‌ها و اندازه. English: clothes, colours, sizes and saying what you like.",
+        "description_fa": "لباس، رنگ‌ها و اندازه.",
         "estimated_time": 65,
         "contents": [
             (
@@ -1598,7 +1641,7 @@ English: „gefallen“ with the dative, adjective endings before nouns, and the
 Kundin: Ich suche ein blaues Hemd.  (دنبال یک پیراهن آبی هستم.)
 Verkäuferin: Welche Größe haben Sie?  (چه اندازه‌ای دارید؟)
 Kundin: Größe 40.  (اندازه ۴۰.)
-Verkäuferin: Hier, bitte.  (بفرمایید.)
+Verkäuferin: Hier, bitte. Und dieser Rock ist auch schön.  (بفرمایید. و این دامن هم زیباست.)
 Kundin: Das gefällt mir. Der Rock passt mir nicht, aber das Hemd ist gut.  (این را دوست دارم. دامن اندازه‌ام نیست، ولی پیراهن خوب است.)
 
 English: Shopping for clothes: size, colour and whether something fits.""",
@@ -1672,10 +1715,19 @@ English: Colours, sizes and likes.""",
             "welcher",
             "anziehen",
             "ausziehen",
+            # The pronoun the two verbs below need. It used to sit in lesson 1, where the
+            # grammar block is titled «sich vorstellen» but no reflexive verb is ever
+            # taught — a word the lesson does not use. Lesson 10 is the first lesson that
+            # really conjugates a reflexive verb, so this is where it is introduced.
+            "sich",
             "sich anziehen",
             "sich ausziehen",
             "tragen",
             "passen",
+            "aber",
+            "euch",
+            "ihm",
+            "uns",
         ],
         "words_review": [
             "kaufen",
@@ -1700,6 +1752,12 @@ English: Colours, sizes and likes.""",
             ("Welche Größe haben Sie?", "چه اندازه‌ای دارید؟", "DIALOGUE", "Verkäuferin"),
             ("Größe 40.", "اندازه ۴۰.", "DIALOGUE", "Kundin"),
             (
+                "Hier, bitte. Und dieser Rock ist auch schön.",
+                "بفرمایید. و این دامن هم زیباست.",
+                "DIALOGUE",
+                "Verkäuferin",
+            ),
+            (
                 "Das gefällt mir. Der Rock passt mir nicht, aber das Hemd ist gut.",
                 "این را دوست دارم. دامن اندازه‌ام نیست، ولی پیراهن خوب است.",
                 "DIALOGUE",
@@ -1723,7 +1781,9 @@ LESSONS.append(
     {
         "order": 11,
         "title": "Wohnen und Möbel",
+        "title_fa": "خانه و اثاثیه",
         "description": "خانه، اتاق‌ها، اثاثیه و اجاره. English: home, rooms, furniture and rent.",
+        "description_fa": "خانه، اتاق‌ها، اثاثیه و اجاره.",
         "estimated_time": 70,
         "contents": [
             (
@@ -1893,6 +1953,7 @@ English: Describing a flat, using place prepositions and „es gibt“.""",
                 "EXAMPLE",
                 "",
             ),
+            ("Wo wohnst du?", "کجا زندگی می‌کنی؟", "EXAMPLE", ""),
         ],
     }
 )
@@ -1902,7 +1963,9 @@ LESSONS.append(
     {
         "order": 12,
         "title": "Wiederholung A1.1: Das kann ich jetzt",
+        "title_fa": "مرور A1.1: این‌ها را حالا می‌توانم",
         "description": "مرور درس‌های ۱ تا ۱۱ با متن خواندن. English: review of lessons 1-11 with a reading text.",
+        "description_fa": "مرور درس‌های ۱ تا ۱۱ با یک متن خواندن.",
         "estimated_time": 50,
         "contents": [
             (

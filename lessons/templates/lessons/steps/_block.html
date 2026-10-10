@@ -1,13 +1,26 @@
 {% comment %}One prose content block. The badge label lives here and nowhere else, so
    every step that shows blocks stays consistent. Every stored body is written in
    paragraphs (blank-line separated) and in single-newline lists, so it is rendered with
-   `linebreaks`: paragraphs stay paragraphs and list lines stay lines, with no rewriting.{% endcomment %}
+   `linebreaks`: paragraphs stay paragraphs and list lines stay lines, with no rewriting.
+
+   The body may carry `English:` glosses that the Persian page has no use for, so it goes
+   through `without_english` first — the stored text is untouched. The vocabulary step
+   additionally asks for its `·` list to be broken into lines.{% endcomment %}
 <article class="step-block">
   <span class="tag tag--{% if block.type == 'GRAMMAR' %}grammar{% elif block.type == 'VOCABULARY' %}vocabulary{% elif block.type == 'DIALOGUE' %}dialogue{% elif block.type == 'EXAMPLE' %}example{% elif block.type == 'NOTE' %}note{% else %}explanation{% endif %}">
     {% if block.type == 'GRAMMAR' %}گرامر{% elif block.type == 'VOCABULARY' %}واژگان{% elif block.type == 'DIALOGUE' %}گفت‌وگو{% elif block.type == 'EXAMPLE' %}مثال{% elif block.type == 'NOTE' %}نکته{% else %}توضیح{% endif %}
   </span>
-  <h3 class="step-block__title" dir="auto" data-lookup>{{ block.title }}</h3>
-  <div class="step-block__body" dir="auto" data-lookup>{{ block.body|linebreaks }}</div>
+  <h3 class="step-block__title" data-lookup>{{ block.title|direction }}</h3>
+  {% comment %}`suppress_block_body` is set by the steps that render the same sentences as
+     cards (see lessons/steps/_sentences.html): the heading still names the section, but the
+     body would repeat, line for line, what the cards below already show.{% endcomment %}
+  {% if not suppress_block_body %}
+    {% if split_lists %}
+      <div class="step-block__body" data-lookup>{{ block.body|without_english|list_lines|direction|linebreaks }}</div>
+    {% else %}
+      <div class="step-block__body" data-lookup>{{ block.body|without_english|direction|linebreaks }}</div>
+    {% endif %}
+  {% endif %}
   {% comment %}The `.step-block__audio` wrapper was left over from before Phase 7 moved the
      audio styles into static/css/components.css: no stylesheet defines that name any more,
      so it was a div with no rules around an already self-spacing control.{% endcomment %}

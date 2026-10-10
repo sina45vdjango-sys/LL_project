@@ -1,0 +1,2867 @@
+{
+ "level": "A1",
+ "source": "Goethe-Zertifikat A1: Start Deutsch 1 – Wortliste (goethe.de, VS_02_280312)",
+ "note": "Machine-extracted from the official PDF with pdftotext and hand-checked; the PDF is not committed.",
+ "entries": [
+  {
+   "word": "ab",
+   "tier": "main"
+  },
+  {
+   "word": "aber",
+   "tier": "main"
+  },
+  {
+   "word": "abfahren",
+   "tier": "main"
+  },
+  {
+   "word": "die Abfahrt",
+   "tier": "sub"
+  },
+  {
+   "word": "abgeben",
+   "tier": "main"
+  },
+  {
+   "word": "abholen",
+   "tier": "main"
+  },
+  {
+   "word": "der Absender",
+   "tier": "main"
+  },
+  {
+   "word": "Achtung",
+   "tier": "main"
+  },
+  {
+   "word": "die Adresse,-en",
+   "tier": "main"
+  },
+  {
+   "word": "all-",
+   "tier": "main"
+  },
+  {
+   "word": "allein",
+   "tier": "main"
+  },
+  {
+   "word": "also",
+   "tier": "main"
+  },
+  {
+   "word": "alt",
+   "tier": "main"
+  },
+  {
+   "word": "das Alter",
+   "tier": "main"
+  },
+  {
+   "word": "an",
+   "tier": "main"
+  },
+  {
+   "word": "anbieten",
+   "tier": "main"
+  },
+  {
+   "word": "das Angebot, -e",
+   "tier": "sub"
+  },
+  {
+   "word": "ander-",
+   "tier": "main"
+  },
+  {
+   "word": "anfangen",
+   "tier": "main"
+  },
+  {
+   "word": "der Anfang",
+   "tier": "sub"
+  },
+  {
+   "word": "anklicken",
+   "tier": "main"
+  },
+  {
+   "word": "ankommen",
+   "tier": "main"
+  },
+  {
+   "word": "die Ankunft",
+   "tier": "main"
+  },
+  {
+   "word": "ankreuzen",
+   "tier": "main"
+  },
+  {
+   "word": "anmachen",
+   "tier": "main"
+  },
+  {
+   "word": "(sich) anmelden",
+   "tier": "main"
+  },
+  {
+   "word": "die Anmeldung",
+   "tier": "sub"
+  },
+  {
+   "word": "die Anrede",
+   "tier": "main"
+  },
+  {
+   "word": "anrufen",
+   "tier": "main"
+  },
+  {
+   "word": "der Anruf, -e",
+   "tier": "main"
+  },
+  {
+   "word": "der Anruf-",
+   "tier": "sub"
+  },
+  {
+   "word": "beantworter",
+   "tier": "sub"
+  },
+  {
+   "word": "die Ansage, -n",
+   "tier": "main"
+  },
+  {
+   "word": "der Anschluss",
+   "tier": "main"
+  },
+  {
+   "word": "an sein",
+   "tier": "main"
+  },
+  {
+   "word": "antworten",
+   "tier": "main"
+  },
+  {
+   "word": "die Antwort, -en",
+   "tier": "sub"
+  },
+  {
+   "word": "die Anzeige, -n",
+   "tier": "main"
+  },
+  {
+   "word": "(sich) anziehen",
+   "tier": "main"
+  },
+  {
+   "word": "das Apartment, -s",
+   "tier": "main"
+  },
+  {
+   "word": "der Apfel, -Ä",
+   "tier": "main"
+  },
+  {
+   "word": "der Appetit",
+   "tier": "main"
+  },
+  {
+   "word": "arbeiten",
+   "tier": "main"
+  },
+  {
+   "word": "die Arbeit, -en",
+   "tier": "sub"
+  },
+  {
+   "word": "arbeitslos",
+   "tier": "main"
+  },
+  {
+   "word": "der Arbeitsplatz, -ä, e",
+   "tier": "main"
+  },
+  {
+   "word": "der Arm, -e",
+   "tier": "main"
+  },
+  {
+   "word": "der Arzt, -Ä, e",
+   "tier": "main"
+  },
+  {
+   "word": "auch",
+   "tier": "main"
+  },
+  {
+   "word": "auf",
+   "tier": "main"
+  },
+  {
+   "word": "die Aufgabe, -n",
+   "tier": "main"
+  },
+  {
+   "word": "aufhören",
+   "tier": "main"
+  },
+  {
+   "word": "auf sein",
+   "tier": "main"
+  },
+  {
+   "word": "aufstehen",
+   "tier": "main"
+  },
+  {
+   "word": "der Aufzug, -ü, e",
+   "tier": "main"
+  },
+  {
+   "word": "das Auge, -n",
+   "tier": "main"
+  },
+  {
+   "word": "aus",
+   "tier": "main"
+  },
+  {
+   "word": "der Ausflug",
+   "tier": "main"
+  },
+  {
+   "word": "ausfüllen",
+   "tier": "main"
+  },
+  {
+   "word": "der Ausgang",
+   "tier": "main"
+  },
+  {
+   "word": "die Auskunft, -ü, e",
+   "tier": "main"
+  },
+  {
+   "word": "das Ausland",
+   "tier": "main"
+  },
+  {
+   "word": "der Ausländer, -",
+   "tier": "sub"
+  },
+  {
+   "word": "ausländisch",
+   "tier": "sub"
+  },
+  {
+   "word": "ausmachen",
+   "tier": "main"
+  },
+  {
+   "word": "die Aussage, -n",
+   "tier": "main"
+  },
+  {
+   "word": "aussehen",
+   "tier": "main"
+  },
+  {
+   "word": "aus sein",
+   "tier": "main"
+  },
+  {
+   "word": "aussteigen",
+   "tier": "main"
+  },
+  {
+   "word": "der Ausweis",
+   "tier": "main"
+  },
+  {
+   "word": "(sich) ausziehen",
+   "tier": "main"
+  },
+  {
+   "word": "das Auto, -s",
+   "tier": "main"
+  },
+  {
+   "word": "die Autobahn, -en",
+   "tier": "main"
+  },
+  {
+   "word": "der Automat",
+   "tier": "main"
+  },
+  {
+   "word": "automatisch",
+   "tier": "main"
+  },
+  {
+   "word": "das Baby, -s",
+   "tier": "main"
+  },
+  {
+   "word": "die Bäckerei",
+   "tier": "main"
+  },
+  {
+   "word": "das Bad",
+   "tier": "main"
+  },
+  {
+   "word": "baden",
+   "tier": "main"
+  },
+  {
+   "word": "die Bahn",
+   "tier": "main"
+  },
+  {
+   "word": "der Bahnhof",
+   "tier": "main"
+  },
+  {
+   "word": "der Bahnsteig",
+   "tier": "main"
+  },
+  {
+   "word": "bald",
+   "tier": "main"
+  },
+  {
+   "word": "der Balkon",
+   "tier": "main"
+  },
+  {
+   "word": "die Banane, -n",
+   "tier": "main"
+  },
+  {
+   "word": "die Bank",
+   "tier": "main"
+  },
+  {
+   "word": "bar",
+   "tier": "main"
+  },
+  {
+   "word": "der Bauch",
+   "tier": "main"
+  },
+  {
+   "word": "der Baum, -ä, e",
+   "tier": "main"
+  },
+  {
+   "word": "der Beamte, -n",
+   "tier": "main"
+  },
+  {
+   "word": "bedeuten",
+   "tier": "main"
+  },
+  {
+   "word": "beginnen",
+   "tier": "main"
+  },
+  {
+   "word": "bei",
+   "tier": "main"
+  },
+  {
+   "word": "beide",
+   "tier": "main"
+  },
+  {
+   "word": "das Bein, -e",
+   "tier": "main"
+  },
+  {
+   "word": "das Beispiel, -e",
+   "tier": "main"
+  },
+  {
+   "word": "zum Beispiel/z. B.",
+   "tier": "sub"
+  },
+  {
+   "word": "bekannt",
+   "tier": "main"
+  },
+  {
+   "word": "der/die Bekannte, -n",
+   "tier": "main"
+  },
+  {
+   "word": "bekommen",
+   "tier": "main"
+  },
+  {
+   "word": "benutzen",
+   "tier": "main"
+  },
+  {
+   "word": "der Beruf, -e",
+   "tier": "main"
+  },
+  {
+   "word": "besetzt",
+   "tier": "main"
+  },
+  {
+   "word": "besichtigen",
+   "tier": "main"
+  },
+  {
+   "word": "besser",
+   "tier": "main"
+  },
+  {
+   "word": "best-",
+   "tier": "main"
+  },
+  {
+   "word": "bestellen",
+   "tier": "main"
+  },
+  {
+   "word": "besuchen",
+   "tier": "main"
+  },
+  {
+   "word": "das Bett, -en",
+   "tier": "main"
+  },
+  {
+   "word": "bezahlen",
+   "tier": "main"
+  },
+  {
+   "word": "das Bier",
+   "tier": "main"
+  },
+  {
+   "word": "das Bild, -er",
+   "tier": "main"
+  },
+  {
+   "word": "billig",
+   "tier": "main"
+  },
+  {
+   "word": "die Birne, -n",
+   "tier": "main"
+  },
+  {
+   "word": "bis",
+   "tier": "main"
+  },
+  {
+   "word": "bisschen",
+   "tier": "main"
+  },
+  {
+   "word": "bitte",
+   "tier": "main"
+  },
+  {
+   "word": "die Bitte, -n",
+   "tier": "sub"
+  },
+  {
+   "word": "bitten",
+   "tier": "sub"
+  },
+  {
+   "word": "bitter",
+   "tier": "main"
+  },
+  {
+   "word": "bleiben",
+   "tier": "main"
+  },
+  {
+   "word": "der Bleistift, -e",
+   "tier": "main"
+  },
+  {
+   "word": "der Blick",
+   "tier": "main"
+  },
+  {
+   "word": "die Blume, -n",
+   "tier": "main"
+  },
+  {
+   "word": "der Bogen",
+   "tier": "main"
+  },
+  {
+   "word": "böse",
+   "tier": "main"
+  },
+  {
+   "word": "brauchen",
+   "tier": "main"
+  },
+  {
+   "word": "breit",
+   "tier": "main"
+  },
+  {
+   "word": "der Brief, -e",
+   "tier": "main"
+  },
+  {
+   "word": "die Briefmarke, -n",
+   "tier": "main"
+  },
+  {
+   "word": "bringen",
+   "tier": "main"
+  },
+  {
+   "word": "das Brot, -e",
+   "tier": "main"
+  },
+  {
+   "word": "das Brötchen, –",
+   "tier": "main"
+  },
+  {
+   "word": "der Bruder, -ü",
+   "tier": "main"
+  },
+  {
+   "word": "das Buch, -ü, er",
+   "tier": "main"
+  },
+  {
+   "word": "der Buchstabe, -n",
+   "tier": "main"
+  },
+  {
+   "word": "buchstabieren",
+   "tier": "main"
+  },
+  {
+   "word": "der Bus, -se",
+   "tier": "main"
+  },
+  {
+   "word": "die Butter",
+   "tier": "main"
+  },
+  {
+   "word": "das Café, -s",
+   "tier": "main"
+  },
+  {
+   "word": "die CD, -s",
+   "tier": "main"
+  },
+  {
+   "word": "der Chef",
+   "tier": "main"
+  },
+  {
+   "word": "circa/ca.",
+   "tier": "main"
+  },
+  {
+   "word": "der Computer, –",
+   "tier": "main"
+  },
+  {
+   "word": "da",
+   "tier": "main"
+  },
+  {
+   "word": "die Dame, -n",
+   "tier": "main"
+  },
+  {
+   "word": "daneben",
+   "tier": "main"
+  },
+  {
+   "word": "danken",
+   "tier": "main"
+  },
+  {
+   "word": "der Dank",
+   "tier": "sub"
+  },
+  {
+   "word": "danke",
+   "tier": "sub"
+  },
+  {
+   "word": "dann",
+   "tier": "main"
+  },
+  {
+   "word": "das Datum",
+   "tier": "main"
+  },
+  {
+   "word": "dauern",
+   "tier": "main"
+  },
+  {
+   "word": "dein-",
+   "tier": "main"
+  },
+  {
+   "word": "denn",
+   "tier": "main"
+  },
+  {
+   "word": "der, die, das",
+   "tier": "main"
+  },
+  {
+   "word": "dich",
+   "tier": "main"
+  },
+  {
+   "word": "dies-",
+   "tier": "main"
+  },
+  {
+   "word": "dir",
+   "tier": "main"
+  },
+  {
+   "word": "die Disco",
+   "tier": "main"
+  },
+  {
+   "word": "der Doktor",
+   "tier": "main"
+  },
+  {
+   "word": "das Doppelzimmer",
+   "tier": "main"
+  },
+  {
+   "word": "das Dorf, -ö, er",
+   "tier": "main"
+  },
+  {
+   "word": "dort, -her, -hin",
+   "tier": "main"
+  },
+  {
+   "word": "draußen",
+   "tier": "main"
+  },
+  {
+   "word": "drucken",
+   "tier": "main"
+  },
+  {
+   "word": "der Drucker, –",
+   "tier": "sub"
+  },
+  {
+   "word": "drücken",
+   "tier": "main"
+  },
+  {
+   "word": "durch",
+   "tier": "main"
+  },
+  {
+   "word": "die Durchsage, -n",
+   "tier": "main"
+  },
+  {
+   "word": "dürfen",
+   "tier": "main"
+  },
+  {
+   "word": "der Durst",
+   "tier": "main"
+  },
+  {
+   "word": "(sich) duschen",
+   "tier": "main"
+  },
+  {
+   "word": "die Dusche",
+   "tier": "sub"
+  },
+  {
+   "word": "die Ecke, -n",
+   "tier": "main"
+  },
+  {
+   "word": "die Ehefrau, -en/",
+   "tier": "main"
+  },
+  {
+   "word": "der Ehemann, ä, er",
+   "tier": "main"
+  },
+  {
+   "word": "das Ei, -er",
+   "tier": "main"
+  },
+  {
+   "word": "eilig",
+   "tier": "main"
+  },
+  {
+   "word": "ein-",
+   "tier": "main"
+  },
+  {
+   "word": "einfach",
+   "tier": "main"
+  },
+  {
+   "word": "der Eingang",
+   "tier": "main"
+  },
+  {
+   "word": "einkaufen",
+   "tier": "main"
+  },
+  {
+   "word": "einladen",
+   "tier": "main"
+  },
+  {
+   "word": "die Einladung",
+   "tier": "sub"
+  },
+  {
+   "word": "einmal",
+   "tier": "main"
+  },
+  {
+   "word": "einsteigen",
+   "tier": "main"
+  },
+  {
+   "word": "der Eintritt",
+   "tier": "main"
+  },
+  {
+   "word": "das Einzelzimmer",
+   "tier": "main"
+  },
+  {
+   "word": "die Eltern (pl.)",
+   "tier": "main"
+  },
+  {
+   "word": "die E-Mail, -s",
+   "tier": "main"
+  },
+  {
+   "word": "der Empfänger, –",
+   "tier": "main"
+  },
+  {
+   "word": "empfehlen",
+   "tier": "main"
+  },
+  {
+   "word": "enden",
+   "tier": "main"
+  },
+  {
+   "word": "das Ende",
+   "tier": "sub"
+  },
+  {
+   "word": "entschuldigen",
+   "tier": "main"
+  },
+  {
+   "word": "die Entschuldigung",
+   "tier": "sub"
+  },
+  {
+   "word": "er",
+   "tier": "main"
+  },
+  {
+   "word": "das Ergebnis, -se",
+   "tier": "main"
+  },
+  {
+   "word": "erklären",
+   "tier": "main"
+  },
+  {
+   "word": "erlauben",
+   "tier": "main"
+  },
+  {
+   "word": "der Erwachsene, -n",
+   "tier": "main"
+  },
+  {
+   "word": "erzählen",
+   "tier": "main"
+  },
+  {
+   "word": "es",
+   "tier": "main"
+  },
+  {
+   "word": "essen",
+   "tier": "main"
+  },
+  {
+   "word": "das Essen",
+   "tier": "sub"
+  },
+  {
+   "word": "euer",
+   "tier": "main"
+  },
+  {
+   "word": "fahren",
+   "tier": "main"
+  },
+  {
+   "word": "der Fahrer",
+   "tier": "sub"
+  },
+  {
+   "word": "die Fahrkarte, -n",
+   "tier": "main"
+  },
+  {
+   "word": "das Fahrrad, -ä, er",
+   "tier": "main"
+  },
+  {
+   "word": "falsch",
+   "tier": "main"
+  },
+  {
+   "word": "die Familie, -n",
+   "tier": "main"
+  },
+  {
+   "word": "der Familienname",
+   "tier": "sub"
+  },
+  {
+   "word": "der Familienstand",
+   "tier": "sub"
+  },
+  {
+   "word": "die Farbe, -n",
+   "tier": "main"
+  },
+  {
+   "word": "das Fax, -e",
+   "tier": "main"
+  },
+  {
+   "word": "Feier-",
+   "tier": "main"
+  },
+  {
+   "word": "feiern",
+   "tier": "main"
+  },
+  {
+   "word": "fehlen",
+   "tier": "main"
+  },
+  {
+   "word": "der Fehler, –",
+   "tier": "main"
+  },
+  {
+   "word": "fernsehen",
+   "tier": "main"
+  },
+  {
+   "word": "fertig",
+   "tier": "main"
+  },
+  {
+   "word": "das Feuer",
+   "tier": "main"
+  },
+  {
+   "word": "das Fieber",
+   "tier": "main"
+  },
+  {
+   "word": "der Film, -e",
+   "tier": "main"
+  },
+  {
+   "word": "finden",
+   "tier": "main"
+  },
+  {
+   "word": "die Firma",
+   "tier": "main"
+  },
+  {
+   "word": "der Fisch, -e",
+   "tier": "main"
+  },
+  {
+   "word": "die Flasche, -n",
+   "tier": "main"
+  },
+  {
+   "word": "das Fleisch",
+   "tier": "main"
+  },
+  {
+   "word": "fliegen",
+   "tier": "main"
+  },
+  {
+   "word": "abfliegen",
+   "tier": "sub"
+  },
+  {
+   "word": "der Abflug",
+   "tier": "sub"
+  },
+  {
+   "word": "der Flughafen",
+   "tier": "main"
+  },
+  {
+   "word": "das Flugzeug",
+   "tier": "main"
+  },
+  {
+   "word": "das Formular, -e",
+   "tier": "main"
+  },
+  {
+   "word": "das Foto, -s",
+   "tier": "main"
+  },
+  {
+   "word": "fragen",
+   "tier": "main"
+  },
+  {
+   "word": "die Frage, -n",
+   "tier": "sub"
+  },
+  {
+   "word": "die Frau, -en",
+   "tier": "main"
+  },
+  {
+   "word": "Guten Tag, Frau Schmitt!",
+   "tier": "sub"
+  },
+  {
+   "word": "Hier arbeiten mehr Frauen als Männer.",
+   "tier": "sub"
+  },
+  {
+   "word": "frei",
+   "tier": "main"
+  },
+  {
+   "word": "die Freizeit",
+   "tier": "main"
+  },
+  {
+   "word": "fremd",
+   "tier": "main"
+  },
+  {
+   "word": "(sich) freuen",
+   "tier": "main"
+  },
+  {
+   "word": "der Freund, -e",
+   "tier": "main"
+  },
+  {
+   "word": "Das ist meine Freundin.",
+   "tier": "sub"
+  },
+  {
+   "word": "früher",
+   "tier": "main"
+  },
+  {
+   "word": "frühstücken",
+   "tier": "main"
+  },
+  {
+   "word": "das Frühstück",
+   "tier": "sub"
+  },
+  {
+   "word": "die Führung",
+   "tier": "main"
+  },
+  {
+   "word": "für",
+   "tier": "main"
+  },
+  {
+   "word": "Das ist der Schlüssel für die Haustür.",
+   "tier": "sub"
+  },
+  {
+   "word": "Das ist das Brot für morgen.",
+   "tier": "sub"
+  },
+  {
+   "word": "der Fuß, -ü, e",
+   "tier": "main"
+  },
+  {
+   "word": "der Fußball",
+   "tier": "main"
+  },
+  {
+   "word": "der Garten",
+   "tier": "main"
+  },
+  {
+   "word": "der Gast, -ä, e",
+   "tier": "main"
+  },
+  {
+   "word": "geben",
+   "tier": "main"
+  },
+  {
+   "word": "Es gibt keine Karten mehr.",
+   "tier": "sub"
+  },
+  {
+   "word": "geboren",
+   "tier": "main"
+  },
+  {
+   "word": "das Geburtsjahr",
+   "tier": "main"
+  },
+  {
+   "word": "der Geburtsort",
+   "tier": "main"
+  },
+  {
+   "word": "der Geburtstag",
+   "tier": "main"
+  },
+  {
+   "word": "gefallen",
+   "tier": "main"
+  },
+  {
+   "word": "gegen",
+   "tier": "main"
+  },
+  {
+   "word": "Ich bin gegen diese Lösung.",
+   "tier": "sub"
+  },
+  {
+   "word": "Wer spielt gegen wen?",
+   "tier": "sub"
+  },
+  {
+   "word": "gehen",
+   "tier": "main"
+  },
+  {
+   "word": "Wie geht‘s?",
+   "tier": "sub"
+  },
+  {
+   "word": "Jetzt muss ich (aber) leider gehen.",
+   "tier": "sub"
+  },
+  {
+   "word": "Ich muss zum Arzt gehen.",
+   "tier": "sub"
+  },
+  {
+   "word": "Das geht nicht!",
+   "tier": "sub"
+  },
+  {
+   "word": "gehören",
+   "tier": "main"
+  },
+  {
+   "word": "das Geld",
+   "tier": "main"
+  },
+  {
+   "word": "das Gemüse",
+   "tier": "main"
+  },
+  {
+   "word": "das Gepäck",
+   "tier": "main"
+  },
+  {
+   "word": "gerade",
+   "tier": "main"
+  },
+  {
+   "word": "geradeaus",
+   "tier": "main"
+  },
+  {
+   "word": "gern(e)",
+   "tier": "main"
+  },
+  {
+   "word": "das Geschäft, -e",
+   "tier": "main"
+  },
+  {
+   "word": "das Geschenk, -e",
+   "tier": "main"
+  },
+  {
+   "word": "die Geschwister (pl.)",
+   "tier": "main"
+  },
+  {
+   "word": "das Gespräch, -e",
+   "tier": "main"
+  },
+  {
+   "word": "gestern",
+   "tier": "main"
+  },
+  {
+   "word": "gestorben",
+   "tier": "main"
+  },
+  {
+   "word": "das Getränk, -e",
+   "tier": "main"
+  },
+  {
+   "word": "das Gewicht",
+   "tier": "main"
+  },
+  {
+   "word": "gewinnen",
+   "tier": "main"
+  },
+  {
+   "word": "das Glas, -ä, er",
+   "tier": "main"
+  },
+  {
+   "word": "glauben",
+   "tier": "main"
+  },
+  {
+   "word": "gleich",
+   "tier": "main"
+  },
+  {
+   "word": "das Gleis, -e",
+   "tier": "main"
+  },
+  {
+   "word": "das Glück",
+   "tier": "main"
+  },
+  {
+   "word": "glücklich",
+   "tier": "main"
+  },
+  {
+   "word": "der Glückwunsch",
+   "tier": "main"
+  },
+  {
+   "word": "Grad (Celsius)",
+   "tier": "main"
+  },
+  {
+   "word": "gratulieren",
+   "tier": "main"
+  },
+  {
+   "word": "grillen",
+   "tier": "main"
+  },
+  {
+   "word": "groß",
+   "tier": "main"
+  },
+  {
+   "word": "die Größe",
+   "tier": "sub"
+  },
+  {
+   "word": "die Großeltern (pl.)",
+   "tier": "main"
+  },
+  {
+   "word": "die Großmutter",
+   "tier": "sub"
+  },
+  {
+   "word": "der Großvater",
+   "tier": "sub"
+  },
+  {
+   "word": "die Gruppe, -n",
+   "tier": "main"
+  },
+  {
+   "word": "der Gruß, -ü, e",
+   "tier": "main"
+  },
+  {
+   "word": "gültig",
+   "tier": "main"
+  },
+  {
+   "word": "günstig",
+   "tier": "main"
+  },
+  {
+   "word": "gut",
+   "tier": "main"
+  },
+  {
+   "word": "das Haar, -e",
+   "tier": "main"
+  },
+  {
+   "word": "haben",
+   "tier": "main"
+  },
+  {
+   "word": "das Hähnchen, -",
+   "tier": "main"
+  },
+  {
+   "word": "die Halbpension",
+   "tier": "main"
+  },
+  {
+   "word": "die Halle",
+   "tier": "main"
+  },
+  {
+   "word": "hallo",
+   "tier": "main"
+  },
+  {
+   "word": "halten",
+   "tier": "main"
+  },
+  {
+   "word": "die Haltestelle",
+   "tier": "main"
+  },
+  {
+   "word": "die Hand, -ä, e",
+   "tier": "main"
+  },
+  {
+   "word": "das Handy, -s",
+   "tier": "main"
+  },
+  {
+   "word": "das Haus, -ä, er",
+   "tier": "main"
+  },
+  {
+   "word": "die Hausaufgabe,-n",
+   "tier": "main"
+  },
+  {
+   "word": "die Hausfrau, -en/",
+   "tier": "main"
+  },
+  {
+   "word": "der Hausmann",
+   "tier": "sub"
+  },
+  {
+   "word": "die Heimat",
+   "tier": "main"
+  },
+  {
+   "word": "heiraten",
+   "tier": "main"
+  },
+  {
+   "word": "heißen",
+   "tier": "main"
+  },
+  {
+   "word": "helfen",
+   "tier": "main"
+  },
+  {
+   "word": "hell",
+   "tier": "main"
+  },
+  {
+   "word": "der Herd",
+   "tier": "main"
+  },
+  {
+   "word": "der Herr, -en",
+   "tier": "main"
+  },
+  {
+   "word": "herzlich",
+   "tier": "main"
+  },
+  {
+   "word": "heute",
+   "tier": "main"
+  },
+  {
+   "word": "hier",
+   "tier": "main"
+  },
+  {
+   "word": "die Hilfe",
+   "tier": "main"
+  },
+  {
+   "word": "hinten",
+   "tier": "main"
+  },
+  {
+   "word": "das Hobby, -s",
+   "tier": "main"
+  },
+  {
+   "word": "hoch",
+   "tier": "main"
+  },
+  {
+   "word": "die Hochzeit",
+   "tier": "main"
+  },
+  {
+   "word": "holen",
+   "tier": "main"
+  },
+  {
+   "word": "hören",
+   "tier": "main"
+  },
+  {
+   "word": "das Hotel, -s",
+   "tier": "main"
+  },
+  {
+   "word": "der Hund, -e",
+   "tier": "main"
+  },
+  {
+   "word": "der Hunger",
+   "tier": "main"
+  },
+  {
+   "word": "ich",
+   "tier": "main"
+  },
+  {
+   "word": "ihr/ihm/ihn",
+   "tier": "main"
+  },
+  {
+   "word": "immer",
+   "tier": "main"
+  },
+  {
+   "word": "in",
+   "tier": "main"
+  },
+  {
+   "word": "die Information, -en",
+   "tier": "main"
+  },
+  {
+   "word": "international",
+   "tier": "main"
+  },
+  {
+   "word": "das Internet",
+   "tier": "main"
+  },
+  {
+   "word": "ja",
+   "tier": "main"
+  },
+  {
+   "word": "die Jacke, -n",
+   "tier": "main"
+  },
+  {
+   "word": "jed-",
+   "tier": "main"
+  },
+  {
+   "word": "jetzt",
+   "tier": "main"
+  },
+  {
+   "word": "der Job, -s",
+   "tier": "main"
+  },
+  {
+   "word": "der Jugendliche, -n",
+   "tier": "main"
+  },
+  {
+   "word": "jung",
+   "tier": "main"
+  },
+  {
+   "word": "der Junge, -n",
+   "tier": "main"
+  },
+  {
+   "word": "der Kaffee",
+   "tier": "main"
+  },
+  {
+   "word": "kaputt",
+   "tier": "main"
+  },
+  {
+   "word": "die Karte, -n",
+   "tier": "main"
+  },
+  {
+   "word": "(Kredit)-Karte, -n",
+   "tier": "sub"
+  },
+  {
+   "word": "die Kartoffel, -n",
+   "tier": "main"
+  },
+  {
+   "word": "die Kasse",
+   "tier": "main"
+  },
+  {
+   "word": "kaufen",
+   "tier": "main"
+  },
+  {
+   "word": "kein",
+   "tier": "main"
+  },
+  {
+   "word": "kennen",
+   "tier": "main"
+  },
+  {
+   "word": "kennenlernen",
+   "tier": "sub"
+  },
+  {
+   "word": "das Kind, -er",
+   "tier": "main"
+  },
+  {
+   "word": "der Kindergarten",
+   "tier": "main"
+  },
+  {
+   "word": "das Kino, -s",
+   "tier": "main"
+  },
+  {
+   "word": "der Kiosk",
+   "tier": "main"
+  },
+  {
+   "word": "klar",
+   "tier": "main"
+  },
+  {
+   "word": "die Klasse",
+   "tier": "main"
+  },
+  {
+   "word": "die Kleidung",
+   "tier": "main"
+  },
+  {
+   "word": "klein",
+   "tier": "main"
+  },
+  {
+   "word": "kochen",
+   "tier": "main"
+  },
+  {
+   "word": "der Koffer, –",
+   "tier": "main"
+  },
+  {
+   "word": "der Kollege, -n",
+   "tier": "main"
+  },
+  {
+   "word": "kommen",
+   "tier": "main"
+  },
+  {
+   "word": "können",
+   "tier": "main"
+  },
+  {
+   "word": "das Konto",
+   "tier": "main"
+  },
+  {
+   "word": "der Kopf",
+   "tier": "main"
+  },
+  {
+   "word": "kosten",
+   "tier": "main"
+  },
+  {
+   "word": "krank",
+   "tier": "main"
+  },
+  {
+   "word": "kriegen",
+   "tier": "main"
+  },
+  {
+   "word": "die Küche",
+   "tier": "main"
+  },
+  {
+   "word": "der Kuchen",
+   "tier": "main"
+  },
+  {
+   "word": "der Kugelschreiber",
+   "tier": "main"
+  },
+  {
+   "word": "der Kühlschrank",
+   "tier": "main"
+  },
+  {
+   "word": "kulturell",
+   "tier": "main"
+  },
+  {
+   "word": "sich kümmern",
+   "tier": "main"
+  },
+  {
+   "word": "der Kunde, -n",
+   "tier": "main"
+  },
+  {
+   "word": "der Kurs, -e",
+   "tier": "main"
+  },
+  {
+   "word": "kurz",
+   "tier": "main"
+  },
+  {
+   "word": "lachen",
+   "tier": "main"
+  },
+  {
+   "word": "der Laden, -ä",
+   "tier": "main"
+  },
+  {
+   "word": "das Land, -ä, er",
+   "tier": "main"
+  },
+  {
+   "word": "lang",
+   "tier": "main"
+  },
+  {
+   "word": "lange",
+   "tier": "main"
+  },
+  {
+   "word": "langsam",
+   "tier": "main"
+  },
+  {
+   "word": "laufen",
+   "tier": "main"
+  },
+  {
+   "word": "laut",
+   "tier": "main"
+  },
+  {
+   "word": "leben",
+   "tier": "main"
+  },
+  {
+   "word": "das Leben",
+   "tier": "sub"
+  },
+  {
+   "word": "die Lebens-",
+   "tier": "sub"
+  },
+  {
+   "word": "mittel (pl.)",
+   "tier": "sub"
+  },
+  {
+   "word": "ledig",
+   "tier": "main"
+  },
+  {
+   "word": "legen",
+   "tier": "main"
+  },
+  {
+   "word": "der Lehrer, –",
+   "tier": "main"
+  },
+  {
+   "word": "leicht",
+   "tier": "main"
+  },
+  {
+   "word": "leider",
+   "tier": "main"
+  },
+  {
+   "word": "leise",
+   "tier": "main"
+  },
+  {
+   "word": "lernen",
+   "tier": "main"
+  },
+  {
+   "word": "lesen",
+   "tier": "main"
+  },
+  {
+   "word": "letzt-",
+   "tier": "main"
+  },
+  {
+   "word": "die Leute (pl.)",
+   "tier": "main"
+  },
+  {
+   "word": "das Licht",
+   "tier": "main"
+  },
+  {
+   "word": "lieb-",
+   "tier": "main"
+  },
+  {
+   "word": "lieben",
+   "tier": "sub"
+  },
+  {
+   "word": "lieber",
+   "tier": "sub"
+  },
+  {
+   "word": "Lieblings-",
+   "tier": "main"
+  },
+  {
+   "word": "das Lied, -er",
+   "tier": "main"
+  },
+  {
+   "word": "liegen",
+   "tier": "main"
+  },
+  {
+   "word": "links",
+   "tier": "main"
+  },
+  {
+   "word": "der Lkw, -s",
+   "tier": "main"
+  },
+  {
+   "word": "das Lokal",
+   "tier": "main"
+  },
+  {
+   "word": "die Lösung, -en",
+   "tier": "main"
+  },
+  {
+   "word": "lustig",
+   "tier": "main"
+  },
+  {
+   "word": "machen",
+   "tier": "main"
+  },
+  {
+   "word": "Das macht 5 Euro 95.",
+   "tier": "sub"
+  },
+  {
+   "word": "Das macht nichts.",
+   "tier": "sub"
+  },
+  {
+   "word": "das Mädchen, –",
+   "tier": "main"
+  },
+  {
+   "word": "man",
+   "tier": "main"
+  },
+  {
+   "word": "der Mann, -ä, er",
+   "tier": "main"
+  },
+  {
+   "word": "männlich",
+   "tier": "sub"
+  },
+  {
+   "word": "die Maschine, -n",
+   "tier": "main"
+  },
+  {
+   "word": "das Meer",
+   "tier": "main"
+  },
+  {
+   "word": "mehr",
+   "tier": "main"
+  },
+  {
+   "word": "mein",
+   "tier": "main"
+  },
+  {
+   "word": "meist-",
+   "tier": "main"
+  },
+  {
+   "word": "der Mensch, -en",
+   "tier": "main"
+  },
+  {
+   "word": "mieten",
+   "tier": "main"
+  },
+  {
+   "word": "die Miete",
+   "tier": "sub"
+  },
+  {
+   "word": "die Milch",
+   "tier": "main"
+  },
+  {
+   "word": "mit",
+   "tier": "main"
+  },
+  {
+   "word": "mitbringen",
+   "tier": "main"
+  },
+  {
+   "word": "mitkommen",
+   "tier": "main"
+  },
+  {
+   "word": "mitmachen",
+   "tier": "main"
+  },
+  {
+   "word": "mitnehmen",
+   "tier": "main"
+  },
+  {
+   "word": "die Mitte",
+   "tier": "main"
+  },
+  {
+   "word": "die Möbel (pl.)",
+   "tier": "main"
+  },
+  {
+   "word": "möchten",
+   "tier": "main"
+  },
+  {
+   "word": "mögen",
+   "tier": "main"
+  },
+  {
+   "word": "möglich",
+   "tier": "main"
+  },
+  {
+   "word": "der Moment",
+   "tier": "main"
+  },
+  {
+   "word": "Einen Moment bitte.",
+   "tier": "sub"
+  },
+  {
+   "word": "morgen",
+   "tier": "main"
+  },
+  {
+   "word": "müde",
+   "tier": "main"
+  },
+  {
+   "word": "der Mund",
+   "tier": "main"
+  },
+  {
+   "word": "müssen",
+   "tier": "main"
+  },
+  {
+   "word": "die Mutter, -ü",
+   "tier": "main"
+  },
+  {
+   "word": "nach",
+   "tier": "main"
+  },
+  {
+   "word": "Ich fliege nach München.",
+   "tier": "sub"
+  },
+  {
+   "word": "Es ist schon 5 nach 12.",
+   "tier": "sub"
+  },
+  {
+   "word": "nächst-",
+   "tier": "main"
+  },
+  {
+   "word": "der Name, -n",
+   "tier": "main"
+  },
+  {
+   "word": "Mein Vorname ist Thomas; Schmidt ist der Familienname.",
+   "tier": "sub"
+  },
+  {
+   "word": "nehmen",
+   "tier": "main"
+  },
+  {
+   "word": "Ich nehme den Bus.",
+   "tier": "sub"
+  },
+  {
+   "word": "nein",
+   "tier": "main"
+  },
+  {
+   "word": "Zeit.",
+   "tier": "sub"
+  },
+  {
+   "word": "neu",
+   "tier": "main"
+  },
+  {
+   "word": "Wir haben eine neue Wohnung.",
+   "tier": "sub"
+  },
+  {
+   "word": "nicht",
+   "tier": "main"
+  },
+  {
+   "word": "Das ist doch schön, nicht?",
+   "tier": "sub"
+  },
+  {
+   "word": "nichts",
+   "tier": "main"
+  },
+  {
+   "word": "Hier kaufe ich nichts. Der Laden gefällt mir nicht.",
+   "tier": "sub"
+  },
+  {
+   "word": "nie",
+   "tier": "main"
+  },
+  {
+   "word": "noch",
+   "tier": "main"
+  },
+  {
+   "word": "normal",
+   "tier": "main"
+  },
+  {
+   "word": "die Nummer, -n",
+   "tier": "main"
+  },
+  {
+   "word": "nur",
+   "tier": "main"
+  },
+  {
+   "word": "oben",
+   "tier": "main"
+  },
+  {
+   "word": "das Obst",
+   "tier": "main"
+  },
+  {
+   "word": "oder",
+   "tier": "main"
+  },
+  {
+   "word": "öffnen",
+   "tier": "main"
+  },
+  {
+   "word": "geöffnet",
+   "tier": "sub"
+  },
+  {
+   "word": "oft",
+   "tier": "main"
+  },
+  {
+   "word": "ohne",
+   "tier": "main"
+  },
+  {
+   "word": "das Öl",
+   "tier": "main"
+  },
+  {
+   "word": "die Oma, -s",
+   "tier": "main"
+  },
+  {
+   "word": "der Opa, -s",
+   "tier": "main"
+  },
+  {
+   "word": "die Ordnung",
+   "tier": "main"
+  },
+  {
+   "word": "der Ort, -e",
+   "tier": "main"
+  },
+  {
+   "word": "das Papier",
+   "tier": "main"
+  },
+  {
+   "word": "die Papiere (pl.)",
+   "tier": "main"
+  },
+  {
+   "word": "der Partner, -/",
+   "tier": "main"
+  },
+  {
+   "word": "die Partnerin, -nen",
+   "tier": "main"
+  },
+  {
+   "word": "die Party",
+   "tier": "main"
+  },
+  {
+   "word": "der Pass, -ä, e",
+   "tier": "main"
+  },
+  {
+   "word": "die Pause, -n",
+   "tier": "main"
+  },
+  {
+   "word": "der Plan, -ä, e",
+   "tier": "main"
+  },
+  {
+   "word": "der Platz, -ä, e",
+   "tier": "main"
+  },
+  {
+   "word": "die Polizei",
+   "tier": "main"
+  },
+  {
+   "word": "die Pommes frites (pl.)",
+   "tier": "main"
+  },
+  {
+   "word": "die Post",
+   "tier": "main"
+  },
+  {
+   "word": "die Postleitzahl",
+   "tier": "main"
+  },
+  {
+   "word": "das Praktikum",
+   "tier": "main"
+  },
+  {
+   "word": "die Praxis",
+   "tier": "main"
+  },
+  {
+   "word": "der Preis, -e",
+   "tier": "main"
+  },
+  {
+   "word": "das Problem, -e",
+   "tier": "main"
+  },
+  {
+   "word": "der Prospekt, -e",
+   "tier": "main"
+  },
+  {
+   "word": "die Prüfung",
+   "tier": "main"
+  },
+  {
+   "word": "pünktlich",
+   "tier": "main"
+  },
+  {
+   "word": "Rad fahren",
+   "tier": "main"
+  },
+  {
+   "word": "rauchen",
+   "tier": "main"
+  },
+  {
+   "word": "der Raum, -ä, e",
+   "tier": "main"
+  },
+  {
+   "word": "die Rechnung, -en",
+   "tier": "main"
+  },
+  {
+   "word": "rechts",
+   "tier": "main"
+  },
+  {
+   "word": "regnen",
+   "tier": "main"
+  },
+  {
+   "word": "der Regen",
+   "tier": "sub"
+  },
+  {
+   "word": "der Reis",
+   "tier": "main"
+  },
+  {
+   "word": "reisen",
+   "tier": "main"
+  },
+  {
+   "word": "die Reise",
+   "tier": "sub"
+  },
+  {
+   "word": "das Reisebüro, -s",
+   "tier": "sub"
+  },
+  {
+   "word": "der Reiseführer",
+   "tier": "sub"
+  },
+  {
+   "word": "reparieren",
+   "tier": "main"
+  },
+  {
+   "word": "die Reparatur",
+   "tier": "sub"
+  },
+  {
+   "word": "das Restaurant, -s",
+   "tier": "main"
+  },
+  {
+   "word": "die Rezeption",
+   "tier": "main"
+  },
+  {
+   "word": "richtig",
+   "tier": "main"
+  },
+  {
+   "word": "riechen",
+   "tier": "main"
+  },
+  {
+   "word": "ruhig",
+   "tier": "main"
+  },
+  {
+   "word": "der Saft",
+   "tier": "main"
+  },
+  {
+   "word": "sagen",
+   "tier": "main"
+  },
+  {
+   "word": "der Salat",
+   "tier": "main"
+  },
+  {
+   "word": "das Salz",
+   "tier": "main"
+  },
+  {
+   "word": "Satz, -ä, e",
+   "tier": "main"
+  },
+  {
+   "word": "die S-Bahn",
+   "tier": "main"
+  },
+  {
+   "word": "der Schalter",
+   "tier": "main"
+  },
+  {
+   "word": "scheinen",
+   "tier": "main"
+  },
+  {
+   "word": "schicken",
+   "tier": "main"
+  },
+  {
+   "word": "das Schild, -er",
+   "tier": "main"
+  },
+  {
+   "word": "der Schinken, –",
+   "tier": "main"
+  },
+  {
+   "word": "schlafen",
+   "tier": "main"
+  },
+  {
+   "word": "schlecht",
+   "tier": "main"
+  },
+  {
+   "word": "schließen",
+   "tier": "main"
+  },
+  {
+   "word": "geschlossen",
+   "tier": "sub"
+  },
+  {
+   "word": "der Schluss",
+   "tier": "main"
+  },
+  {
+   "word": "der Schlüssel, –",
+   "tier": "main"
+  },
+  {
+   "word": "schmecken",
+   "tier": "main"
+  },
+  {
+   "word": "schnell",
+   "tier": "main"
+  },
+  {
+   "word": "schon",
+   "tier": "main"
+  },
+  {
+   "word": "schön",
+   "tier": "main"
+  },
+  {
+   "word": "der Schrank, -ä, e",
+   "tier": "main"
+  },
+  {
+   "word": "schreiben",
+   "tier": "main"
+  },
+  {
+   "word": "der Schuh, -e",
+   "tier": "main"
+  },
+  {
+   "word": "die Schule",
+   "tier": "main"
+  },
+  {
+   "word": "der Schüler, –",
+   "tier": "sub"
+  },
+  {
+   "word": "schwer",
+   "tier": "main"
+  },
+  {
+   "word": "die Schwester, -n",
+   "tier": "main"
+  },
+  {
+   "word": "schwimmen",
+   "tier": "main"
+  },
+  {
+   "word": "das Schwimmbad",
+   "tier": "sub"
+  },
+  {
+   "word": "der See",
+   "tier": "main"
+  },
+  {
+   "word": "sehen",
+   "tier": "main"
+  },
+  {
+   "word": "die Sehenswürdigkeit, -en",
+   "tier": "main"
+  },
+  {
+   "word": "sehr",
+   "tier": "main"
+  },
+  {
+   "word": "sein",
+   "tier": "main"
+  },
+  {
+   "word": "an sein",
+   "tier": "sub"
+  },
+  {
+   "word": "auf sein",
+   "tier": "sub"
+  },
+  {
+   "word": "weg sein",
+   "tier": "sub"
+  },
+  {
+   "word": "zu sein",
+   "tier": "sub"
+  },
+  {
+   "word": "seit",
+   "tier": "main"
+  },
+  {
+   "word": "selbstständig",
+   "tier": "main"
+  },
+  {
+   "word": "sich",
+   "tier": "main"
+  },
+  {
+   "word": "sie",
+   "tier": "main"
+  },
+  {
+   "word": "Sie",
+   "tier": "main"
+  },
+  {
+   "word": "sitzen",
+   "tier": "main"
+  },
+  {
+   "word": "so",
+   "tier": "main"
+  },
+  {
+   "word": "das Sofa",
+   "tier": "main"
+  },
+  {
+   "word": "sofort",
+   "tier": "main"
+  },
+  {
+   "word": "der Sohn, -ö, e",
+   "tier": "main"
+  },
+  {
+   "word": "sollen",
+   "tier": "main"
+  },
+  {
+   "word": "die Sonne",
+   "tier": "main"
+  },
+  {
+   "word": "spät",
+   "tier": "main"
+  },
+  {
+   "word": "später",
+   "tier": "main"
+  },
+  {
+   "word": "die Speisekarte",
+   "tier": "main"
+  },
+  {
+   "word": "spielen",
+   "tier": "main"
+  },
+  {
+   "word": "der Sport",
+   "tier": "main"
+  },
+  {
+   "word": "die Sprache, -n",
+   "tier": "main"
+  },
+  {
+   "word": "sprechen",
+   "tier": "main"
+  },
+  {
+   "word": "die Stadt, -ä, e",
+   "tier": "main"
+  },
+  {
+   "word": "stehen",
+   "tier": "main"
+  },
+  {
+   "word": "die Stelle, -n",
+   "tier": "main"
+  },
+  {
+   "word": "stellen",
+   "tier": "main"
+  },
+  {
+   "word": "der Stock",
+   "tier": "main"
+  },
+  {
+   "word": "die Straße, -n",
+   "tier": "main"
+  },
+  {
+   "word": "die Straßenbahn",
+   "tier": "main"
+  },
+  {
+   "word": "studieren",
+   "tier": "main"
+  },
+  {
+   "word": "das Studium",
+   "tier": "main"
+  },
+  {
+   "word": "der Student, -en",
+   "tier": "sub"
+  },
+  {
+   "word": "die Stunde, -n",
+   "tier": "main"
+  },
+  {
+   "word": "suchen",
+   "tier": "main"
+  },
+  {
+   "word": "tanzen",
+   "tier": "main"
+  },
+  {
+   "word": "die Tasche, -n",
+   "tier": "main"
+  },
+  {
+   "word": "das Taxi, -s",
+   "tier": "main"
+  },
+  {
+   "word": "der Tee",
+   "tier": "main"
+  },
+  {
+   "word": "der Teil, -e",
+   "tier": "main"
+  },
+  {
+   "word": "telefonieren",
+   "tier": "main"
+  },
+  {
+   "word": "das Telefon",
+   "tier": "sub"
+  },
+  {
+   "word": "der Termin, -e",
+   "tier": "main"
+  },
+  {
+   "word": "der Test",
+   "tier": "main"
+  },
+  {
+   "word": "teuer",
+   "tier": "main"
+  },
+  {
+   "word": "der Text, -e",
+   "tier": "main"
+  },
+  {
+   "word": "das Thema",
+   "tier": "main"
+  },
+  {
+   "word": "das Ticket, -s",
+   "tier": "main"
+  },
+  {
+   "word": "der Tisch, -e",
+   "tier": "main"
+  },
+  {
+   "word": "die Tochter, -ö",
+   "tier": "main"
+  },
+  {
+   "word": "die Toilette, -en",
+   "tier": "main"
+  },
+  {
+   "word": "die Tomate, -n",
+   "tier": "main"
+  },
+  {
+   "word": "tot",
+   "tier": "main"
+  },
+  {
+   "word": "(sich) treffen",
+   "tier": "main"
+  },
+  {
+   "word": "die Treppe, -n",
+   "tier": "main"
+  },
+  {
+   "word": "trinken",
+   "tier": "main"
+  },
+  {
+   "word": "tschüss",
+   "tier": "main"
+  },
+  {
+   "word": "tun",
+   "tier": "main"
+  },
+  {
+   "word": "über",
+   "tier": "main"
+  },
+  {
+   "word": "übernachten",
+   "tier": "main"
+  },
+  {
+   "word": "überweisen",
+   "tier": "main"
+  },
+  {
+   "word": "die Uhr",
+   "tier": "main"
+  },
+  {
+   "word": "um",
+   "tier": "main"
+  },
+  {
+   "word": "umziehen",
+   "tier": "main"
+  },
+  {
+   "word": "und",
+   "tier": "main"
+  },
+  {
+   "word": "unser-",
+   "tier": "main"
+  },
+  {
+   "word": "unten",
+   "tier": "main"
+  },
+  {
+   "word": "unter",
+   "tier": "main"
+  },
+  {
+   "word": "der Unterricht",
+   "tier": "main"
+  },
+  {
+   "word": "unterschreiben",
+   "tier": "main"
+  },
+  {
+   "word": "die Unterschrift",
+   "tier": "sub"
+  },
+  {
+   "word": "der Urlaub",
+   "tier": "main"
+  },
+  {
+   "word": "der Vater, -ä",
+   "tier": "main"
+  },
+  {
+   "word": "verboten",
+   "tier": "main"
+  },
+  {
+   "word": "verdienen",
+   "tier": "main"
+  },
+  {
+   "word": "der Verein",
+   "tier": "main"
+  },
+  {
+   "word": "verheiratet",
+   "tier": "main"
+  },
+  {
+   "word": "verkaufen",
+   "tier": "main"
+  },
+  {
+   "word": "der Verkäufer, –",
+   "tier": "sub"
+  },
+  {
+   "word": "vermieten",
+   "tier": "main"
+  },
+  {
+   "word": "der Vermieter",
+   "tier": "sub"
+  },
+  {
+   "word": "verstehen",
+   "tier": "main"
+  },
+  {
+   "word": "der Verwandte, -n",
+   "tier": "main"
+  },
+  {
+   "word": "viel",
+   "tier": "main"
+  },
+  {
+   "word": "vielleicht",
+   "tier": "main"
+  },
+  {
+   "word": "von",
+   "tier": "main"
+  },
+  {
+   "word": "vor",
+   "tier": "main"
+  },
+  {
+   "word": "der Vorname, -n",
+   "tier": "main"
+  },
+  {
+   "word": "die Vorsicht",
+   "tier": "main"
+  },
+  {
+   "word": "(sich) vorstellen",
+   "tier": "main"
+  },
+  {
+   "word": "die Vorwahl",
+   "tier": "main"
+  },
+  {
+   "word": "wandern",
+   "tier": "main"
+  },
+  {
+   "word": "wann",
+   "tier": "main"
+  },
+  {
+   "word": "warten",
+   "tier": "main"
+  },
+  {
+   "word": "warum",
+   "tier": "main"
+  },
+  {
+   "word": "was",
+   "tier": "main"
+  },
+  {
+   "word": "was für ein",
+   "tier": "main"
+  },
+  {
+   "word": "(sich) waschen",
+   "tier": "main"
+  },
+  {
+   "word": "das Wasser",
+   "tier": "main"
+  },
+  {
+   "word": "weh tun",
+   "tier": "main"
+  },
+  {
+   "word": "weiblich",
+   "tier": "main"
+  },
+  {
+   "word": "der Wein",
+   "tier": "main"
+  },
+  {
+   "word": "weit",
+   "tier": "main"
+  },
+  {
+   "word": "weiter",
+   "tier": "main"
+  },
+  {
+   "word": "welch-",
+   "tier": "main"
+  },
+  {
+   "word": "die Welt",
+   "tier": "main"
+  },
+  {
+   "word": "wenig",
+   "tier": "main"
+  },
+  {
+   "word": "wer",
+   "tier": "main"
+  },
+  {
+   "word": "werden",
+   "tier": "main"
+  },
+  {
+   "word": "das Wetter",
+   "tier": "main"
+  },
+  {
+   "word": "wichtig",
+   "tier": "main"
+  },
+  {
+   "word": "wie",
+   "tier": "main"
+  },
+  {
+   "word": "wiederholen",
+   "tier": "main"
+  },
+  {
+   "word": "das Wiederhören",
+   "tier": "main"
+  },
+  {
+   "word": "das Wiedersehen",
+   "tier": "main"
+  },
+  {
+   "word": "wie viel",
+   "tier": "main"
+  },
+  {
+   "word": "willkommen",
+   "tier": "main"
+  },
+  {
+   "word": "der Wind",
+   "tier": "main"
+  },
+  {
+   "word": "wir",
+   "tier": "main"
+  },
+  {
+   "word": "wissen",
+   "tier": "main"
+  },
+  {
+   "word": "wo",
+   "tier": "main"
+  },
+  {
+   "word": "woher",
+   "tier": "main"
+  },
+  {
+   "word": "wohin",
+   "tier": "main"
+  },
+  {
+   "word": "wohnen",
+   "tier": "main"
+  },
+  {
+   "word": "die Wohnung, -en",
+   "tier": "sub"
+  },
+  {
+   "word": "wollen",
+   "tier": "main"
+  },
+  {
+   "word": "das Wort, -ö, er/-e",
+   "tier": "main"
+  },
+  {
+   "word": "wunderbar",
+   "tier": "main"
+  },
+  {
+   "word": "zahlen",
+   "tier": "main"
+  },
+  {
+   "word": "die Zeit",
+   "tier": "main"
+  },
+  {
+   "word": "zurzeit",
+   "tier": "sub"
+  },
+  {
+   "word": "die Zeitung, -en",
+   "tier": "main"
+  },
+  {
+   "word": "die Zigarette, -n",
+   "tier": "main"
+  },
+  {
+   "word": "das Zimmer, –",
+   "tier": "main"
+  },
+  {
+   "word": "der Zoll",
+   "tier": "main"
+  },
+  {
+   "word": "zu",
+   "tier": "main"
+  },
+  {
+   "word": "zufrieden",
+   "tier": "main"
+  },
+  {
+   "word": "der Zug, -ü, e",
+   "tier": "main"
+  },
+  {
+   "word": "zurück",
+   "tier": "main"
+  },
+  {
+   "word": "Wann kommst du zurück?",
+   "tier": "sub"
+  },
+  {
+   "word": "zusammen",
+   "tier": "main"
+  },
+  {
+   "word": "Das macht zusammen 2 Euro 80.",
+   "tier": "sub"
+  },
+  {
+   "word": "zwischen",
+   "tier": "main"
+  },
+  {
+   "word": "Zwischen 8 und 10 Uhr bin ich zu Hause.",
+   "tier": "sub"
+  }
+ ]
+}

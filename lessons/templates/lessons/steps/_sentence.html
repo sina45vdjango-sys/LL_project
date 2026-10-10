@@ -6,11 +6,17 @@
 
    `data-role` is the real LessonSentence role. CSS uses it to lay dialogue out like a
    script (speaker beside the line) instead of a chat transcript; the role is never
-   carried by colour.{% endcomment %}
+   carried by colour.
+
+   `words` is optional and only the vocabulary step passes it: the page's own words that
+   this sentence uses, shown as chips so the learner sees which of them appear here.{% endcomment %}
 <li class="sentence" data-role="{{ link.role }}">
   {% if link.speaker %}<p class="sentence__speaker"><bdi>{{ link.speaker }}</bdi></p>{% endif %}
   <p class="sentence__de" lang="de" dir="ltr" data-lookup>{{ link.sentence.text }}</p>
   <p class="sentence__fa">{{ link.sentence.translation_fa }}</p>
+  {% if words %}
+    <p class="sentence__words">{% for word in words %}<span class="chip" lang="de" dir="ltr">{{ word.word }}</span>{% endfor %}</p>
+  {% endif %}
   {% if link.sentence.audio %}
     <div class="sentence__audio">
       {% include "includes/audio_control.html" with audio=link.sentence.audio prefix="sentence" pk=link.sentence.pk label=link.sentence.text|truncatechars:60 %}

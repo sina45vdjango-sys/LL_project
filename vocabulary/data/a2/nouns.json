@@ -1,0 +1,1662 @@
+{
+  "level": "A2",
+  "topic": "A2 nouns (official Goethe list)",
+  "words": [
+    {
+      "word": "Ahnung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Ahnungen",
+      "fa": "گمان، تصور",
+      "en": "idea, clue"
+    },
+    {
+      "word": "Angst",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Ängste",
+      "fa": "ترس",
+      "en": "fear"
+    },
+    {
+      "word": "Anzug",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Anzüge",
+      "fa": "کت و شلوار",
+      "en": "suit"
+    },
+    {
+      "word": "Apparat",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Apparate",
+      "fa": "دستگاه، تلفن",
+      "en": "device, apparatus"
+    },
+    {
+      "word": "Artikel",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Artikel",
+      "fa": "مقاله؛ حرف تعریف",
+      "en": "article"
+    },
+    {
+      "word": "Ausbildung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Ausbildungen",
+      "fa": "آموزش حرفه‌ای، کارآموزی",
+      "en": "vocational training"
+    },
+    {
+      "word": "Ausstellung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Ausstellungen",
+      "fa": "نمایشگاه",
+      "en": "exhibition"
+    },
+    {
+      "word": "Babysitter",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Babysitter",
+      "fa": "پرستار بچه",
+      "en": "babysitter"
+    },
+    {
+      "word": "Ball",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Bälle",
+      "fa": "توپ",
+      "en": "ball"
+    },
+    {
+      "word": "Band",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Bands",
+      "fa": "گروه موسیقی",
+      "en": "band"
+    },
+    {
+      "word": "Basketball",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Basketbälle",
+      "fa": "بسکتبال",
+      "en": "basketball"
+    },
+    {
+      "word": "Baustelle",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Baustellen",
+      "fa": "کارگاه ساختمانی",
+      "en": "construction site"
+    },
+    {
+      "word": "Berg",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Berge",
+      "fa": "کوه",
+      "en": "mountain"
+    },
+    {
+      "word": "Besuch",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Besuche",
+      "fa": "بازدید، مهمانی",
+      "en": "visit"
+    },
+    {
+      "word": "Bewerbung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Bewerbungen",
+      "fa": "درخواست کار، تقاضانامهٔ شغلی",
+      "en": "job application"
+    },
+    {
+      "word": "Bitte",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Bitten",
+      "fa": "درخواست، خواهش",
+      "en": "request"
+    },
+    {
+      "word": "Blatt",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Blätter",
+      "fa": "برگ، ورق",
+      "en": "leaf, sheet"
+    },
+    {
+      "word": "Bohne",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Bohnen",
+      "fa": "لوبیا",
+      "en": "bean"
+    },
+    {
+      "word": "Brücke",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Brücken",
+      "fa": "پل",
+      "en": "bridge"
+    },
+    {
+      "word": "Cafeteria",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Cafeterias",
+      "fa": "کافه‌تریا",
+      "en": "cafeteria"
+    },
+    {
+      "word": "Chefin",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Chefinnen",
+      "fa": "رئیس (زن)",
+      "en": "female boss"
+    },
+    {
+      "word": "Club",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Clubs",
+      "fa": "باشگاه، کلوب",
+      "en": "club"
+    },
+    {
+      "word": "Creme",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Cremes",
+      "fa": "کرم",
+      "en": "cream"
+    },
+    {
+      "word": "Datei",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Dateien",
+      "fa": "فایل",
+      "en": "file"
+    },
+    {
+      "word": "Ding",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Dinge",
+      "fa": "چیز",
+      "en": "thing"
+    },
+    {
+      "word": "Disko",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Diskos",
+      "fa": "دیسکو",
+      "en": "disco"
+    },
+    {
+      "word": "E-Book",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die E-Books",
+      "fa": "کتاب الکترونیکی",
+      "en": "e-book"
+    },
+    {
+      "word": "Ehepartner",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Ehepartner",
+      "fa": "همسر",
+      "en": "spouse"
+    },
+    {
+      "word": "Erdgeschoss",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Erdgeschosse",
+      "fa": "طبقهٔ همکف",
+      "en": "ground floor"
+    },
+    {
+      "word": "Erfahrung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Erfahrungen",
+      "fa": "تجربه",
+      "en": "experience"
+    },
+    {
+      "word": "Erlaubnis",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": null,
+      "fa": "اجازه",
+      "en": "permission"
+    },
+    {
+      "word": "Ermäßigung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Ermäßigungen",
+      "fa": "تخفیف",
+      "en": "discount"
+    },
+    {
+      "word": "Fach",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Fächer",
+      "fa": "درس، رشته",
+      "en": "subject"
+    },
+    {
+      "word": "Fahrplan",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Fahrpläne",
+      "fa": "جدول زمانی حرکت (قطار، اتوبوس)",
+      "en": "timetable"
+    },
+    {
+      "word": "Fan",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Fans",
+      "fa": "هوادار",
+      "en": "fan"
+    },
+    {
+      "word": "Fest",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Feste",
+      "fa": "جشن",
+      "en": "celebration"
+    },
+    {
+      "word": "Festival",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Festivals",
+      "fa": "فستیوال",
+      "en": "festival"
+    },
+    {
+      "word": "Flohmarkt",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Flohmärkte",
+      "fa": "بازار دست‌دوم‌فروش‌ها",
+      "en": "flea market"
+    },
+    {
+      "word": "Flug",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Flüge",
+      "fa": "پرواز",
+      "en": "flight"
+    },
+    {
+      "word": "Fluss",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Flüsse",
+      "fa": "رودخانه",
+      "en": "river"
+    },
+    {
+      "word": "Fotoapparat",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Fotoapparate",
+      "fa": "دوربین عکاسی",
+      "en": "camera"
+    },
+    {
+      "word": "Garage",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Garagen",
+      "fa": "گاراژ",
+      "en": "garage"
+    },
+    {
+      "word": "Gehalt",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Gehälter",
+      "fa": "حقوق",
+      "en": "salary"
+    },
+    {
+      "word": "Geldbörse",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Geldbörsen",
+      "fa": "کیف پول",
+      "en": "purse"
+    },
+    {
+      "word": "Gericht",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Gerichte",
+      "fa": "غذا؛ دادگاه",
+      "en": "dish, court"
+    },
+    {
+      "word": "Gerät",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Geräte",
+      "fa": "دستگاه",
+      "en": "device"
+    },
+    {
+      "word": "Geschichte",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Geschichten",
+      "fa": "داستان، تاریخ",
+      "en": "story, history"
+    },
+    {
+      "word": "Gesicht",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Gesichter",
+      "fa": "صورت",
+      "en": "face"
+    },
+    {
+      "word": "Gewitter",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Gewitter",
+      "fa": "رعد و برق",
+      "en": "thunderstorm"
+    },
+    {
+      "word": "Gitarre",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Gitarren",
+      "fa": "گیتار",
+      "en": "guitar"
+    },
+    {
+      "word": "Grippe",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": null,
+      "fa": "آنفلوانزا",
+      "en": "flu"
+    },
+    {
+      "word": "Hamburger",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Hamburger",
+      "fa": "همبرگر",
+      "en": "hamburger"
+    },
+    {
+      "word": "Handtuch",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Handtücher",
+      "fa": "حوله",
+      "en": "towel"
+    },
+    {
+      "word": "Hauptstadt",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Hauptstädte",
+      "fa": "پایتخت",
+      "en": "capital city"
+    },
+    {
+      "word": "Haushalt",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Haushalte",
+      "fa": "خانه و خانواده؛ اقتصاد خانه",
+      "en": "household"
+    },
+    {
+      "word": "Heizung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Heizungen",
+      "fa": "شوفاژ",
+      "en": "heating"
+    },
+    {
+      "word": "Himmel",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": null,
+      "fa": "آسمان",
+      "en": "sky"
+    },
+    {
+      "word": "Homepage",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Homepages",
+      "fa": "صفحهٔ اصلی وب",
+      "en": "homepage"
+    },
+    {
+      "word": "Insel",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Inseln",
+      "fa": "جزیره",
+      "en": "island"
+    },
+    {
+      "word": "Instrument",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Instrumente",
+      "fa": "ساز، ابزار",
+      "en": "instrument"
+    },
+    {
+      "word": "Interesse",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Interessen",
+      "fa": "علاقه",
+      "en": "interest"
+    },
+    {
+      "word": "Interview",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Interviews",
+      "fa": "مصاحبه",
+      "en": "interview"
+    },
+    {
+      "word": "Kamera",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Kameras",
+      "fa": "دوربین",
+      "en": "camera"
+    },
+    {
+      "word": "Kaufhaus",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Kaufhäuser",
+      "fa": "فروشگاه بزرگ",
+      "en": "department store"
+    },
+    {
+      "word": "Kette",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Ketten",
+      "fa": "زنجیر، گردنبند",
+      "en": "chain, necklace"
+    },
+    {
+      "word": "Klavier",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Klaviere",
+      "fa": "پیانو",
+      "en": "piano"
+    },
+    {
+      "word": "Kollegin",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Kolleginnen",
+      "fa": "همکار (زن)",
+      "en": "female colleague"
+    },
+    {
+      "word": "Kontakt",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Kontakte",
+      "fa": "تماس، ارتباط",
+      "en": "contact"
+    },
+    {
+      "word": "Kosmetik",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": null,
+      "fa": "لوازم آرایشی",
+      "en": "cosmetics"
+    },
+    {
+      "word": "Kredit",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Kredite",
+      "fa": "وام، اعتبار",
+      "en": "loan, credit"
+    },
+    {
+      "word": "Krimi",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Krimis",
+      "fa": "داستان کارآگاهی",
+      "en": "crime story"
+    },
+    {
+      "word": "Kultur",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Kulturen",
+      "fa": "فرهنگ",
+      "en": "culture"
+    },
+    {
+      "word": "Kundin",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Kundinnen",
+      "fa": "مشتری (زن)",
+      "en": "female customer"
+    },
+    {
+      "word": "Kunst",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Künste",
+      "fa": "هنر",
+      "en": "art"
+    },
+    {
+      "word": "Körper",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Körper",
+      "fa": "بدن",
+      "en": "body"
+    },
+    {
+      "word": "Landschaft",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Landschaften",
+      "fa": "منظره، چشم‌انداز",
+      "en": "landscape"
+    },
+    {
+      "word": "Leben",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Leben",
+      "fa": "زندگی",
+      "en": "life"
+    },
+    {
+      "word": "Link",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Links",
+      "fa": "پیوند، لینک",
+      "en": "link"
+    },
+    {
+      "word": "Lust",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": null,
+      "fa": "میل، رغبت",
+      "en": "desire, inclination"
+    },
+    {
+      "word": "Lüge",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Lügen",
+      "fa": "دروغ",
+      "en": "lie"
+    },
+    {
+      "word": "Magen",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Mägen",
+      "fa": "معده",
+      "en": "stomach"
+    },
+    {
+      "word": "Mailbox",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Mailboxen",
+      "fa": "صندوق پیام",
+      "en": "voicemail, mailbox"
+    },
+    {
+      "word": "Mannschaft",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Mannschaften",
+      "fa": "تیم",
+      "en": "team"
+    },
+    {
+      "word": "Medikament",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Medikamente",
+      "fa": "دارو",
+      "en": "medicine"
+    },
+    {
+      "word": "Menge",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Mengen",
+      "fa": "مقدار، جمعیت",
+      "en": "quantity"
+    },
+    {
+      "word": "Messe",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Messen",
+      "fa": "نمایشگاه تجاری؛ مراسم مذهبی",
+      "en": "trade fair; mass"
+    },
+    {
+      "word": "Mitarbeiter",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Mitarbeiter",
+      "fa": "همکار",
+      "en": "employee"
+    },
+    {
+      "word": "Mitschüler",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Mitschüler",
+      "fa": "هم‌کلاسی",
+      "en": "classmate"
+    },
+    {
+      "word": "Mittel",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Mittel",
+      "fa": "وسیله؛ دارو",
+      "en": "means; remedy"
+    },
+    {
+      "word": "Mode",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Moden",
+      "fa": "مد",
+      "en": "fashion"
+    },
+    {
+      "word": "Motor",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Motoren",
+      "fa": "موتور",
+      "en": "engine"
+    },
+    {
+      "word": "Motorroller",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Motorroller",
+      "fa": "اسکوتر (موتورسیکلت کوچک)",
+      "en": "scooter"
+    },
+    {
+      "word": "Nachbarin",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Nachbarinnen",
+      "fa": "همسایه (زن)",
+      "en": "female neighbour"
+    },
+    {
+      "word": "Natur",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": null,
+      "fa": "طبیعت",
+      "en": "nature"
+    },
+    {
+      "word": "Notiz",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Notizen",
+      "fa": "یادداشت",
+      "en": "note"
+    },
+    {
+      "word": "Nudel",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Nudeln",
+      "fa": "رشته‌فرنگی",
+      "en": "noodle"
+    },
+    {
+      "word": "Nähe",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": null,
+      "fa": "نزدیکی",
+      "en": "proximity"
+    },
+    {
+      "word": "Paar",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Paare",
+      "fa": "جفت، زوج",
+      "en": "pair, couple"
+    },
+    {
+      "word": "Paket",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Pakete",
+      "fa": "بسته",
+      "en": "parcel"
+    },
+    {
+      "word": "Parfüm",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Parfüms",
+      "fa": "عطر",
+      "en": "perfume"
+    },
+    {
+      "word": "Passwort",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Passwörter",
+      "fa": "گذرواژه",
+      "en": "password"
+    },
+    {
+      "word": "Person",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Personen",
+      "fa": "شخص",
+      "en": "person"
+    },
+    {
+      "word": "Pferd",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Pferde",
+      "fa": "اسب",
+      "en": "horse"
+    },
+    {
+      "word": "Pflanze",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Pflanzen",
+      "fa": "گیاه",
+      "en": "plant"
+    },
+    {
+      "word": "Pizza",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Pizzas",
+      "fa": "پیتزا",
+      "en": "pizza"
+    },
+    {
+      "word": "Plakat",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Plakate",
+      "fa": "پوستر",
+      "en": "poster"
+    },
+    {
+      "word": "Portion",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Portionen",
+      "fa": "پرس",
+      "en": "portion"
+    },
+    {
+      "word": "Poster",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Poster",
+      "fa": "پوستر",
+      "en": "poster"
+    },
+    {
+      "word": "Postkarte",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Postkarten",
+      "fa": "کارت پستال",
+      "en": "postcard"
+    },
+    {
+      "word": "Produkt",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Produkte",
+      "fa": "محصول",
+      "en": "product"
+    },
+    {
+      "word": "Programm",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Programme",
+      "fa": "برنامه",
+      "en": "programme"
+    },
+    {
+      "word": "Projekt",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Projekte",
+      "fa": "پروژه",
+      "en": "project"
+    },
+    {
+      "word": "Qualität",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Qualitäten",
+      "fa": "کیفیت",
+      "en": "quality"
+    },
+    {
+      "word": "Quiz",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": null,
+      "fa": "مسابقهٔ پرسش",
+      "en": "quiz"
+    },
+    {
+      "word": "Rathaus",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Rathäuser",
+      "fa": "شهرداری",
+      "en": "town hall"
+    },
+    {
+      "word": "Reifen",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Reifen",
+      "fa": "لاستیک",
+      "en": "tyre"
+    },
+    {
+      "word": "Reihe",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Reihen",
+      "fa": "ردیف، سری",
+      "en": "row, series"
+    },
+    {
+      "word": "Reinigung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Reinigungen",
+      "fa": "خشکشویی، نظافت",
+      "en": "dry cleaner"
+    },
+    {
+      "word": "Rentnerin",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Rentnerinnen",
+      "fa": "بازنشسته (زن)",
+      "en": "female pensioner"
+    },
+    {
+      "word": "Rest",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Reste",
+      "fa": "باقی‌مانده",
+      "en": "remainder"
+    },
+    {
+      "word": "Rezept",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Rezepte",
+      "fa": "دستور غذا؛ نسخه",
+      "en": "recipe, prescription"
+    },
+    {
+      "word": "Rose",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Rosen",
+      "fa": "گل رز",
+      "en": "rose"
+    },
+    {
+      "word": "Ruhe",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": null,
+      "fa": "آرامش، سکوت",
+      "en": "calm, quiet"
+    },
+    {
+      "word": "Rundgang",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Rundgänge",
+      "fa": "بازدید همراه با راهنما، گردش",
+      "en": "tour"
+    },
+    {
+      "word": "Rätsel",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Rätsel",
+      "fa": "معما",
+      "en": "puzzle, riddle"
+    },
+    {
+      "word": "Sache",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Sachen",
+      "fa": "چیز، موضوع",
+      "en": "thing, matter"
+    },
+    {
+      "word": "Schere",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Scheren",
+      "fa": "قیچی",
+      "en": "scissors"
+    },
+    {
+      "word": "Schiff",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Schiffe",
+      "fa": "کشتی",
+      "en": "ship"
+    },
+    {
+      "word": "Schloss",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Schlösser",
+      "fa": "قصر؛ قفل",
+      "en": "castle, lock"
+    },
+    {
+      "word": "Schwein",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Schweine",
+      "fa": "خوک",
+      "en": "pig"
+    },
+    {
+      "word": "Schülerin",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Schülerinnen",
+      "fa": "دانش‌آموز (دختر)",
+      "en": "female pupil"
+    },
+    {
+      "word": "Seife",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Seifen",
+      "fa": "صابون",
+      "en": "soap"
+    },
+    {
+      "word": "Seite",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Seiten",
+      "fa": "صفحه، طرف",
+      "en": "page, side"
+    },
+    {
+      "word": "Sendung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Sendungen",
+      "fa": "برنامه؛ محموله",
+      "en": "broadcast, shipment"
+    },
+    {
+      "word": "Service",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": null,
+      "fa": "خدمات، سرویس",
+      "en": "service"
+    },
+    {
+      "word": "Situation",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Situationen",
+      "fa": "موقعیت",
+      "en": "situation"
+    },
+    {
+      "word": "Ski",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Ski",
+      "fa": "اسکی",
+      "en": "ski"
+    },
+    {
+      "word": "Sportplatz",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Sportplätze",
+      "fa": "زمین ورزش",
+      "en": "sports ground"
+    },
+    {
+      "word": "Stadtplan",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Stadtpläne",
+      "fa": "نقشهٔ شهر",
+      "en": "city map"
+    },
+    {
+      "word": "Star",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Stars",
+      "fa": "ستاره",
+      "en": "star"
+    },
+    {
+      "word": "Stiefel",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Stiefel",
+      "fa": "چکمه",
+      "en": "boot"
+    },
+    {
+      "word": "Stift",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Stifte",
+      "fa": "خودکار، مداد",
+      "en": "pen"
+    },
+    {
+      "word": "Stockwerk",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Stockwerke",
+      "fa": "طبقه",
+      "en": "floor, storey"
+    },
+    {
+      "word": "Strand",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Strände",
+      "fa": "ساحل",
+      "en": "beach"
+    },
+    {
+      "word": "Stress",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": null,
+      "fa": "استرس، فشار",
+      "en": "stress"
+    },
+    {
+      "word": "Studentin",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Studentinnen",
+      "fa": "دانشجو (دختر)",
+      "en": "female student"
+    },
+    {
+      "word": "Tablet",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Tablets",
+      "fa": "تبلت",
+      "en": "tablet"
+    },
+    {
+      "word": "Tafel",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Tafeln",
+      "fa": "تخته، لوح",
+      "en": "board, bar"
+    },
+    {
+      "word": "Team",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Teams",
+      "fa": "تیم",
+      "en": "team"
+    },
+    {
+      "word": "Tennis",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": null,
+      "fa": "تنیس",
+      "en": "tennis"
+    },
+    {
+      "word": "Tipp",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Tipps",
+      "fa": "نکته، راهنمایی",
+      "en": "tip"
+    },
+    {
+      "word": "Titel",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Titel",
+      "fa": "عنوان (کتاب، فیلم)",
+      "en": "title"
+    },
+    {
+      "word": "Topf",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Töpfe",
+      "fa": "قابلمه",
+      "en": "pot"
+    },
+    {
+      "word": "Tour",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Touren",
+      "fa": "تور، گردش",
+      "en": "tour"
+    },
+    {
+      "word": "Tourist",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Touristen",
+      "fa": "گردشگر",
+      "en": "tourist"
+    },
+    {
+      "word": "Touristin",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Touristinnen",
+      "fa": "گردشگر (زن)",
+      "en": "female tourist"
+    },
+    {
+      "word": "Training",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Trainings",
+      "fa": "تمرین",
+      "en": "training"
+    },
+    {
+      "word": "Traum",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Träume",
+      "fa": "خواب، رؤیا",
+      "en": "dream"
+    },
+    {
+      "word": "Umzug",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Umzüge",
+      "fa": "اسباب‌کشی",
+      "en": "move"
+    },
+    {
+      "word": "Unfall",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Unfälle",
+      "fa": "تصادف، حادثه",
+      "en": "accident"
+    },
+    {
+      "word": "Unterkunft",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Unterkünfte",
+      "fa": "محل اقامت",
+      "en": "accommodation"
+    },
+    {
+      "word": "Unterschied",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Unterschiede",
+      "fa": "تفاوت",
+      "en": "difference"
+    },
+    {
+      "word": "Verkehr",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": null,
+      "fa": "ترافیک، رفت‌وآمد",
+      "en": "traffic"
+    },
+    {
+      "word": "Vermieterin",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Vermieterinnen",
+      "fa": "صاحب‌خانه (زن)",
+      "en": "female landlord"
+    },
+    {
+      "word": "Verspätung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Verspätungen",
+      "fa": "تأخیر",
+      "en": "delay"
+    },
+    {
+      "word": "Vertrag",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Verträge",
+      "fa": "قرارداد",
+      "en": "contract"
+    },
+    {
+      "word": "Volleyball",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Volleybälle",
+      "fa": "والیبال",
+      "en": "volleyball"
+    },
+    {
+      "word": "Vorschlag",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Vorschläge",
+      "fa": "پیشنهاد",
+      "en": "suggestion"
+    },
+    {
+      "word": "Wagen",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Wagen",
+      "fa": "خودرو، واگن",
+      "en": "car"
+    },
+    {
+      "word": "Wald",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Wälder",
+      "fa": "جنگل",
+      "en": "forest"
+    },
+    {
+      "word": "Webseite",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Webseiten",
+      "fa": "وب‌سایت",
+      "en": "website"
+    },
+    {
+      "word": "Werkstatt",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Werkstätten",
+      "fa": "تعمیرگاه",
+      "en": "workshop, garage"
+    },
+    {
+      "word": "Wettbewerb",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Wettbewerbe",
+      "fa": "مسابقه",
+      "en": "competition"
+    },
+    {
+      "word": "Witz",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Witze",
+      "fa": "لطیفه",
+      "en": "joke"
+    },
+    {
+      "word": "Wolke",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Wolken",
+      "fa": "ابر",
+      "en": "cloud"
+    },
+    {
+      "word": "Workshop",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Workshops",
+      "fa": "کارگاه آموزشی",
+      "en": "workshop"
+    },
+    {
+      "word": "Wunsch",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Wünsche",
+      "fa": "آرزو، خواسته",
+      "en": "wish"
+    },
+    {
+      "word": "Wäsche",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Wäschen",
+      "fa": "رخت، لباس‌های شستنی",
+      "en": "laundry"
+    },
+    {
+      "word": "Zelt",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Zelte",
+      "fa": "چادر",
+      "en": "tent"
+    },
+    {
+      "word": "Zentrum",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Zentren",
+      "fa": "مرکز",
+      "en": "centre"
+    },
+    {
+      "word": "Zettel",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Zettel",
+      "fa": "تکه کاغذ، یادداشت",
+      "en": "note, slip"
+    },
+    {
+      "word": "Zeugnis",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Zeugnisse",
+      "fa": "گواهی، کارنامه",
+      "en": "certificate"
+    },
+    {
+      "word": "Ziel",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Ziele",
+      "fa": "هدف، مقصد",
+      "en": "goal, destination"
+    },
+    {
+      "word": "Zirkus",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Zirkusse",
+      "fa": "سیرک",
+      "en": "circus"
+    }
+  ]
+}

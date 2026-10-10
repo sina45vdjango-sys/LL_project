@@ -8,8 +8,8 @@
     {% for link in step.grammar %}
       <article class="grammar-topic">
         <p class="grammar-topic__eyebrow">موضوع {{ forloop.counter }} از {{ step.count }}</p>
-        <h3 class="grammar-topic__title" dir="auto">{{ link.grammar.title }}</h3>
-        <div class="grammar-topic__body" dir="auto" data-lookup>{{ link.grammar.explanation|linebreaks }}</div>
+        <h3 class="grammar-topic__title">{{ link.grammar.title|direction }}</h3>
+        <div class="grammar-topic__body" data-lookup>{{ link.grammar.explanation|without_english|direction|linebreaks }}</div>
         {% comment %}Same as the prose blocks: `.grammar-topic__audio` lost its rules in Phase 7,
            so the wrapper is gone and the shared control spaces itself.{% endcomment %}
         {% if link.grammar.audio %}

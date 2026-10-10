@@ -63,7 +63,7 @@
               <li class="word-lesson">
                 <a class="word-lesson__link" href="{% url 'lessons:lesson-detail' link.lesson.pk %}">
                   <span class="word-lesson__number">درس {{ link.lesson.order }}</span>
-                  <span class="word-lesson__title" dir="auto">{{ link.lesson.title }}</span>
+                  <span class="word-lesson__title">{{ link.lesson.title|direction }}</span>
                 </a>
                 <span class="chip">{% if link.role == 'REVIEW' %}مرور{% else %}جدید{% endif %}</span>
               </li>

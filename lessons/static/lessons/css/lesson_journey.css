@@ -35,12 +35,16 @@
    smaller and quieter than the title and is never allowed to wrap mid-word. */
 .lesson-head__de { margin: 0; color: var(--muted); font: 400 13px/1.8 system-ui, sans-serif; overflow-wrap: anywhere; }
 
+/* ------------------------------------------------------------- stepper --- */
+.journey-stepper { display: flex; flex-direction: column; gap: 8px; }
+
 /* --------------------------------------------------------------- progress --- */
 .journey-progress { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
 .journey-progress__text { margin: 0; color: var(--muted); font-size: 12px; }
 
 /* -------------------------------------------------------------- step chips --- */
-.journey-steps ol { display: flex; gap: 8px; margin: 0; padding: 2px 2px 8px; list-style: none; overflow-x: auto; }
+.journey-steps ol { display: flex; gap: 8px; margin: 0; padding: 2px 2px 8px; list-style: none; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.journey-steps ol::-webkit-scrollbar { display: none; }
 .journey-steps li { flex: 0 0 auto; }
 .journey-chip { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 12px; white-space: nowrap; }
 .journey-chip:hover { border-color: var(--accent); color: var(--fg); text-decoration: none; }
@@ -116,6 +120,9 @@
 .lesson-mode-hint { margin: 12px 0 0; color: var(--muted); font-size: 13px; }
 .lesson-mode-hint a { text-decoration: underline; text-underline-offset: 3px; }
 .step-note { margin: 0; max-width: 68ch; color: var(--muted); font-size: 12px; line-height: 1.95; }
+.callout { display: flex; flex-direction: column; gap: 6px; padding: 14px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-alt); font-size: 13px; line-height: 1.9; }
+.callout--info { border-color: var(--accent); background: var(--accent-soft); color: var(--fg); }
+.callout--info strong { color: var(--accent-text); }
 .step-toolbar { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0; font-size: 13px; }
 .step-toolbar__page { color: var(--muted); font-size: 12px; }
 
@@ -149,11 +156,14 @@
    every row would turn the list into a traffic light; only the states that really need
    attention use colour, and «مرور» stays neutral on purpose. */
 .word-rows { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.word-chunk-divider { display: flex; align-items: center; gap: 12px; margin-block: 16px 10px; padding-block: 4px; list-style: none; }
+.word-chunk-divider__line { flex: 1; height: 1px; background: var(--line); }
+.word-chunk-divider__badge { flex: 0 0 auto; padding: 4px 12px; border-radius: 999px; background: var(--surface-alt); border: 1px solid var(--line); color: var(--muted); font: 600 12px/1.5 system-ui, sans-serif; letter-spacing: .2px; }
 .word-row { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) auto; align-items: center; gap: 3px 14px; padding: 8px 10px; border-block-end: 1px solid var(--line); }
 .word-row:first-child { border-block-start: 1px solid var(--line); }
 .word-row:hover { background: var(--surface-alt); }
 .word-row__term { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-width: 0; }
-.word-row__term a { color: var(--fg); font: 700 16px/1.55 system-ui, sans-serif; overflow-wrap: anywhere; }
+.word-row__term a { display: inline-flex; align-items: center; min-height: 44px; color: var(--fg); font: 700 16px/1.55 system-ui, sans-serif; overflow-wrap: anywhere; }
 .word-row__term a:hover { color: var(--accent-text); text-decoration: none; }
 .word-row__article { color: var(--accent-text); }
 .word-row__body { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
@@ -235,6 +245,12 @@
 .finish-missed__count { margin-inline-start: auto; color: var(--danger); font-size: 12px; white-space: nowrap; }
 .finish-missed__cta { align-self: flex-start; }
 
+.finish-srs { display: flex; flex-direction: column; gap: 12px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.finish-srs__body { display: flex; flex-direction: column; gap: 6px; }
+.finish-srs__title { margin: 0; font-size: 17px; line-height: 1.65; }
+.finish-srs__lead { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.9; }
+.finish-srs__cta { align-self: flex-start; }
+
 .step-finish__actions { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
 .step-finish__state { margin: 0; color: var(--success); font-size: 12px; }
 .step-finish__nav { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -259,7 +275,17 @@
 /* A focused player: compact header, one step at a time, and the primary action
    pinned above the shell's bottom navigation rather than below the fold. */
 @media (max-width: 899.98px) {
-  .journey-step { scroll-margin-block-start: 72px; }
+  .journey-stepper {
+    position: sticky;
+    top: var(--app-bar-h, 48px);
+    z-index: 25;
+    background: var(--bg);
+    margin-inline: -16px;
+    padding: 8px 16px 6px;
+    border-block-end: 1px solid var(--line);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  }
+  .journey-step { scroll-margin-block-start: 140px; }
   .journey-nav {
     position: sticky; bottom: var(--bottom-nav-h); z-index: 20;
     margin-inline: -16px; margin-block-start: 4px;
@@ -273,20 +299,31 @@
 
   .journey-nav__pos { display: none; }
   .journey-step { gap: 14px; }
-  .step-block, .grammar-topic, .ex-item, .finish-missed { padding: 16px; border-radius: 12px; }
+  .step-block, .grammar-topic, .ex-item, .finish-missed, .finish-srs { padding: 16px; border-radius: 12px; }
   .finish-missed__count { margin-inline-start: 0; }
   .sentence { padding: 14px 16px; }
   .sentence__de { font-size: 18px; }
-  /* Two lines per row instead of three columns: the word and its label on the first, the
-     meaning and its inflections across the full width below. The meaning is never pushed
-     into a narrow column next to a long German word. */
-  .word-row { grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; padding: 8px; }
-  .word-row__term { grid-column: 1; }
-  .word-row__side { grid-column: 2; grid-row: 1; }
-  .word-row__body { grid-column: 1 / -1; }
-  .word-row__term a { font-size: 15.5px; }
-  /* Below 560px the meaning spans the full width, so a wide label cannot push it anywhere
-     — the pill can shrink back to hugging its own text and give the German word more room. */
+  /* Mobile chunked card layout for vocabulary: each item is an individual touch card */
+  .word-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 12px;
+    padding: 10px 14px;
+    margin-block-end: 8px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  }
+  .word-row:first-child { border-block-start: 1px solid var(--line); }
+  .word-row:last-child { margin-block-end: 0; }
+  .word-row:hover { background: var(--surface-alt); }
+  .word-row__term { grid-column: 1; display: flex; align-items: center; gap: 8px; }
+  .word-row__term a { min-height: 44px; display: inline-flex; align-items: center; font-size: 16px; font-weight: 700; }
+  .word-row__side { grid-column: 2; grid-row: 1; align-self: center; }
+  .word-row__body { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 4px; padding-block-start: 2px; }
+  .word-row__meaning { font-size: 14px; line-height: 1.6; }
+  .word-row__facts { display: flex; flex-wrap: wrap; gap: 6px 10px; margin-block-start: 2px; }
+  .word-row__fact { font-size: 12px; color: var(--muted); }
   .word-row__status { min-width: 0; }
   .agenda { grid-template-columns: minmax(0, 1fr); }
 }

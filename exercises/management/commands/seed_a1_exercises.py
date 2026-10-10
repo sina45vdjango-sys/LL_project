@@ -16,11 +16,16 @@ The audio is neither generated nor copied: the question points at the sentence's
 file, so one MP3 serves the sentence link, the lesson block and the listening question.
 
 **This command deletes and rebuilds.** What it created last time is removed first, so
-running it twice does not double the content. The deletion is scoped to ``LISTENING``
-exercises and can never reach the 111 authored exercises. Note the consequence all the same:
-deleting an exercise cascades to its questions and answers, and an ``ExerciseAttempt``
+running it twice does not double the content. The deletion is scoped to this command's own
+exercise **title**, so it can never reach an authored exercise — and it is deliberately not
+scoped by exercise *type* any more, because the pronunciation and dictation drills are
+``LISTENING`` exercises too, and rebuilding by type silently deleted them.
+
+Deleting an exercise cascades to its questions and answers, and an ``ExerciseAttempt``
 points at both, so a learner's recorded attempts *on a generated listening exercise* go with
-it. Attempts on authored exercises are untouched.
+it. Attempts on authored exercises are untouched. Rebuilding is therefore refused while any
+such attempt exists; ``--yes-replace-history`` allows it on purpose and says how much
+history it is about to delete.
 
 A lesson is skipped when it has fewer than three usable sentences, because the wrong options
 would then be repeated correct answers rather than plausible ones.
@@ -30,7 +35,8 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.db.models import Max
 
-from exercises.models import Answer, Exercise, Question
+from exercises.generated import LISTENING_DRILL_PREFIX
+from exercises.models import Answer, Exercise, ExerciseAttempt, Question
 from lessons.models import Lesson
 from vocabulary.models import Sentence
 
@@ -48,7 +54,10 @@ CANDIDATES = 60
 
 MEANING_PROMPT = "به فایل گوش کن و معنی درست را انتخاب کن."
 HEARD_PROMPT = "به فایل گوش کن. کدام جملهٔ آلمانی را شنیدی؟"
-EXERCISE_TITLE = "شنیدن: جمله‌های این درس"
+# The title every exercise it writes carries, and the marker of what it owns. Read from
+# ``exercises/generated.py`` so the string cannot drift from the one the word drills use to
+# tell generated questions from authored ones.
+EXERCISE_TITLE = LISTENING_DRILL_PREFIX
 EXERCISE_INSTRUCTION = "به هر فایل گوش کن و گزینهٔ درست را انتخاب کن."
 
 
@@ -68,6 +77,11 @@ class Command(BaseCommand):
             type=int,
             default=0,
             help="Only this lesson id. Zero means every published lesson.",
+        )
+        parser.add_argument(
+            "--yes-replace-history",
+            action="store_true",
+            help="Also delete the stored attempts that belong to the listening exercises being replaced.",
         )
 
     def wrong_options(self, correct, candidates):
@@ -110,8 +124,15 @@ class Command(BaseCommand):
             )
             wrong_index += 1
 
-    def lesson_plan(self, lesson, want_sentences):
-        """The questions this lesson should get, or an empty list when it cannot supply them."""
+    def lesson_plan(self, lesson, want_sentences, asked):
+        """The questions this lesson should get, or an empty list when it cannot supply them.
+
+        ``asked`` holds the sentences an earlier lesson already turned into a listening
+        question in this run, and the picked sentence is added to it. A sentence taught in
+        several lessons — every later lesson reuses the ones before it — would otherwise be
+        asked again, word for word, in each of them; hearing it once is the practice, and the
+        second listening is the same question twice.
+        """
         links = (
             lesson.lesson_sentences.filter(sentence__is_published=True)
             .exclude(sentence__audio="")
@@ -122,12 +143,17 @@ class Command(BaseCommand):
 
         picked = []
         for link in links:
+            if link.sentence.pk in asked:
+                continue
             picked.append(link.sentence)
             if len(picked) == want_sentences:
                 break
 
         if len(picked) < SENTENCES_PER_LESSON:
             return []
+
+        for sentence in picked:
+            asked.add(sentence.pk)
 
         # Wrong options are drawn from the same level, ordered by id, so the same content
         # always produces the same exercise.
@@ -185,9 +211,13 @@ class Command(BaseCommand):
             "course__language_level__order", "order", "pk"
         )
 
+        # Which sentences already have a listening question in this run, so a sentence
+        # taught in more than one lesson is asked about only in the first of them.
+        asked = set()
+
         planned = []
         for lesson in lessons:
-            plan = self.lesson_plan(lesson, options["sentences"])
+            plan = self.lesson_plan(lesson, options["sentences"], asked)
             if plan:
                 planned.append((lesson, plan))
 
@@ -202,18 +232,55 @@ class Command(BaseCommand):
         for lesson, plan in planned:
             question_total += len(plan)
 
-        existing = Exercise.objects.filter(type=Exercise.ExerciseType.LISTENING).count()
+        existing = Exercise.objects.filter(title=EXERCISE_TITLE).count()
+
+        # An attempt points at both the exercise and the question, and the rebuild deletes
+        # both, so these rows disappear with the exercises. Count them while they still exist.
+        attempt_rows = ExerciseAttempt.objects.filter(exercise__title=EXERCISE_TITLE)
+        attempt_total = attempt_rows.count()
+        learner_total = attempt_rows.values("user").distinct().count()
 
         if options["dry_run"]:
             self.stdout.write(
                 f"Dry run: would replace {existing} listening exercise(s) with "
                 f"{len(planned)} exercises / {question_total} questions."
             )
+            if attempt_total:
+                self.stdout.write(
+                    f"Dry run: {attempt_total} stored attempt(s) from {learner_total} "
+                    f"learner(s) belong to those exercises and would be deleted as well."
+                )
             return
+
+        # Rebuilding is safe while nobody has answered these questions. Once somebody has,
+        # replacing them would quietly destroy learning history, so it needs the flag.
+        if attempt_total and not options["yes_replace_history"]:
+            self.stderr.write(
+                self.style.WARNING(
+                    f"{attempt_total} stored attempt(s) from {learner_total} learner(s) belong "
+                    f"to the {existing} listening exercise(s) this command would replace."
+                )
+            )
+            self.stderr.write(
+                "Deleting those exercises also deletes those attempts, which are the history "
+                "the review and progress features read."
+            )
+            raise CommandError(
+                "Refusing to replace listening exercises that have learner attempts. "
+                "Re-run with --yes-replace-history to delete that history too."
+            )
+
+        if attempt_total:
+            self.stderr.write(
+                self.style.WARNING(
+                    f"--yes-replace-history: deleting {attempt_total} stored attempt(s) from "
+                    f"{learner_total} learner(s) together with the listening exercises."
+                )
+            )
 
         # One transaction, so a failure half-way cannot leave the content deleted.
         with transaction.atomic():
-            Exercise.objects.filter(type=Exercise.ExerciseType.LISTENING).delete()
+            Exercise.objects.filter(title=EXERCISE_TITLE).delete()
 
             for lesson, plan in planned:
                 last_order = Exercise.objects.filter(lesson=lesson).aggregate(Max("order"))["order__max"]

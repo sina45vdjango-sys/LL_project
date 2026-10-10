@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}مرور {{ lesson.display_title }} | درس {{ lesson.order }} | {{ brand.name }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'lessons/css/lessons.css' %}">
+<link rel="stylesheet" href="{% static 'lessons/css/lesson_journey.css' %}">
+<link rel="stylesheet" href="{% static 'lessons/css/lesson_review.css' %}">
+{% endblock %}
+{% block content_class %}content--lesson{% endblock %}
+{% block content %}
+{% comment %}The revision pass over one lesson: the same rows the journey teaches (see
+   lessons/review.py), shown as short lists instead of narrative steps, so bringing a
+   lesson back to mind takes a minute rather than a second walk through the stepper.
+
+   Every section is rendered only when the lesson actually has that material, and only
+   from published rows — the product's usual rule. Each section links back into the
+   lesson at the step that holds the full text, so the review stays a summary and never a
+   second copy of the lesson.{% endcomment %}
+{% comment %}The progress attributes are only rendered for a signed-in learner, exactly as on
+   the journey page: they are the endpoint the completion button posts to. Without them the
+   button is never revealed, because there would be nowhere to record anything.{% endcomment %}
+<div class="lesson review" data-review data-lesson-id="{{ lesson.pk }}"
+     {% if user.is_authenticated %}data-progress-url="{% url 'lessons:lesson-progress' lesson.pk %}"{% endif %}>
+
+  <header class="lesson-head">
+    <nav class="lesson-head__nav">
+      <a class="lesson-head__back" href="{% url 'lessons:lesson-detail' lesson.pk %}">← بازگشت به درس</a>
+    </nav>
+    <p class="lesson-head__meta">
+      <span class="lesson-head__level" lang="en" dir="ltr">{{ lesson.course.language_level }}</span>
+      <span>درس {{ lesson.order }}</span>
+      <span>مرور</span>
+    </p>
+    <h1 class="lesson-head__title">{{ lesson.display_title|direction }}</h1>
+    {% if lesson.title_fa %}<p class="lesson-head__de" lang="de" dir="ltr">{{ lesson.title }}</p>{% endif %}
+    <p class="lesson-head__desc">هر چیزی که این درس آموزش داد، فشرده و دسته‌بندی‌شده — برای یک مرور سریع، نه دوباره‌خوانی.</p>
+  </header>
+
+  {% if word_rows %}
+    <section class="review-section" id="review-words" aria-labelledby="review-words-title">
+      <header class="review-section__head">
+        <h2 class="review-section__title" id="review-words-title">واژه‌های این درس</h2>
+        <span class="review-section__count">{{ word_rows|length }} واژه</span>
+      </header>
+      <ul class="word-rows">
+        {% for row in word_rows %}
+          {% include "lessons/steps/_word_row.html" with word=row.word status=row.status label=row.label %}
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% if review.grammar %}
+    <section class="review-section" id="review-grammar" aria-labelledby="review-grammar-title">
+      <header class="review-section__head">
+        <h2 class="review-section__title" id="review-grammar-title">گرامر</h2>
+        <span class="review-section__count">{{ review.grammar|length }} موضوع</span>
+      </header>
+      <div class="review-grammar">
+        {% for row in review.grammar %}
+          <article class="review-grammar__item">
+            <h3 class="review-grammar__title">{{ row.grammar.title|direction }}</h3>
+            <p class="review-grammar__summary">{{ row.summary|without_english|direction }}</p>
+            <a class="review-more" href="{% url 'lessons:lesson-detail' lesson.pk %}#step-grammar">متن کامل در درس</a>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  {% if review.sentences %}
+    <section class="review-section" id="review-sentences" aria-labelledby="review-sentences-title">
+      <header class="review-section__head">
+        <h2 class="review-section__title" id="review-sentences-title">جمله‌های کاربردی</h2>
+        <span class="review-section__count">{{ review.sentences|length }} جمله</span>
+      </header>
+      <ul class="sentence-list">
+        {% for link in review.sentences %}
+          {% include "lessons/steps/_sentence.html" with link=link %}
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% if review.ideas %}
+    <section class="review-section" id="review-ideas" aria-labelledby="review-ideas-title">
+      <header class="review-section__head">
+        <h2 class="review-section__title" id="review-ideas-title">مفاهیم کلیدی</h2>
+        <span class="review-section__count">{{ review.ideas|length }} بخش</span>
+      </header>
+      <ul class="review-ideas">
+        {% for block in review.ideas %}
+          <li class="review-ideas__item">
+            {% if block.type == "NOTE" %}
+              <span class="review-ideas__type">نکته</span>
+            {% else %}
+              <span class="review-ideas__type">توضیح</span>
+            {% endif %}
+            <span class="review-ideas__title">{{ block.title|direction }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      <a class="review-more" href="{% url 'lessons:lesson-detail' lesson.pk %}#step-explanation">خواندن کامل در درس</a>
+    </section>
+  {% endif %}
+
+  {% if not word_rows and not review.grammar and not review.sentences and not review.ideas %}
+    <p class="review-empty">این درس هنوز محتوایی برای مرور ندارد.</p>
+  {% endif %}
+
+  {% comment %}The same action the journey's last step offers, at the end of the short read.
+     Only for a signed-in learner, because only they have a row to write; the endpoint is
+     lessons:lesson-progress with the payload the stepper already sends, so the two pages
+     cannot disagree about what "read" means. The button stays hidden until
+     lesson_review.js reveals it, since with no JavaScript nothing could be recorded.{% endcomment %}
+  {% if user.is_authenticated %}
+    <section class="review-section review-done" aria-labelledby="review-done-title">
+      <header class="review-section__head">
+        <h2 class="review-section__title" id="review-done-title">این درس را خواندی؟</h2>
+      </header>
+      <p class="review-done__lead">
+        مرورِ سریع هم یعنی درس را خوانده‌ای. اگر برای امروز کافی بود، همین‌جا ثبتش کن تا
+        قدمِ «درس» در مسیر امروز تمام شود.
+      </p>
+      <div class="review-done__actions">
+        <button type="button" class="btn btn--primary" data-review-complete hidden>درس را خواندم</button>
+        <p class="review-done__state" data-review-state role="status" aria-live="polite" hidden></p>
+      </div>
+    </section>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% comment %}The learner's own progress in the shape progress.js already reads, so the button
+   knows whether this lesson is already finished.{% endcomment %}
+{% block extra_js %}
+{% if progress_state %}{{ progress_state|json_script:"progress-state" }}{% endif %}
+<script src="{% static 'lessons/js/lesson_review.js' %}" defer></script>
+{% endblock %}

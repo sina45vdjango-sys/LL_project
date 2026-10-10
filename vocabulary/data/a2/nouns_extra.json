@@ -1,0 +1,24 @@
+{
+  "level": "A2",
+  "topic": "nouns",
+  "words": [
+    {
+      "word": "Einkaufszentrum",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Einkaufszentren",
+      "fa": "مرکز خرید",
+      "en": "shopping centre"
+    },
+    {
+      "word": "Stipendium",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Stipendien",
+      "fa": "بورس تحصیلی",
+      "en": "scholarship"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% comment %}The plain title here, not `|direction`: that filter returns `<bdi>` markup,
+   which belongs in the page body and would be shown literally inside `<title>`.
+   The visible heading below still uses it.{% endcomment %}
+{% block title %}گفت‌وگو با معلم · {{ lesson.display_title }} | {{ brand.name }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'exercises/css/exercise.css' %}">
+<link rel="stylesheet" href="{% static 'exercises/css/chat.css' %}">
+{% endblock %}
+{% block content_class %}content--exercise{% endblock %}
+{% block content %}
+{% comment %}Concept 9 — «چتِ معلم». The lesson's own dialogue (``exercises/conversation.py``)
+   played with a teacher: she says the partner's lines, the learner answers their own in
+   their own words, and the lesson's line is revealed so they can judge how close they were.
+
+   This replaces the earlier version of the page, which said an exercise's quiz questions
+   in chat bubbles — the reason it read like a form rather than a conversation. Nothing is
+   graded here because a learner's own line cannot be: the graded practice of the lesson is
+   the link at the end.{% endcomment %}
+<div class="exercise-page chat-page">
+  <a class="exercise-back" href="{% url 'lessons:practice-path' %}">
+    ← <span>مسیر امروز</span>
+  </a>
+
+  <header class="exercise-head">
+    <p class="exercise-head__meta">
+      <span class="chip chip--accent">چتِ معلم</span>
+      {% if skill_label %}<span class="chip">{{ skill_label }}</span>{% endif %}
+    </p>
+    <h1 class="exercise-head__title">{{ lesson.display_title|direction }}</h1>
+    {% if turns %}
+      {% comment %}Both characters are named, because the thread below labels the partner's
+         turns with the character's own name: without this line the learner meets a bubble
+         signed «Ben» and has no way to tell that Ben is the side the teacher is reading.{% endcomment %}
+      <p class="exercise-head__instruction">
+        صحنه: {{ lesson.display_title }}. تو نقش
+        {% if you %}<bdi lang="de" dir="ltr">{{ you }}</bdi>{% else %}خودت{% endif %}
+        را داری و معلم جای
+        {% if partner %}<bdi lang="de" dir="ltr">{{ partner }}</bdi>{% else %}طرف مقابل{% endif %}
+        حرف می‌زند. هر جواب را با واژه‌های خودت بنویس؛ بعد خط همان درس را می‌بینی تا
+        خودت بسنجی چقدر نزدیک بودی. هیچ‌کدام نمره ندارد و جایی ثبت نمی‌شود.
+      </p>
+    {% endif %}
+  </header>
+
+  {% if turns %}
+    {% include "exercises/_conversation.html" %}
+  {% else %}
+    <section class="exercise-empty">
+      <h2>این درس گفت‌وگویی ندارد.</h2>
+      <p>درس‌های مرور صحنهٔ خودشان را ندارند. تمرین همین درس را انجام بده.</p>
+      <a class="btn btn--primary" href="{% url 'exercises:exercise-detail' exercise.pk %}">تمرین همین درس</a>
+    </section>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'exercises/js/conversation.js' %}" defer></script>
+{% endblock %}

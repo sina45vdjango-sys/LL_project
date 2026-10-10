@@ -1,0 +1,82 @@
+/* The conversation thread — concepts 9 and 13 (exercises/templates/exercises/chat.html,
+   dialogue.html and their shared `_conversation.html`).
+
+   The two sides are the point of this file: the partner's bubble sits at the inline start
+   with its tail on the top corner, and the learner's own bubble sits at the inline end,
+   tinted with the accent, with its tail on the bottom corner. Inside the learner's bubble
+   live the two states of their turn — the box they write in, and the lesson's own line
+   they compare against — so a turn is either being answered or already answered, never
+   both. Every value is a token from static/css/base.css. */
+
+.chat-page { max-width: 760px; }
+
+.chat { display: flex; flex-direction: column; gap: 14px; }
+
+.chat-thread { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+
+/* A turn is hidden until the conversation reaches it, so the scene grows one line at a
+   time and reads top to bottom. An answered turn stays visible: that is what makes it a
+   conversation rather than a form. */
+.chat-turn { display: flex; flex-direction: column; gap: 8px; }
+.chat-turn[data-turn] { display: none; }
+.chat-turn[data-turn].is-shown { display: flex; }
+
+.chat-bubble {
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 15px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--surface);
+  overflow-wrap: anywhere;
+}
+
+/* The partner speaks first, from the inline start. */
+.chat-turn--teacher .chat-bubble { background: var(--surface-alt); border-start-start-radius: 5px; }
+
+/* You answer from the other side, tinted, so the thread has a visible back-and-forth. */
+.chat-turn--learner .chat-bubble { width: 100%; margin-inline-start: auto; background: var(--accent-soft); border-color: transparent; border-end-end-radius: 5px; }
+
+.chat-bubble__who { display: flex; align-items: center; gap: 6px; margin: 0; color: var(--muted); font-size: 12px; font-weight: 700; }
+
+.chat-avatar {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* plaintext lets each line pick its own direction from its first strong character, so a
+   German answer is not forced into the Persian right-to-left flow (and vice versa). */
+.chat-bubble__answer { margin: 0; font-size: 15px; line-height: 1.8; unicode-bidi: plaintext; }
+.chat-bubble__media { display: flex; }
+
+/* Writing your own line. */
+.chat-compose { display: flex; flex-direction: column; gap: 8px; }
+.chat-compose__label { margin: 0; color: var(--muted); font-size: 12px; }
+.chat-compose__row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.chat-compose__row .runner-answer__input { flex: 1 1 220px; }
+
+/* The lesson's own line, shown after yours so you can judge the difference yourself. */
+.chat-model { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 12px; background: var(--surface); }
+.chat-model__label { margin: 0; color: var(--muted); font-size: 12px; }
+.chat-model__text { margin: 0; font-size: 15px; font-weight: 700; unicode-bidi: plaintext; }
+.chat-model__fa { margin: 0; color: var(--muted); font-size: 12px; }
+.chat-model__check { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.chat-summary { display: flex; flex-direction: column; gap: 8px; }
+.chat-summary__title { margin: 0; font-size: 17px; }
+.chat-summary__score { margin: 0; color: var(--muted); font-size: 14px; }
+.chat-summary__line { margin: 0; color: var(--muted); font-size: 13px; }
+.chat-summary__actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+@media (max-width: 560px) {
+  .chat-bubble { max-width: 100%; padding: 11px 13px; border-radius: 13px; }
+}

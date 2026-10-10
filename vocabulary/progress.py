@@ -9,6 +9,9 @@ its words through ``QuestionTarget``, and only the ``TESTED_ITEM`` target is the
 being tested — the ``CONTEXT`` targets are the words that merely appear in the question.
 Answering a question about ``bestellen`` correctly says nothing about the learner's
 grasp of ``kaufen`` or ``Geld``, so those are left alone.
+
+The same submission also moves the word's review ladder and due time, so this stays the
+one place a word's progress changes (``vocabulary/schedule.py`` owns the schedule).
 """
 
 from django.utils import timezone
@@ -16,6 +19,7 @@ from django.utils import timezone
 from exercises.models import QuestionTarget
 
 from .models import WordProgress
+from .schedule import next_review
 
 
 def tested_word(question):
@@ -39,11 +43,16 @@ def tested_word(question):
     return target.word
 
 
-def record_word_progress(user, question, is_correct):
-    """Count one attempt on the word this question tests.
+def record_word_progress(user, question, is_correct, response_time=None):
+    """Count one attempt on the word this question tests, and re-schedule it.
 
     Separate ``correct`` and ``wrong`` counters are kept (rather than only a total) so
-    a later feature can ask "how often was this word missed?" without a migration.
+    a later feature can ask "how often was this word missed?" without a migration. The
+    same submission moves the word's schedule — its state, interval, ease, due time and
+    the run of consecutive answers (``vocabulary/schedule.py`` owns the arithmetic).
+
+    ``response_time`` is the number of seconds the learner took, or ``None`` when it was
+    not recorded; the scheduler uses it only to nudge the ease and the next interval.
     """
     word = tested_word(question)
     if word is None:
@@ -57,9 +66,33 @@ def record_word_progress(user, question, is_correct):
     if is_correct:
         progress.correct_count += 1
         progress.last_correct_at = now
+        progress.repetitions += 1
+        progress.consecutive_correct += 1
+        progress.consecutive_wrong = 0
     else:
         progress.wrong_count += 1
         progress.last_wrong_at = now
+        progress.consecutive_correct = 0
+        progress.consecutive_wrong += 1
+
+        # A lapse is only a lapse when a graduated word falls back; failing a word that is
+        # still being learned is expected and says nothing about long-term memory.
+        if progress.state == WordProgress.State.REVIEW:
+            progress.lapses += 1
+
+    # The counters say how it has gone so far; the schedule says what to do about it.
+    result = next_review(
+        progress.state,
+        progress.interval_days,
+        progress.ease,
+        is_correct,
+        response_time,
+        now,
+    )
+    progress.state = result["state"]
+    progress.interval_days = result["interval_days"]
+    progress.ease = result["ease"]
+    progress.due_at = result["due_at"]
 
     progress.save()
     return progress

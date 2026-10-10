@@ -1,0 +1,193 @@
+{% comment %}The exercise runner, shared by one exercise's page and a session page.
+
+   Every question is rendered server-side in full; exercise_runner.js reveals one at a
+   time and submits the answer to ExerciseSubmitView, which grades it, records it for a
+   signed-in learner and sends the verdict back. The correct answers are deliberately not
+   in this page. With JavaScript off the page is a readable list of questions — the
+   controls stay hidden instead of pretending to work.
+
+   Two pages draw from this file: one exercise (exercises/exercise_detail.html) and a
+   session that gathers questions from many exercises (exercises/session.html). The only
+   things they disagree about are passed in — where "back" goes and what it says, an
+   optional "next" link, and the two result headings — so the runner itself has exactly
+   one definition and cannot drift between them.
+
+   Each question carries its *own* submit and hint URL. A single-exercise page could put
+   one URL on the runner, but a session's questions come from several exercises, and the
+   server grades each answer against the exercise it really belongs to.{% endcomment %}
+<div class="runner" data-runner{% if second_try %} data-second-try{% endif %}>
+  <noscript>
+    <p class="runner-note">برای بررسی پاسخ‌ها جاوااسکریپت لازم است. با خاموش بودن آن می‌توانی پرسش‌ها را بخوانی، ولی پاسخی بررسی نمی‌شود.</p>
+  </noscript>
+
+  {% comment %}Honest disclosure, same as the dashboard's: say where the answers go,
+     and only claim the account when there is one to write to.{% endcomment %}
+  <p class="runner-disclosure">
+    {% if user.is_authenticated %}
+      هر پاسخ همان لحظه بررسی و روی حساب کاربری‌ات ثبت می‌شود.
+    {% else %}
+      هر پاسخ همان لحظه بررسی می‌شود، ولی جایی ذخیره نمی‌شود.
+    {% endif %}
+  </p>
+
+  <div class="runner-progress" data-runner-progress hidden>
+    <div class="progress" role="progressbar" aria-valuemin="1" aria-valuemax="{{ total_questions }}"
+         aria-valuenow="1" aria-label="پیشرفت تمرین" data-runner-bar>
+      <span class="progress__fill" data-runner-fill style="width:{% widthratio 1 total_questions 100 %}%"></span>
+    </div>
+  </div>
+
+  <div class="runner-body">
+    {% for question in questions %}
+      <section class="runner-q{% if forloop.first %} is-active{% endif %}"
+               data-question="{{ question.id }}" data-kind="{{ question.kind }}"
+               data-exercise="{{ question.exercise_id }}"
+               data-submit-url="{% url 'exercises:exercise-submit' question.exercise_id %}"
+               data-hint-url="{% url 'exercises:exercise-hint' question.exercise_id %}"
+               data-hint-strength="{{ question.hint_strength }}"
+               aria-labelledby="question-title-{{ question.id }}">
+        <header class="runner-q__head">
+          <p class="runner-q__eyebrow">سؤال {{ question.number }} از {{ total_questions }}</p>
+          {% if question.passage %}
+            <p class="runner-q__passage" lang="de" dir="ltr">{{ question.passage }}</p>
+          {% endif %}
+          <h2 class="runner-q__prompt" id="question-title-{{ question.id }}" tabindex="-1">{{ question.prompt|direction|linebreaksbr }}</h2>
+        </header>
+
+        {% if question.audio %}
+          <div class="runner-q__media">{% include "includes/audio_control.html" with audio=question.audio prefix="q" pk=question.id label=question.prompt %}</div>
+        {% endif %}
+        {% if question.image %}
+          <img class="runner-q__image" src="{{ question.image.url }}" alt="" loading="lazy">
+        {% endif %}
+
+        {% comment %}A hint the learner has earned by missing this question before. The
+           button is shown once the server says a hint exists, and the text is fetched on
+           demand — the answer the hint hides is never part of this page.{% endcomment %}
+        {% if question.kind != 'none' %}
+          <div class="runner-help" data-runner-help-block hidden>
+            <button type="button" class="btn runner-help__button" data-runner-hint-request>راهنما</button>
+            <p class="runner-help__text" data-runner-help role="status" aria-live="polite" hidden></p>
+          </div>
+        {% endif %}
+
+        {% if question.kind == 'choice' %}
+          <fieldset class="runner-options" data-runner-options>
+            <legend class="sr-only">گزینه‌ها</legend>
+            {% for option in question.options %}
+              <label class="runner-option">
+                <input type="radio" name="answer-{{ question.id }}" value="{{ option.id }}">
+                <span class="runner-option__text">{{ option.text|direction|linebreaksbr }}</span>
+                <span class="runner-option__flag runner-option__flag--correct" data-flag="correct" hidden>درست</span>
+                <span class="runner-option__flag runner-option__flag--wrong" data-flag="wrong" hidden>نادرست</span>
+              </label>
+            {% endfor %}
+          </fieldset>
+        {% elif question.kind == 'order' %}
+          {% comment %}A scramble: the sentence's own words, shuffled and shown without
+             their punctuation, over the same typed input every other "text" question uses —
+             so the runner's JavaScript needs no case for it. The words are not the answer;
+             their order is, and that is exactly what the page does not hold. Grading a
+             scramble ignores punctuation too, so nothing shown here has to be guessed.{% endcomment %}
+          <div class="runner-order">
+            {% comment %}The chips read as drag-and-drop, but the only input is typing. The
+               label says so, so a learner does not try to move a word that cannot move.{% endcomment %}
+            <p class="runner-order__label">واژه‌ها به‌هم ریخته‌اند — ترتیب درست را در کادر پایین بنویس:</p>
+            <ul class="runner-order__tokens" lang="de" dir="ltr">
+              {% for token in question.tokens %}<li class="runner-order__token">{{ token }}</li>{% endfor %}
+            </ul>
+            <div class="runner-answer">
+              <label class="runner-answer__label" for="answer-{{ question.id }}">جمله را به آلمانی و با ترتیب درست بنویس</label>
+              <input class="runner-answer__input" id="answer-{{ question.id }}" name="answer-{{ question.id }}"
+                     type="text" lang="de" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
+            </div>
+          </div>
+        {% elif question.kind == 'text' %}
+          <div class="runner-answer">
+            <label class="runner-answer__label" for="answer-{{ question.id }}">پاسخ را به آلمانی بنویس</label>
+            <input class="runner-answer__input" id="answer-{{ question.id }}" name="answer-{{ question.id }}"
+                   type="text" lang="de" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
+          </div>
+        {% else %}
+          <p class="runner-note">این پرسش پاسخ تعریف‌شده‌ای ندارد و بررسی نمی‌شود.</p>
+        {% endif %}
+
+        {% if question.kind != 'none' %}
+          <div class="runner-feedback" data-runner-feedback role="status" aria-live="polite">
+            <p class="runner-result runner-result--correct" data-result="correct" hidden>
+              <span class="runner-result__mark" aria-hidden="true">✓</span>درست است.
+            </p>
+            <p class="runner-result runner-result--wrong" data-result="wrong" hidden>
+              <span class="runner-result__mark" aria-hidden="true">✕</span>درست نیست.
+            </p>
+            {% comment %}One more go at the same question, before the answer is shown.
+               practice pages only (``second_try``): being told the answer the instant you
+               miss it turns a lesson into a quiz, so the first miss is held back and only
+               a second miss reveals the answer and the word card. A test never passes the
+               flag, because a second try there would inflate the score.{% endcomment %}
+            {% if second_try %}
+              <p class="runner-second-try" data-runner-second-try hidden>
+                یک بار دیگر تلاش کن — این بار با دقت بیشتر.
+              </p>
+            {% endif %}
+            {% comment %}Filled from the submission's response: the correct answer is
+               not part of this page, so it cannot be read out of the source.{% endcomment %}
+            <p class="runner-expected" data-expected hidden>
+              پاسخ درست: <span class="runner-expected__value" data-expected-value lang="de" dir="ltr"></span>
+            </p>
+            <p class="runner-explanation" data-explanation hidden></p>
+            {% comment %}The word behind a missed question, filled from the submission's
+               response — most questions carry no authored explanation, but almost every
+               one tests a real word, so this is the teaching moment a miss otherwise
+               lacks. It is public lesson content, so a visitor gets the same card a
+               signed-in learner does.{% endcomment %}
+            <div class="runner-word-card" data-runner-word-card hidden></div>
+          </div>
+          <p class="runner-hint" data-runner-hint role="alert" hidden>لطفاً پیش از بررسی، پاسخ را انتخاب یا وارد کن.</p>
+        {% endif %}
+
+        <div class="runner-q__actions" data-runner-actions hidden>
+          <button type="button" class="btn runner-q__prev" data-runner-prev>قبلی</button>
+          <button type="button" class="btn runner-q__check" data-runner-check>بررسی پاسخ</button>
+          <button type="button" class="btn btn--primary runner-q__next" data-runner-next hidden>
+            {% if forloop.last %}دیدن نتیجه{% else %}بعدی{% endif %}
+          </button>
+        </div>
+      </section>
+    {% endfor %}
+  </div>
+
+  <section class="runner-results" data-runner-results hidden tabindex="-1" aria-labelledby="results-title">
+    <p class="runner-results__eyebrow">{{ results_eyebrow }}</p>
+    <h2 class="runner-results__title" id="results-title">{{ results_title }}</h2>
+    <p class="runner-results__score">
+      <span data-results-correct>0</span> از <span data-results-total>0</span> پاسخ درست
+    </p>
+    <p class="runner-results__accuracy" data-results-accuracy-line hidden>
+      دقت: <span data-results-accuracy>0</span>٪
+    </p>
+    <p class="runner-results__perfect" data-results-perfect hidden>همهٔ پاسخ‌ها درست بود.</p>
+    <div class="runner-results__review" data-results-review hidden>
+      <h3 class="runner-results__review-title">پرسش‌هایی برای مرور</h3>
+      <ul class="runner-review" data-results-list></ul>
+    </div>
+    {% comment %}The words behind the questions that were missed, gathered by
+       exercise_runner.js from the tested word each submission reports. A question can test
+       a grammar topic or a sentence instead of a word, so the list can be shorter than the
+       review list — or absent. The rows are filled from the response; the word itself is
+       never on this page.{% endcomment %}
+    <div class="runner-results__weak" data-results-weak hidden>
+      <h3 class="runner-results__weak-title">واژه‌های ضعیف</h3>
+      <p class="runner-results__weak-lead">واژه‌هایی از این تمرین که اشتباه زدی؛ تمرین دوبارهٔ همین‌ها بیشترین فایده را دارد.</p>
+      <ul class="runner-weak" data-results-weak-list></ul>
+      <a class="btn runner-results__weak-cta" href="{% url 'vocabulary:word-review' %}">تمرین این واژه‌ها</a>
+    </div>
+    <div class="runner-results__actions">
+      <a class="btn btn--primary" href="{{ back_url }}">{{ back_label }}</a>
+      {% if next_url %}
+        <a class="btn" href="{{ next_url }}">تمرین بعدی · <span>{{ next_label|direction }}</span></a>
+      {% endif %}
+      <button type="button" class="btn" data-runner-retry>تلاش دوباره</button>
+    </div>
+  </section>
+</div>

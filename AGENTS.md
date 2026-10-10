@@ -37,6 +37,25 @@
 هر اپ `urls.py` و `app_name` خودش را دارد و با namespace صدا زده می‌شود
 (`lessons:lesson-detail`، `vocabulary:word-detail`).
 
+### آدرس‌هایی که صفحه نیستند (endpoint)
+
+چند آدرس با `fetch` صدا زده می‌شوند و JSON برمی‌گردانند، نه HTML. اگر کسی آن‌ها را در
+مرورگر باز کند، پاسخ عمداً خطاست و این درست است — باگ نیست:
+
+| آدرس | روش | پاسخ عمدی |
+|---|---|---|
+| `/lessons/<pk>/progress/` | POST | مهمان ۴۰۳ · هر روش دیگر ۴۰۵ |
+| `/lessons/progress/import/` | POST | مهمان ۴۰۳ · هر روش دیگر ۴۰۵ |
+| `/exercises/<pk>/submit/` | POST | ۴۰۵ روی GET · ۴۰۰ روی بدنهٔ ناقص |
+| `/exercises/<pk>/hint/?question=…` | GET | مهمان ۴۰۳ · راهنمای نارسیده ۴۰۴ |
+| `/accounts/theme/` | POST | هر روش دیگر ۴۰۵ |
+| `/vocabulary/lookup/?q=…` | GET | بدون `?q=` → ۴۰۰ |
+
+قراردادشان همین است و صفحه شدن عمداً نیست: `LessonProgressView`/`LessonImportView`
+وقتی نوشتن دارند، GET نباید چیزی بنویسد؛ `WordLookupView` هم بدون واژه چیزی برای
+برگرداندن ندارد. (یک استثنا: `LogoutView` روی GET به خانه ریدایرکت می‌کند تا آدرس
+تایپ‌شده صفحهٔ خالی ندهد.)
+
 ## معماری در یک پاراگراف
 
 `config` همه‌چیز را به هم وصل می‌کند و هر اپ یک تکه از دامنه را مالک است. منطقِ حساس
@@ -213,7 +232,14 @@ cp .env.example .env      # بعد مقدارها را پر کن
 
 کلیدها (فهرست کامل در `.env.example`):
 `DJANGO_SECRET_KEY`، `DJANGO_DEBUG`، `DJANGO_ALLOWED_HOSTS`،
-`DB_NAME`، `DB_USER`، `DB_PASSWORD`، `DB_HOST`، `DB_PORT`.
+`DB_ENGINE`، `DB_NAME`، `DB_USER`، `DB_PASSWORD`، `DB_HOST`، `DB_PORT`،
+`DJANGO_CSRF_TRUSTED_ORIGINS`، `DJANGO_BEHIND_HTTPS_PROXY`.
+`DJANGO_BEHIND_HTTPS_PROXY=True` را روی هاستی بگذار که پروکسی جلویش HTTPS را تمام می‌کند
+(PythonAnywhere). بدون آن `request.is_secure()` نادرست است و CSRF روی مسیر Referer — یعنی
+وقتی مرورگر هدر `Origin` نمی‌فرستد — هر POST را با ۴۰۳ رد می‌کند، در حالی که همهٔ GETها سالم‌اند.
+`DB_ENGINE` پیش‌فرض `postgresql` است. مقدار `sqlite` یعنی دیتابیس یک **فایل** است نه یک
+سرور، و `DB_NAME` نام همان فایل می‌شود — برای هاستی که فقط فایل می‌دهد (پلن رایگان
+PythonAnywhere). بقیهٔ کلیدهای `DB_*` فقط در شاخهٔ postgresql خوانده می‌شوند.
 
 - `.env` در `.gitignore` است و هرگز commit نمی‌شود. `.env.example` فقط جای‌نگهدار
   دارد و commit می‌شود.
@@ -296,8 +322,9 @@ Warning باقی‌مانده ‏W020 است که با `DJANGO_ALLOWED_HOSTS` ح
 
 ### محدودیت‌هایی که باید بدانی
 
-- **`STATIC_ROOT` تعریف نشده**، پس `collectstatic` کار نمی‌کند. این فقط برای استقرار
-  واقعی (با nginx/Apache) مهم است، نه برای این حالت.
+- **`STATIC_ROOT` الان تعریف شده** (`staticfiles/`، در `.gitignore`) پس `collectstatic`
+  کار می‌کند — استقرار واقعی (nginx/Apache یا PythonAnywhere) به همان نیاز دارد. این حالت
+  محلی به آن کاری ندارد: `--insecure` فایل‌های static را از خود اپ‌ها سرو می‌کند.
 - **`django.views.static.serve` ‏Range request پشتیبانی نمی‌کند**، پس فایل صوتی **پخش
   می‌شود ولی نمی‌توان داخل آن جلو/عقب رفت** (seek). در پروداکشن وب‌سرور این را درست
   انجام می‌دهد.
@@ -585,7 +612,7 @@ dig +short A yourdomain.tld  # 10.10.34.36 یعنی برای بازدیدکنن�
 .venv/bin/python manage.py test      # کل مجموعه
 ```
 
-- آخرین اندازه‌گیری: **۹۴۶ تست — OK (skipped=1)**. عدد تاریخ‌دار است، هدف نیست.
+- آخرین اندازه‌گیری: **۱۰۴۹ تست — OK (skipped=1)** (مهر ۱۴۰۵). عدد تاریخ‌دار است، هدف نیست.
 - `manage.py test lessons` هم کامل اجرا می‌شود (۲۸۵ تست).
 - تست‌های DB-محور به اجازهٔ ساخت test database نیاز دارند؛ جایگزین فقط-خواندنی:
   `.venv/bin/python manage.py validate_a1_content`.

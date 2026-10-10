@@ -451,6 +451,9 @@ class LessonDetailView(View):
             # cannot identify and for a lesson with no mistakes in it
             # (vocabulary/review.py owns the rule).
             "lesson_mistakes": lesson_mistakes(request.user, lesson),
+            "new_words_count": lesson.lesson_words.filter(
+                role=LessonWord.Role.NEW, word__is_published=True
+            ).count(),
         })
 
 

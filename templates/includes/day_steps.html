@@ -1,0 +1,46 @@
+{% comment %}The guided day, rendered in one place: review what is due or missed, read the
+   lesson, practise, be measured. The order, the sizes and the two states it can honestly
+   know live in lessons/skill_path.py::day_steps; this include only arranges what it is
+   handed, so the dashboard and «مسیر امروز» cannot show two different days. It expects a
+   ``day`` in the context (the dashboard passes ``board.day``).{% endcomment %}
+<ol class="day__steps">
+  {% for step in day.steps %}
+    <li class="day-step{% if step.done %} is-done{% endif %}{% if not step.counted %} is-extra{% endif %}{% if step == day.start %} is-now{% endif %}">
+      <span class="day-step__mark" aria-hidden="true">{% if step.done %}✓{% else %}{{ forloop.counter }}{% endif %}</span>
+      <span class="day-step__body">
+        <span class="day-step__label">
+          {{ step.label }}{% if not step.counted %} · خارج از هدف{% endif %}{% if step == day.start %} · نوبت الان{% endif %}
+        </span>
+        <a class="day-step__title" href="{{ step.url }}">{{ step.title }}</a>
+        {% comment %}A second way into the same step, where there is one: the lesson can be
+           read as the full journey or as the short revision page.{% endcomment %}
+        {% if step.alt_url %}
+          <a class="day-step__alt" href="{{ step.alt_url }}">{{ step.alt_label }}</a>
+        {% endif %}
+        <span class="day-step__hint">{{ step.hint }}</span>
+      </span>
+      <span class="day-step__size">{{ step.size }}</span>
+    </li>
+  {% endfor %}
+</ol>
+
+<p class="day__cta">
+  {% comment %}`day.finished` is a count, so it is truthy as soon as one step is done — which
+     made the button say «start over» to a learner who had only read the lesson. The button
+     always goes to the first step that is not finished, so the label says which of the two
+     things it is about to do.
+
+     The total is `day.goal` and not `day.steps|length`: a step that can never be finished
+     (the step test, which stores nothing) is shown but left out of the count, so the day
+     can reach its own goal. When every counted step is done there is nothing left to
+     resume — `day.start` is None and the page says the day is done, rather than sending the
+     learner back to the test forever.{% endcomment %}
+  {% if day.start %}
+    <a class="btn btn--primary day__start" href="{{ day.start.url }}">
+      {% if day.finished %}ادامه بده{% else %}شروع روز{% endif %}
+    </a>
+    <span class="muted">{{ day.finished }} از {{ day.goal }} قدم تمام شده.</span>
+  {% else %}
+    <span class="day__done">امروز را تمام کردی.</span>
+  {% endif %}
+</p>

@@ -53,6 +53,21 @@
   </section>
 {% endif %}
 
+<section class="finish-srs" aria-labelledby="finish-srs-title">
+  <div class="finish-srs__body">
+    <h3 class="finish-srs__title" id="finish-srs-title">اتصال به سیستم مرور فاصله‌دار (SRS)</h3>
+    <p class="finish-srs__lead">
+      {% if new_words_count %}
+        {{ new_words_count }} واژهٔ جدید این درس به صف مرور هوشمند اضافه شدند.
+      {% else %}
+        واژه‌های این درس در صف مرور هوشمند قرار دارند.
+      {% endif %}
+      سیستم بر اساس فاصله و زمان پاسخ، مرور آن‌ها را در روزهای آینده زمان‌بندی می‌کند تا در حافظهٔ بلندمدت تثبیت شوند.
+    </p>
+  </div>
+  <a class="btn finish-srs__cta" href="{% url 'vocabulary:word-review' %}">مشاهده صف مرور واژه‌ها</a>
+</section>
+
 <div class="step-finish__actions">
   {% comment %}Revealed by lesson_steps.js and only then clickable: without
      JavaScript nothing can be recorded, and a dead button would be a lie.{% endcomment %}

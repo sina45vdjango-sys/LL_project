@@ -1,0 +1,2460 @@
+{
+  "level": "B1",
+  "topic": "adjectives and adverbs",
+  "words": [
+    {
+      "word": "abhängig",
+      "type": "ADJECTIVE",
+      "fa": "وابسته",
+      "en": "dependent"
+    },
+    {
+      "word": "absolut",
+      "type": "ADJECTIVE",
+      "fa": "مطلق، قطعی",
+      "en": "absolute"
+    },
+    {
+      "word": "abwesend",
+      "type": "ADJECTIVE",
+      "fa": "غایب",
+      "en": "absent"
+    },
+    {
+      "word": "abwärts",
+      "type": "ADVERB",
+      "fa": "به پایین",
+      "en": "downwards"
+    },
+    {
+      "word": "allgemein",
+      "type": "ADJECTIVE",
+      "fa": "عمومی، کلی",
+      "en": "general"
+    },
+    {
+      "word": "alltäglich",
+      "type": "ADJECTIVE",
+      "fa": "روزمره",
+      "en": "everyday"
+    },
+    {
+      "word": "alternativ",
+      "type": "ADJECTIVE",
+      "fa": "جایگزین، آلترناتیو",
+      "en": "alternative"
+    },
+    {
+      "word": "anders",
+      "type": "ADVERB",
+      "fa": "متفاوت، جور دیگر",
+      "en": "differently"
+    },
+    {
+      "word": "anfangs",
+      "type": "ADVERB",
+      "fa": "در آغاز",
+      "en": "at first"
+    },
+    {
+      "word": "anwesend",
+      "type": "ADJECTIVE",
+      "fa": "حاضر",
+      "en": "present"
+    },
+    {
+      "word": "arm",
+      "type": "ADJECTIVE",
+      "fa": "فقیر",
+      "en": "poor"
+    },
+    {
+      "word": "aufwärts",
+      "type": "ADVERB",
+      "fa": "به بالا",
+      "en": "upwards"
+    },
+    {
+      "word": "auseinander",
+      "type": "ADVERB",
+      "fa": "از هم جدا",
+      "en": "apart"
+    },
+    {
+      "word": "ausgebildet",
+      "type": "ADJECTIVE",
+      "fa": "آموزش‌دیده",
+      "en": "trained"
+    },
+    {
+      "word": "ausgezeichnet",
+      "type": "ADJECTIVE",
+      "fa": "عالی، ممتاز",
+      "en": "excellent"
+    },
+    {
+      "word": "ausreichend",
+      "type": "ADJECTIVE",
+      "fa": "کافی",
+      "en": "sufficient"
+    },
+    {
+      "word": "ausschließlich",
+      "type": "ADVERB",
+      "fa": "منحصراً، فقط",
+      "en": "exclusively"
+    },
+    {
+      "word": "außen",
+      "type": "ADVERB",
+      "fa": "بیرون",
+      "en": "outside"
+    },
+    {
+      "word": "außer",
+      "type": "PREPOSITION",
+      "fa": "به‌جز، غیر از",
+      "en": "except for"
+    },
+    {
+      "word": "außerdem",
+      "type": "ADVERB",
+      "fa": "علاوه بر این",
+      "en": "besides"
+    },
+    {
+      "word": "außerhalb",
+      "type": "PREPOSITION",
+      "fa": "بیرون از",
+      "en": "outside of"
+    },
+    {
+      "word": "befreit",
+      "type": "ADJECTIVE",
+      "fa": "آزادشده، رهاشده",
+      "en": "freed"
+    },
+    {
+      "word": "befriedigend",
+      "type": "ADJECTIVE",
+      "fa": "رضایت‌بخش",
+      "en": "satisfactory"
+    },
+    {
+      "word": "begeistert",
+      "type": "ADJECTIVE",
+      "fa": "مشتاق، شوریده",
+      "en": "enthusiastic"
+    },
+    {
+      "word": "begrenzt",
+      "type": "ADJECTIVE",
+      "fa": "محدود",
+      "en": "limited"
+    },
+    {
+      "word": "behindert",
+      "type": "ADJECTIVE",
+      "fa": "معلول",
+      "en": "disabled"
+    },
+    {
+      "word": "beinahe",
+      "type": "ADVERB",
+      "fa": "تقریباً",
+      "en": "almost"
+    },
+    {
+      "word": "beliebt",
+      "type": "ADJECTIVE",
+      "fa": "محبوب",
+      "en": "popular"
+    },
+    {
+      "word": "bereits",
+      "type": "ADVERB",
+      "fa": "پیشاپیش، از قبل",
+      "en": "already"
+    },
+    {
+      "word": "beruflich",
+      "type": "ADJECTIVE",
+      "fa": "شغلی، حرفه‌ای",
+      "en": "professional"
+    },
+    {
+      "word": "berufstätig",
+      "type": "ADJECTIVE",
+      "fa": "شاغل",
+      "en": "employed"
+    },
+    {
+      "word": "bestimmt",
+      "type": "ADJECTIVE",
+      "fa": "معیّن؛ قطعی",
+      "en": "specific; certain"
+    },
+    {
+      "word": "betrunken",
+      "type": "ADJECTIVE",
+      "fa": "مست",
+      "en": "drunk"
+    },
+    {
+      "word": "bevor",
+      "type": "OTHER",
+      "fa": "پیش از آنکه",
+      "en": "before"
+    },
+    {
+      "word": "bewölkt",
+      "type": "ADJECTIVE",
+      "fa": "ابری",
+      "en": "cloudy"
+    },
+    {
+      "word": "bisher",
+      "type": "ADVERB",
+      "fa": "تا کنون",
+      "en": "so far"
+    },
+    {
+      "word": "blass",
+      "type": "ADJECTIVE",
+      "fa": "رنگ‌پریده",
+      "en": "pale"
+    },
+    {
+      "word": "blind",
+      "type": "ADJECTIVE",
+      "fa": "نابینا",
+      "en": "blind"
+    },
+    {
+      "word": "blond",
+      "type": "ADJECTIVE",
+      "fa": "بور",
+      "en": "blond"
+    },
+    {
+      "word": "bloß",
+      "type": "ADVERB",
+      "fa": "فقط، تنها",
+      "en": "merely"
+    },
+    {
+      "word": "dabei",
+      "type": "ADVERB",
+      "fa": "در همین حال؛ حاضر",
+      "en": "thereby; present"
+    },
+    {
+      "word": "dafür",
+      "type": "ADVERB",
+      "fa": "در عوض؛ موافق آن",
+      "en": "for it; in favour"
+    },
+    {
+      "word": "dagegen",
+      "type": "ADVERB",
+      "fa": "در مقابل؛ مخالف آن",
+      "en": "against it"
+    },
+    {
+      "word": "daher",
+      "type": "ADVERB",
+      "fa": "از این رو",
+      "en": "therefore"
+    },
+    {
+      "word": "dahin",
+      "type": "ADVERB",
+      "fa": "به آنجا",
+      "en": "there, to that point"
+    },
+    {
+      "word": "damals",
+      "type": "ADVERB",
+      "fa": "آن زمان",
+      "en": "back then"
+    },
+    {
+      "word": "damit",
+      "type": "OTHER",
+      "fa": "تا اینکه؛ با آن",
+      "en": "so that; with it"
+    },
+    {
+      "word": "dasselbe",
+      "type": "PRONOUN",
+      "fa": "همان چیز",
+      "en": "the same"
+    },
+    {
+      "word": "dauernd",
+      "type": "ADVERB",
+      "fa": "مدام، پیوسته",
+      "en": "constantly"
+    },
+    {
+      "word": "deshalb",
+      "type": "ADVERB",
+      "fa": "به همین دلیل",
+      "en": "therefore"
+    },
+    {
+      "word": "deswegen",
+      "type": "ADVERB",
+      "fa": "به همین دلیل",
+      "en": "that is why"
+    },
+    {
+      "word": "deutsch",
+      "type": "ADJECTIVE",
+      "fa": "آلمانی",
+      "en": "German"
+    },
+    {
+      "word": "dicht",
+      "type": "ADJECTIVE",
+      "fa": "انبوه؛ تنگ",
+      "en": "dense, tight"
+    },
+    {
+      "word": "digital",
+      "type": "ADJECTIVE",
+      "fa": "دیجیتال",
+      "en": "digital"
+    },
+    {
+      "word": "direkt",
+      "type": "ADJECTIVE",
+      "fa": "مستقیم",
+      "en": "direct"
+    },
+    {
+      "word": "dorthin",
+      "type": "ADVERB",
+      "fa": "به آنجا",
+      "en": "to there"
+    },
+    {
+      "word": "dreimal",
+      "type": "ADVERB",
+      "fa": "سه بار",
+      "en": "three times"
+    },
+    {
+      "word": "drittens",
+      "type": "ADVERB",
+      "fa": "سوم اینکه",
+      "en": "thirdly"
+    },
+    {
+      "word": "drüben",
+      "type": "ADVERB",
+      "fa": "آن طرف",
+      "en": "over there"
+    },
+    {
+      "word": "dumm",
+      "type": "ADJECTIVE",
+      "fa": "نادان، احمق",
+      "en": "stupid"
+    },
+    {
+      "word": "durcheinander",
+      "type": "ADVERB",
+      "fa": "درهم، به‌هم‌ریخته",
+      "en": "in disorder"
+    },
+    {
+      "word": "durchschnittlich",
+      "type": "ADJECTIVE",
+      "fa": "متوسط",
+      "en": "average"
+    },
+    {
+      "word": "durstig",
+      "type": "ADJECTIVE",
+      "fa": "تشنه",
+      "en": "thirsty"
+    },
+    {
+      "word": "eben",
+      "type": "ADVERB",
+      "fa": "همین حالا؛ دقیقاً",
+      "en": "just now; exactly"
+    },
+    {
+      "word": "ebenfalls",
+      "type": "ADVERB",
+      "fa": "همچنین",
+      "en": "likewise"
+    },
+    {
+      "word": "ebenso",
+      "type": "ADVERB",
+      "fa": "به همان اندازه",
+      "en": "equally"
+    },
+    {
+      "word": "echt",
+      "type": "ADJECTIVE",
+      "fa": "واقعی، اصل",
+      "en": "genuine"
+    },
+    {
+      "word": "eckig",
+      "type": "ADJECTIVE",
+      "fa": "گوشه‌دار",
+      "en": "angular"
+    },
+    {
+      "word": "egal",
+      "type": "ADJECTIVE",
+      "fa": "فرقی نمی‌کند",
+      "en": "all the same"
+    },
+    {
+      "word": "eher",
+      "type": "ADVERB",
+      "fa": "بیشتر؛ زودتر",
+      "en": "rather; earlier"
+    },
+    {
+      "word": "eindeutig",
+      "type": "ADJECTIVE",
+      "fa": "روشن، بی‌ابهام",
+      "en": "unambiguous"
+    },
+    {
+      "word": "einerseits",
+      "type": "ADVERB",
+      "fa": "از یک سو",
+      "en": "on the one hand"
+    },
+    {
+      "word": "einheitlich",
+      "type": "ADJECTIVE",
+      "fa": "یکدست، یکسان",
+      "en": "uniform"
+    },
+    {
+      "word": "einsam",
+      "type": "ADJECTIVE",
+      "fa": "تنها",
+      "en": "lonely"
+    },
+    {
+      "word": "einschließlich",
+      "type": "PREPOSITION",
+      "fa": "از جمله، همراه با",
+      "en": "including"
+    },
+    {
+      "word": "einverstanden",
+      "type": "ADJECTIVE",
+      "fa": "موافق",
+      "en": "agreed"
+    },
+    {
+      "word": "einzeln",
+      "type": "ADJECTIVE",
+      "fa": "تک‌تک، جداگانه",
+      "en": "individual"
+    },
+    {
+      "word": "elegant",
+      "type": "ADJECTIVE",
+      "fa": "شیک، خوش‌پوش",
+      "en": "elegant"
+    },
+    {
+      "word": "elektrisch",
+      "type": "ADJECTIVE",
+      "fa": "برقی",
+      "en": "electric"
+    },
+    {
+      "word": "endgültig",
+      "type": "ADJECTIVE",
+      "fa": "نهایی",
+      "en": "final"
+    },
+    {
+      "word": "endlich",
+      "type": "ADVERB",
+      "fa": "سرانجام",
+      "en": "finally"
+    },
+    {
+      "word": "eng",
+      "type": "ADJECTIVE",
+      "fa": "تنگ؛ نزدیک",
+      "en": "narrow, close"
+    },
+    {
+      "word": "entlang",
+      "type": "PREPOSITION",
+      "fa": "در طول",
+      "en": "along"
+    },
+    {
+      "word": "entschlossen",
+      "type": "ADJECTIVE",
+      "fa": "مصمم",
+      "en": "determined"
+    },
+    {
+      "word": "entspannend",
+      "type": "ADJECTIVE",
+      "fa": "آرامش‌بخش",
+      "en": "relaxing"
+    },
+    {
+      "word": "erfolgreich",
+      "type": "ADJECTIVE",
+      "fa": "موفق",
+      "en": "successful"
+    },
+    {
+      "word": "erforderlich",
+      "type": "ADJECTIVE",
+      "fa": "لازم، مورد نیاز",
+      "en": "required"
+    },
+    {
+      "word": "erkältet",
+      "type": "ADJECTIVE",
+      "fa": "سرماخورده",
+      "en": "having a cold"
+    },
+    {
+      "word": "ernst",
+      "type": "ADJECTIVE",
+      "fa": "جدی",
+      "en": "serious"
+    },
+    {
+      "word": "ernsthaft",
+      "type": "ADJECTIVE",
+      "fa": "جدی، مصرانه",
+      "en": "earnest"
+    },
+    {
+      "word": "erschöpft",
+      "type": "ADJECTIVE",
+      "fa": "خسته، فرسوده",
+      "en": "exhausted"
+    },
+    {
+      "word": "erst",
+      "type": "ADVERB",
+      "fa": "تازه؛ فقط",
+      "en": "not until; only"
+    },
+    {
+      "word": "erstens",
+      "type": "ADVERB",
+      "fa": "اول اینکه",
+      "en": "firstly"
+    },
+    {
+      "word": "erwachsen",
+      "type": "ADJECTIVE",
+      "fa": "بالغ",
+      "en": "adult"
+    },
+    {
+      "word": "europäisch",
+      "type": "ADJECTIVE",
+      "fa": "اروپایی",
+      "en": "European"
+    },
+    {
+      "word": "eventuell",
+      "type": "ADVERB",
+      "fa": "احتمالاً",
+      "en": "possibly"
+    },
+    {
+      "word": "ewig",
+      "type": "ADJECTIVE",
+      "fa": "ابدی",
+      "en": "eternal"
+    },
+    {
+      "word": "extra",
+      "type": "ADVERB",
+      "fa": "جدا؛ مخصوصاً",
+      "en": "extra; specially"
+    },
+    {
+      "word": "extrem",
+      "type": "ADJECTIVE",
+      "fa": "شدید، فوق‌العاده",
+      "en": "extreme"
+    },
+    {
+      "word": "fair",
+      "type": "ADJECTIVE",
+      "fa": "منصفانه",
+      "en": "fair"
+    },
+    {
+      "word": "falls",
+      "type": "OTHER",
+      "fa": "در صورتی که",
+      "en": "in case"
+    },
+    {
+      "word": "fantastisch",
+      "type": "ADJECTIVE",
+      "fa": "فوق‌العاده",
+      "en": "fantastic"
+    },
+    {
+      "word": "farbig",
+      "type": "ADJECTIVE",
+      "fa": "رنگی",
+      "en": "coloured"
+    },
+    {
+      "word": "faul",
+      "type": "ADJECTIVE",
+      "fa": "تنبل؛ گندیده",
+      "en": "lazy; rotten"
+    },
+    {
+      "word": "fest",
+      "type": "ADJECTIVE",
+      "fa": "محکم، سفت",
+      "en": "firm, solid"
+    },
+    {
+      "word": "fett",
+      "type": "ADJECTIVE",
+      "fa": "چرب",
+      "en": "fatty"
+    },
+    {
+      "word": "feucht",
+      "type": "ADJECTIVE",
+      "fa": "نمناک",
+      "en": "damp"
+    },
+    {
+      "word": "finanziell",
+      "type": "ADJECTIVE",
+      "fa": "مالی",
+      "en": "financial"
+    },
+    {
+      "word": "fit",
+      "type": "ADJECTIVE",
+      "fa": "سرحال، آماده",
+      "en": "fit"
+    },
+    {
+      "word": "flach",
+      "type": "ADJECTIVE",
+      "fa": "تخت، صاف",
+      "en": "flat"
+    },
+    {
+      "word": "flexibel",
+      "type": "ADJECTIVE",
+      "fa": "انعطاف‌پذیر",
+      "en": "flexible"
+    },
+    {
+      "word": "fließend",
+      "type": "ADJECTIVE",
+      "fa": "روان (در زبان)",
+      "en": "fluent"
+    },
+    {
+      "word": "folgend",
+      "type": "ADJECTIVE",
+      "fa": "زیر، بعدی",
+      "en": "following"
+    },
+    {
+      "word": "frech",
+      "type": "ADJECTIVE",
+      "fa": "گستاخ، پررو",
+      "en": "cheeky"
+    },
+    {
+      "word": "freiwillig",
+      "type": "ADJECTIVE",
+      "fa": "اختیاری، داوطلبانه",
+      "en": "voluntary"
+    },
+    {
+      "word": "frisch",
+      "type": "ADJECTIVE",
+      "fa": "تازه",
+      "en": "fresh"
+    },
+    {
+      "word": "froh",
+      "type": "ADJECTIVE",
+      "fa": "خوشحال",
+      "en": "glad"
+    },
+    {
+      "word": "fröhlich",
+      "type": "ADJECTIVE",
+      "fa": "شاد",
+      "en": "cheerful"
+    },
+    {
+      "word": "furchtbar",
+      "type": "ADJECTIVE",
+      "fa": "وحشتناک",
+      "en": "terrible"
+    },
+    {
+      "word": "fällig",
+      "type": "ADJECTIVE",
+      "fa": "سررسیدشده، واجب",
+      "en": "due"
+    },
+    {
+      "word": "gar",
+      "type": "ADVERB",
+      "fa": "اصلاً، به‌کل؛ پخته",
+      "en": "at all; cooked"
+    },
+    {
+      "word": "geehrt",
+      "type": "ADJECTIVE",
+      "fa": "محترم",
+      "en": "honoured"
+    },
+    {
+      "word": "geeignet",
+      "type": "ADJECTIVE",
+      "fa": "مناسب",
+      "en": "suitable"
+    },
+    {
+      "word": "gefährlich",
+      "type": "ADJECTIVE",
+      "fa": "خطرناک",
+      "en": "dangerous"
+    },
+    {
+      "word": "geheim",
+      "type": "ADJECTIVE",
+      "fa": "مخفی، محرمانه",
+      "en": "secret"
+    },
+    {
+      "word": "gemeinsam",
+      "type": "ADJECTIVE",
+      "fa": "مشترک، با هم",
+      "en": "joint, together"
+    },
+    {
+      "word": "genau",
+      "type": "ADVERB",
+      "fa": "دقیقاً",
+      "en": "exactly"
+    },
+    {
+      "word": "genauso",
+      "type": "ADVERB",
+      "fa": "دقیقاً همان‌طور",
+      "en": "just the same"
+    },
+    {
+      "word": "genug",
+      "type": "ADVERB",
+      "fa": "به‌اندازهٔ کافی",
+      "en": "enough"
+    },
+    {
+      "word": "gerecht",
+      "type": "ADJECTIVE",
+      "fa": "عادلانه",
+      "en": "just, fair"
+    },
+    {
+      "word": "gering",
+      "type": "ADJECTIVE",
+      "fa": "کم، ناچیز",
+      "en": "low, slight"
+    },
+    {
+      "word": "geschieden",
+      "type": "ADJECTIVE",
+      "fa": "جدا شده، طلاق‌گرفته",
+      "en": "divorced"
+    },
+    {
+      "word": "gespannt",
+      "type": "ADJECTIVE",
+      "fa": "کنجاو، مشتاق",
+      "en": "curious, eager"
+    },
+    {
+      "word": "gewohnt",
+      "type": "ADJECTIVE",
+      "fa": "عادت‌کرده",
+      "en": "accustomed"
+    },
+    {
+      "word": "gewöhnlich",
+      "type": "ADJECTIVE",
+      "fa": "معمولی، عادی",
+      "en": "ordinary"
+    },
+    {
+      "word": "giftig",
+      "type": "ADJECTIVE",
+      "fa": "سمی",
+      "en": "poisonous"
+    },
+    {
+      "word": "glatt",
+      "type": "ADJECTIVE",
+      "fa": "صاف، لیز",
+      "en": "smooth"
+    },
+    {
+      "word": "gleichberechtigt",
+      "type": "ADJECTIVE",
+      "fa": "دارای حقوق برابر",
+      "en": "with equal rights"
+    },
+    {
+      "word": "gleichfalls",
+      "type": "ADVERB",
+      "fa": "همچنین، هم‌چنین شما",
+      "en": "likewise"
+    },
+    {
+      "word": "gleichzeitig",
+      "type": "ADJECTIVE",
+      "fa": "همزمان",
+      "en": "simultaneous"
+    },
+    {
+      "word": "gratis",
+      "type": "ADJECTIVE",
+      "fa": "مجانی",
+      "en": "free of charge"
+    },
+    {
+      "word": "griechisch",
+      "type": "ADJECTIVE",
+      "fa": "یونانی",
+      "en": "Greek"
+    },
+    {
+      "word": "gründlich",
+      "type": "ADJECTIVE",
+      "fa": "کامل، دقیق",
+      "en": "thorough"
+    },
+    {
+      "word": "halbtags",
+      "type": "ADVERB",
+      "fa": "نیمه‌وقت",
+      "en": "half-day"
+    },
+    {
+      "word": "halt",
+      "type": "ADVERB",
+      "fa": "خب، دیگر (ذرهٔ تأکید)",
+      "en": "just, after all"
+    },
+    {
+      "word": "haltbar",
+      "type": "ADJECTIVE",
+      "fa": "بادوام، ماندگار",
+      "en": "durable"
+    },
+    {
+      "word": "hart",
+      "type": "ADJECTIVE",
+      "fa": "سخت، سفت",
+      "en": "hard"
+    },
+    {
+      "word": "heim",
+      "type": "ADVERB",
+      "fa": "به خانه",
+      "en": "home"
+    },
+    {
+      "word": "heimlich",
+      "type": "ADJECTIVE",
+      "fa": "مخفیانه",
+      "en": "secretly"
+    },
+    {
+      "word": "hinterher",
+      "type": "ADVERB",
+      "fa": "بعد از آن، پشت سر",
+      "en": "afterwards"
+    },
+    {
+      "word": "historisch",
+      "type": "ADJECTIVE",
+      "fa": "تاریخی",
+      "en": "historic"
+    },
+    {
+      "word": "hoffentlich",
+      "type": "ADVERB",
+      "fa": "امیدوارم که",
+      "en": "hopefully"
+    },
+    {
+      "word": "hungrig",
+      "type": "ADJECTIVE",
+      "fa": "گرسنه",
+      "en": "hungry"
+    },
+    {
+      "word": "häufig",
+      "type": "ADJECTIVE",
+      "fa": "مکرر، فراوان",
+      "en": "frequent"
+    },
+    {
+      "word": "höchstens",
+      "type": "ADVERB",
+      "fa": "حداکثر",
+      "en": "at most"
+    },
+    {
+      "word": "hübsch",
+      "type": "ADJECTIVE",
+      "fa": "خوشگل، قشنگ",
+      "en": "pretty"
+    },
+    {
+      "word": "ideal",
+      "type": "ADJECTIVE",
+      "fa": "ایده‌آل",
+      "en": "ideal"
+    },
+    {
+      "word": "illegal",
+      "type": "ADJECTIVE",
+      "fa": "غیرقانونی",
+      "en": "illegal"
+    },
+    {
+      "word": "indem",
+      "type": "OTHER",
+      "fa": "بدین‌گونه که، با ... کردن",
+      "en": "by doing so"
+    },
+    {
+      "word": "individuell",
+      "type": "ADJECTIVE",
+      "fa": "فردی، شخصی",
+      "en": "individual"
+    },
+    {
+      "word": "inklusive",
+      "type": "PREPOSITION",
+      "fa": "به‌همراه، شاملِ",
+      "en": "including"
+    },
+    {
+      "word": "innen",
+      "type": "ADVERB",
+      "fa": "درون",
+      "en": "inside"
+    },
+    {
+      "word": "insgesamt",
+      "type": "ADVERB",
+      "fa": "در مجموع",
+      "en": "in total"
+    },
+    {
+      "word": "intelligent",
+      "type": "ADJECTIVE",
+      "fa": "باهوش",
+      "en": "intelligent"
+    },
+    {
+      "word": "intensiv",
+      "type": "ADJECTIVE",
+      "fa": "فشرده، شدید",
+      "en": "intensive"
+    },
+    {
+      "word": "interessiert",
+      "type": "ADJECTIVE",
+      "fa": "علاقه‌مند",
+      "en": "interested"
+    },
+    {
+      "word": "interkulturell",
+      "type": "ADJECTIVE",
+      "fa": "بین‌فرهنگی",
+      "en": "intercultural"
+    },
+    {
+      "word": "inzwischen",
+      "type": "ADVERB",
+      "fa": "در این فاصله، حالا دیگر",
+      "en": "meanwhile"
+    },
+    {
+      "word": "irgendwann",
+      "type": "ADVERB",
+      "fa": "یک وقتی، هر وقت",
+      "en": "at some point"
+    },
+    {
+      "word": "je",
+      "type": "ADVERB",
+      "fa": "هرگز؛ هر یک",
+      "en": "ever; each"
+    },
+    {
+      "word": "jedoch",
+      "type": "ADVERB",
+      "fa": "اما، با این حال",
+      "en": "however"
+    },
+    {
+      "word": "jemals",
+      "type": "ADVERB",
+      "fa": "هرگز (در گذشته)",
+      "en": "ever"
+    },
+    {
+      "word": "jeweils",
+      "type": "ADVERB",
+      "fa": "هر بار، بهترتیب",
+      "en": "in each case"
+    },
+    {
+      "word": "kaum",
+      "type": "ADVERB",
+      "fa": "به‌سختی، تقریباً نه",
+      "en": "hardly"
+    },
+    {
+      "word": "klasse",
+      "type": "ADJECTIVE",
+      "fa": "عالی، درجه‌یک",
+      "en": "great"
+    },
+    {
+      "word": "klug",
+      "type": "ADJECTIVE",
+      "fa": "باهوش، خردمند",
+      "en": "clever"
+    },
+    {
+      "word": "knapp",
+      "type": "ADJECTIVE",
+      "fa": "کم، تنگ؛ بهسختی",
+      "en": "scarce, tight"
+    },
+    {
+      "word": "komisch",
+      "type": "ADJECTIVE",
+      "fa": "عجیب؛ خنده‌دار",
+      "en": "strange; funny"
+    },
+    {
+      "word": "komplett",
+      "type": "ADJECTIVE",
+      "fa": "کامل",
+      "en": "complete"
+    },
+    {
+      "word": "kompliziert",
+      "type": "ADJECTIVE",
+      "fa": "پیچیده",
+      "en": "complicated"
+    },
+    {
+      "word": "konservativ",
+      "type": "ADJECTIVE",
+      "fa": "محافظه‌کار",
+      "en": "conservative"
+    },
+    {
+      "word": "korrekt",
+      "type": "ADJECTIVE",
+      "fa": "درست، صحیح",
+      "en": "correct"
+    },
+    {
+      "word": "kostenlos",
+      "type": "ADJECTIVE",
+      "fa": "رایگان",
+      "en": "free of charge"
+    },
+    {
+      "word": "kreativ",
+      "type": "ADJECTIVE",
+      "fa": "خلاق",
+      "en": "creative"
+    },
+    {
+      "word": "kritisch",
+      "type": "ADJECTIVE",
+      "fa": "انتقادی؛ بحرانی",
+      "en": "critical"
+    },
+    {
+      "word": "kräftig",
+      "type": "ADJECTIVE",
+      "fa": "نیرومند، قوی",
+      "en": "strong"
+    },
+    {
+      "word": "künstlich",
+      "type": "ADJECTIVE",
+      "fa": "مصنوعی",
+      "en": "artificial"
+    },
+    {
+      "word": "kürzlich",
+      "type": "ADVERB",
+      "fa": "به‌تازگی",
+      "en": "recently"
+    },
+    {
+      "word": "liberal",
+      "type": "ADJECTIVE",
+      "fa": "آزاداندیش، لیبرال",
+      "en": "liberal"
+    },
+    {
+      "word": "live",
+      "type": "ADVERB",
+      "fa": "زنده، مستقیم",
+      "en": "live"
+    },
+    {
+      "word": "locker",
+      "type": "ADJECTIVE",
+      "fa": "شل، راحت",
+      "en": "loose, relaxed"
+    },
+    {
+      "word": "längst",
+      "type": "ADVERB",
+      "fa": "خیلی وقت پیش، دیرزمانی",
+      "en": "long since"
+    },
+    {
+      "word": "mal",
+      "type": "ADVERB",
+      "fa": "یک بار، یه دفعه",
+      "en": "once, sometime"
+    },
+    {
+      "word": "maximal",
+      "type": "ADJECTIVE",
+      "fa": "حداکثری",
+      "en": "maximum"
+    },
+    {
+      "word": "mehrere",
+      "type": "PRONOUN",
+      "fa": "چندین",
+      "en": "several"
+    },
+    {
+      "word": "menschlich",
+      "type": "ADJECTIVE",
+      "fa": "انسانی",
+      "en": "human"
+    },
+    {
+      "word": "merkwürdig",
+      "type": "ADJECTIVE",
+      "fa": "عجیب",
+      "en": "strange"
+    },
+    {
+      "word": "mild",
+      "type": "ADJECTIVE",
+      "fa": "ملایم",
+      "en": "mild"
+    },
+    {
+      "word": "mindestens",
+      "type": "ADVERB",
+      "fa": "حداقل",
+      "en": "at least"
+    },
+    {
+      "word": "minimal",
+      "type": "ADJECTIVE",
+      "fa": "حداقلی",
+      "en": "minimal"
+    },
+    {
+      "word": "minus",
+      "type": "PREPOSITION",
+      "fa": "منهای",
+      "en": "minus"
+    },
+    {
+      "word": "miteinander",
+      "type": "ADVERB",
+      "fa": "با هم",
+      "en": "with each other"
+    },
+    {
+      "word": "musikalisch",
+      "type": "ADJECTIVE",
+      "fa": "موسیقایی",
+      "en": "musical"
+    },
+    {
+      "word": "mutig",
+      "type": "ADJECTIVE",
+      "fa": "شجاع",
+      "en": "brave"
+    },
+    {
+      "word": "möglichst",
+      "type": "ADVERB",
+      "fa": "تا حد امکان",
+      "en": "as far as possible"
+    },
+    {
+      "word": "mündlich",
+      "type": "ADJECTIVE",
+      "fa": "شفاهی",
+      "en": "oral"
+    },
+    {
+      "word": "nachdem",
+      "type": "OTHER",
+      "fa": "پس از آنکه",
+      "en": "after"
+    },
+    {
+      "word": "nachher",
+      "type": "ADVERB",
+      "fa": "بعداً",
+      "en": "afterwards"
+    },
+    {
+      "word": "nass",
+      "type": "ADJECTIVE",
+      "fa": "خیس",
+      "en": "wet"
+    },
+    {
+      "word": "nebenan",
+      "type": "ADVERB",
+      "fa": "همین بغلی، کنار",
+      "en": "next door"
+    },
+    {
+      "word": "nebenbei",
+      "type": "ADVERB",
+      "fa": "در ضمن، ضمن کار",
+      "en": "in passing"
+    },
+    {
+      "word": "negativ",
+      "type": "ADJECTIVE",
+      "fa": "منفی",
+      "en": "negative"
+    },
+    {
+      "word": "nervös",
+      "type": "ADJECTIVE",
+      "fa": "مضطرب، عصبی",
+      "en": "nervous"
+    },
+    {
+      "word": "neugierig",
+      "type": "ADJECTIVE",
+      "fa": "کنجاو",
+      "en": "curious"
+    },
+    {
+      "word": "neulich",
+      "type": "ADVERB",
+      "fa": "چندی پیش",
+      "en": "recently"
+    },
+    {
+      "word": "niedrig",
+      "type": "ADJECTIVE",
+      "fa": "پایین، کم",
+      "en": "low"
+    },
+    {
+      "word": "nirgends",
+      "type": "ADVERB",
+      "fa": "هیچ‌جا",
+      "en": "nowhere"
+    },
+    {
+      "word": "nirgendwo",
+      "type": "ADVERB",
+      "fa": "هیچ‌جا",
+      "en": "nowhere"
+    },
+    {
+      "word": "nochmals",
+      "type": "ADVERB",
+      "fa": "یک بار دیگر",
+      "en": "once again"
+    },
+    {
+      "word": "normalerweise",
+      "type": "ADVERB",
+      "fa": "معمولاً",
+      "en": "normally"
+    },
+    {
+      "word": "notwendig",
+      "type": "ADJECTIVE",
+      "fa": "لازم",
+      "en": "necessary"
+    },
+    {
+      "word": "nun",
+      "type": "ADVERB",
+      "fa": "اکنون، حالا",
+      "en": "now"
+    },
+    {
+      "word": "nämlich",
+      "type": "ADVERB",
+      "fa": "زیرا، یعنی",
+      "en": "namely"
+    },
+    {
+      "word": "nötig",
+      "type": "ADJECTIVE",
+      "fa": "لازم",
+      "en": "necessary"
+    },
+    {
+      "word": "nützlich",
+      "type": "ADJECTIVE",
+      "fa": "مفید",
+      "en": "useful"
+    },
+    {
+      "word": "obwohl",
+      "type": "OTHER",
+      "fa": "هرچند، با اینکه",
+      "en": "although"
+    },
+    {
+      "word": "offenbar",
+      "type": "ADVERB",
+      "fa": "ظاهراً، آشکارا",
+      "en": "apparently"
+    },
+    {
+      "word": "online",
+      "type": "ADJECTIVE",
+      "fa": "آنلاین",
+      "en": "online"
+    },
+    {
+      "word": "original",
+      "type": "ADJECTIVE",
+      "fa": "اصل، اورجینال",
+      "en": "original"
+    },
+    {
+      "word": "parallel",
+      "type": "ADJECTIVE",
+      "fa": "موازی",
+      "en": "parallel"
+    },
+    {
+      "word": "passiv",
+      "type": "ADJECTIVE",
+      "fa": "منفعل، غیرفعال",
+      "en": "passive"
+    },
+    {
+      "word": "pauschal",
+      "type": "ADJECTIVE",
+      "fa": "کلی، یک‌جا",
+      "en": "flat-rate"
+    },
+    {
+      "word": "peinlich",
+      "type": "ADJECTIVE",
+      "fa": "خجالت‌آور",
+      "en": "embarrassing"
+    },
+    {
+      "word": "per",
+      "type": "PREPOSITION",
+      "fa": "به‌وسیلهٔ، از طریق",
+      "en": "by, via"
+    },
+    {
+      "word": "perfekt",
+      "type": "ADJECTIVE",
+      "fa": "بی‌نقص",
+      "en": "perfect"
+    },
+    {
+      "word": "persönlich",
+      "type": "ADJECTIVE",
+      "fa": "شخصی",
+      "en": "personal"
+    },
+    {
+      "word": "plus",
+      "type": "PREPOSITION",
+      "fa": "به‌علاوهٔ",
+      "en": "plus"
+    },
+    {
+      "word": "plötzlich",
+      "type": "ADVERB",
+      "fa": "ناگهان",
+      "en": "suddenly"
+    },
+    {
+      "word": "politisch",
+      "type": "ADJECTIVE",
+      "fa": "سیاسی",
+      "en": "political"
+    },
+    {
+      "word": "populär",
+      "type": "ADJECTIVE",
+      "fa": "پرطرفدار",
+      "en": "popular"
+    },
+    {
+      "word": "positiv",
+      "type": "ADJECTIVE",
+      "fa": "مثبت",
+      "en": "positive"
+    },
+    {
+      "word": "praktisch",
+      "type": "ADJECTIVE",
+      "fa": "کاربردی؛ عملی",
+      "en": "practical"
+    },
+    {
+      "word": "preiswert",
+      "type": "ADJECTIVE",
+      "fa": "به‌صرفه",
+      "en": "good value"
+    },
+    {
+      "word": "prima",
+      "type": "ADJECTIVE",
+      "fa": "عالی",
+      "en": "great"
+    },
+    {
+      "word": "privat",
+      "type": "ADJECTIVE",
+      "fa": "خصوصی",
+      "en": "private"
+    },
+    {
+      "word": "pro",
+      "type": "PREPOSITION",
+      "fa": "به‌ازای هر",
+      "en": "per"
+    },
+    {
+      "word": "quer",
+      "type": "ADVERB",
+      "fa": "عرضی، کج",
+      "en": "across"
+    },
+    {
+      "word": "realistisch",
+      "type": "ADJECTIVE",
+      "fa": "واقع‌گرایانه",
+      "en": "realistic"
+    },
+    {
+      "word": "recht",
+      "type": "ADJECTIVE",
+      "fa": "درست، مناسب",
+      "en": "right"
+    },
+    {
+      "word": "rechtlich",
+      "type": "ADJECTIVE",
+      "fa": "حقوقی، قانونی",
+      "en": "legal"
+    },
+    {
+      "word": "rechtzeitig",
+      "type": "ADJECTIVE",
+      "fa": "به‌موقع",
+      "en": "in time"
+    },
+    {
+      "word": "regelmäßig",
+      "type": "ADJECTIVE",
+      "fa": "منظم، مرتب؛ به‌طور منظم",
+      "en": "regular"
+    },
+    {
+      "word": "regional",
+      "type": "ADJECTIVE",
+      "fa": "منطقه‌ای",
+      "en": "regional"
+    },
+    {
+      "word": "reich",
+      "type": "ADJECTIVE",
+      "fa": "ثروتمند؛ غنی",
+      "en": "rich"
+    },
+    {
+      "word": "reif",
+      "type": "ADJECTIVE",
+      "fa": "رسیده، بالغ",
+      "en": "ripe, mature"
+    },
+    {
+      "word": "rein",
+      "type": "ADJECTIVE",
+      "fa": "خالص، پاک",
+      "en": "pure"
+    },
+    {
+      "word": "relativ",
+      "type": "ADVERB",
+      "fa": "نسبتاً",
+      "en": "relatively"
+    },
+    {
+      "word": "riesig",
+      "type": "ADJECTIVE",
+      "fa": "عظیم، بسیار بزرگ",
+      "en": "huge"
+    },
+    {
+      "word": "roh",
+      "type": "ADJECTIVE",
+      "fa": "خام",
+      "en": "raw"
+    },
+    {
+      "word": "rund",
+      "type": "ADJECTIVE",
+      "fa": "گرد، مدور",
+      "en": "round"
+    },
+    {
+      "word": "rückwärts",
+      "type": "ADVERB",
+      "fa": "به عقب",
+      "en": "backwards"
+    },
+    {
+      "word": "salzig",
+      "type": "ADJECTIVE",
+      "fa": "شور",
+      "en": "salty"
+    },
+    {
+      "word": "satt",
+      "type": "ADJECTIVE",
+      "fa": "سیر؛ اشباع",
+      "en": "full, satisfied"
+    },
+    {
+      "word": "schade",
+      "type": "ADJECTIVE",
+      "fa": "افسوس، حیف",
+      "en": "a pity"
+    },
+    {
+      "word": "schief",
+      "type": "ADJECTIVE",
+      "fa": "کج",
+      "en": "crooked"
+    },
+    {
+      "word": "schlank",
+      "type": "ADJECTIVE",
+      "fa": "لاغر، خوش‌اندام",
+      "en": "slim"
+    },
+    {
+      "word": "schließlich",
+      "type": "ADVERB",
+      "fa": "سرانجام، در نهایت",
+      "en": "finally"
+    },
+    {
+      "word": "schlimm",
+      "type": "ADJECTIVE",
+      "fa": "بد، وخیم",
+      "en": "bad"
+    },
+    {
+      "word": "schrecklich",
+      "type": "ADJECTIVE",
+      "fa": "وحشتناک",
+      "en": "terrible"
+    },
+    {
+      "word": "schriftlich",
+      "type": "ADJECTIVE",
+      "fa": "کتبی",
+      "en": "in writing"
+    },
+    {
+      "word": "schuld",
+      "type": "ADJECTIVE",
+      "fa": "مقصر (schuld sein)",
+      "en": "at fault"
+    },
+    {
+      "word": "schuldig",
+      "type": "ADJECTIVE",
+      "fa": "مقصر؛ بدهکار",
+      "en": "guilty"
+    },
+    {
+      "word": "schwanger",
+      "type": "ADJECTIVE",
+      "fa": "باردار",
+      "en": "pregnant"
+    },
+    {
+      "word": "schweizerisch",
+      "type": "ADJECTIVE",
+      "fa": "سوئیسی",
+      "en": "Swiss"
+    },
+    {
+      "word": "seitdem",
+      "type": "OTHER",
+      "fa": "از آن زمان که",
+      "en": "since"
+    },
+    {
+      "word": "selber",
+      "type": "ADVERB",
+      "fa": "خودِ ... (تأکید)",
+      "en": "oneself"
+    },
+    {
+      "word": "selbstverständlich",
+      "type": "ADVERB",
+      "fa": "طبیعتاً، بدیهی است",
+      "en": "of course"
+    },
+    {
+      "word": "seltsam",
+      "type": "ADJECTIVE",
+      "fa": "عجیب",
+      "en": "strange"
+    },
+    {
+      "word": "senkrecht",
+      "type": "ADJECTIVE",
+      "fa": "عمودی",
+      "en": "vertical"
+    },
+    {
+      "word": "sichtbar",
+      "type": "ADJECTIVE",
+      "fa": "مرئی، قابل دیدن",
+      "en": "visible"
+    },
+    {
+      "word": "sinnlos",
+      "type": "ADJECTIVE",
+      "fa": "بی‌معنی، بی‌فایده",
+      "en": "pointless"
+    },
+    {
+      "word": "sinnvoll",
+      "type": "ADJECTIVE",
+      "fa": "معنادار، سنجیده",
+      "en": "sensible"
+    },
+    {
+      "word": "sobald",
+      "type": "OTHER",
+      "fa": "بهمحض اینکه",
+      "en": "as soon as"
+    },
+    {
+      "word": "sodass",
+      "type": "OTHER",
+      "fa": "به‌گونه‌ای که",
+      "en": "so that"
+    },
+    {
+      "word": "solange",
+      "type": "OTHER",
+      "fa": "تا زمانی که",
+      "en": "as long as"
+    },
+    {
+      "word": "sondern",
+      "type": "OTHER",
+      "fa": "بلکه",
+      "en": "but rather"
+    },
+    {
+      "word": "sonnig",
+      "type": "ADJECTIVE",
+      "fa": "آفتابی",
+      "en": "sunny"
+    },
+    {
+      "word": "sonst",
+      "type": "ADVERB",
+      "fa": "وگرنه؛ دیگر",
+      "en": "otherwise"
+    },
+    {
+      "word": "soviel",
+      "type": "ADVERB",
+      "fa": "تا آنجا که",
+      "en": "as much as"
+    },
+    {
+      "word": "sowieso",
+      "type": "ADVERB",
+      "fa": "به‌هرحال",
+      "en": "anyway"
+    },
+    {
+      "word": "sozial",
+      "type": "ADJECTIVE",
+      "fa": "اجتماعی",
+      "en": "social"
+    },
+    {
+      "word": "sparsam",
+      "type": "ADJECTIVE",
+      "fa": "صرفه‌جو",
+      "en": "economical"
+    },
+    {
+      "word": "speziell",
+      "type": "ADJECTIVE",
+      "fa": "ویژه، خاص",
+      "en": "special"
+    },
+    {
+      "word": "spitz",
+      "type": "ADJECTIVE",
+      "fa": "تیز، نوک‌تیز",
+      "en": "pointed"
+    },
+    {
+      "word": "sportlich",
+      "type": "ADJECTIVE",
+      "fa": "ورزشی، خوش‌اندام",
+      "en": "sporty"
+    },
+    {
+      "word": "spätestens",
+      "type": "ADVERB",
+      "fa": "نهایتاً، حداکثر تا",
+      "en": "at the latest"
+    },
+    {
+      "word": "statistisch",
+      "type": "ADJECTIVE",
+      "fa": "آماری",
+      "en": "statistical"
+    },
+    {
+      "word": "statt",
+      "type": "PREPOSITION",
+      "fa": "به‌جای",
+      "en": "instead of"
+    },
+    {
+      "word": "steil",
+      "type": "ADJECTIVE",
+      "fa": "شیب‌دار",
+      "en": "steep"
+    },
+    {
+      "word": "stilistisch",
+      "type": "ADJECTIVE",
+      "fa": "سبکی، اسلوبی",
+      "en": "stylistic"
+    },
+    {
+      "word": "still",
+      "type": "ADJECTIVE",
+      "fa": "ساکت، آرام",
+      "en": "quiet"
+    },
+    {
+      "word": "stolz",
+      "type": "ADJECTIVE",
+      "fa": "مغرور، سربلند",
+      "en": "proud"
+    },
+    {
+      "word": "strafbar",
+      "type": "ADJECTIVE",
+      "fa": "قابل مجازات",
+      "en": "punishable"
+    },
+    {
+      "word": "streng",
+      "type": "ADJECTIVE",
+      "fa": "سختگیر؛ شدید",
+      "en": "strict"
+    },
+    {
+      "word": "stumm",
+      "type": "ADJECTIVE",
+      "fa": "لال، بی‌صدا",
+      "en": "mute"
+    },
+    {
+      "word": "städtisch",
+      "type": "ADJECTIVE",
+      "fa": "شهری",
+      "en": "municipal"
+    },
+    {
+      "word": "ständig",
+      "type": "ADJECTIVE",
+      "fa": "دائمی، مداوم",
+      "en": "constant"
+    },
+    {
+      "word": "super",
+      "type": "ADJECTIVE",
+      "fa": "عالی",
+      "en": "super"
+    },
+    {
+      "word": "sympathisch",
+      "type": "ADJECTIVE",
+      "fa": "دل‌نشین، دوست‌داشتنی",
+      "en": "likeable"
+    },
+    {
+      "word": "sämtliche",
+      "type": "PRONOUN",
+      "fa": "همهٔ، تمامِ",
+      "en": "all of"
+    },
+    {
+      "word": "süchtig",
+      "type": "ADJECTIVE",
+      "fa": "معتاد",
+      "en": "addicted"
+    },
+    {
+      "word": "tatsächlich",
+      "type": "ADVERB",
+      "fa": "واقعاً",
+      "en": "actually"
+    },
+    {
+      "word": "taub",
+      "type": "ADJECTIVE",
+      "fa": "ناشنوا",
+      "en": "deaf"
+    },
+    {
+      "word": "technisch",
+      "type": "ADJECTIVE",
+      "fa": "فنی",
+      "en": "technical"
+    },
+    {
+      "word": "theoretisch",
+      "type": "ADJECTIVE",
+      "fa": "نظری",
+      "en": "theoretical"
+    },
+    {
+      "word": "tolerant",
+      "type": "ADJECTIVE",
+      "fa": "بردبار",
+      "en": "tolerant"
+    },
+    {
+      "word": "toll",
+      "type": "ADJECTIVE",
+      "fa": "عالی، فوق‌العاده",
+      "en": "great"
+    },
+    {
+      "word": "total",
+      "type": "ADJECTIVE",
+      "fa": "کاملاً، مطلقاً",
+      "en": "totally"
+    },
+    {
+      "word": "traditionell",
+      "type": "ADJECTIVE",
+      "fa": "سنتی",
+      "en": "traditional"
+    },
+    {
+      "word": "treu",
+      "type": "ADJECTIVE",
+      "fa": "وفادار",
+      "en": "loyal"
+    },
+    {
+      "word": "trocken",
+      "type": "ADJECTIVE",
+      "fa": "خشک",
+      "en": "dry"
+    },
+    {
+      "word": "trotz",
+      "type": "PREPOSITION",
+      "fa": "با وجودِ",
+      "en": "despite"
+    },
+    {
+      "word": "trotzdem",
+      "type": "ADVERB",
+      "fa": "با این حال",
+      "en": "nevertheless"
+    },
+    {
+      "word": "typisch",
+      "type": "ADJECTIVE",
+      "fa": "معمول، خاصِ",
+      "en": "typical"
+    },
+    {
+      "word": "tödlich",
+      "type": "ADJECTIVE",
+      "fa": "کشنده",
+      "en": "fatal"
+    },
+    {
+      "word": "türkisch",
+      "type": "ADJECTIVE",
+      "fa": "ترکی",
+      "en": "Turkish"
+    },
+    {
+      "word": "ukrainisch",
+      "type": "ADJECTIVE",
+      "fa": "اوکراینی",
+      "en": "Ukrainian"
+    },
+    {
+      "word": "umgekehrt",
+      "type": "ADVERB",
+      "fa": "برعکس، وارونه",
+      "en": "the other way round"
+    },
+    {
+      "word": "umso",
+      "type": "ADVERB",
+      "fa": "هرچه ... تر",
+      "en": "all the more"
+    },
+    {
+      "word": "umsonst",
+      "type": "ADVERB",
+      "fa": "بی‌هوده؛ مجانی",
+      "en": "in vain; for free"
+    },
+    {
+      "word": "unentschieden",
+      "type": "ADJECTIVE",
+      "fa": "بدون برنده، مساوی",
+      "en": "tied, undecided"
+    },
+    {
+      "word": "ungefähr",
+      "type": "ADVERB",
+      "fa": "تقریباً",
+      "en": "approximately"
+    },
+    {
+      "word": "ungewöhnlich",
+      "type": "ADJECTIVE",
+      "fa": "غیرمعمول",
+      "en": "unusual"
+    },
+    {
+      "word": "unglaublich",
+      "type": "ADJECTIVE",
+      "fa": "باورنکردنی",
+      "en": "unbelievable"
+    },
+    {
+      "word": "unheimlich",
+      "type": "ADJECTIVE",
+      "fa": "ترسناک؛ فوق‌العاده",
+      "en": "eerie; immense"
+    },
+    {
+      "word": "untersagt",
+      "type": "ADJECTIVE",
+      "fa": "ممنوع",
+      "en": "prohibited"
+    },
+    {
+      "word": "unterschiedlich",
+      "type": "ADJECTIVE",
+      "fa": "متفاوت",
+      "en": "different"
+    },
+    {
+      "word": "unterwegs",
+      "type": "ADVERB",
+      "fa": "در راه",
+      "en": "on the way"
+    },
+    {
+      "word": "ursprünglich",
+      "type": "ADJECTIVE",
+      "fa": "اصلی، اولیه",
+      "en": "original"
+    },
+    {
+      "word": "verabredet",
+      "type": "ADJECTIVE",
+      "fa": "قرار گذاشته",
+      "en": "arranged to meet"
+    },
+    {
+      "word": "verantwortlich",
+      "type": "ADJECTIVE",
+      "fa": "مسئول",
+      "en": "responsible"
+    },
+    {
+      "word": "verdächtig",
+      "type": "ADJECTIVE",
+      "fa": "مشکوک",
+      "en": "suspicious"
+    },
+    {
+      "word": "vergeblich",
+      "type": "ADJECTIVE",
+      "fa": "بی‌هوده",
+      "en": "in vain"
+    },
+    {
+      "word": "verliebt",
+      "type": "ADJECTIVE",
+      "fa": "عاشق",
+      "en": "in love"
+    },
+    {
+      "word": "vermutlich",
+      "type": "ADVERB",
+      "fa": "احتمالاً",
+      "en": "presumably"
+    },
+    {
+      "word": "vernünftig",
+      "type": "ADJECTIVE",
+      "fa": "منطقی، عاقلانه",
+      "en": "sensible"
+    },
+    {
+      "word": "verpflichtet",
+      "type": "ADJECTIVE",
+      "fa": "موظف",
+      "en": "obliged"
+    },
+    {
+      "word": "verrückt",
+      "type": "ADJECTIVE",
+      "fa": "دیوانه",
+      "en": "crazy"
+    },
+    {
+      "word": "verschieden",
+      "type": "ADJECTIVE",
+      "fa": "مختلف، متفاوت",
+      "en": "various"
+    },
+    {
+      "word": "verständlich",
+      "type": "ADJECTIVE",
+      "fa": "قابل فهم",
+      "en": "understandable"
+    },
+    {
+      "word": "verwandt",
+      "type": "ADJECTIVE",
+      "fa": "فامیل، خویشاوند",
+      "en": "related"
+    },
+    {
+      "word": "violett",
+      "type": "ADJECTIVE",
+      "fa": "بنفش",
+      "en": "violet"
+    },
+    {
+      "word": "virtuell",
+      "type": "ADJECTIVE",
+      "fa": "مجازی",
+      "en": "virtual"
+    },
+    {
+      "word": "voneinander",
+      "type": "ADVERB",
+      "fa": "از یکدیگر",
+      "en": "from each other"
+    },
+    {
+      "word": "voraus",
+      "type": "ADVERB",
+      "fa": "پیشتر، جلوتر",
+      "en": "ahead"
+    },
+    {
+      "word": "voraussichtlich",
+      "type": "ADVERB",
+      "fa": "بنا به پیش‌بینی",
+      "en": "expected"
+    },
+    {
+      "word": "vorgestern",
+      "type": "ADVERB",
+      "fa": "پریروز",
+      "en": "the day before yesterday"
+    },
+    {
+      "word": "vorher",
+      "type": "ADVERB",
+      "fa": "پیشتر، قبل",
+      "en": "beforehand"
+    },
+    {
+      "word": "vorhin",
+      "type": "ADVERB",
+      "fa": "کمی پیش‌تر",
+      "en": "a little while ago"
+    },
+    {
+      "word": "vorläufig",
+      "type": "ADJECTIVE",
+      "fa": "موقتی",
+      "en": "provisional"
+    },
+    {
+      "word": "vorsichtig",
+      "type": "ADJECTIVE",
+      "fa": "محتاط، مراقب",
+      "en": "careful"
+    },
+    {
+      "word": "vorwärts",
+      "type": "ADVERB",
+      "fa": "به جلو",
+      "en": "forwards"
+    },
+    {
+      "word": "völlig",
+      "type": "ADJECTIVE",
+      "fa": "کامل، تمام",
+      "en": "complete"
+    },
+    {
+      "word": "waagerecht",
+      "type": "ADJECTIVE",
+      "fa": "افقی",
+      "en": "horizontal"
+    },
+    {
+      "word": "wach",
+      "type": "ADJECTIVE",
+      "fa": "بیدار",
+      "en": "awake"
+    },
+    {
+      "word": "wahnsinnig",
+      "type": "ADJECTIVE",
+      "fa": "دیوانه؛ فوق‌العاده",
+      "en": "insane"
+    },
+    {
+      "word": "wahr",
+      "type": "ADJECTIVE",
+      "fa": "درست، راست",
+      "en": "true"
+    },
+    {
+      "word": "wahrscheinlich",
+      "type": "ADVERB",
+      "fa": "احتمالاً",
+      "en": "probably"
+    },
+    {
+      "word": "weich",
+      "type": "ADJECTIVE",
+      "fa": "نرم",
+      "en": "soft"
+    },
+    {
+      "word": "weltweit",
+      "type": "ADVERB",
+      "fa": "در سراسر جهان",
+      "en": "worldwide"
+    },
+    {
+      "word": "wenigstens",
+      "type": "ADVERB",
+      "fa": "لااقل",
+      "en": "at least"
+    },
+    {
+      "word": "wert",
+      "type": "ADJECTIVE",
+      "fa": "ارزشمند؛ ارزشِ",
+      "en": "worth"
+    },
+    {
+      "word": "wertlos",
+      "type": "ADJECTIVE",
+      "fa": "بی‌ارزش",
+      "en": "worthless"
+    },
+    {
+      "word": "wertvoll",
+      "type": "ADJECTIVE",
+      "fa": "ارزشمند",
+      "en": "valuable"
+    },
+    {
+      "word": "weshalb",
+      "type": "ADVERB",
+      "fa": "چرا، به چه دلیل",
+      "en": "why"
+    },
+    {
+      "word": "wieso",
+      "type": "ADVERB",
+      "fa": "چرا، چطور",
+      "en": "why"
+    },
+    {
+      "word": "wild",
+      "type": "ADJECTIVE",
+      "fa": "وحشی",
+      "en": "wild"
+    },
+    {
+      "word": "windig",
+      "type": "ADJECTIVE",
+      "fa": "بادی، پرحادثه",
+      "en": "windy"
+    },
+    {
+      "word": "worum",
+      "type": "ADVERB",
+      "fa": "دربارهٔ چه",
+      "en": "about what"
+    },
+    {
+      "word": "worüber",
+      "type": "ADVERB",
+      "fa": "دربارهٔ چه",
+      "en": "about what"
+    },
+    {
+      "word": "wunderschön",
+      "type": "ADJECTIVE",
+      "fa": "بسیار زیبا",
+      "en": "gorgeous"
+    },
+    {
+      "word": "während",
+      "type": "PREPOSITION",
+      "fa": "در طولِ",
+      "en": "during"
+    },
+    {
+      "word": "wütend",
+      "type": "ADJECTIVE",
+      "fa": "خشمگین",
+      "en": "furious"
+    },
+    {
+      "word": "zahlreich",
+      "type": "ADJECTIVE",
+      "fa": "پرشمار",
+      "en": "numerous"
+    },
+    {
+      "word": "zentral",
+      "type": "ADJECTIVE",
+      "fa": "مرکزی",
+      "en": "central"
+    },
+    {
+      "word": "ziemlich",
+      "type": "ADVERB",
+      "fa": "نسبتاً، خیلی",
+      "en": "quite"
+    },
+    {
+      "word": "zufällig",
+      "type": "ADJECTIVE",
+      "fa": "تصادفی، اتفاقی",
+      "en": "accidental"
+    },
+    {
+      "word": "zugänglich",
+      "type": "ADJECTIVE",
+      "fa": "قابل دسترس",
+      "en": "accessible"
+    },
+    {
+      "word": "zukünftig",
+      "type": "ADJECTIVE",
+      "fa": "آینده، آتی",
+      "en": "future"
+    },
+    {
+      "word": "zuletzt",
+      "type": "ADVERB",
+      "fa": "آخر، آخرین بار",
+      "en": "last"
+    },
+    {
+      "word": "zumindest",
+      "type": "ADVERB",
+      "fa": "لااقل، دست‌کم",
+      "en": "at least"
+    },
+    {
+      "word": "zunächst",
+      "type": "ADVERB",
+      "fa": "نخست، ابتدا",
+      "en": "at first"
+    },
+    {
+      "word": "zuständig",
+      "type": "ADJECTIVE",
+      "fa": "مسئول، مربوط",
+      "en": "responsible"
+    },
+    {
+      "word": "zusätzlich",
+      "type": "ADJECTIVE",
+      "fa": "اضافی",
+      "en": "additional"
+    },
+    {
+      "word": "zuverlässig",
+      "type": "ADJECTIVE",
+      "fa": "قابل‌اعتماد",
+      "en": "reliable"
+    },
+    {
+      "word": "zwar",
+      "type": "ADVERB",
+      "fa": "هرچند، درست است که",
+      "en": "admittedly"
+    },
+    {
+      "word": "zweimal",
+      "type": "ADVERB",
+      "fa": "دو بار",
+      "en": "twice"
+    },
+    {
+      "word": "zweitens",
+      "type": "ADVERB",
+      "fa": "دوم اینکه",
+      "en": "secondly"
+    },
+    {
+      "word": "ängstlich",
+      "type": "ADJECTIVE",
+      "fa": "ترسو، نگران",
+      "en": "anxious"
+    },
+    {
+      "word": "ärgerlich",
+      "type": "ADJECTIVE",
+      "fa": "آزاردهنده، دلخورکننده",
+      "en": "annoying"
+    },
+    {
+      "word": "äußerlich",
+      "type": "ADJECTIVE",
+      "fa": "ظاهری",
+      "en": "outward"
+    },
+    {
+      "word": "öffentlich",
+      "type": "ADJECTIVE",
+      "fa": "عمومی، دولتی",
+      "en": "public"
+    },
+    {
+      "word": "österreichisch",
+      "type": "ADJECTIVE",
+      "fa": "اتریشی",
+      "en": "Austrian"
+    },
+    {
+      "word": "überall",
+      "type": "ADVERB",
+      "fa": "همه‌جا",
+      "en": "everywhere"
+    },
+    {
+      "word": "überhaupt",
+      "type": "ADVERB",
+      "fa": "اصلاً، به‌طور کلی",
+      "en": "at all"
+    },
+    {
+      "word": "übermorgen",
+      "type": "ADVERB",
+      "fa": "پس‌فردا",
+      "en": "the day after tomorrow"
+    },
+    {
+      "word": "üblich",
+      "type": "ADJECTIVE",
+      "fa": "معمول، رایج",
+      "en": "usual"
+    },
+    {
+      "word": "übrig",
+      "type": "ADJECTIVE",
+      "fa": "باقی‌مانده",
+      "en": "remaining"
+    },
+    {
+      "word": "übrigens",
+      "type": "ADVERB",
+      "fa": "راستی، ضمناً",
+      "en": "by the way"
+    }
+  ]
+}

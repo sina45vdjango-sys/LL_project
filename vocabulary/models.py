@@ -77,6 +77,17 @@ class Word(models.Model):
         null=True,
     )
 
+    is_exam_important = models.BooleanField(
+        default=False,
+        help_text=(
+            "The A1 exam asks the learner to produce this word's form, not only to "
+            "recognise its meaning: a separable verb, a verb with `sein` in the "
+            "perfect, or a noun whose plural takes an umlaut. `import_a1_words` sets it "
+            "from the word's own data, and the lesson vocabulary row shows it as its "
+            "«مهم برای آزمون» label."
+        ),
+    )
+
     level = models.ForeignKey(
         "lessons.LanguageLevel",
         on_delete=models.PROTECT,
@@ -178,6 +189,20 @@ class Sentence(models.Model):
 
 
 class WordProgress(models.Model):
+    """One learner's spaced-repetition state for one word.
+
+    The counters (``attempt_count``/``correct_count``/``wrong_count`` and the ``last_*_at``
+    stamps) say how the word has gone so far. The scheduling fields say what to do about
+    it: a state, the interval it is on, an ease value, and how many times it has been
+    repeated or failed. ``vocabulary/schedule.py`` owns the arithmetic; this model only
+    stores the result.
+    """
+
+    class State(models.TextChoices):
+        NEW = "NEW", "New"
+        LEARNING = "LEARNING", "Learning"
+        REVIEW = "REVIEW", "Review"
+        RELEARNING = "RELEARNING", "Relearning"
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -219,6 +244,52 @@ class WordProgress(models.Model):
     last_wrong_at = models.DateTimeField(
         null=True,
         blank=True,
+    )
+
+    due_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When this word should next be reviewed.",
+    )
+
+    state = models.CharField(
+        max_length=12,
+        choices=State.choices,
+        default=State.NEW,
+        help_text="Where this word stands in the review schedule.",
+    )
+
+    interval_days = models.PositiveIntegerField(
+        default=0,
+        help_text="The gap this word is currently on, in days. 0 means never scheduled.",
+    )
+
+    ease = models.FloatField(
+        default=2.5,
+        help_text=(
+            "How easily this word is recalled; the multiplier the next interval is built "
+            "from. Bounded by vocabulary/schedule.py (1.3 … 2.8)."
+        ),
+    )
+
+    repetitions = models.PositiveIntegerField(
+        default=0,
+        help_text="How many times this word has been answered correctly.",
+    )
+
+    lapses = models.PositiveIntegerField(
+        default=0,
+        help_text="How many times a word already in review was failed and fell to relearning.",
+    )
+
+    consecutive_correct = models.PositiveIntegerField(
+        default=0,
+        help_text="How many correct answers in a row, from the most recent answer backwards.",
+    )
+
+    consecutive_wrong = models.PositiveIntegerField(
+        default=0,
+        help_text="How many wrong answers in a row, from the most recent answer backwards.",
     )
 
     class Meta:

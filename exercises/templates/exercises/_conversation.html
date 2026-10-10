@@ -1,0 +1,81 @@
+{% comment %}The conversation thread, shared by concept 9's teacher chat and concept 13's
+   role-play. The turns are the lesson's own DIALOGUE sentences
+   (``exercises/conversation.py``), in the order the lesson stores them, each with the
+   speaker the lesson names, its Persian translation and its recording.
+
+   The learner's lines carry no answer on the page and are graded nowhere: they answer in
+   their own words, then the lesson's own line is revealed so they can judge how close they
+   were. So this file holds the two sides of the conversation and the self-check, and
+   ``exercises/js/conversation.js`` reveals one turn at a time. With JavaScript off the
+   whole dialogue is readable, which is the honest fallback for a page that is only a
+   conversation.{% endcomment %}
+<div class="chat" data-chat data-who="{{ partner }}">
+  <ol class="chat-thread" data-chat-thread>
+    {% for turn in turns %}
+      {% if turn.mine %}
+        <li class="chat-turn chat-turn--learner" data-turn data-mine>
+          <div class="chat-bubble">
+            <p class="chat-bubble__who">تو{% if you %} · <span lang="de" dir="ltr">{{ you }}</span>{% endif %}</p>
+            <p class="chat-bubble__answer" data-typed hidden></p>
+            <div class="chat-compose" data-compose>
+              <label class="chat-compose__label" for="line-{{ forloop.counter }}">خودت را جای او بگذار و جواب بده</label>
+              <div class="chat-compose__row">
+                <input class="runner-answer__input" id="line-{{ forloop.counter }}" type="text"
+                       lang="de" dir="ltr" autocomplete="off" autocapitalize="off"
+                       spellcheck="false" enterkeyhint="done" data-answer>
+                <button type="button" class="btn btn--primary" data-send>بفرست</button>
+              </div>
+            </div>
+            <div class="chat-model" data-model hidden>
+              <p class="chat-model__label">در همین درس این‌طور گفته می‌شود:</p>
+              <p class="chat-model__text" lang="de" dir="ltr">{{ turn.text }}</p>
+              <p class="chat-model__fa">{{ turn.translation }}</p>
+              <div class="chat-model__check">
+                <button type="button" class="btn btn--sm" data-check="ok">درست گفتم</button>
+                <button type="button" class="btn btn--sm" data-check="no">نه، فرق داشت</button>
+              </div>
+            </div>
+          </div>
+        </li>
+      {% else %}
+        <li class="chat-turn chat-turn--teacher" data-turn>
+          <div class="chat-bubble">
+            <p class="chat-bubble__who">
+              <span class="chat-avatar" aria-hidden="true">{{ turn.speaker|slice:":1" }}</span>{{ turn.speaker }}
+            </p>
+            <p class="chat-bubble__answer" lang="de" dir="ltr">{{ turn.text }}</p>
+            <p class="chat-model__fa">{{ turn.translation }}</p>
+            {% if turn.audio %}
+              <div class="chat-bubble__media">{% include "includes/audio_control.html" with audio=turn.audio prefix="line" pk=forloop.counter label=turn.text %}</div>
+            {% endif %}
+          </div>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ol>
+
+  <section class="chat-turn chat-turn--teacher chat-summary" data-chat-summary hidden tabindex="-1" aria-labelledby="conversation-summary-title">
+    <div class="chat-bubble">
+      <p class="chat-bubble__who"><span class="chat-avatar" aria-hidden="true">{{ partner|slice:":1" }}</span>{{ partner }}</p>
+      <h2 class="chat-summary__title" id="conversation-summary-title">گفت‌وگو تمام شد</h2>
+      <p class="chat-summary__score">
+        <span data-chat-ok>0</span> نوبت را گفتی که به نظرم درست بود و
+        <span data-chat-no>0</span> نوبت را خودت نزدیک ندانستی.
+      </p>
+      <p class="chat-summary__line">هیچ‌کدام ثبت نمی‌شود؛ چون گفت‌وگو نمره ندارد، تنها داوری که معنا دارد مال خودت است.</p>
+      <div class="chat-summary__actions">
+        <a class="btn btn--primary" href="{% url 'lessons:practice-path' %}">بازگشت به مسیر امروز</a>
+        {% if exercise.lesson %}
+          <a class="btn" href="{% url 'exercises:exercise-detail' exercise.pk %}">تمرین همین درس (نمره‌دار)</a>
+          {% if mode == "chat" %}
+            <a class="btn" href="{% url 'exercises:exercise-dialogue' exercise.pk %}">همین گفت‌وگو را نقش‌بازی کن</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <noscript>
+    <p class="runner-note">گفت‌وگو نوبت‌به‌نوبت پیش می‌رود و به جاوااسکریپت نیاز دارد. با خاموش بودن آن می‌توانی همهٔ خط‌ها را بخوانی.</p>
+  </noscript>
+</div>

@@ -10,6 +10,7 @@
      the mobile content padding and the lesson floating-actions offset. It is the bar's
      own height; the phone's safe-area inset is added on top where it exists, so the
      targets are never pushed under the home indicator (see the bottom-nav rule). */
+  --app-bar-h: 48px;
   --bottom-nav-h: 66px;
 }
 
@@ -44,6 +45,7 @@
 /* ------------------------------------------------------------ app bar ------ */
 .app-bar {
   position: sticky; top: 0; z-index: 30;
+  height: var(--app-bar-h); box-sizing: border-box;
   display: none; align-items: center; justify-content: space-between; gap: 12px;
   /* 6px, not 10px: the brand inside is a 44px tap target now, and the bar should not
      grow just because the target is correct. */

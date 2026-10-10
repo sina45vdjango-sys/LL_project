@@ -18,6 +18,10 @@ db.sqlite3-journal
 /media/
 /staticfiles/
 
+# Third-party study document: the official Goethe Wortliste PDF and its raw extraction.
+# The derived headword list under vocabulary/data/wortliste/ is data and is kept.
+/vocabulary/data/wortliste/a1_source.*
+
 # Environment variables / secrets
 .env
 .env.*
@@ -41,3 +45,6 @@ dist/
 *.swp
 .DS_Store
 Thumbs.db
+
+# Review screenshots and local artifacts
+review-artifacts/

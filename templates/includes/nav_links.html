@@ -2,7 +2,13 @@
    navigation. Layout differences are handled in CSS, not by duplicating markup.{% endcomment %}
 {% for item in nav_items %}
   <a class="nav-link{% if item.active %} is-active{% endif %}" href="{{ item.url }}"{% if item.active %} aria-current="page"{% endif %}>
-    {% include "includes/nav_icon.html" with icon=item.icon %}
-    <span class="nav-link__label">{{ item.label }}</span>
+    {% comment %}A small count on «امروز» when words are waiting for review, so the
+       reminder is visible from any page instead of only on the page it belongs to
+       (config/context_processors.py counts it).{% endcomment %}
+    <span class="nav-link__icon">
+      {% include "includes/nav_icon.html" with icon=item.icon %}
+      {% if item.badge %}<span class="nav-link__badge" aria-hidden="true">{{ item.badge }}</span>{% endif %}
+    </span>
+    <span class="nav-link__label">{{ item.label }}{% if item.badge %} <span class="sr-only">{{ item.badge }} واژه برای مرور</span>{% endif %}</span>
   </a>
 {% endfor %}

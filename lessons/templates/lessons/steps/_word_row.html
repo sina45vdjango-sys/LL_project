@@ -1,0 +1,37 @@
+{% comment %}One vocabulary row. Option 1 of the approved design: the German word, then
+   what it means, then the one label this learner's own record earns it.
+
+   Only fields the word actually has are shown, so a pronoun's row does not carry an empty
+   plural and a visitor we cannot identify sees no invented state. The label and its text
+   both come from `vocabulary/status.py`, so a state is spelled once — `status` is the CSS
+   class, `label` is what the learner reads.
+
+   The row is not a link: the German term links to the word page and the audio button sits
+   beside it inside the same cell, so no interactive element is nested in another. The
+   facts under the meaning carry no separator character — their labels ("جمع", "تلفظ")
+   already delimit them, and the old `·` list is what these rows replaced.{% endcomment %}
+<li class="word-row" data-word-type="{{ word.word_type }}">
+  <span class="word-row__term">
+    <a href="{% url 'vocabulary:word-detail' word.pk %}" lang="de" dir="ltr">{% if word.article %}<span class="word-row__article">{{ word.article }}</span> {% endif %}{{ word.word }}</a>
+    {% if word.audio %}
+      {% include "includes/audio_control.html" with audio=word.audio prefix="word" pk=word.pk label=word.word inline=True %}
+    {% endif %}
+  </span>
+
+  <span class="word-row__body">
+    <span class="word-row__meaning">{{ word.meaning_fa }}</span>
+    {% if word.gender_label or word.plural or word.is_separable or word.perfect_auxiliary or word.pronunciation %}
+      <span class="word-row__facts">
+        {% if word.gender_label %}<span class="word-row__fact">جنسیت: {{ word.gender_label }}</span>{% endif %}
+        {% if word.plural %}<span class="word-row__fact">جمع: <bdi lang="de" dir="ltr">{{ word.plural }}</bdi></span>{% endif %}
+        {% if word.is_separable %}<span class="word-row__fact">جداپذیر</span>{% endif %}
+        {% if word.perfect_auxiliary %}<span class="word-row__fact">کمکی گذشته: <bdi lang="de" dir="ltr">{{ word.get_perfect_auxiliary_display }}</bdi></span>{% endif %}
+        {% if word.pronunciation %}<span class="word-row__fact">تلفظ: <bdi lang="de" dir="ltr">{{ word.pronunciation }}</bdi></span>{% endif %}
+      </span>
+    {% endif %}
+  </span>
+
+  <span class="word-row__side">
+    <span class="word-row__status word-row__status--{{ status }}">{{ label }}</span>
+  </span>
+</li>

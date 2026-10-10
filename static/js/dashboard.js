@@ -85,10 +85,6 @@
     activity.hidden = false;
   }
 
-  // --------------------------------------------------------- empty state
-  const emptyState = page.querySelector('[data-empty]');
-  if (emptyState) emptyState.hidden = status.started > 0;
-
   // ---------------------------------------------------------------- path
   const path = page.querySelector('[data-path]');
   if (path && current) {
@@ -125,7 +121,12 @@
 
     const title = document.createElement('a');
     title.className = 'dash-path__title';
-    title.dir = 'auto';
+    // No `dir` is set here. The payload's `title` is `Lesson.display_title`, which is
+    // authored Persian (lessons/views.py::_lesson_payload), so it lays out correctly under
+    // the page's own RTL direction — a German word inside it stays LTR on its own. The
+    // `dir="auto"` that used to be set here was this project's forbidden heuristic in a
+    // place the template check could not see: it resolves from the first strong character
+    // and reorders mixed content instead of isolating it (vocabulary/text_direction.py).
     title.href = lesson.url;
     title.textContent = lesson.title;
 

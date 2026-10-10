@@ -1,0 +1,501 @@
+{
+  "level": "B1",
+  "topic": "B1 core vocabulary",
+  "words": [
+    {
+      "word": "Absicht",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Absichten",
+      "fa": "قصد، نیت",
+      "en": "intention"
+    },
+    {
+      "word": "Aussicht",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Aussichten",
+      "fa": "منظره، چشم‌انداز",
+      "en": "view, prospect"
+    },
+    {
+      "word": "Bedeutung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Bedeutungen",
+      "fa": "معنی، اهمیت",
+      "en": "meaning, importance"
+    },
+    {
+      "word": "Bedingung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Bedingungen",
+      "fa": "شرط",
+      "en": "condition"
+    },
+    {
+      "word": "Bericht",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Berichte",
+      "fa": "گزارش",
+      "en": "report"
+    },
+    {
+      "word": "Briefkasten",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Briefkästen",
+      "fa": "صندوق پست",
+      "en": "mailbox"
+    },
+    {
+      "word": "Chance",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Chancen",
+      "fa": "فرصت، شانس",
+      "en": "chance, opportunity"
+    },
+    {
+      "word": "Cousin",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Cousins",
+      "fa": "پسرخاله، پسرعمو",
+      "en": "cousin (male)"
+    },
+    {
+      "word": "Cousine",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Cousinen",
+      "fa": "دخترخاله، دخترعمو",
+      "en": "cousin (female)"
+    },
+    {
+      "word": "Empfang",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Empfänge",
+      "fa": "پذیرش، دریافت",
+      "en": "reception, receipt"
+    },
+    {
+      "word": "Erfolg",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Erfolge",
+      "fa": "موفقیت",
+      "en": "success"
+    },
+    {
+      "word": "Ereignis",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Ereignisse",
+      "fa": "رویداد",
+      "en": "event"
+    },
+    {
+      "word": "Fernbedienung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Fernbedienungen",
+      "fa": "کنترل تلویزیون",
+      "en": "remote control"
+    },
+    {
+      "word": "Fremdsprache",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Fremdsprachen",
+      "fa": "زبان خارجی",
+      "en": "foreign language"
+    },
+    {
+      "word": "Gebühr",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Gebühren",
+      "fa": "هزینه، عوارض",
+      "en": "fee"
+    },
+    {
+      "word": "Gefühl",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Gefühle",
+      "fa": "احساس",
+      "en": "feeling"
+    },
+    {
+      "word": "Gegenteil",
+      "type": "NOUN",
+      "gender": "N",
+      "article": "das",
+      "plural": "die Gegenteile",
+      "fa": "متضاد، نقطهٔ مقابل",
+      "en": "opposite"
+    },
+    {
+      "word": "Gelegenheit",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Gelegenheiten",
+      "fa": "فرصت",
+      "en": "opportunity"
+    },
+    {
+      "word": "Gewohnheit",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Gewohnheiten",
+      "fa": "عادت",
+      "en": "habit"
+    },
+    {
+      "word": "Grund",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Gründe",
+      "fa": "دلیل، زمین",
+      "en": "reason, ground"
+    },
+    {
+      "word": "Hof",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Höfe",
+      "fa": "حیاط",
+      "en": "yard, courtyard"
+    },
+    {
+      "word": "Hoffnung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Hoffnungen",
+      "fa": "امید",
+      "en": "hope"
+    },
+    {
+      "word": "Kantine",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Kantinen",
+      "fa": "سلف، غذاخوری",
+      "en": "canteen"
+    },
+    {
+      "word": "Knochen",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Knochen",
+      "fa": "استخوان",
+      "en": "bone"
+    },
+    {
+      "word": "Konferenz",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Konferenzen",
+      "fa": "کنفرانس",
+      "en": "conference"
+    },
+    {
+      "word": "Kritik",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Kritiken",
+      "fa": "انتقاد",
+      "en": "criticism"
+    },
+    {
+      "word": "Lebenslauf",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Lebensläufe",
+      "fa": "رزومه",
+      "en": "CV, résumé"
+    },
+    {
+      "word": "Liste",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Listen",
+      "fa": "فهرست",
+      "en": "list"
+    },
+    {
+      "word": "Mahlzeit",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Mahlzeiten",
+      "fa": "وعدهٔ غذایی",
+      "en": "meal"
+    },
+    {
+      "word": "Mappe",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Mappen",
+      "fa": "کیف مدارک",
+      "en": "folder"
+    },
+    {
+      "word": "Mauer",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Mauern",
+      "fa": "دیوار",
+      "en": "wall"
+    },
+    {
+      "word": "Möglichkeit",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Möglichkeiten",
+      "fa": "امکان، احتمال",
+      "en": "possibility"
+    },
+    {
+      "word": "Nachteil",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Nachteile",
+      "fa": "عیب، ضرر",
+      "en": "disadvantage"
+    },
+    {
+      "word": "Punkt",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Punkte",
+      "fa": "نقطه، امتیاز",
+      "en": "point"
+    },
+    {
+      "word": "Regel",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Regeln",
+      "fa": "قاعده، قانون",
+      "en": "rule"
+    },
+    {
+      "word": "Richtung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Richtungen",
+      "fa": "جهت",
+      "en": "direction"
+    },
+    {
+      "word": "Schaden",
+      "type": "NOUN",
+      "gender": "M",
+      "article": "der",
+      "plural": "die Schäden",
+      "fa": "خسارت، آسیب",
+      "en": "damage"
+    },
+    {
+      "word": "Schulter",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Schultern",
+      "fa": "شانه",
+      "en": "shoulder"
+    },
+    {
+      "word": "Zwiebel",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Zwiebeln",
+      "fa": "پیاز",
+      "en": "onion"
+    },
+    {
+      "word": "aufgeben",
+      "type": "VERB",
+      "fa": "تسلیم شدن، ارسال کردن",
+      "en": "to give up, to send off",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "besitzen",
+      "type": "VERB",
+      "fa": "مالک بودن، داشتن",
+      "en": "to own",
+      "aux": "haben"
+    },
+    {
+      "word": "entscheiden",
+      "type": "VERB",
+      "fa": "تصمیم گرفتن",
+      "en": "to decide",
+      "aux": "haben"
+    },
+    {
+      "word": "folgen",
+      "type": "VERB",
+      "fa": "دنبال کردن، پیروی کردن",
+      "en": "to follow",
+      "aux": "sein"
+    },
+    {
+      "word": "funktionieren",
+      "type": "VERB",
+      "fa": "کار کردن، درست کار کردن",
+      "en": "to work, to function",
+      "aux": "haben"
+    },
+    {
+      "word": "genießen",
+      "type": "VERB",
+      "fa": "لذت بردن",
+      "en": "to enjoy",
+      "aux": "haben"
+    },
+    {
+      "word": "klopfen",
+      "type": "VERB",
+      "fa": "در زدن، کوبیدن",
+      "en": "to knock",
+      "aux": "haben"
+    },
+    {
+      "word": "produzieren",
+      "type": "VERB",
+      "fa": "تولید کردن",
+      "en": "to produce",
+      "aux": "haben"
+    },
+    {
+      "word": "schauen",
+      "type": "VERB",
+      "fa": "نگاه کردن",
+      "en": "to look",
+      "aux": "haben"
+    },
+    {
+      "word": "schlagen",
+      "type": "VERB",
+      "fa": "زدن، کوبیدن",
+      "en": "to hit, to beat",
+      "aux": "haben"
+    },
+    {
+      "word": "überlegen",
+      "type": "VERB",
+      "fa": "فکر کردن، تأمل کردن",
+      "en": "to consider",
+      "aux": "haben"
+    },
+    {
+      "word": "ähnlich",
+      "type": "ADJ",
+      "fa": "شبیه، مشابه",
+      "en": "similar"
+    },
+    {
+      "word": "angenehm",
+      "type": "ADJ",
+      "fa": "خوشایند، مطبوع",
+      "en": "pleasant"
+    },
+    {
+      "word": "anstrengend",
+      "type": "ADJ",
+      "fa": "خسته‌کننده، طاقت‌فرسا",
+      "en": "exhausting"
+    },
+    {
+      "word": "aufmerksam",
+      "type": "ADJ",
+      "fa": "مراقب، توجه‌دقیق",
+      "en": "attentive"
+    },
+    {
+      "word": "bereit",
+      "type": "ADJ",
+      "fa": "آماده",
+      "en": "ready"
+    },
+    {
+      "word": "dankbar",
+      "type": "ADJ",
+      "fa": "سپاسگزار",
+      "en": "grateful"
+    },
+    {
+      "word": "ehrlich",
+      "type": "ADJ",
+      "fa": "صادق، راستگو",
+      "en": "honest"
+    },
+    {
+      "word": "gemütlich",
+      "type": "ADJ",
+      "fa": "دنج، راحت",
+      "en": "cosy"
+    },
+    {
+      "word": "höflich",
+      "type": "ADJ",
+      "fa": "مؤدب",
+      "en": "polite"
+    },
+    {
+      "word": "offiziell",
+      "type": "ADJ",
+      "fa": "رسمی",
+      "en": "official"
+    },
+    {
+      "word": "ordentlich",
+      "type": "ADJ",
+      "fa": "مرتب، منظم",
+      "en": "tidy"
+    }
+  ]
+}

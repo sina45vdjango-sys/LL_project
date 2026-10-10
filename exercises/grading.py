@@ -15,6 +15,12 @@ passed then still pass:
 * trailing punctuation is ignored, so ``gute Nacht!`` matches ``gute Nacht``,
 * case is ignored.
 
+A scramble is the one kind compared with punctuation ignored **everywhere**. Its words are
+shown without their punctuation (``exercises/runner.py``), so the order is the question and
+the marks are not: demanding the comma in ``Auch gut, danke.`` would ask the learner to
+reproduce something the tray never showed. Every other typed question keeps the rule above,
+where an answer is what counts and only the mark at its end is forgiven.
+
 An expected answer has to match as a whole answer, not as a fragment of one. That is
 deliberately forgiving rather than clever: every live ``Answer`` row uses the EXACT
 match type, so nothing here stretches to CONTAINS or ANY_OF.
@@ -22,21 +28,33 @@ match type, so nothing here stretches to CONTAINS or ANY_OF.
 
 import re
 
+from exercises.models import Exercise
+
 #: Punctuation a learner may reasonably add at the end of an otherwise correct answer.
 TRAILING_PUNCTUATION = re.compile(r"[.!?,;:،؛«»\"']+$")
+
+#: Every punctuation mark, for the one kind whose words are shown without it (a scramble).
+PUNCTUATION = re.compile(r"[.!?,;:،؛«»\"']+")
 
 #: ``ExerciseAttempt.response_text`` is a CharField of this length; a typed answer is
 #: cut to fit rather than rejected.
 MAX_RESPONSE_LENGTH = 500
 
 
-def normalize(text):
-    """One canonical form, for comparing a typed answer with an expected one."""
+def normalize(text, ignore_punctuation=False):
+    """One canonical form, for comparing a typed answer with an expected one.
+
+    ``ignore_punctuation`` drops every mark, not only the run at the end; a scramble passes
+    it because its words are shown bare. Nothing else does.
+    """
     # A run of whitespace (spaces, tabs, newlines) counts as a single space.
     collapsed = " ".join(str(text).split())
 
-    # Drop punctuation the learner may have added at the end, then compare lower case.
-    without_punctuation = TRAILING_PUNCTUATION.sub("", collapsed)
+    # Drop the punctuation, then compare lower case.
+    if ignore_punctuation:
+        without_punctuation = PUNCTUATION.sub("", collapsed)
+    else:
+        without_punctuation = TRAILING_PUNCTUATION.sub("", collapsed)
 
     return without_punctuation.lower()
 
@@ -81,16 +99,24 @@ def grade(question, answer_id, response_text):
         # used for the comparison.
         typed = str(response_text or "").strip()[:MAX_RESPONSE_LENGTH]
 
+        # A scramble's words are shown bare, so its comparison ignores punctuation too —
+        # otherwise the learner would have to reproduce a comma the tray never showed.
+        ignore_punctuation = question.exercise.type == Exercise.ExerciseType.SCRAMBLE
+
         is_correct = False
         for answer in correct_answers:
-            if normalize(answer.text) == normalize(typed):
+            if normalize(answer.text, ignore_punctuation) == normalize(typed, ignore_punctuation):
                 is_correct = True
                 break
+
+    expected = []
+    for answer in correct_answers:
+        expected.append(answer.text)
 
     return {
         "is_correct": is_correct,
         "answer": chosen,
         "response_text": typed,
         "correct_answer_id": correct_answers[0].pk,
-        "expected": [answer.text for answer in correct_answers],
+        "expected": expected,
     }

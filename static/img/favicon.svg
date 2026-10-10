@@ -3,12 +3,16 @@
      background so it reads on a light or dark browser tab strip.
 
      An SVG file cannot read the CSS custom properties from static/css/base.css, so the
-     colours are written out here. If --bg or --accent ever changes, change them here too.
+     colours are written out here. They are the **dark** theme's `--bg` (`#0f1116`) and the
+     canonical brand `--accent` (`#ff7a1a`, the light theme's value — the dark theme's
+     `--accent` is the lighter `#ff8a4c`, but a tab icon is one asset and the light accent is
+     the brand colour, with 7.2:1 against this background). If those two tokens ever change,
+     change them here too — this is the last place in the project that hardcodes a colour.
      Until this file existed every page logged one 404 (/favicon.ico) — the only console
      error left in the product. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="GamBeGam">
   <rect width="32" height="32" rx="7" fill="#0f1116"/>
-  <path d="M9.5 24.4C9.5 16.7 22.5 19.1 22.5 8.6" fill="none" stroke="#7caeff" stroke-width="3.1" stroke-linecap="round"/>
-  <circle cx="9.5" cy="24.4" r="2.9" fill="#7caeff" opacity=".45"/>
-  <circle cx="22.5" cy="8.6" r="3.9" fill="#7caeff"/>
+  <path d="M9.5 24.4C9.5 16.7 22.5 19.1 22.5 8.6" fill="none" stroke="#ff7a1a" stroke-width="3.1" stroke-linecap="round"/>
+  <circle cx="9.5" cy="24.4" r="2.9" fill="#ff7a1a" opacity=".45"/>
+  <circle cx="22.5" cy="8.6" r="3.9" fill="#ff7a1a"/>
 </svg>

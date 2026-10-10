@@ -127,6 +127,10 @@
 .day-step { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-alt); }
 .day-step.is-now { border-color: var(--accent); background: var(--accent-soft); }
 .day-step.is-done { background: var(--surface); }
+/* A step shown but left out of the day's goal (the step test), so the “N از M” line and
+   the step list cannot look like they disagree. Dashed, because it is not one of the
+   goal's steps and colour alone should not be the only thing saying so. */
+.day-step.is-extra { border-style: dashed; background: var(--surface); }
 .day-step__mark { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--surface); color: var(--muted); font-size: 13px; font-weight: 700; }
 .day-step.is-now .day-step__mark { background: var(--accent); color: var(--on-accent); }
 .day-step.is-done .day-step__mark { background: var(--success-soft); color: var(--on-success); }
@@ -138,6 +142,9 @@
 .day-step__hint { color: var(--muted); font-size: 12px; line-height: 1.7; }
 .day-step__size { color: var(--muted); font-size: 12px; white-space: nowrap; }
 .day__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0; }
+/* Every counted step is done. The button is gone on purpose: there is nothing to resume,
+   and the day says so instead. */
+.day__done { padding: 6px 14px; border-radius: 999px; background: var(--success-soft); color: var(--on-success); font-size: 13px; font-weight: 700; }
 @media (max-width: 560px) {
   .day-step { grid-template-columns: 28px minmax(0, 1fr); }
   .day-step__size { grid-column: 2; justify-self: start; }

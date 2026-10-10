@@ -14,6 +14,7 @@ comes in through the shell context processor rather than through a view context.
 
 from datetime import date, timedelta
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import SimpleTestCase, TestCase
 from django.template import Context, Template
@@ -92,6 +93,111 @@ class SignUpTests(TestCase):
         self.client.force_login(user)
         self.assertRedirects(self.client.get(self.url), reverse("home"))
 
+    def test_the_username_help_text_states_the_maximum(self):
+        # The help text is where a learner reads the rule before typing, so the length cap
+        # has to be part of it rather than a surprise after submitting.
+        response = self.client.get(self.url)
+        self.assertContains(response, "حروف انگلیسی، رقم و نویسه‌های @ . + - _")
+        self.assertContains(response, f"حداکثر {settings.USERNAME_MAX_LENGTH} نویسه")
+
+    def test_signup_rejects_a_username_the_help_text_does_not_allow(self):
+        # «حروف انگلیسی، رقم و نویسه‌های @ . + - _» is a promise the field keeps. Persian
+        # digits are outside it, and the value used to be accepted and created.
+        for username in ("کاربر۱۲۳", "sina#test", "sina test"):
+            with self.subTest(username=username):
+                response = self.client.post(self.url, {
+                    "username": username,
+                    "password1": PASSWORD,
+                    "password2": PASSWORD,
+                })
+                self.assertEqual(response.status_code, 200)
+                self.assertContains(
+                    response,
+                    "نام کاربری فقط می‌تواند شامل حروف انگلیسی، رقم و نویسه‌های @ . + - _ باشد.",
+                )
+                self.assertFalse(User.objects.filter(username=username).exists())
+
+    def test_signup_rejects_markup_in_the_username(self):
+        # Not a security fix — the value is escaped wherever it is shown either way — but a
+        # username made of markup is not one of the characters the form allows.
+        response = self.client.post(self.url, {
+            "username": "<script>alert(1)</script>",
+            "password1": PASSWORD,
+            "password2": PASSWORD,
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "نام کاربری فقط می‌تواند شامل")
+        self.assertFalse(User.objects.filter(username__startswith="<script>").exists())
+
+    def test_a_username_at_the_maximum_is_still_allowed(self):
+        allowed = "u" * settings.USERNAME_MAX_LENGTH
+        response = self.client.post(self.url, {
+            "username": allowed,
+            "password1": PASSWORD,
+            "password2": PASSWORD,
+        })
+        self.assertRedirects(response, reverse("accounts:goal") + "?onboarding=1")
+        self.assertTrue(User.objects.filter(username=allowed).exists())
+
+    def test_signup_rejects_a_username_longer_than_the_maximum(self):
+        response = self.client.post(self.url, {
+            "username": "u" * (settings.USERNAME_MAX_LENGTH + 1),
+            "password1": PASSWORD,
+            "password2": PASSWORD,
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response, f"نام کاربری نباید بیشتر از {settings.USERNAME_MAX_LENGTH} نویسه باشد."
+        )
+        self.assertEqual(User.objects.count(), 0)
+
+    def test_a_short_password_is_reported_in_persian(self):
+        # Django's own minimum-length sentence is not translated in its Persian catalog, so
+        # the product states it (accounts/validators.py). Raw English in this form is the bug
+        # this test pins down.
+        response = self.client.post(self.url, {
+            "username": "sina",
+            "password1": "abc",
+            "password2": "abc",
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "گذرواژه باید حداقل ۸ نویسه باشد.")
+        self.assertNotContains(response, "This password is too short")
+        self.assertFalse(User.objects.filter(username="sina").exists())
+
+    def test_a_password_that_fails_its_own_rule_is_not_also_called_mismatched(self):
+        # The two boxes held the same text. Only the real problem is reported: the missing
+        # password1 used to be compared against password2 and produce a second, false error.
+        for password in ("abc", "12345678", "password"):
+            with self.subTest(password=password):
+                response = self.client.post(self.url, {
+                    "username": "sina",
+                    "password1": password,
+                    "password2": password,
+                })
+                self.assertEqual(response.status_code, 200)
+                self.assertNotContains(response, "دو گذرواژه یکسان نیستند.")
+                self.assertTrue(response.context["form"].errors["password1"])
+
+    def test_other_password_rules_are_still_reported(self):
+        for password in ("12345678", "password"):
+            with self.subTest(password=password):
+                response = self.client.post(self.url, {
+                    "username": "sina",
+                    "password1": password,
+                    "password2": password,
+                })
+                self.assertEqual(response.status_code, 200)
+                self.assertTrue(response.context["form"].errors["password1"])
+
+    def test_the_credential_fields_ask_the_browser_to_fill_them(self):
+        # Without these hints no password manager offers to fill or save the form.
+        response = self.client.get(self.url)
+        self.assertContains(response, 'autocomplete="username"')
+        self.assertContains(response, 'autocomplete="email"')
+        self.assertContains(response, 'autocomplete="new-password"')
+        self.assertEqual(response.content.decode().count('autocomplete="new-password"'), 2)
+
 
 class LoginTests(TestCase):
     url = reverse("accounts:login")
@@ -118,6 +224,11 @@ class LoginTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "نام کاربری یا گذرواژه درست نیست.")
         self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_the_login_fields_ask_the_browser_to_fill_them(self):
+        response = self.client.get(self.url)
+        self.assertContains(response, 'autocomplete="username"')
+        self.assertContains(response, 'autocomplete="current-password"')
 
     def test_login_page_carries_next_into_the_form(self):
         # The hidden field is what keeps `next` alive across the POST: the form posts
@@ -396,6 +507,28 @@ class GoalTests(TestCase):
         self.assertContains(response, 'aria-label="هدف فعلی"')
         self.assertEqual(response.context["form"].initial["target_level"], self.next_level)
         self.assertEqual(response.context["form"].initial["reason"], UserProfile.Reason.UNIVERSITY)
+
+    def test_the_date_menus_offer_a_blank_and_no_date_is_assumed(self):
+        # The form's own hint says every field is optional, and the browser can only leave a
+        # <select> empty if there is an empty <option> to select. Without it, an untouched
+        # form submitted the first year instead — a past date nobody chose.
+        response = self.client.get(self.url)
+        form = response.context["form"]
+
+        for field_name in ("target_year", "target_month", "target_day"):
+            with self.subTest(field=field_name):
+                self.assertEqual(form.fields[field_name].choices[0], ("", "انتخاب نشده"))
+
+        # What a browser sends for that untouched form stores no date at all.
+        self.client.post(self.url, {
+            "current_level": "",
+            "target_level": "",
+            "reason": "",
+            "target_year": "",
+            "target_month": "",
+            "target_day": "",
+        })
+        self.assertIsNone(self.profile().target_date)
 
     def test_a_learner_with_no_goal_gets_no_summary(self):
         response = self.client.get(self.url)

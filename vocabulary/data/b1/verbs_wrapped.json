@@ -1,0 +1,1238 @@
+{
+  "level": "B1",
+  "topic": "verbs",
+  "words": [
+    {
+      "word": "abonnieren",
+      "type": "VERB",
+      "fa": "مشترک شدن",
+      "en": "to subscribe",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "akzeptieren",
+      "type": "VERB",
+      "fa": "پذیرفتن",
+      "en": "to accept",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "analysieren",
+      "type": "VERB",
+      "fa": "تحلیل کردن",
+      "en": "to analyse",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "basteln",
+      "type": "VERB",
+      "fa": "کار دستی ساختن",
+      "en": "to do handicrafts",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "beachten",
+      "type": "VERB",
+      "fa": "رعایت کردن، توجه کردن",
+      "en": "to heed, to observe",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "beantragen",
+      "type": "VERB",
+      "fa": "درخواست کردن (رسمی)",
+      "en": "to apply for",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "bedienen",
+      "type": "VERB",
+      "fa": "سرویس دادن؛ کار کردن با",
+      "en": "to serve, to operate",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "beeinflussen",
+      "type": "VERB",
+      "fa": "تأثیر گذاشتن",
+      "en": "to influence",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "beenden",
+      "type": "VERB",
+      "fa": "به پایان رساندن",
+      "en": "to end",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "begegnen",
+      "type": "VERB",
+      "fa": "برخورد کردن، روبه‌رو شدن",
+      "en": "to encounter",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "begleiten",
+      "type": "VERB",
+      "fa": "همراهی کردن",
+      "en": "to accompany",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "begründen",
+      "type": "VERB",
+      "fa": "دلیل آوردن؛ بنیان گذاشتن",
+      "en": "to justify, to found",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "begrüßen",
+      "type": "VERB",
+      "fa": "خوش‌آمد گفتن",
+      "en": "to welcome",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "behandeln",
+      "type": "VERB",
+      "fa": "درمان کردن؛ رفتار کردن",
+      "en": "to treat",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "behaupten",
+      "type": "VERB",
+      "fa": "ادعا کردن",
+      "en": "to claim",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "behindern",
+      "type": "VERB",
+      "fa": "مانع شدن",
+      "en": "to hinder",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "beleidigen",
+      "type": "VERB",
+      "fa": "توهین کردن",
+      "en": "to insult",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "bemerken",
+      "type": "VERB",
+      "fa": "متوجه شدن",
+      "en": "to notice",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "benötigen",
+      "type": "VERB",
+      "fa": "نیاز داشتن",
+      "en": "to need",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "beobachten",
+      "type": "VERB",
+      "fa": "مشاهده کردن",
+      "en": "to observe",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "berechnen",
+      "type": "VERB",
+      "fa": "محاسبه کردن؛ گرفتن پول",
+      "en": "to calculate, to charge",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "berichten",
+      "type": "VERB",
+      "fa": "گزارش دادن",
+      "en": "to report",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "beruhigen",
+      "type": "VERB",
+      "fa": "آرام کردن",
+      "en": "to calm down",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "beschließen",
+      "type": "VERB",
+      "fa": "تصمیم گرفتن",
+      "en": "to decide",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "beschädigen",
+      "type": "VERB",
+      "fa": "آسیب زدن",
+      "en": "to damage",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "beschäftigen",
+      "type": "VERB",
+      "fa": "مشغول کردن",
+      "en": "to occupy, to employ",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "besetzen",
+      "type": "VERB",
+      "fa": "اشغال کردن",
+      "en": "to occupy",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "besorgen",
+      "type": "VERB",
+      "fa": "تهیه کردن",
+      "en": "to get, to obtain",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "besprechen",
+      "type": "VERB",
+      "fa": "دربارهٔ چیزی صحبت کردن",
+      "en": "to discuss",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "bestehen",
+      "type": "VERB",
+      "fa": "موجود بودن؛ قبول شدن؛ اصرار کردن",
+      "en": "to exist, to pass, to insist",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "bestrafen",
+      "type": "VERB",
+      "fa": "مجازات کردن",
+      "en": "to punish",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "betreuen",
+      "type": "VERB",
+      "fa": "سرپرستی کردن",
+      "en": "to take care of",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "bewegen",
+      "type": "VERB",
+      "fa": "حرکت دادن؛ واداشتن",
+      "en": "to move",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "beweisen",
+      "type": "VERB",
+      "fa": "اثبات کردن",
+      "en": "to prove",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "bremsen",
+      "type": "VERB",
+      "fa": "ترمز کردن",
+      "en": "to brake",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "dekorieren",
+      "type": "VERB",
+      "fa": "تزئین کردن",
+      "en": "to decorate",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "diskutieren",
+      "type": "VERB",
+      "fa": "بحث کردن",
+      "en": "to discuss",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "donnern",
+      "type": "VERB",
+      "fa": "رعد زدن",
+      "en": "to thunder",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "empfangen",
+      "type": "VERB",
+      "fa": "دریافت کردن؛ پذیرفتن",
+      "en": "to receive",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "entdecken",
+      "type": "VERB",
+      "fa": "کشف کردن",
+      "en": "to discover",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "entfernen",
+      "type": "VERB",
+      "fa": "دور کردن، برداشتن",
+      "en": "to remove",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "entlassen",
+      "type": "VERB",
+      "fa": "اخراج کردن؛ آزاد کردن",
+      "en": "to dismiss, to release",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "entsorgen",
+      "type": "VERB",
+      "fa": "دفع کردن (زباله)",
+      "en": "to dispose of",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "entstehen",
+      "type": "VERB",
+      "fa": "به وجود آمدن",
+      "en": "to arise",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "enttäuschen",
+      "type": "VERB",
+      "fa": "ناامید کردن",
+      "en": "to disappoint",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "entwickeln",
+      "type": "VERB",
+      "fa": "توسعه دادن؛ ظهور کردن (عکس)",
+      "en": "to develop",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "erfordern",
+      "type": "VERB",
+      "fa": "ایجاب کردن",
+      "en": "to require",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "erkennen",
+      "type": "VERB",
+      "fa": "شناختن، تشخیص دادن",
+      "en": "to recognise",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "erledigen",
+      "type": "VERB",
+      "fa": "انجام دادن",
+      "en": "to get done",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "erleichtern",
+      "type": "VERB",
+      "fa": "آسان کردن",
+      "en": "to make easier",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "ernähren",
+      "type": "VERB",
+      "fa": "تغذیه کردن",
+      "en": "to feed",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "erreichen",
+      "type": "VERB",
+      "fa": "رسیدن به، دست یافتن",
+      "en": "to reach",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "erschrecken",
+      "type": "VERB",
+      "fa": "ترسیدن؛ ترساندن",
+      "en": "to be frightened; to frighten",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "erstellen",
+      "type": "VERB",
+      "fa": "تهیه کردن، ساختن",
+      "en": "to create, to prepare",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "erwarten",
+      "type": "VERB",
+      "fa": "انتظار داشتن",
+      "en": "to expect",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "eröffnen",
+      "type": "VERB",
+      "fa": "افتتاح کردن؛ باز کردن (حساب)",
+      "en": "to open",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "faulenzen",
+      "type": "VERB",
+      "fa": "تنبلی کردن",
+      "en": "to laze around",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "finanzieren",
+      "type": "VERB",
+      "fa": "تأمین مالی کردن",
+      "en": "to finance",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "fotografieren",
+      "type": "VERB",
+      "fa": "عکاسی کردن",
+      "en": "to photograph",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "garantieren",
+      "type": "VERB",
+      "fa": "تضمین کردن",
+      "en": "to guarantee",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "gebrauchen",
+      "type": "VERB",
+      "fa": "به کار بردن",
+      "en": "to use",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "genehmigen",
+      "type": "VERB",
+      "fa": "تصویب کردن، اجازه دادن",
+      "en": "to approve",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "geschehen",
+      "type": "VERB",
+      "fa": "رخ دادن",
+      "en": "to happen",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "gewöhnen",
+      "type": "VERB",
+      "fa": "عادت دادن",
+      "en": "to accustom",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "grillieren",
+      "type": "VERB",
+      "fa": "گریل کردن (سوئیس)",
+      "en": "to grill (CH)",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "gründen",
+      "type": "VERB",
+      "fa": "بنیان گذاشتن",
+      "en": "to found",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "handeln",
+      "type": "VERB",
+      "fa": "عمل کردن؛ معامله کردن؛ (sich um) مربوط بودن",
+      "en": "to act, to trade; to be about",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "hängen",
+      "type": "VERB",
+      "fa": "آویزان بودن؛ آویزان کردن",
+      "en": "to hang",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "hinterlassen",
+      "type": "VERB",
+      "fa": "به جا گذاشتن",
+      "en": "to leave behind",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "informieren",
+      "type": "VERB",
+      "fa": "اطلاع دادن",
+      "en": "to inform",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "installieren",
+      "type": "VERB",
+      "fa": "نصب کردن",
+      "en": "to install",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "interessieren",
+      "type": "VERB",
+      "fa": "علاقه‌مند کردن",
+      "en": "to interest",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "kämpfen",
+      "type": "VERB",
+      "fa": "جنگیدن، مبارزه کردن",
+      "en": "to fight",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "klettern",
+      "type": "VERB",
+      "fa": "بالا رفتن، کوهنوردی کردن",
+      "en": "to climb",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "klingeln",
+      "type": "VERB",
+      "fa": "زنگ زدن",
+      "en": "to ring",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "konsumieren",
+      "type": "VERB",
+      "fa": "مصرف کردن",
+      "en": "to consume",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "kontrollieren",
+      "type": "VERB",
+      "fa": "کنترل کردن",
+      "en": "to check",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "kritisieren",
+      "type": "VERB",
+      "fa": "انتقاد کردن",
+      "en": "to criticise",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "kündigen",
+      "type": "VERB",
+      "fa": "فسخ کردن، استعفا دادن",
+      "en": "to cancel, to give notice",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "markieren",
+      "type": "VERB",
+      "fa": "علامت زدن",
+      "en": "to mark",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "operieren",
+      "type": "VERB",
+      "fa": "جراحی کردن",
+      "en": "to operate",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "pflanzen",
+      "type": "VERB",
+      "fa": "کاشتن",
+      "en": "to plant",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "protestieren",
+      "type": "VERB",
+      "fa": "اعتراض کردن",
+      "en": "to protest",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "reagieren",
+      "type": "VERB",
+      "fa": "واکنش نشان دادن",
+      "en": "to react",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "realisieren",
+      "type": "VERB",
+      "fa": "محقق کردن، اجرا کردن",
+      "en": "to realise, to implement",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "rechnen",
+      "type": "VERB",
+      "fa": "حساب کردن",
+      "en": "to calculate",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "reduzieren",
+      "type": "VERB",
+      "fa": "کاهش دادن",
+      "en": "to reduce",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "schaden",
+      "type": "VERB",
+      "fa": "آسیب زدن",
+      "en": "to harm",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "schalten",
+      "type": "VERB",
+      "fa": "وصل کردن، سوییچ کردن",
+      "en": "to switch",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "schimpfen",
+      "type": "VERB",
+      "fa": "فحش دادن، بدوبیراه گفتن",
+      "en": "to scold",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "schminken",
+      "type": "VERB",
+      "fa": "آرایش کردن",
+      "en": "to put on make-up",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "schweigen",
+      "type": "VERB",
+      "fa": "سکوت کردن",
+      "en": "to be silent",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "schwitzen",
+      "type": "VERB",
+      "fa": "عرق کردن",
+      "en": "to sweat",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "schätzen",
+      "type": "VERB",
+      "fa": "تخمین زدن؛ ارزش گذاشتن",
+      "en": "to estimate, to appreciate",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "schütteln",
+      "type": "VERB",
+      "fa": "تکان دادن",
+      "en": "to shake",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "schützen",
+      "type": "VERB",
+      "fa": "محافظت کردن",
+      "en": "to protect",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "senden",
+      "type": "VERB",
+      "fa": "فرستادن؛ پخش کردن",
+      "en": "to send, to broadcast",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "speichern",
+      "type": "VERB",
+      "fa": "ذخیره کردن",
+      "en": "to save",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "stammen",
+      "type": "VERB",
+      "fa": "منشأ داشتن",
+      "en": "to come from",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "staubsaugen",
+      "type": "VERB",
+      "fa": "جاروبرقی کشیدن",
+      "en": "to vacuum",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "tauschen",
+      "type": "VERB",
+      "fa": "مبادله کردن",
+      "en": "to exchange",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "trainieren",
+      "type": "VERB",
+      "fa": "تمرین کردن",
+      "en": "to train",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "trocknen",
+      "type": "VERB",
+      "fa": "خشک کردن؛ خشک شدن",
+      "en": "to dry",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "umarmen",
+      "type": "VERB",
+      "fa": "در آغوش گرفتن",
+      "en": "to hug",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "unterbrechen",
+      "type": "VERB",
+      "fa": "قطع کردن",
+      "en": "to interrupt",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "unterlassen",
+      "type": "VERB",
+      "fa": "خودداری کردن",
+      "en": "to refrain",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "unterrichten",
+      "type": "VERB",
+      "fa": "درس دادن؛ مطلع کردن",
+      "en": "to teach, to inform",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "unterstützen",
+      "type": "VERB",
+      "fa": "پشتیبانی کردن",
+      "en": "to support",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "untersuchen",
+      "type": "VERB",
+      "fa": "بررسی کردن؛ معاینه کردن",
+      "en": "to examine",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verbinden",
+      "type": "VERB",
+      "fa": "وصل کردن؛ پانسمان کردن",
+      "en": "to connect, to bandage",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verbrauchen",
+      "type": "VERB",
+      "fa": "مصرف کردن",
+      "en": "to consume",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verbringen",
+      "type": "VERB",
+      "fa": "گذراندن",
+      "en": "to spend (time)",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "vereinbaren",
+      "type": "VERB",
+      "fa": "توافق کردن، قرار گذاشتن",
+      "en": "to agree on",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "vergessen",
+      "type": "VERB",
+      "fa": "فراموش کردن",
+      "en": "to forget",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "vergleichen",
+      "type": "VERB",
+      "fa": "مقایسه کردن",
+      "en": "to compare",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "vergrößern",
+      "type": "VERB",
+      "fa": "بزرگ‌تر کردن",
+      "en": "to enlarge",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verhaften",
+      "type": "VERB",
+      "fa": "بازداشت کردن",
+      "en": "to arrest",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verhindern",
+      "type": "VERB",
+      "fa": "جلوگیری کردن",
+      "en": "to prevent",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verlangen",
+      "type": "VERB",
+      "fa": "خواستن، مطالبه کردن",
+      "en": "to demand",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verlassen",
+      "type": "VERB",
+      "fa": "ترک کردن",
+      "en": "to leave",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verlängern",
+      "type": "VERB",
+      "fa": "تمدید کردن",
+      "en": "to extend",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "vermeiden",
+      "type": "VERB",
+      "fa": "پرهیز کردن",
+      "en": "to avoid",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "vermissen",
+      "type": "VERB",
+      "fa": "دلش تنگ شدن، جای خالی حس کردن",
+      "en": "to miss",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "vermuten",
+      "type": "VERB",
+      "fa": "گمان کردن",
+      "en": "to suppose",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verpacken",
+      "type": "VERB",
+      "fa": "بسته‌بندی کردن",
+      "en": "to pack",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verpassen",
+      "type": "VERB",
+      "fa": "از دست دادن (قطار و مانند آن)",
+      "en": "to miss",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verpflegen",
+      "type": "VERB",
+      "fa": "خوراک دادن، تغذیه کردن",
+      "en": "to cater for",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verreisen",
+      "type": "VERB",
+      "fa": "به سفر رفتن",
+      "en": "to go away on a trip",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "verschieben",
+      "type": "VERB",
+      "fa": "به تعویق انداختن؛ جابه‌جا کردن",
+      "en": "to postpone, to shift",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verschreiben",
+      "type": "VERB",
+      "fa": "تجویز کردن؛ اشتباه نوشتن",
+      "en": "to prescribe",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "versichern",
+      "type": "VERB",
+      "fa": "بیمه کردن؛ اطمینان دادن",
+      "en": "to insure, to assure",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "versprechen",
+      "type": "VERB",
+      "fa": "قول دادن",
+      "en": "to promise",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "versuchen",
+      "type": "VERB",
+      "fa": "تلاش کردن، امتحان کردن",
+      "en": "to try",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "versäumen",
+      "type": "VERB",
+      "fa": "از دست دادن؛ غفلت کردن",
+      "en": "to miss, to neglect",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verteilen",
+      "type": "VERB",
+      "fa": "توزیع کردن، پخش کردن",
+      "en": "to distribute",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "vertrauen",
+      "type": "VERB",
+      "fa": "اعتماد کردن",
+      "en": "to trust",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verursachen",
+      "type": "VERB",
+      "fa": "باعث شدن",
+      "en": "to cause",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verurteilen",
+      "type": "VERB",
+      "fa": "محکوم کردن",
+      "en": "to convict, to condemn",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verwechseln",
+      "type": "VERB",
+      "fa": "اشتباه گرفتن",
+      "en": "to mix up",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verwenden",
+      "type": "VERB",
+      "fa": "به کار بردن",
+      "en": "to use",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verzeihen",
+      "type": "VERB",
+      "fa": "بخشیدن",
+      "en": "to forgive",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verzichten",
+      "type": "VERB",
+      "fa": "صرف‌نظر کردن",
+      "en": "to do without",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "wenden",
+      "type": "VERB",
+      "fa": "چرخاندن، برگرداندن",
+      "en": "to turn",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "zeichnen",
+      "type": "VERB",
+      "fa": "رسم کردن، طراحی کردن",
+      "en": "to draw",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "zerstören",
+      "type": "VERB",
+      "fa": "نابود کردن",
+      "en": "to destroy",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "zweifeln",
+      "type": "VERB",
+      "fa": "شک کردن",
+      "en": "to doubt",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "überfahren",
+      "type": "VERB",
+      "fa": "زیر گرفتن، رد شدن از خط",
+      "en": "to run over",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "überholen",
+      "type": "VERB",
+      "fa": "سبقت گرفتن",
+      "en": "to overtake",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "übernehmen",
+      "type": "VERB",
+      "fa": "بر عهده گرفتن؛ تحویل گرفتن",
+      "en": "to take over",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "überprüfen",
+      "type": "VERB",
+      "fa": "بازبینی کردن",
+      "en": "to check",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "überqueren",
+      "type": "VERB",
+      "fa": "عبور کردن",
+      "en": "to cross",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "überraschen",
+      "type": "VERB",
+      "fa": "غافلگیر کردن",
+      "en": "to surprise",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "überreden",
+      "type": "VERB",
+      "fa": "متقاعد کردن، راضی کردن",
+      "en": "to persuade",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "übertreiben",
+      "type": "VERB",
+      "fa": "اغراق کردن",
+      "en": "to exaggerate",
+      "aux": "haben",
+      "separable": false
+    }
+  ]
+}

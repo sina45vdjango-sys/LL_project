@@ -33,6 +33,10 @@
         token.setAttribute('aria-controls', 'word-popover');
         token.setAttribute('aria-label', `معنی ${match[0]}`);
         token.lang = 'de';
+        // German is always announced left-to-right and laid out that way, even inside a
+        // Persian sentence: without this the bidi algorithm is free to reorder a token
+        // that carries punctuation ("z.B.", "Guten Tag!") against the sentence around it.
+        token.dir = 'ltr';
         token.textContent = match[0];
         fragment.append(token);
         end = match.index + match[0].length;
@@ -45,10 +49,12 @@
     if (!active || popup.hidden) return;
     const rect = active.getBoundingClientRect();
     const width = popup.offsetWidth, height = popup.offsetHeight;
-    // On phones the bottom navigation is fixed over the page, so the popover has
-    // to stay above it. The shell publishes that height as a token — use it
-    // rather than hardcoding a number that would drift.
-    const navHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bottom-nav-h')) || 0;
+    // On phones the bottom navigation is fixed over the page, so the popover has to stay
+    // above it. Measure the bar itself rather than reading `--bottom-nav-h`: the bar adds
+    // the phone's safe-area inset on top of that token, so the token alone would let the
+    // popover sit under the last few pixels of the bar.
+    const nav = document.querySelector('.bottom-nav');
+    const navHeight = nav ? nav.getBoundingClientRect().height : 0;
     const bottomGuard = innerWidth < 900 ? navHeight + 12 : 8;
     popup.style.left = `${Math.max(8, Math.min(innerWidth - width - 8, rect.left + rect.width / 2 - width / 2))}px`;
     popup.style.top = `${Math.max(8, rect.top >= height + 12 ? rect.top - height - 8 : Math.min(innerHeight - height - bottomGuard, rect.bottom + 8))}px`;

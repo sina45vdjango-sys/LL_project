@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+{% comment %}The plain title here, not `|direction`: that filter returns `<bdi>` markup,
+   which belongs in the page body and would be shown literally inside `<title>`.
+   The visible heading below still uses it.{% endcomment %}
+{% block title %}گفت‌وگوی روز · {{ lesson.display_title }} | {{ brand.name }}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'exercises/css/exercise.css' %}">
+<link rel="stylesheet" href="{% static 'exercises/css/chat.css' %}">
+{% endblock %}
+{% block content_class %}content--exercise{% endblock %}
+{% block content %}
+{% comment %}Concept 13 — «گفت‌وگوی روز». The lesson's own dialogue
+   (``exercises/conversation.py``) played as a role-play: the partner says their lines and
+   the learner takes their own part, then sees the line the lesson uses.
+
+   The same thread and the same script as concept 9's teacher chat (the shared partial and
+   ``exercises/js/conversation.js``): one engine, two framings. Nothing is graded and
+   nothing is stored — the honest limit a spoken turn has — and the graded practice of the
+   lesson stays one link away.{% endcomment %}
+<div class="exercise-page chat-page dialogue-page">
+  <a class="exercise-back" href="{% url 'lessons:practice-path' %}">
+    ← <span>مسیر امروز</span>
+  </a>
+
+  <header class="exercise-head">
+    <p class="exercise-head__meta">
+      <span class="chip chip--accent">گفت‌وگوی روز</span>
+      {% if skill_label %}<span class="chip">{{ skill_label }}</span>{% endif %}
+    </p>
+    <h1 class="exercise-head__title">{{ lesson.display_title|direction }}</h1>
+    {% if turns %}
+      <p class="exercise-head__instruction">
+        صحنه: {{ lesson.display_title }}. تو یکی از دو طرف گفت‌وگویی{% if you %} — نقش
+        <bdi lang="de" dir="ltr">{{ you }}</bdi>{% endif %}؛ هر بار خط خودت را به واژه‌های
+        خودت می‌نویسی و بعد می‌بینی در درس چه گفته شده.
+      </p>
+    {% endif %}
+  </header>
+
+  {% if turns %}
+    {% include "exercises/_conversation.html" %}
+  {% else %}
+    <section class="exercise-empty">
+      <h2>این درس گفت‌وگویی ندارد.</h2>
+      <p>درس‌های مرور صحنهٔ خودشان را ندارند. تمرین همین درس را انجام بده.</p>
+      <a class="btn btn--primary" href="{% url 'exercises:exercise-detail' exercise.pk %}">تمرین همین درس</a>
+    </section>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'exercises/js/conversation.js' %}" defer></script>
+{% endblock %}

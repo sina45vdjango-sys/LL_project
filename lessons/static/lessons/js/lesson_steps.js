@@ -41,6 +41,8 @@
   const fill = root.querySelector('[data-journey-fill]');
   const currentEls = Array.from(root.querySelectorAll('[data-journey-current]'));
   const labelEl = root.querySelector('[data-journey-label]');
+  const resumeEl = root.querySelector('[data-journey-resume]');
+  const noteEl = root.querySelector('[data-journey-note]');
   const progress = window.GamProgress;
   const lessonId = Number(root.dataset.lessonId);
   const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -97,7 +99,11 @@
     if (number) number.textContent = isBehind ? '✓' : String(i + 1);
   });
 
-    const percent = Math.round(((index + 1) / steps.length) * 100);
+  if (chips[index]) {
+    chips[index].scrollIntoView({ behavior: calm ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
+  }
+
+  const percent = Math.round(((index + 1) / steps.length) * 100);
     if (fill) fill.style.width = `${percent}%`;
     if (bar) bar.setAttribute('aria-valuenow', String(percent));
     currentEls.forEach((el) => { el.textContent = String(index + 1); });
@@ -141,6 +147,21 @@
     fromHash >= 0 ? fromHash : fromServer >= 0 ? fromServer : typeof remembered === 'number' ? remembered : 0;
   activate(start, { scroll: start > 0 ? 'auto' : false });
 
+  // Reopening the lesson lands on the step the learner left, so say so: coming back reads
+  // as a continuation instead of as starting over. An explicit #step-… in the URL is the
+  // learner's own choice, and step 0 is not a resume, so neither shows the line.
+  if (resumeEl && fromHash < 0 && fromServer > 0) {
+    resumeEl.textContent = `از همان‌جایی که رها کرده بودی ادامه دادی: قدم «${labels[fromServer]}».`;
+    resumeEl.hidden = false;
+  }
+
+  // The note under the buttons promises that the place is kept. With nowhere to keep it
+  // (blocked localStorage and no account) that would be a promise the page breaks, so it
+  // is dropped rather than shown as a lie.
+  if (noteEl && (!progress || (!progress.available && !progress.serverBacked))) {
+    noteEl.hidden = true;
+  }
+
   if (navBar) navBar.hidden = false;
 
   if (prevBtn) prevBtn.addEventListener('click', () => activate(index - 1, { scroll: 'smooth' }));
@@ -169,6 +190,7 @@
   // of being handed a dead button.
   const completeBtn = root.querySelector('[data-finish-complete]');
   const completeState = root.querySelector('[data-finish-state]');
+  const completeEyebrow = root.querySelector('[data-finish-eyebrow]');
   if (completeBtn && completeState && progress) {
     if (!progress.available && !progress.serverBacked) {
       completeState.textContent = 'این مرورگر اجازهٔ ذخیره‌سازی محلی نمی‌دهد، پس نمی‌توان این درس را کامل‌شده ثبت کرد.';
@@ -181,6 +203,11 @@
       const done = !!entry && entry.status === progress.COMPLETED;
       completeBtn.disabled = done;
       completeBtn.textContent = done ? 'کامل‌شده' : 'درس را کامل کردم';
+      // The summary header says what is true: a recap while the lesson is still open,
+      // and the completion itself once the server has stored it.
+      if (completeEyebrow) {
+        completeEyebrow.textContent = done ? 'درس را کامل کردی' : 'جمع‌بندی این درس';
+      }
       if (done) {
         completeState.textContent = progress.serverBacked
           ? 'این درس روی حساب کاربری‌ات کامل‌شده ثبت شده است.'

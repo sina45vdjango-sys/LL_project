@@ -1,10 +1,34 @@
+{% comment %}The count here is `journey_step_count`, the same number the stepper shows
+   ("قدم ۱ از ۸") — a lesson's shape is the journey's, and the agenda below already names
+   the content parts with their own noun («بخش»). Using the material count here made the
+   two numbers on this screen disagree.{% endcomment %}
 <p class="step-lead-text">
-  این درس {{ lesson.estimated_time }} دقیقه زمان می‌برد{% if material_step_count %} و در {{ material_step_count }} قدم پیش می‌رود{% endif %}.
+  {% if material_step_count %}
+    این درس {{ lesson.estimated_time }} دقیقه زمان می‌برد و در {{ journey_step_count }} قدم پیش می‌رود.
+  {% else %}
+    این درس {{ lesson.estimated_time }} دقیقه زمان می‌برد.
+  {% endif %}
 </p>
 
 {% if material_step_count %}
   {% include "lessons/steps/_agenda.html" %}
   <p class="step-note">از فهرست بالا می‌توانی هر قدم را مستقیم باز کنی؛ لازم نیست به ترتیب جلو بروی.</p>
+  {% if lesson.order == 1 %}
+    <p class="step-note"><strong>راهنمای شروع:</strong> واژگان کلیدی این درس در بخش تمرین سنجیده می‌شوند و واژه‌های تکمیلی مستقیماً وارد سیستم مرور فاصله‌دار (جعبه مرور) خواهند شد.</p>
+  {% elif lesson.order == 24 %}
+    <p class="step-note"><strong>راهنمای پایان A1:</strong> این درس شامل ماتریس هستهٔ آزمون و بانک واژگان مرجع است. واژگان برای تثبیت تدریجی در سیستم مرور قرار می‌گیرند.</p>
+  {% endif %}
 {% else %}
   <p class="step-note">هنوز محتوایی برای این درس ثبت نشده است. می‌توانی درس را کامل‌شده علامت بزنی و به درس بعدی بروی.</p>
+{% endif %}
+
+{% comment %}The way out for a learner who already knows this lesson: a short sample of the
+   lesson's own questions (lessons/check.py), and completion on a pass. Login-only, like
+   the finish button and for the same reason — a completion is a stored row, and a visitor
+   we cannot identify has nowhere to keep one.{% endcomment %}
+{% if user.is_authenticated %}
+  <p class="step-note">
+    این درس را از قبل می‌دانی؟ با یک بررسی کوتاه از پرسش‌های خودِ همین درس می‌توانی مستقیم
+    <a href="{% url 'lessons:lesson-check' lesson.pk %}">کاملش ثبت کنی</a>.
+  </p>
 {% endif %}

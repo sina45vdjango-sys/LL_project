@@ -1,0 +1,678 @@
+{
+  "level": "B1",
+  "topic": "verbs",
+  "words": [
+    {
+      "word": "abschreiben",
+      "type": "VERB",
+      "fa": "رونویس کردن، کپی کردن (از روی کسی نوشتن)",
+      "en": "to copy (in writing)",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "abnehmen",
+      "type": "VERB",
+      "fa": "کاهش یافتن؛ برداشتن؛ وزن کم کردن",
+      "en": "to decrease; to take off",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "abstimmen",
+      "type": "VERB",
+      "fa": "رأی‌گیری کردن؛ هماهنگ کردن",
+      "en": "to vote; to coordinate",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "abwaschen",
+      "type": "VERB",
+      "fa": "شستن (ظرف)",
+      "en": "to wash up",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "abheben",
+      "type": "VERB",
+      "fa": "برداشت کردن (پول)؛ بلند کردن",
+      "en": "to withdraw; to lift off",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "sich amüsieren",
+      "type": "VERB",
+      "fa": "خوش گذراندن",
+      "en": "to enjoy oneself",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "ankündigen",
+      "type": "VERB",
+      "fa": "اعلام کردن",
+      "en": "to announce",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "anmelden",
+      "type": "VERB",
+      "fa": "ثبت‌نام کردن",
+      "en": "to register",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "annehmen",
+      "type": "VERB",
+      "fa": "پذیرفتن؛ فرض کردن",
+      "en": "to accept; to assume",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "anerkennen",
+      "type": "VERB",
+      "fa": "به رسمیت شناختن",
+      "en": "to recognise, to acknowledge",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "angeben",
+      "type": "VERB",
+      "fa": "اظهار کردن، دادن (اطلاعات)؛ پُز دادن",
+      "en": "to state; to show off",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "anschaffen",
+      "type": "VERB",
+      "fa": "خریداری کردن",
+      "en": "to acquire",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "anschließen",
+      "type": "VERB",
+      "fa": "وصل کردن؛ پیوستن",
+      "en": "to connect; to join",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "anschnallen",
+      "type": "VERB",
+      "fa": "بستن کمربند ایمنی",
+      "en": "to buckle up",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "ansehen",
+      "type": "VERB",
+      "fa": "نگاه کردن",
+      "en": "to look at",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "ansprechen",
+      "type": "VERB",
+      "fa": "سر صحبت را باز کردن، خطاب قرار دادن",
+      "en": "to address, to speak to",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "sich anstrengen",
+      "type": "VERB",
+      "fa": "تلاش کردن",
+      "en": "to make an effort",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "auffordern",
+      "type": "VERB",
+      "fa": "درخواست کردن، فراخواندن",
+      "en": "to request, to call upon",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "aufladen",
+      "type": "VERB",
+      "fa": "شارژ کردن؛ بار کردن",
+      "en": "to charge; to load",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "aufnehmen",
+      "type": "VERB",
+      "fa": "ضبط کردن؛ پذیرفتن",
+      "en": "to record; to take up",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "ausdrucken",
+      "type": "VERB",
+      "fa": "چاپ کردن",
+      "en": "to print out",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "aufregen",
+      "type": "VERB",
+      "fa": "ناراحت کردن؛ هیجان‌زده کردن",
+      "en": "to upset, to excite",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "aussprechen",
+      "type": "VERB",
+      "fa": "تلفظ کردن؛ حرف دل را زدن",
+      "en": "to pronounce",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "ausstellen",
+      "type": "VERB",
+      "fa": "صادر کردن؛ به نمایش گذاشتن",
+      "en": "to issue; to exhibit",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "auswählen",
+      "type": "VERB",
+      "fa": "انتخاب کردن",
+      "en": "to choose",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "ausreichen",
+      "type": "VERB",
+      "fa": "کافی بودن",
+      "en": "to suffice",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "ausrichten",
+      "type": "VERB",
+      "fa": "منتقل کردن (پیام)؛ ترتیب دادن",
+      "en": "to pass on a message",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "ausschließen",
+      "type": "VERB",
+      "fa": "کنار گذاشتن، ممکن ندانستن",
+      "en": "to exclude",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "beantworten",
+      "type": "VERB",
+      "fa": "پاسخ دادن",
+      "en": "to answer",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich befinden",
+      "type": "VERB",
+      "fa": "قرار داشتن، واقع بودن",
+      "en": "to be located",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich beschweren",
+      "type": "VERB",
+      "fa": "شکایت کردن",
+      "en": "to complain",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich beteiligen",
+      "type": "VERB",
+      "fa": "شرکت کردن",
+      "en": "to take part",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich bewerben",
+      "type": "VERB",
+      "fa": "درخواست کار دادن، تقاضا دادن",
+      "en": "to apply",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "eilen",
+      "type": "VERB",
+      "fa": "شتاب کردن",
+      "en": "to hurry",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "einbrechen",
+      "type": "VERB",
+      "fa": "دستبرد زدن؛ فروریختن",
+      "en": "to break in",
+      "aux": "sein",
+      "separable": true
+    },
+    {
+      "word": "einfallen",
+      "type": "VERB",
+      "fa": "به ذهن رسیدن",
+      "en": "to come to mind",
+      "aux": "sein",
+      "separable": true
+    },
+    {
+      "word": "sich eignen",
+      "type": "VERB",
+      "fa": "مناسب بودن",
+      "en": "to be suitable",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "einrichten",
+      "type": "VERB",
+      "fa": "راه‌اندازی کردن؛ مبله کردن",
+      "en": "to set up; to furnish",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "einschalten",
+      "type": "VERB",
+      "fa": "روشن کردن، وصل کردن",
+      "en": "to switch on",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "sich einigen",
+      "type": "VERB",
+      "fa": "به توافق رسیدن",
+      "en": "to agree",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "einnehmen",
+      "type": "VERB",
+      "fa": "دریافت کردن (پول)؛ مصرف کردن (دارو)",
+      "en": "to take (money, medicine)",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "sich ereignen",
+      "type": "VERB",
+      "fa": "رخ دادن",
+      "en": "to occur",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich entschließen",
+      "type": "VERB",
+      "fa": "تصمیم گرفتن",
+      "en": "to decide",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich erholen",
+      "type": "VERB",
+      "fa": "استراحت کردن، بهبود یافتن",
+      "en": "to recover",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich erkälten",
+      "type": "VERB",
+      "fa": "سرما خوردن",
+      "en": "to catch a cold",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "festnehmen",
+      "type": "VERB",
+      "fa": "بازداشت کردن",
+      "en": "to arrest",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "feststehen",
+      "type": "VERB",
+      "fa": "قطعی بودن، مسلّم بودن",
+      "en": "to be certain",
+      "aux": "sein",
+      "separable": true
+    },
+    {
+      "word": "feststellen",
+      "type": "VERB",
+      "fa": "تشخیص دادن، مشخص کردن",
+      "en": "to establish, to notice",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "sich konzentrieren",
+      "type": "VERB",
+      "fa": "تمرکز کردن",
+      "en": "to concentrate",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich langweilen",
+      "type": "VERB",
+      "fa": "حوصله‌اش سر رفتن",
+      "en": "to be bored",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich lohnen",
+      "type": "VERB",
+      "fa": "ارزش داشتن، به‌صرفه بودن",
+      "en": "to be worth it",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "nachdenken",
+      "type": "VERB",
+      "fa": "فکر کردن، تأمل کردن",
+      "en": "to think about",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "nachschlagen",
+      "type": "VERB",
+      "fa": "مراجعه کردن (به لغت‌نامه)",
+      "en": "to look up",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "sich nähern",
+      "type": "VERB",
+      "fa": "نزدیک شدن",
+      "en": "to approach",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "veröffentlichen",
+      "type": "VERB",
+      "fa": "منتشر کردن",
+      "en": "to publish",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich scheiden lassen",
+      "type": "VERB",
+      "fa": "طلاق گرفتن",
+      "en": "to get divorced",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "verschmutzen",
+      "type": "VERB",
+      "fa": "آلوده کردن",
+      "en": "to pollute",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "spazieren gehen",
+      "type": "VERB",
+      "fa": "قدم زدن",
+      "en": "to go for a walk",
+      "aux": "sein",
+      "separable": true
+    },
+    {
+      "word": "tauchen",
+      "type": "VERB",
+      "fa": "شیرجه زدن؛ غوطه خوردن",
+      "en": "to dive",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "teilnehmen",
+      "type": "VERB",
+      "fa": "شرکت کردن",
+      "en": "to take part in",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "transportieren",
+      "type": "VERB",
+      "fa": "حمل کردن",
+      "en": "to transport",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "treten",
+      "type": "VERB",
+      "fa": "لگد زدن؛ قدم گذاشتن",
+      "en": "to kick; to step",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "unternehmen",
+      "type": "VERB",
+      "fa": "انجام دادن، اقدام کردن",
+      "en": "to undertake",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "unterscheiden",
+      "type": "VERB",
+      "fa": "تفاوت قائل شدن، تشخیص دادن",
+      "en": "to distinguish",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "umtauschen",
+      "type": "VERB",
+      "fa": "تعویض کردن",
+      "en": "to exchange",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "unterstreichen",
+      "type": "VERB",
+      "fa": "زیر چیزی خط کشیدن؛ تأکید کردن",
+      "en": "to underline",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich verhalten",
+      "type": "VERB",
+      "fa": "رفتار کردن",
+      "en": "to behave",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich vergnügen",
+      "type": "VERB",
+      "fa": "خوش گذراندن",
+      "en": "to enjoy oneself",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "verschwinden",
+      "type": "VERB",
+      "fa": "ناپدید شدن",
+      "en": "to disappear",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "sich verlaufen",
+      "type": "VERB",
+      "fa": "گم شدن",
+      "en": "to get lost",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich verlieben",
+      "type": "VERB",
+      "fa": "عاشق شدن",
+      "en": "to fall in love",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "vorschlagen",
+      "type": "VERB",
+      "fa": "پیشنهاد کردن",
+      "en": "to suggest",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "vorkommen",
+      "type": "VERB",
+      "fa": "رخ دادن، پیش آمدن؛ به نظر رسیدن",
+      "en": "to occur; to seem",
+      "aux": "sein",
+      "separable": true
+    },
+    {
+      "word": "sich weigern",
+      "type": "VERB",
+      "fa": "امتناع کردن",
+      "en": "to refuse",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "widersprechen",
+      "type": "VERB",
+      "fa": "مخالفت کردن، حرف کسی را رد کردن",
+      "en": "to contradict",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich wundern",
+      "type": "VERB",
+      "fa": "تعجب کردن",
+      "en": "to be surprised",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "ziehen",
+      "type": "VERB",
+      "fa": "کشیدن؛ اسباب‌کشی کردن",
+      "en": "to pull; to move",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "zubereiten",
+      "type": "VERB",
+      "fa": "آماده کردن (غذا)",
+      "en": "to prepare (food)",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "zunehmen",
+      "type": "VERB",
+      "fa": "افزایش یافتن؛ وزن زیاد کردن",
+      "en": "to increase; to gain weight",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "zurechtkommen",
+      "type": "VERB",
+      "fa": "کنار آمدن، از عهده برآمدن",
+      "en": "to manage, to cope",
+      "aux": "sein",
+      "separable": true
+    },
+    {
+      "word": "zusagen",
+      "type": "VERB",
+      "fa": "قبول کردن (دعوت)",
+      "en": "to accept",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "zusammenfassen",
+      "type": "VERB",
+      "fa": "خلاصه کردن",
+      "en": "to summarise",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "zugehen",
+      "type": "VERB",
+      "fa": "بسته شدن؛ اتفاق افتادن",
+      "en": "to close; to happen",
+      "aux": "sein",
+      "separable": true
+    },
+    {
+      "word": "zustimmen",
+      "type": "VERB",
+      "fa": "موافقت کردن",
+      "en": "to agree",
+      "aux": "haben",
+      "separable": true
+    }
+  ]
+}

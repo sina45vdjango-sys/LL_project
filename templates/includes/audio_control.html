@@ -1,31 +1,19 @@
 {% comment %}One audio control for every playable item in the product: lesson prose blocks,
    grammar topics, sentences, vocabulary words and exercise question audio.
 
-   The control is a single 44x44 button with a play icon, and the real <audio> element is
-   kept hidden until static/js/audio.js decides it earns its place. A vocabulary word is
-   over in about a second, so a player there would only make the row taller; a grammar
-   topic runs half a minute and is worth a scrubber to seek inside. That decision is made
-   from the clip's real length in the browser rather than guessed here, which is why this
-   template has no short/long switch and no second variant.
+   Lightweight trigger element for the Audio Singleton (static/js/audio.js). Instead of
+   rendering dozens of redundant <audio> elements in the DOM, each control carries its
+   source on `data-audio-src`. The global Audio Singleton manages playback, play/stop
+   states, and only attaches the native scrubber for clips >= 5s.
 
-   The button ships `hidden` and the script reveals it, exactly like the lesson stepper's
-   controls: with JavaScript off there is no button that would do nothing, only the plain
-   download link in the <noscript> block.
-
-   The generated id is `{{ prefix }}-{{ pk }}` -- the prefix scheme is asserted by tests,
-   so keep it unique per player on a page. Pass `inline=True` where the control sits in a
-   dense row (a word row, a word list row) and needs no space above it.
-
-   `data-label` carries the clip's name on its own, without the verb, so the script can
-   build "پخش …" or "توقف …" from it instead of having to take its own label apart.{% endcomment %}
-{% if audio %}<span class="audio-control{% if inline %} audio-control--inline{% endif %}">
-  <button type="button" class="audio-toggle" hidden aria-expanded="false" aria-controls="{{ prefix }}-{{ pk }}" aria-label="پخش {{ label }}" data-label="{{ label }}">
-    {% comment %}Shapes live once in base.html's sprite: this control is repeated dozens of
-       times on one lesson page, and the two paths were most of the page's icon bytes.{% endcomment %}
+   The button ships `hidden` and the script reveals it: with JavaScript off there is
+   no button that would do nothing, only the plain download link in the <noscript> block.
+{% endcomment %}
+{% if audio %}<span class="audio-control{% if inline %} audio-control--inline{% endif %}" id="{{ prefix }}-{{ pk }}" data-audio-src="{{ audio.url }}">
+  <button type="button" class="audio-toggle" hidden aria-expanded="false" aria-controls="{{ prefix }}-{{ pk }}" aria-label="پخش {{ label }}" data-label="{{ label }}" data-audio-src="{{ audio.url }}">
     <svg class="audio-toggle__play" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-audio-play"/></svg>
     <svg class="audio-toggle__stop" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-audio-stop"/></svg>
   </button>
   <span class="audio-status" role="status" hidden></span>
-  <audio id="{{ prefix }}-{{ pk }}" controls preload="none" hidden src="{{ audio.url }}" aria-label="{{ label }}">مرورگر شما پخش صوت را پشتیبانی نمی‌کند.</audio>
   <noscript><a class="audio-fallback" href="{{ audio.url }}">دریافت فایل صوتی</a></noscript>
 </span>{% endif %}

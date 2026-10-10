@@ -1,0 +1,35 @@
+/* lesson_check.css — the outcome block on the «این درس را می‌دانم» check page.
+ *
+ * The runner itself is styled by exercises/css/exercise.css, which this page also loads;
+ * only the pass/fail outcome below it lives here. Colour is read from base.css tokens.
+ */
+
+.check-done {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-block-start: 18px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.check-done__lead {
+  margin: 0;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.check-done__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+}
+
+.check-done__state {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}

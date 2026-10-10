@@ -1,0 +1,102 @@
+{
+  "level": "B1",
+  "topic": "verbs",
+  "words": [
+    {
+      "word": "aufschreiben",
+      "type": "VERB",
+      "fa": "نوشتن، یادداشت کردن",
+      "en": "to write down",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "beschränken",
+      "type": "VERB",
+      "fa": "محدود کردن",
+      "en": "to limit",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "entgegenkommen",
+      "type": "VERB",
+      "fa": "به‌سوی کسی آمدن، کوتاه آمدن",
+      "en": "to come towards, to accommodate",
+      "aux": "sein",
+      "separable": true
+    },
+    {
+      "word": "kaputtgehen",
+      "type": "VERB",
+      "fa": "خراب شدن",
+      "en": "to break, to get broken",
+      "aux": "sein",
+      "separable": true
+    },
+    {
+      "word": "kaputtmachen",
+      "type": "VERB",
+      "fa": "خراب کردن",
+      "en": "to break something",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "kopieren",
+      "type": "VERB",
+      "fa": "کپی کردن",
+      "en": "to copy",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "notieren",
+      "type": "VERB",
+      "fa": "یادداشت کردن",
+      "en": "to note down",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "parkieren",
+      "type": "VERB",
+      "fa": "پارک کردن (سوئیس)",
+      "en": "to park (CH)",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "probieren",
+      "type": "VERB",
+      "fa": "امتحان کردن، چشیدن",
+      "en": "to try",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "präsentieren",
+      "type": "VERB",
+      "fa": "ارائه دادن",
+      "en": "to present",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "üben",
+      "type": "VERB",
+      "fa": "تمرین کردن",
+      "en": "to practise",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "zuschauen",
+      "type": "VERB",
+      "fa": "تماشا کردن",
+      "en": "to watch",
+      "aux": "haben",
+      "separable": true
+    }
+  ]
+}

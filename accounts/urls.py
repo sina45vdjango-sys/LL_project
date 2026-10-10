@@ -23,4 +23,14 @@ urlpatterns = [
         views.ProfileView.as_view(),
         name="profile",
     ),
+    path(
+        "goal/",
+        views.GoalView.as_view(),
+        name="goal",
+    ),
+    path(
+        "theme/",
+        views.ThemeView.as_view(),
+        name="theme",
+    ),
 ]

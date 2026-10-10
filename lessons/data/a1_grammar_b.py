@@ -132,7 +132,7 @@ Ich möchte einen Termin machen. (می‌خواهم وقت بگیرم.)
 Passt es Ihnen am Dienstag um zehn Uhr? (سه‌شنبه ساعت ده مناسب شماست؟)
 Das passt mir gut. (مناسب من است.)
 Leider kann ich nicht. Können wir den Termin verschieben? (متأسفانه نمی‌توانم. می‌توانیم قرار را جابه‌جا کنیم؟)
-Der Termin ist am Dienstag, den dritten Mai. (قرار سه‌شنبه، سوم ماه مه است.)
+Der Termin ist am Dienstag, dem dritten Mai. (قرار سه‌شنبه، سوم ماه مه است.)
 
 English: Making, accepting and changing appointments: einen Termin machen, Passt es Ihnen …?, den Termin verschieben.""",
 
@@ -239,8 +239,7 @@ Können Sie mir helfen? (می‌توانید کمکم کنید؟)
 Wo ist der Aufzug? (آسانسور کجاست؟)
 
 فرم‌های مؤدبانه درخواست:
-Könnten Sie … ? (می‌توانید …؟) — در سطح A1 همین «Können Sie … ?» هم مؤدبانه است.
-Bitte, würden Sie … ? — برای سطح بالاتر.
+Können Sie … ? (می‌توانید …؟)
 
 English: Polite requests at a hotel with „Sie“: eine Reservierung haben, ein Zimmer frei haben, Können Sie … ?""",
 
@@ -283,8 +282,7 @@ Du sollst mehr schlafen. (بهتر است بیشتر بخوابی.)
 Sie sollen viel trinken. (باید زیاد آب بنوشید.)
 
 مؤدبانه‌تر:
-Ich glaube, du solltest zum Arzt gehen. — «solltest» شکل Konjunktiv II است و برای A1 لازم نیست؛ شما با «Du sollst zum Arzt gehen» منظور را می‌رسانید.
-An deiner Stelle würde ich … — برای سطوح بالاتر.
+Du solltest zum Arzt gehen. (بهتر است به پزشک بروی.)
 
 English: Giving advice with the imperative (Schlaf mehr! Trinken Sie viel!) or with sollen (Du sollst mehr schlafen).""",
 

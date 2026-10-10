@@ -1,0 +1,540 @@
+{
+  "level": "A2",
+  "topic": "verbs and other words",
+  "words": [
+    {
+      "word": "abschließen",
+      "type": "VERB",
+      "fa": "قفل کردن، بستن؛ به پایان رساندن",
+      "en": "to lock; to complete",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "auspacken",
+      "type": "VERB",
+      "fa": "باز کردن (چمدان، بسته)",
+      "en": "to unpack",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "austragen",
+      "type": "VERB",
+      "fa": "توزیع کردن (نامه، روزنامه)",
+      "en": "to deliver",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "einziehen",
+      "type": "VERB",
+      "fa": "اسباب‌کشی کردن به داخل؛ وصول کردن (پول)",
+      "en": "to move in",
+      "aux": "sein",
+      "separable": true
+    },
+    {
+      "word": "herstellen",
+      "type": "VERB",
+      "fa": "تولید کردن، ساختن",
+      "en": "to produce",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "herunterladen",
+      "type": "VERB",
+      "fa": "دانلود کردن",
+      "en": "to download",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "joggen",
+      "type": "VERB",
+      "fa": "دویدن (آهسته)",
+      "en": "to jog",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "liefern",
+      "type": "VERB",
+      "fa": "تحویل دادن",
+      "en": "to deliver",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "parken",
+      "type": "VERB",
+      "fa": "پارک کردن",
+      "en": "to park",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "renovieren",
+      "type": "VERB",
+      "fa": "بازسازی کردن",
+      "en": "to renovate",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sterben",
+      "type": "VERB",
+      "fa": "مردن",
+      "en": "to die",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "surfen",
+      "type": "VERB",
+      "fa": "موج‌سواری کردن؛ در اینترنت گشتن",
+      "en": "to surf",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "umsteigen",
+      "type": "VERB",
+      "fa": "عوض کردن (وسیلهٔ نقلیه)",
+      "en": "to change (trains)",
+      "aux": "sein",
+      "separable": true
+    },
+    {
+      "word": "vorbereiten",
+      "type": "VERB",
+      "fa": "آماده کردن",
+      "en": "to prepare",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "wehtun",
+      "type": "VERB",
+      "fa": "درد کردن، درد دادن",
+      "en": "to hurt",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "wünschen",
+      "type": "VERB",
+      "fa": "آرزو کردن",
+      "en": "to wish",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich bedanken",
+      "type": "VERB",
+      "fa": "تشکر کردن",
+      "en": "to thank",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich duschen",
+      "type": "VERB",
+      "fa": "دوش گرفتن",
+      "en": "to shower",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich eintragen",
+      "type": "VERB",
+      "fa": "نام خود را نوشتن، ثبت‌نام کردن",
+      "en": "to sign in",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "sich erinnern",
+      "type": "VERB",
+      "fa": "به یاد آوردن",
+      "en": "to remember",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich fühlen",
+      "type": "VERB",
+      "fa": "احساس کردن",
+      "en": "to feel",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich schneiden",
+      "type": "VERB",
+      "fa": "بریدن خود (هنگام اصلاح)",
+      "en": "to cut oneself",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich umziehen",
+      "type": "VERB",
+      "fa": "لباس عوض کردن",
+      "en": "to change clothes",
+      "aux": "haben",
+      "separable": true
+    },
+    {
+      "word": "sich unterhalten",
+      "type": "VERB",
+      "fa": "گفت‌وگو کردن؛ سرگرم شدن",
+      "en": "to converse",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "sich ärgern",
+      "type": "VERB",
+      "fa": "دلخور شدن",
+      "en": "to get annoyed",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "leid tun",
+      "type": "VERB",
+      "fa": "متأسف بودن",
+      "en": "to be sorry",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "recht haben",
+      "type": "VERB",
+      "fa": "حق داشتن",
+      "en": "to be right",
+      "aux": "haben",
+      "separable": false
+    },
+    {
+      "word": "dafür sein",
+      "type": "VERB",
+      "fa": "موافق بودن",
+      "en": "to be in favour",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "dagegen sein",
+      "type": "VERB",
+      "fa": "مخالف بودن",
+      "en": "to be against",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "erlaubt sein",
+      "type": "VERB",
+      "fa": "مجاز بودن",
+      "en": "to be allowed",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "erkältet sein",
+      "type": "VERB",
+      "fa": "سرما خورده بودن",
+      "en": "to have a cold",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "fertig sein",
+      "type": "VERB",
+      "fa": "آماده بودن؛ تمام‌شده بودن",
+      "en": "to be ready, to be done",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "fit sein",
+      "type": "VERB",
+      "fa": "سرحال بودن، آماده بودن",
+      "en": "to be fit",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "gültig sein",
+      "type": "VERB",
+      "fa": "معتبر بودن",
+      "en": "to be valid",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "unterwegs sein",
+      "type": "VERB",
+      "fa": "در راه بودن",
+      "en": "to be on the way",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "verabredet sein",
+      "type": "VERB",
+      "fa": "قرار داشتن",
+      "en": "to have an appointment",
+      "aux": "sein",
+      "separable": false
+    },
+    {
+      "word": "abends",
+      "type": "ADVERB",
+      "fa": "شب‌ها (اوایل شب)",
+      "en": "in the evening"
+    },
+    {
+      "word": "am",
+      "type": "OTHER",
+      "fa": "در، به (an + dem)",
+      "en": "at the, in the"
+    },
+    {
+      "word": "am besten",
+      "type": "ADVERB",
+      "fa": "از همه بهتر",
+      "en": "best of all"
+    },
+    {
+      "word": "am liebsten",
+      "type": "ADVERB",
+      "fa": "از همه بیشتر (دوست داشتن)",
+      "en": "most of all"
+    },
+    {
+      "word": "aufregend",
+      "type": "ADJECTIVE",
+      "fa": "هیجان‌انگیز",
+      "en": "exciting"
+    },
+    {
+      "word": "besonders",
+      "type": "ADVERB",
+      "fa": "به‌ویژه",
+      "en": "especially"
+    },
+    {
+      "word": "blöd",
+      "type": "ADJECTIVE",
+      "fa": "احمقانه، بی‌معنی",
+      "en": "stupid"
+    },
+    {
+      "word": "dienstags",
+      "type": "ADVERB",
+      "fa": "سه‌شنبه‌ها",
+      "en": "on Tuesdays"
+    },
+    {
+      "word": "donnerstags",
+      "type": "ADVERB",
+      "fa": "پنج‌شنبه‌ها",
+      "en": "on Thursdays"
+    },
+    {
+      "word": "drinnen",
+      "type": "ADVERB",
+      "fa": "درون، داخل",
+      "en": "inside"
+    },
+    {
+      "word": "eigentlich",
+      "type": "ADVERB",
+      "fa": "در واقع",
+      "en": "actually"
+    },
+    {
+      "word": "ein paar",
+      "type": "OTHER",
+      "fa": "چند تا، مقداری",
+      "en": "a few"
+    },
+    {
+      "word": "freitags",
+      "type": "ADVERB",
+      "fa": "جمعه‌ها",
+      "en": "on Fridays"
+    },
+    {
+      "word": "her",
+      "type": "ADVERB",
+      "fa": "به این سو",
+      "en": "here, towards the speaker"
+    },
+    {
+      "word": "heraus",
+      "type": "ADVERB",
+      "fa": "بیرون (از داخل به بیرون)",
+      "en": "out"
+    },
+    {
+      "word": "herein",
+      "type": "ADVERB",
+      "fa": "به داخل (به سمت گوینده)",
+      "en": "in"
+    },
+    {
+      "word": "hin",
+      "type": "ADVERB",
+      "fa": "به آن سو",
+      "en": "there, away"
+    },
+    {
+      "word": "luxemburgisch",
+      "type": "ADJECTIVE",
+      "fa": "لوکزامبورگی",
+      "en": "Luxembourgish"
+    },
+    {
+      "word": "mittags",
+      "type": "ADVERB",
+      "fa": "ظه‌رها",
+      "en": "at midday"
+    },
+    {
+      "word": "mittwochs",
+      "type": "ADVERB",
+      "fa": "چهارشنبه‌ها",
+      "en": "on Wednesdays"
+    },
+    {
+      "word": "montags",
+      "type": "ADVERB",
+      "fa": "دوشنبه‌ها",
+      "en": "on Mondays"
+    },
+    {
+      "word": "morgens",
+      "type": "ADVERB",
+      "fa": "صبح‌ها",
+      "en": "in the morning"
+    },
+    {
+      "word": "nachmittags",
+      "type": "ADVERB",
+      "fa": "بعدازظهرها",
+      "en": "in the afternoon"
+    },
+    {
+      "word": "nachts",
+      "type": "ADVERB",
+      "fa": "شب‌ها (نیمه‌شب به بعد)",
+      "en": "at night"
+    },
+    {
+      "word": "neblig",
+      "type": "ADJECTIVE",
+      "fa": "مه‌آلود",
+      "en": "foggy"
+    },
+    {
+      "word": "romantisch",
+      "type": "ADJECTIVE",
+      "fa": "رمانتیک",
+      "en": "romantic"
+    },
+    {
+      "word": "samstags",
+      "type": "ADVERB",
+      "fa": "شنبه‌ها",
+      "en": "on Saturdays"
+    },
+    {
+      "word": "scharf",
+      "type": "ADJECTIVE",
+      "fa": "تند (غذا)؛ تیز",
+      "en": "spicy; sharp"
+    },
+    {
+      "word": "schwierig",
+      "type": "ADJECTIVE",
+      "fa": "سخت، دشوار",
+      "en": "difficult"
+    },
+    {
+      "word": "schädlich",
+      "type": "ADJECTIVE",
+      "fa": "مضر، زیان‌آور",
+      "en": "harmful"
+    },
+    {
+      "word": "selbst",
+      "type": "ADVERB",
+      "fa": "خودِ (خودش)",
+      "en": "oneself"
+    },
+    {
+      "word": "sogar",
+      "type": "ADVERB",
+      "fa": "حتی",
+      "en": "even"
+    },
+    {
+      "word": "sonntags",
+      "type": "ADVERB",
+      "fa": "یک‌شنبه‌ها",
+      "en": "on Sundays"
+    },
+    {
+      "word": "stressig",
+      "type": "ADJECTIVE",
+      "fa": "پراسترس",
+      "en": "stressful"
+    },
+    {
+      "word": "täglich",
+      "type": "ADJECTIVE",
+      "fa": "روزانه",
+      "en": "daily"
+    },
+    {
+      "word": "tschüs",
+      "type": "OTHER",
+      "fa": "خداحافظ",
+      "en": "bye"
+    },
+    {
+      "word": "unbedingt",
+      "type": "ADVERB",
+      "fa": "حتماً، به‌هرحال",
+      "en": "absolutely"
+    },
+    {
+      "word": "viermal",
+      "type": "ADVERB",
+      "fa": "چهار بار",
+      "en": "four times"
+    },
+    {
+      "word": "vorbei",
+      "type": "ADVERB",
+      "fa": "از کنار؛ تمام‌شده",
+      "en": "past; over"
+    },
+    {
+      "word": "vormittags",
+      "type": "ADVERB",
+      "fa": "پیش از ظهرها",
+      "en": "in the morning"
+    },
+    {
+      "word": "witzig",
+      "type": "ADJECTIVE",
+      "fa": "بامزه، خنده‌دار",
+      "en": "funny"
+    }
+  ]
+}

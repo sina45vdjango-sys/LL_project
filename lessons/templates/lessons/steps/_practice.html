@@ -1,26 +1,90 @@
-{% comment %}The lesson's own published exercises. The journey hands over to the
-exercise page rather than running grading inline — the runner lives there now
-(Phase 6); see AGENT_MEMORY.md.{% endcomment %}
-<ul class="ex-list">
-  {% for exercise in step.exercises %}
-    <li class="ex-item">
-      <div class="ex-item__head">
-        <span class="ex-item__number">تمرین {{ exercise.order }}</span>
-        {% comment %}Persian labels live on the model (Exercise.type_label /
-          difficulty_label), so the journey, the exercise list and the exercise page
-          cannot drift.{% endcomment %}
-        <span class="tag tag--type">{{ exercise.type_label }}</span>
-        <span class="ex-item__difficulty">{{ exercise.difficulty_label }}</span>
-      </div>
-      <h3 class="ex-item__title" dir="auto">{{ exercise.title }}</h3>
-      {% if exercise.instruction %}<p class="ex-item__instruction" dir="auto">{{ exercise.instruction }}</p>{% endif %}
-      <div class="ex-item__foot">
-        <span class="ex-item__meta">{{ exercise.question_count }} پرسش</span>
-        <a class="btn ex-item__cta" href="{% url 'exercises:exercise-detail' exercise.pk %}">شروع تمرین</a>
-      </div>
-    </li>
-  {% endfor %}
-</ul>
+{% comment %}The lesson's practice, grouped by skill.
+
+   This step used to render the lesson's whole exercise list — 31 exercises and roughly 183
+   questions for lesson 1 — which is the wall «مسیر امروز» was built to remove. The grouping
+   already exists in lessons/skill_path.py::lesson_practice, so this step shows the same map
+   the path shows: one node per skill the lesson really has material for, each opening its
+   own graded drill. Nothing is authored here and nothing is hidden: the full list is still
+   one disclosure below, for a learner who wants to pick a specific exercise.
+
+   The journey hands over to the exercise page rather than running grading inline — the
+   runner lives there (Phase 6); see AGENT_MEMORY.md.{% endcomment %}
+{% if step.practice_path and step.practice_path.nodes %}
+  <div class="practice-path">
+    <p class="practice-path__lead">
+      به‌جای فهرست بلند تمرین‌ها، این درس را مهارت‌به‌مهارت تمرین کن: هر گره یک تمرین کوتاه است
+      و تمام‌شدنی.
+    </p>
+    <ul class="practice-nodes">
+      {% for node in step.practice_path.nodes %}
+        <li>
+          <a class="practice-node practice-node--{{ node.state }}" href="{{ node.url }}">
+            <span class="practice-node__dot" aria-hidden="true">{% if node.done %}✓{% else %}{{ forloop.counter }}{% endif %}</span>
+            <span class="practice-node__body">
+              <span class="practice-node__title">
+                {{ node.title|direction }}
+                <span class="practice-node__skill practice-node__skill--{{ node.key }}">{{ node.label }}</span>
+              </span>
+              <span class="practice-node__meta">
+                {{ node.hint }}
+                {% if node.questions %} · {{ node.questions }} پرسش{% endif %}
+                {% if node.xp %} · <span class="practice-node__xp">+{{ node.xp }} امتیاز</span>{% endif %}
+              </span>
+            </span>
+            <span class="practice-node__side">
+              {% if node.state == "done" %}تمام
+              {% elif node.state == "now" %}حالا
+              {% elif node.state == "next" %}بعدی{% endif %}
+            </span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+    <p class="step-note">
+      {{ step.practice_path.done }} از {{ step.practice_path.goal }} مهارت این درس را امروز تمرین کرده‌ای.
+    </p>
+
+    <details class="practice-more">
+      <summary class="practice-more__summary">همهٔ تمرین‌های این درس ({{ step.count }})</summary>
+      <ul class="ex-list">
+        {% for exercise in step.exercises %}
+          <li class="ex-item">
+            <div class="ex-item__head">
+              <span class="ex-item__number">تمرین {{ forloop.counter }}</span>
+              <span class="tag tag--type">{{ exercise.type_label }}</span>
+              <span class="ex-item__difficulty">{{ exercise.difficulty_label }}</span>
+            </div>
+            <h3 class="ex-item__title">{{ exercise.title|direction }}</h3>
+            {% if exercise.instruction %}<p class="ex-item__instruction">{{ exercise.instruction|direction }}</p>{% endif %}
+            <div class="ex-item__foot">
+              <span class="ex-item__meta">{{ exercise.question_count }} پرسش</span>
+              <a class="btn ex-item__cta" href="{% url 'exercises:exercise-detail' exercise.pk %}">شروع تمرین</a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </details>
+  </div>
+{% else %}
+  <ul class="ex-list">
+    {% for exercise in step.exercises %}
+      <li class="ex-item">
+        <div class="ex-item__head">
+          <span class="ex-item__number">تمرین {{ forloop.counter }}</span>
+          <span class="tag tag--type">{{ exercise.type_label }}</span>
+          <span class="ex-item__difficulty">{{ exercise.difficulty_label }}</span>
+        </div>
+        <h3 class="ex-item__title">{{ exercise.title|direction }}</h3>
+        {% if exercise.instruction %}<p class="ex-item__instruction">{{ exercise.instruction|direction }}</p>{% endif %}
+        <div class="ex-item__foot">
+          <span class="ex-item__meta">{{ exercise.question_count }} پرسش</span>
+          <a class="btn ex-item__cta" href="{% url 'exercises:exercise-detail' exercise.pk %}">شروع تمرین</a>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
 <p class="step-note">
   {% if user.is_authenticated %}
     پاسخ‌هایت بررسی و روی حساب کاربری‌ات ثبت می‌شوند؛ بعد از تمرین به همین درس برمی‌گردی.

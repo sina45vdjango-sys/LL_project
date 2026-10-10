@@ -95,6 +95,18 @@ if raw_csrf_origins:
 else:
     CSRF_TRUSTED_ORIGINS = []
 
+# The other half of that same problem. A proxy that terminates HTTPS delivers the request
+# to Django as plain HTTP, so Django believes the connection is insecure: `is_secure()` is
+# False, `build_absolute_uri()` would write http://, and the CSRF check's *Referer* fallback
+# -- the path a POST takes when the client sends no Origin header -- compares the browser's
+# https:// Referer against http:// and rejects it. The POST then fails with 403 even though
+# the token was fine, while every GET keeps working.
+#
+# Set DJANGO_BEHIND_HTTPS_PROXY=True on such a host (PythonAnywhere is one) and Django
+# trusts the header the proxy sets. Off by default, so a laptop changes nothing.
+if os.environ.get("DJANGO_BEHIND_HTTPS_PROXY", "False").lower() == "true":
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 
 # Application definition
 
@@ -169,17 +181,33 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Every value comes from the environment, so no credential is written down here.
 # The mirror copy (config/settings_mirror.py) reuses all of it and only swaps NAME.
+#
+# DB_ENGINE is "postgresql" on the machines this project has been developed on, and
+# that default is unchanged. A host that gives you a database *file* instead of a
+# server -- PythonAnywhere's free plan is one -- sets DB_ENGINE=sqlite, and then DB_NAME
+# is the file name instead of a database name. The site behaves the same either way;
+# only where the rows live changes.
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME", "language_learning"),
-        "USER": os.environ.get("DB_USER", "django_user"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", ""),
-        "HOST": os.environ.get("DB_HOST", "localhost"),
-        "PORT": os.environ.get("DB_PORT", "5432"),
+DB_ENGINE = os.environ.get("DB_ENGINE", "postgresql")
+
+if DB_ENGINE == "sqlite":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / os.environ.get("DB_NAME", "db.sqlite3"),
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("DB_NAME", "language_learning"),
+            "USER": os.environ.get("DB_USER", "django_user"),
+            "PASSWORD": os.environ.get("DB_PASSWORD", ""),
+            "HOST": os.environ.get("DB_HOST", "localhost"),
+            "PORT": os.environ.get("DB_PORT", "5432"),
+        }
+    }
 
 
 # Password validation
@@ -189,8 +217,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
+    # Not Django's own MinimumLengthValidator: its Persian message never matches the
+    # source string, so the learner saw English. See accounts/validators.py.
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'accounts.validators.PersianMinimumLengthValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -232,6 +262,12 @@ FAVICON_PATH = 'img/favicon.svg'
 # Project-wide static assets, alongside each app's static/<app>/ folder.
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+# Where `collectstatic` gathers every app's static files into one tree. Development
+# never reads it -- there Django serves each file straight out of its own app. It exists
+# for a deployment whose web server (or, on PythonAnywhere, a static file mapping) points
+# at one folder and has no idea which app a file came from.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 # Media files (uploaded/generated audio, images, ...)
 # https://docs.djangoproject.com/en/6.1/topics/files/
 
@@ -272,12 +308,16 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = '/'
 
 
-# The shortest username the sign-up form accepts. Django's own User model allows a
-# one-character username, which is a name nobody can be recognised by; the sign-up form
-# enforces this floor (accounts/forms.py). Only the form is guarded — existing accounts
-# and the login form are left alone, so a short legacy username can still sign in.
+# The shortest and longest username the sign-up form accepts. Django's own User model
+# allows a one-character name nobody can be recognised by, and up to 150 characters —
+# longer than any real name and longer than the form ever told the learner about. The
+# sign-up form enforces both ends (accounts/forms.py). Only the form is guarded — existing
+# accounts and the login form are left alone, so a legacy username outside this range can
+# still sign in.
 
 USERNAME_MIN_LENGTH = 3
+
+USERNAME_MAX_LENGTH = 30
 
 
 # Brand identity.

@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}مسیر امروز | {{ brand.name }}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/practice_path.css' %}">{% endblock %}
+{% block content %}
+{% comment %}«مسیر امروز»: today's practice as one node per skill, in place of the lesson's
+   exercise wall. The grouping, the goal arithmetic and the rule that a missing skill is
+   simply absent all live in lessons/skill_path.py; this page only arranges what it is
+   handed. XP comes from accounts/xp.py and is None for a visitor, so the header is
+   omitted rather than drawn empty.{% endcomment %}
+<div class="path">
+
+  <header class="path-head">
+    <p class="path-eyebrow">مسیر امروز</p>
+    <h1 class="path-title">یک گره برای هر مهارت</h1>
+    <p class="path-lead">
+      به‌جای فهرست بلند تمرین‌ها، امروز فقط همان چیزی را می‌بینی که این درس واقعاً دارد:
+      یک تمرین واژگان، یکی گرامر، و همین‌طور تا آخر. هر گره چند پرسش است و تمام‌شدنی.
+    </p>
+  </header>
+
+  {% if not path %}
+    <section class="panel path-empty">
+      <h2>این مسیر به حساب تو نیاز دارد.</h2>
+      <p>
+        مسیر امروز از پاسخ‌های ثبت‌شده ساخته می‌شود تا بتواند بگوید کدام گره را
+        تمام کرده‌ای و کدام را نه. بدون حساب، تمرین‌ها درست بررسی می‌شوند ولی جایی برای
+        شمردن‌شان نیست.
+      </p>
+      <p class="path-empty__actions">
+        <a class="btn btn--primary" href="{% url 'accounts:login' %}">ورود</a>
+        <a class="btn" href="{% url 'accounts:signup' %}">ساخت حساب</a>
+      </p>
+    </section>
+
+  {% else %}
+
+    {% comment %}The guided day, before the map: study, then practise, then be measured on
+       it. The same include the dashboard renders, so the two pages cannot show two different
+       days (lessons/skill_path.py::today_board builds it once).{% endcomment %}
+    {% if day %}
+      <section class="day" aria-labelledby="day-title">
+        <div class="day__head">
+          <p class="day__eyebrow">روز تو</p>
+          <h2 class="day__title" id="day-title">بخوان، تمرین کن، بسنج</h2>
+        </div>
+
+        {% include "includes/day_steps.html" %}
+      </section>
+    {% endif %}
+
+    {% if xp %}
+      <section class="panel" aria-label="پیشرفت و سطح">
+        <div class="path-xp">
+          <span class="path-level" aria-hidden="true">{{ xp.level }}</span>
+          <span class="path-xp__body">
+            <span class="path-xp__label">
+              سطح <b>{{ xp.level }}</b> · {{ xp.into_level }} از {{ xp.per_level }} امتیاز
+            </span>
+            <span class="progress path-xp__track" role="img"
+                  aria-label="{{ xp.percent }} درصد تا سطح بعدی">
+              <span class="progress__fill" style="width:{{ xp.percent }}%"></span>
+            </span>
+          </span>
+          {% if xp.streak_days %}
+            <span class="path-streak">🔥 <b>{{ xp.streak_days }}</b> روز پشت‌سرهم</span>
+          {% endif %}
+        </div>
+      </section>
+    {% endif %}
+
+    {% comment %}Only the badges actually earned (accounts/badges.py). Shown as a strip of
+       what is already true rather than a grid with locks in it, because a badge that is
+       merely possible is a promise nobody made.{% endcomment %}
+    {% if badges %}
+      <section class="panel path-badges" aria-labelledby="path-badges-title">
+        <h2 class="path-badges__title" id="path-badges-title">نشان‌های تو</h2>
+        <ul class="badge-list">
+          {% for badge in badges %}
+            <li class="badge">
+              <span class="badge__mark" aria-hidden="true">★</span>
+              <span class="badge__body">
+                <span class="badge__label">{{ badge.label }}</span>
+                <span class="badge__hint">{{ badge.hint }}</span>
+              </span>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+
+    {% if path.lesson %}
+      <div class="path-goal">
+        <span class="path-goal__num">{{ path.done }} از <b>{{ path.goal }}</b></span>
+        <span class="path-goal__label">گرهٔ امروز · {{ path.lesson.display_title }}</span>
+        {% if path.goal %}
+          <span class="progress" role="img" aria-label="پیشرفت امروز">
+            <span class="progress__fill" style="width:{% widthratio path.done path.goal 100 %}%"></span>
+          </span>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if path.nodes %}
+      <ul class="path-nodes">
+        {% for node in path.nodes %}
+          <li>
+            <a class="path-node path-node--{{ node.state }}" href="{{ node.url }}">
+              <span class="path-node__dot" aria-hidden="true">
+                {% if node.done %}✓{% elif node.milestone %}★{% elif node.optional %}♪{% else %}{{ forloop.counter }}{% endif %}
+              </span>
+              <span class="path-node__body">
+                <span class="path-node__title">
+                  {{ node.title }}
+                  <span class="path-skill path-skill--{{ node.key }}">{{ node.label }}</span>
+                  {% if node.mode == "chat" %}<span class="path-mode">چتِ معلم</span>{% endif %}
+                </span>
+                <span class="path-node__meta">
+                  {{ node.hint }}
+                  {% if node.questions %}
+                    · {{ node.questions }} پرسش
+                  {% endif %}
+                  {% if node.xp %}
+                    · <span class="path-xp-gain">+{{ node.xp }} امتیاز</span>
+                  {% endif %}
+                </span>
+              </span>
+              <span class="path-node__side">
+                {% if node.state == "done" %}تمام
+                {% elif node.state == "now" %}حالا
+                {% elif node.state == "next" %}بعدی
+                {% endif %}
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      {% if not path.lesson %}
+        <p class="muted">همهٔ درس‌های منتشرشده را تمام کرده‌ای.</p>
+      {% endif %}
+
+    {% elif not day %}
+      {% comment %}Only when there is genuinely no day either: once the course is finished a
+         review-only day is the day, and telling the learner there is nothing to do would be
+         wrong.{% endcomment %}
+      <section class="panel path-empty">
+        <h2>برای امروز گره‌ای نیست.</h2>
+        <p>
+          یا همهٔ درس‌های منتشرشده را تمام کرده‌ای، یا این درس هنوز تمرین منتشرشده‌ای
+          ندارد. مسیر چیزی از خودش نمی‌سازد؛ اگر ماده‌ای نباشد گره هم ساخته نمی‌شود.
+        </p>
+      </section>
+    {% endif %}
+
+  {% endif %}
+
+</div>
+{% endblock %}

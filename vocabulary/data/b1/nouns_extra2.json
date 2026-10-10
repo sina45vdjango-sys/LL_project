@@ -1,0 +1,51 @@
+{
+  "level": "B1",
+  "topic": "nouns",
+  "words": [
+    {
+      "word": "Entschuldigung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Entschuldigungen",
+      "fa": "عذرخواهی",
+      "en": "apology"
+    },
+    {
+      "word": "Geschwindigkeitsbeschränkung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Geschwindigkeitsbeschränkungen",
+      "fa": "محدودیت سرعت",
+      "en": "speed limit"
+    },
+    {
+      "word": "Schweiz",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": null,
+      "fa": "سوئیس",
+      "en": "Switzerland"
+    },
+    {
+      "word": "Umweltverschmutzung",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": "die Umweltverschmutzungen",
+      "fa": "آلودگی محیط زیست",
+      "en": "environmental pollution"
+    },
+    {
+      "word": "Vorsicht",
+      "type": "NOUN",
+      "gender": "F",
+      "article": "die",
+      "plural": null,
+      "fa": "احتیاط، ملاحظه",
+      "en": "caution"
+    }
+  ]
+}

@@ -6,14 +6,19 @@
     {"word": "Doktor", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Doktoren", "fa": "دکتر", "en": "doctor", "ipa": "ˈdɔktoːɐ̯"},
     {"word": "Halbpension", "type": "NOUN", "gender": "F", "article": "die", "plural": "", "fa": "اقامت با صبحانه و شام", "en": "half board", "ipa": "ˈhalppaŋzi̯oːn"},
     {"word": "Satz", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Sätze", "fa": "جمله", "en": "sentence", "ipa": "zats"},
+    {"word": "Arbeitsplatz", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Arbeitsplätze", "fa": "محل کار", "en": "workplace", "ipa": "ˈaʁbaɪ̯tsˌplats"},
+    {"word": "Lieblingsfach", "type": "NOUN", "gender": "N", "article": "das", "plural": "die Lieblingsfächer", "fa": "درس مورد علاقه", "en": "favourite subject", "ipa": "ˈliːplɪŋsˌfax"},
 
     {"word": "ausländisch", "type": "ADJ", "fa": "خارجی، بیگانه", "en": "foreign", "ipa": "ˈaʊslɛndɪʃ"},
     {"word": "lange", "type": "ADVERB", "fa": "مدت زیاد", "en": "a long time", "ipa": "ˈlaŋə"},
     {"word": "zurzeit", "type": "ADVERB", "fa": "در حال حاضر", "en": "at present", "ipa": "tsuːɐ̯ˈtsaɪt"},
+    {"word": "circa", "type": "ADVERB", "fa": "حدوداً، تقریباً", "en": "approximately", "ipa": "ˈtsɪʁka"},
+    {"word": "ab", "type": "PREP", "fa": "از (زمان)؛ از ... به بعد", "en": "from", "ipa": "ap"},
 
     {"word": "euer", "type": "PRONOUN", "fa": "مالِ شما (جمع)", "en": "your (plural)", "ipa": "ˈɔɪɐ"},
 
     {"word": "scheinen", "type": "VERB", "fa": "به نظر رسیدن؛ تابیدن", "en": "to seem; to shine", "ipa": "ˈʃaɪnən", "aux": "haben"},
+    {"word": "abfahren", "type": "VERB", "fa": "حرکت کردن، راه افتادن (وسیلهٔ نقلیه)", "en": "to depart, to leave", "ipa": "ˈapfaːʁən", "aux": "sein", "separable": true},
     {"word": "sich ausziehen", "type": "VERB", "fa": "لباس درآوردن", "en": "to undress, to take off", "ipa": "zɪç ˈaʊstsiːən", "aux": "haben", "separable": true},
 
     {"word": "Kellner", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Kellner", "fa": "پیشخدمت", "en": "waiter", "ipa": "ˈkɛlnɐ"},
@@ -37,6 +42,13 @@
     {"word": "Nachricht", "type": "NOUN", "gender": "F", "article": "die", "plural": "die Nachrichten", "fa": "پیام، خبر", "en": "message, news", "ipa": "ˈnaːxʁɪçt"},
 
     {"word": "passen", "type": "VERB", "fa": "اندازه بودن، مناسب بودن", "en": "to fit, to suit", "ipa": "ˈpasn̩", "aux": "haben"},
-    {"word": "aufräumen", "type": "VERB", "fa": "مرتب کردن، جمع کردن", "en": "to tidy up", "ipa": "ˈaʊfˌʁɔʏ̯mən", "aux": "haben", "separable": true}
+    {"word": "aufräumen", "type": "VERB", "fa": "مرتب کردن، جمع کردن", "en": "to tidy up", "ipa": "ˈaʊfˌʁɔʏ̯mən", "aux": "haben", "separable": true},
+
+    {"word": "Antwortbogen", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Antwortbögen", "fa": "برگهٔ پاسخ", "en": "answer sheet", "ipa": "ˈantvɔʁtˌboːɡn̩"},
+    {"word": "Hörtext", "type": "NOUN", "gender": "M", "article": "der", "plural": "die Hörtexte", "fa": "متن شنیداری", "en": "listening text", "ipa": "ˈhøːɐ̯ˌtɛkst"},
+    {"word": "Alphabet", "type": "NOUN", "gender": "N", "article": "das", "plural": "die Alphabete", "fa": "الفبا", "en": "alphabet", "ipa": "ˌalfaˈbeːt"},
+
+    {"word": "ergänzen", "type": "VERB", "fa": "کامل کردن", "en": "to complete, to fill in", "ipa": "ɛɐ̯ˈɡɛntsn̩", "aux": "haben"},
+    {"word": "zuordnen", "type": "VERB", "fa": "تطبیق دادن، نسبت دادن", "en": "to match, to assign", "ipa": "ˈtsuːˌʔɔʁdnən", "aux": "haben", "separable": true}
   ]
 }

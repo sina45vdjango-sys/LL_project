@@ -39,12 +39,16 @@ class WordProgressAdmin(admin.ModelAdmin):
         "__str__",
         "user",
         "word",
+        "state",
+        "interval_days",
+        "ease",
         "attempt_count",
         "correct_count",
         "wrong_count",
         "last_attempted_at",
+        "due_at",
     )
-    list_filter = ("word__word_type",)
+    list_filter = ("state", "word__word_type")
     search_fields = ("user__username", "word__word")
     list_select_related = ("user", "word")
     list_per_page = 50

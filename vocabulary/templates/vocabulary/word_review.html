@@ -1,21 +1,24 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}مرور واژه‌های دشوار | {{ brand.name }}{% endblock %}
+{% block title %}مرور اشتباه‌ها | {{ brand.name }}{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'vocabulary/css/word_list.css' %}">
 <link rel="stylesheet" href="{% static 'vocabulary/css/word_review.css' %}">
 {% endblock %}
 {% block content_class %}content--vocabulary{% endblock %}
 {% block content %}
-{% comment %}The review list, built from the learner's own WordProgress rows — the words
-   they actually answered wrong in an exercise. The rows reuse the vocabulary list's
-   `.vrow` layout because a review is still a list of words to scan; the only thing this
-   page adds is the pair of counters each row exists for.{% endcomment %}
+{% comment %}The review page, built from the learner's own answers — the words they got
+   wrong (vocabulary/review.py, from WordProgress) and the rules they got wrong
+   (lessons/readiness.py, from the GRAMMAR targets their questions carry). Both halves
+   come from stored rows, so this page and the dashboard panel and «آمادگی من» cannot
+   disagree about what a mistake is. The word rows reuse the vocabulary list's `.vrow`
+   layout because a review is still a list to scan; what this page adds is the pair of
+   counters each row exists for, and a way back into the exercises that test it.{% endcomment %}
 <div class="vlist">
   <header class="vlist__head">
     <p class="vlist__eyebrow">مرور</p>
-    <h1 class="vlist__title">واژه‌هایی که سخت‌تر بوده‌اند.</h1>
-    <p class="vlist__lead">این فهرست را پاسخ‌های خودت می‌سازد. هر واژه‌ای که در تمرین‌ها اشتباه زده باشی اینجا می‌آید، پراشتباه‌ترین اول، تا بدانی وقتت را کجا بگذاری.</p>
+    <h1 class="vlist__title">واژه‌ها و قاعده‌هایی که سخت‌تر بوده‌اند.</h1>
+    <p class="vlist__lead">این فهرست را پاسخ‌های خودت می‌سازد: واژه‌ای که در تمرین‌ها اشتباه زده باشی، و قاعده‌ای که آخرین پاسخت به پرسشش غلط بوده. پراشتباه‌ترین اول می‌آید و کنار هر کدام تمرینی هست که همان چیز را می‌سنجد، تا مرور فقط خواندن نباشد.</p>
     <div class="vlist__actions">
       <a class="btn" href="{% url 'vocabulary:word-list' %}">دفتر واژه‌ها</a>
     </div>
@@ -30,39 +33,174 @@
         <a class="btn" href="{% url 'accounts:signup' %}">ساخت حساب</a>
       </p>
     </section>
-  {% elif words %}
-    <div class="vlist__bar">
-      <h2 class="vlist__bar-title">واژه‌های نیازمند مرور</h2>
-      <p class="vlist__bar-meta">
-        {{ words.paginator.count }} واژه
-        {% if words.paginator.num_pages > 1 %}· صفحهٔ {{ words.number }} از {{ words.paginator.num_pages }}{% endif %}
-      </p>
-    </div>
-
-    <ul class="vlist__words">
-      {% for row in words %}
-        <li class="vrow">
-          <div class="vrow__main">
-            <a class="vrow__term" href="{% url 'vocabulary:word-detail' row.word.pk %}" lang="de" dir="ltr">{% if row.word.article %}<span class="vrow__article">{{ row.word.article }}</span> {% endif %}{{ row.word.word }}</a>
-            {% if row.word.audio %}
-              {% include "includes/audio_control.html" with audio=row.word.audio prefix="review" pk=row.pk label=row.word.word icon_only=True %}
-            {% endif %}
+  {% elif words or grammar or queue.new %}
+    {% if words %}
+      {% comment %}Where to practise, before the long list: a review is only worth anything
+         if it ends in answering questions again. The exercises come from the real
+         QuestionTarget rows, so a listed exercise really does test these words.{% endcomment %}
+      {% if exercises %}
+        <section class="vpractice" aria-labelledby="review-practice-title">
+          <div class="vlist__bar">
+            <h2 class="vlist__bar-title" id="review-practice-title">از کجا تمرین کنی</h2>
+            <p class="vlist__bar-meta">{{ exercise_count }} تمرین</p>
           </div>
-          <p class="vrow__meaning">{{ row.word.meaning_fa }}</p>
-          <p class="vrow__meta">
-            <span class="vstat vstat--wrong">غلط: {{ row.wrong_count }}</span>
-            <span class="vstat vstat--right">درست: {{ row.correct_count }}</span>
-            <span class="chip chip--accent" lang="en" dir="ltr">{{ row.word.level }}</span>
-          </p>
-        </li>
-      {% endfor %}
-    </ul>
+          <p class="vlist__lead">این تمرین‌ها همان واژه‌هایی را می‌سنجند که اشتباه زده‌ای؛ تمرینی که بیشترین واژه‌های تو را پوشش می‌دهد اول آمده است.</p>
 
-    {% include "vocabulary/_pagination.html" %}
+          <ul class="vpractice__list">
+            {% for item in exercises %}
+              <li class="vpractice__item">
+                <div class="vpractice__head">
+                  <a class="vpractice__link" href="{% url 'exercises:exercise-detail' item.exercise.pk %}">{{ item.exercise.title|direction }}</a>
+                  <span class="chip chip--accent">{{ item.exercise.type_label }}</span>
+                </div>
+                <p class="vpractice__meta">
+                  درس {{ item.exercise.lesson.order }}
+                  · {{ item.question_count }} پرسش از این تمرین واژه‌های اشتباه تو را می‌سنجد
+                </p>
+                <p class="vpractice__words" lang="de" dir="ltr">
+                  {% for word in item.words %}<span class="chip">{{ word.word }}</span>{% endfor %}
+                </p>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+      {% endif %}
+
+      <div class="vlist__bar">
+        <h2 class="vlist__bar-title">واژه‌های نیازمند مرور</h2>
+        <p class="vlist__bar-meta">
+          {{ wrong_word_count }} واژه
+          {% if queue.due_count %}· <b>{{ queue.due_count }} وقت مرور</b>{% if queue.overdue_count %} ({{ queue.overdue_count }} عقب‌افتاده){% endif %}{% endif %}
+          {% if words.paginator.num_pages > 1 %}· صفحهٔ {{ words.number }} از {{ words.paginator.num_pages }}{% endif %}
+        </p>
+      </div>
+
+      <ul class="vlist__words">
+        {% for row in words %}
+          <li class="vrow">
+            <div class="vrow__main">
+              <a class="vrow__term" href="{% url 'vocabulary:word-detail' row.word.pk %}" lang="de" dir="ltr">{% if row.word.article %}<span class="vrow__article">{{ row.word.article }}</span> {% endif %}{{ row.word.word }}</a>
+              {% if row.word.audio %}
+                {% include "includes/audio_control.html" with audio=row.word.audio prefix="review" pk=row.pk label=row.word.word inline=True %}
+              {% endif %}
+            </div>
+            <p class="vrow__meaning">{{ row.word.meaning_fa }}</p>
+            <p class="vrow__meta">
+              <span class="vstat vstat--wrong">غلط: {{ row.wrong_count }}</span>
+              <span class="vstat vstat--right">درست: {{ row.correct_count }}</span>
+              {% if row.is_due %}<span class="chip chip--accent">وقت مرور</span>{% endif %}
+              <span class="chip chip--accent" lang="en" dir="ltr">{{ row.word.level }}</span>
+            </p>
+            {% comment %}The exercises that test this word, attached by the view from
+               review.exercises_by_word. A Django template cannot index a dict with a
+               variable key, so the view pairs them up instead of the template guessing.{% endcomment %}
+            {% if row.practice %}
+              <p class="vrow__practice">
+                <span class="vrow__practice-label">تمرین</span>
+                {% for exercise in row.practice %}
+                  <a class="vrow__practice-link" href="{% url 'exercises:exercise-detail' exercise.pk %}">{{ exercise.title|direction }}</a>
+                {% endfor %}
+              </p>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+
+      {% include "vocabulary/_pagination.html" %}
+    {% endif %}
+
+    {% if grammar %}
+      {% comment %}The rules the learner's own answers got wrong — the same promise as the
+         words above, one level up. lessons/readiness.py decides which rule a wrong answer
+         belongs to and which real exercises ask about that rule, so this block cannot
+         disagree with the grammar numbers on «آمادگی من». It renders on its own, because
+         a learner can have a weak rule and no weak words.{% endcomment %}
+      <section class="vgrammar-block" id="grammar" aria-labelledby="review-grammar-title">
+        <div class="vlist__bar">
+          <h2 class="vlist__bar-title" id="review-grammar-title">قاعده‌هایی که اشتباه زده‌ای</h2>
+          <p class="vlist__bar-meta">{{ grammar.wrong_topic_count }} قاعده</p>
+        </div>
+        <p class="vlist__lead">یک قاعده اینجا می‌آید وقتی آخرین پاسخت به پرسشی که به آن قاعده مربوط است غلط بوده؛ همان چیزی که «آمادگی من» هم می‌شمارد. پس قاعده‌ای که بعداً درست جوابش داده باشی از این فهرست می‌رود.</p>
+
+        <ul class="vgrammar">
+          {% for row in grammar.topics %}
+            <li class="vgrammar__topic">
+              <span class="vgrammar__title" lang="de" dir="ltr">{{ row.grammar.title }}</span>
+              <div class="vgrammar__counts">
+                <span class="vstat vstat--wrong">غلط: {{ row.wrong }}</span>
+                <span class="vstat vstat--right">درست: {{ row.correct }}</span>
+                <span class="vstat">{{ row.answered }} پرسش</span>
+                {% if row.practice_exercise %}
+                  <a class="vgrammar__action" href="{% url 'exercises:exercise-detail' row.practice_exercise.pk %}">تمرین این قاعده</a>
+                {% endif %}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+
+        {% if grammar.exercises %}
+          <div class="vlist__bar">
+            <h2 class="vlist__bar-title">تمرین همین قاعده‌ها</h2>
+            <p class="vlist__bar-meta">{{ grammar.exercise_count }} تمرین</p>
+          </div>
+          <p class="vlist__lead">این تمرین‌ها پرسش‌هایی دربارهٔ قاعده‌های بالا دارند؛ تمرینی که بیشترین قاعده‌های اشتباه تو را می‌پوشاند اول آمده است.</p>
+
+          <ul class="vpractice__list">
+            {% for item in grammar.exercises %}
+              <li class="vpractice__item">
+                <div class="vpractice__head">
+                  <a class="vpractice__link" href="{% url 'exercises:exercise-detail' item.exercise.pk %}">{{ item.exercise.title|direction }}</a>
+                  <span class="chip chip--accent">{{ item.exercise.type_label }}</span>
+                </div>
+                <p class="vpractice__meta">
+                  درس {{ item.exercise.lesson.order }}
+                  · {{ item.question_count }} پرسش دربارهٔ این قاعده‌ها
+                </p>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </section>
+    {% endif %}
+
+    {% if queue.new %}
+      {% comment %}The scheduler's *new* tier, shown at last. vocabulary/schedule.py has
+         computed it since the adaptive queue landed, but no page ever read it — so the
+         words a learner had reached and never practised were invisible. They are not
+         mistakes, so they are not mixed into the list above: this is what is *coming*,
+         not what went wrong. It deliberately offers no drill — introducing new
+         vocabulary is the lesson's job, exactly as lessons/today.py argues for keeping
+         the new tier out of today's practice.{% endcomment %}
+      <section class="vnew-block" aria-labelledby="review-new-title">
+        <div class="vlist__bar">
+          <h2 class="vlist__bar-title" id="review-new-title">واژه‌های تازه‌ای که رسیده‌ای</h2>
+          <p class="vlist__bar-meta">{{ queue.new_count }} واژه</p>
+        </div>
+        <p class="vlist__lead">واژه‌هایی از درس‌هایی که تا حالا باز کرده‌ای و هنوز تمرین نشده‌اند. این‌ها اشتباه نیستند؛ نوبتشان در تمرین‌های همان درس می‌رسد. برای آشنایی، هر واژه را باز کن.</p>
+
+        <ul class="vlist__words">
+          {% for word in queue.new %}
+            <li class="vrow">
+              <div class="vrow__main">
+                <a class="vrow__term" href="{% url 'vocabulary:word-detail' word.pk %}" lang="de" dir="ltr">{% if word.article %}<span class="vrow__article">{{ word.article }}</span> {% endif %}{{ word.word }}</a>
+                {% if word.audio %}
+                  {% include "includes/audio_control.html" with audio=word.audio prefix="new" pk=word.pk label=word.word inline=True %}
+                {% endif %}
+              </div>
+              <p class="vrow__meaning">{{ word.meaning_fa }}</p>
+              <p class="vrow__meta">
+                <span class="chip">تازه</span>
+                <span class="chip chip--accent" lang="en" dir="ltr">{{ word.level }}</span>
+              </p>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
   {% else %}
     <section class="vlist__empty">
-      <h2>هنوز واژه‌ای اشتباه نشده.</h2>
-      <p>این فهرست از تمرین‌ها پر می‌شود: هر واژه‌ای که در یک تمرین اشتباه بزنی، اینجا می‌آید. پس اولین تمرین را بزن و برگرد.</p>
+      <h2>هنوز اشتباهی ثبت نشده.</h2>
+      <p>این فهرست از تمرین‌ها پر می‌شود: هر واژه‌ای که اشتباه بزنی و هر قاعده‌ای که پرسشش را غلط جواب بدهی اینجا می‌آید. پس اولین تمرین را بزن و برگرد.</p>
       <p class="vlist__empty-actions">
         <a class="btn btn--primary" href="{% url 'exercises:exercise-list' %}">شروع تمرین‌ها</a>
       </p>

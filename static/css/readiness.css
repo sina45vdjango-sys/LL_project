@@ -30,6 +30,13 @@
 .rdy-facts dd { margin: 0; min-width: 0; text-align: end; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 
 .rdy-note { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.95; }
+.rdy-weak-grammar { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); margin-block: 6px; }
+.rdy-weak-grammar__label { font-size: 13px; font-weight: 600; color: var(--fg); }
+.rdy-weak-grammar__list { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.rdy-weak-grammar__item { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; font-size: 13px; }
+.rdy-weak-grammar__name { font-weight: 700; color: var(--fg); }
+.rdy-weak-grammar__link { display: inline-flex; align-items: center; min-height: 32px; color: var(--accent-text); font-size: 12px; text-decoration: none; }
+.rdy-weak-grammar__link:hover { text-decoration: underline; }
 .rdy-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; }
 
 /* --------------------------------------------------------------- pace ---- */

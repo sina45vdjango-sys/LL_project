@@ -16,7 +16,13 @@
     <p class="vlist__lead">هر ردیف یک واژه است: واژهٔ آلمانی، معنی فارسی و نکته‌های دستوری. تلفظ هر واژه را همان‌جا بشنو.</p>
     <form class="vsearch" method="get" role="search">
       <label class="sr-only" for="word-search">جست‌وجوی واژه</label>
-      <input class="vsearch__input" id="word-search" type="search" name="q" value="{{ query }}" placeholder="واژهٔ آلمانی یا معنی..." autocomplete="off">
+      {% comment %}This box is used both ways: most searches type a German word, a search by
+         meaning is Persian. The direction is therefore decided from the search itself in the
+         view and set explicitly here — this project never hands direction to the browser's
+         automatic heuristic, which resolves from the first strong character and reorders
+         mixed content (see vocabulary/text_direction.py). The empty box is LTR, which is what
+         typing German wants; a Persian search comes back RTL with its caret on the right.{% endcomment %}
+      <input class="vsearch__input" id="word-search" type="search" name="q" value="{{ query }}" placeholder="واژهٔ آلمانی یا معنی..." autocomplete="off" dir="{% if search_dir == 'rtl' %}rtl{% else %}ltr{% endif %}">
       <button class="btn" type="submit">جست‌وجو</button>
       {% if query %}<a class="btn" href="{{ request.path }}">پاک کردن</a>{% endif %}
     </form>
@@ -24,6 +30,16 @@
       <a class="btn" href="{% url 'vocabulary:word-review' %}">مرور واژه‌های دشوار</a>
     </div>
   </header>
+
+  {% comment %}The learner's own level, which the view has already moved to the front of the
+     tabs below. Shown only on the all-levels page: a search or a tab the learner chose
+     already answers "where do I start", and the line would just be noise there.{% endcomment %}
+  {% if suggested_level and not selected_level %}
+    <p class="vlist__suggest">
+      سطحت <bdi lang="en" dir="ltr">{{ suggested_level.level }}</bdi> است —
+      <a href="{% url 'vocabulary:word-level-list' suggested_level.level %}">از واژه‌های همین سطح شروع کن</a>
+    </p>
+  {% endif %}
 
   <nav class="vlist__levels" aria-label="فیلتر سطح زبان">
     {% comment %}The whitespace between the label and the count is load-bearing: without it
@@ -40,11 +56,12 @@
 
   <div class="vlist__bar">
     <h2 class="vlist__bar-title">
-      {% if query %}نتیجهٔ جست‌وجو برای «{{ query }}»{% elif selected_level %}واژه‌های سطح <bdi lang="en" dir="ltr">{{ selected_level.level }}</bdi>{% else %}همهٔ واژه‌ها{% endif %}
+      {% if query %}نتیجهٔ جست‌وجو برای «{{ query }}»{% elif selected_level %}واژه‌های سطح <bdi lang="en" dir="ltr">{{ selected_level.level }}</bdi>{% elif scoped_to_course %}واژه‌های این دوره{% else %}همهٔ واژه‌ها{% endif %}
     </h2>
     <p class="vlist__bar-meta">
       {{ words.paginator.count }} واژه
       {% if words.paginator.num_pages > 1 %}· صفحهٔ {{ words.number }} از {{ words.paginator.num_pages }}{% endif %}
+      {% if scoped_to_course %}· <a href="?scope=all">دیدن همهٔ {{ word_total }} واژه</a>{% endif %}
     </p>
   </div>
 
@@ -55,7 +72,7 @@
           <div class="vrow__main">
             <a class="vrow__term" href="{% url 'vocabulary:word-detail' word.pk %}" lang="de" dir="ltr">{% if word.article %}<span class="vrow__article">{{ word.article }}</span> {% endif %}{{ word.word }}</a>
             {% if word.audio %}
-              {% include "includes/audio_control.html" with audio=word.audio prefix="word" pk=word.pk label=word.word icon_only=True %}
+              {% include "includes/audio_control.html" with audio=word.audio prefix="word" pk=word.pk label=word.word inline=True %}
             {% endif %}
           </div>
           <p class="vrow__meaning">{{ word.meaning_fa }}</p>

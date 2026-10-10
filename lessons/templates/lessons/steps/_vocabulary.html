@@ -1,16 +1,69 @@
-{% include "lessons/steps/_lead.html" %}
+{% comment %}The vocabulary step, page by page.
 
+   Page 1 introduces the words: the authored VOCABULARY block — its topic headings and the
+   words under them, one per line — and then the rows themselves.
+
+   The pages after it do **not** show that lead-in again. Repeating the same paragraph on
+   every page was the repetition this step had, and a page that opens on material the
+   learner has already read adds nothing. Instead they open with the lesson's own sentences
+   (the journey's own calculation, `sentences_using` in lessons/journey.py) with the current
+   page's words marked in each one, so turning the page shows the words at work.
+
+   Every row carries the one label its word earns for this learner, decided in
+   vocabulary/status.py.{% endcomment %}
+{% if step.word_page.number == 1 %}
+  {% include "lessons/steps/_lead.html" with split_lists=True %}
+{% elif step.context_sentences %}
+  <ul class="sentence-list">
+    {% for row in step.context_sentences %}
+      {% include "lessons/steps/_sentence.html" with link=row.link words=row.words %}
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% comment %}On the short path the step shows a handful of the lesson's words, so the count
+   says so against the lesson's real total instead of claiming the lesson is smaller than it
+   is — and there is no pagination, because the pages it would turn to are exactly what this
+   path left out.{% endcomment %}
 <p class="step-toolbar">
-  <span>{{ step.count }} واژه در این درس</span>
-  {% if step.word_page.has_other_pages %}
-    <span class="step-toolbar__page">صفحهٔ {{ step.word_page.number }} از {{ step.word_page.paginator.num_pages }}</span>
+  {% if step.short %}
+    <span>{{ step.count }} واژه در این نسخه، از {{ step.word_page.paginator.count }} واژهٔ درس</span>
+  {% else %}
+    <span>{{ step.count }} واژه در این درس</span>
+    {% if step.word_page.has_other_pages %}
+      <span class="step-toolbar__page">صفحهٔ {{ step.word_page.number }} از {{ step.word_page.paginator.num_pages }}</span>
+    {% endif %}
   {% endif %}
 </p>
 
-<ul class="word-grid">
-  {% for link in step.words %}
-    <li>{% include "lessons/steps/_word_card.html" with word=link.word role=link.role %}</li>
+{% comment %}Not every word on this page gets a drill of its own: the drill generators cap
+   how many new words they ask per lesson, so a large lesson teaches more words than it
+   drills — lesson 1 shows 44 and asks about 30. The rest are not dropped: they wait in the
+   review queue (``vocabulary/schedule.py::new_words`` hands out every published word the
+   learner has reached and never practised). This note says so, because without it the
+   page looks like it simply ran out of exercises.{% endcomment %}
+{% if lesson.order == 24 %}
+  <div class="callout callout--info">
+    <strong>بانک واژگان مرجع A1:</strong>
+    این واژگان جهت جمع‌بندی سطح و مراجعهٔ مداوم شما گردآوری شده‌اند. سیستم مرور هوشمند، این واژه‌ها را به مرور در تمرین‌های روزانه به شما یادآوری خواهد کرد.
+  </div>
+{% else %}
+  <p class="step-note">از {{ step.count }} واژهٔ این درس، واژه‌های کلیدی در گام تمرین همین درس سنجیده می‌شوند و واژه‌های تکمیلی مستقیماً به صف مرور روزانهٔ شما می‌آیند تا در روزهای بعد تثبیت شوند.</p>
+{% endif %}
+
+<ul class="word-rows">
+  {% for row in step.words %}
+    {% if forloop.counter0|divisibleby:8 and not forloop.first %}
+      <li class="word-chunk-divider" role="separator" aria-label="بخش بعدی واژگان">
+        <span class="word-chunk-divider__line"></span>
+        <span class="word-chunk-divider__badge">واژه‌های {{ forloop.counter0|add:1 }} به بعد</span>
+        <span class="word-chunk-divider__line"></span>
+      </li>
+    {% endif %}
+    {% include "lessons/steps/_word_row.html" with word=row.word status=row.status label=row.label %}
   {% endfor %}
 </ul>
 
-{% include "lessons/_pagination.html" with page=step.word_page page_param="words_page" page_anchor="#step-vocabulary" %}
+{% if not step.short %}
+  {% include "lessons/_pagination.html" with page=step.word_page page_param="words_page" page_anchor="#step-vocabulary" %}
+{% endif %}
