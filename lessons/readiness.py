@@ -43,6 +43,7 @@ either a count, a ratio of two counts, or arithmetic on a target date.
 
 import math
 
+from django.urls import reverse
 from django.utils import timezone
 
 from accounts.models import UserProfile
@@ -652,6 +653,300 @@ def learning_pace(course_stats, goal, today):
     }
 
 
+def goethe_competencies(user):
+    """Diagnose learner performance across Goethe A1 modalities.
+
+    Evaluates user answers on real questions grouped into the core Goethe domains:
+    - Hören (شنیدن): audio drills, dictations, listening questions
+    - Lesen (خواندن): reading comprehension questions with passages
+    - Schreiben (نوشتن): form-filling, written production, dictations, typed questions
+    - Sprechen (گفتن): Goethe speaking cards and oral drills
+    - Satzbau (چیدمان جمله): sentence order syntax puzzles (scramble)
+
+    Each of the 4 official Goethe exam skills (Hören, Lesen, Schreiben, Sprechen) is
+    scored out of 25 points, reflecting the official Goethe weighting (4 x 25 = 100).
+    """
+    attempts = latest_attempts(user)
+
+    counts = {
+        "hoeren": {"answered": 0, "correct": 0},
+        "lesen": {"answered": 0, "correct": 0},
+        "schreiben": {"answered": 0, "correct": 0},
+        "sprechen": {"answered": 0, "correct": 0},
+        "satzbau": {"answered": 0, "correct": 0},
+    }
+
+    if attempts:
+        question_ids = list(attempts.keys())
+        questions = (
+            Question.objects.filter(pk__in=question_ids, exercise__is_published=True)
+            .select_related("exercise")
+            .prefetch_related("targets")
+        )
+
+        for q in questions:
+            attempt = attempts[q.pk]
+            ex_type = q.exercise.type
+            is_right = attempt.is_correct
+
+            # 1. Hören
+            if q.audio or ex_type == Exercise.ExerciseType.LISTENING:
+                counts["hoeren"]["answered"] += 1
+                if is_right:
+                    counts["hoeren"]["correct"] += 1
+
+            # 2. Lesen
+            has_passage = False
+            for t in q.targets.all():
+                if t.sentence_id is not None:
+                    has_passage = True
+                    break
+            if ex_type == Exercise.ExerciseType.READING or has_passage:
+                counts["lesen"]["answered"] += 1
+                if is_right:
+                    counts["lesen"]["correct"] += 1
+
+            # 3. Schreiben
+            if ex_type in (
+                Exercise.ExerciseType.WRITING,
+                Exercise.ExerciseType.TRANSLATION,
+            ):
+                counts["schreiben"]["answered"] += 1
+                if is_right:
+                    counts["schreiben"]["correct"] += 1
+
+            # 4. Sprechen
+            if ex_type == Exercise.ExerciseType.SPEAKING:
+                counts["sprechen"]["answered"] += 1
+                if is_right:
+                    counts["sprechen"]["correct"] += 1
+
+            # 5. Satzbau
+            if ex_type == Exercise.ExerciseType.SCRAMBLE:
+                counts["satzbau"]["answered"] += 1
+                if is_right:
+                    counts["satzbau"]["correct"] += 1
+
+    result = {}
+    specs = {
+        "hoeren": {"label_fa": "شنیدن و درک صوت", "label_de": "Hören", "max_points": 25},
+        "lesen": {"label_fa": "خواندن و درک مطلب", "label_de": "Lesen", "max_points": 25},
+        "schreiben": {"label_fa": "نگارش و فرم‌های اداری", "label_de": "Schreiben", "max_points": 25},
+        "sprechen": {"label_fa": "گفت‌وگو و بیان شفاهی", "label_de": "Sprechen", "max_points": 25},
+        "satzbau": {"label_fa": "ساختار جمله و نحو", "label_de": "Satzbau", "max_points": 0},
+    }
+
+    for key, spec in specs.items():
+        c = counts[key]
+        pct = percent(c["correct"], c["answered"])
+        pts = round(pct * 0.25) if spec["max_points"] > 0 else 0
+        result[key] = {
+            "key": key,
+            "label_fa": spec["label_fa"],
+            "label_de": spec["label_de"],
+            "answered": c["answered"],
+            "correct": c["correct"],
+            "percent": pct,
+            "points": pts,
+            "max_points": spec["max_points"],
+        }
+
+    return result
+
+
+def goethe_readiness_score(competencies):
+    """Official Goethe A1 100-point composite readiness score.
+
+    Calculates the learner's estimated score across the 4 Goethe modalities:
+    Hören (25) + Lesen (25) + Schreiben (25) + Sprechen (25) = 100 max points.
+    Official pass mark is 60 points.
+    """
+    hoeren_pts = competencies["hoeren"]["points"]
+    lesen_pts = competencies["lesen"]["points"]
+    schreiben_pts = competencies["schreiben"]["points"]
+    sprechen_pts = competencies["sprechen"]["points"]
+
+    total = hoeren_pts + lesen_pts + schreiben_pts + sprechen_pts
+    is_passing = total >= 60
+
+    if total >= 85:
+        status_label = "آمادهٔ قبولی با نمرهٔ عالی (Sehr gut)"
+    elif total >= 60:
+        status_label = "در آستانهٔ قبولی در آزمون گوته (Bestanden)"
+    elif total >= 35:
+        status_label = "نیازمند تمرین بیشتر برای رسیدن به حد نصاب ۶۰"
+    else:
+        status_label = "در ابتدای مسیر یادگیری و آمادگی آزمون"
+
+    return {
+        "total_points": total,
+        "max_points": 100,
+        "pass_points": 60,
+        "is_passing": is_passing,
+        "status_label": status_label,
+        "hoeren_points": hoeren_pts,
+        "lesen_points": lesen_pts,
+        "schreiben_points": schreiben_pts,
+        "sprechen_points": sprechen_pts,
+    }
+
+
+def actionable_micro_weaknesses(user, weak_grammar=None, weak_word_count=0):
+    """Pinpoint actionable micro-weaknesses across specialized labs with 1-click remedies.
+
+    Examines learner mistakes in Schreib-Formulare, Hören audio discrimination, Satzbau
+    syntax, Goethe Sprechen cards, and grammar to produce targeted remedial actions.
+    """
+    remedies = []
+    attempts = latest_attempts(user)
+
+    # 1. Check Schreiben / Administrative Forms
+    form_mistakes = False
+    for a in attempts.values():
+        if not a.is_correct and a.question.exercise.type in (
+            Exercise.ExerciseType.WRITING,
+            Exercise.ExerciseType.TRANSLATION,
+        ):
+            form_mistakes = True
+            break
+
+    form_exercise = (
+        Exercise.objects.filter(
+            type__in=[Exercise.ExerciseType.WRITING, Exercise.ExerciseType.TRANSLATION],
+            is_published=True,
+            lesson__is_published=True,
+            lesson__course__is_published=True,
+        )
+        .order_by("lesson__order", "order")
+        .first()
+    )
+
+    if form_mistakes and form_exercise:
+        remedies.append({
+            "key": "schreiben_forms",
+            "tag": "Schreiben",
+            "title": "نیاز به تمرین در پر کردن فرم‌های اداری و ثبت‌نام",
+            "detail": "در بخش ۱ آزمون نوشتاری گوته، استخراج اطلاعات فردی و پر کردن فرم ۵ امتیاز قطعی دارد.",
+            "action_label": "ورود به کارگاه فرم‌نویسی ←",
+            "action_url": reverse("exercises:exercise-detail", args=[form_exercise.pk]),
+        })
+
+    # 2. Check Hören / Auditory discrimination & numbers
+    hoeren_mistakes = False
+    for a in attempts.values():
+        if not a.is_correct and (
+            a.question.audio
+            or a.question.exercise.type == Exercise.ExerciseType.LISTENING
+        ):
+            hoeren_mistakes = True
+            break
+
+    hoeren_exercise = (
+        Exercise.objects.filter(
+            type=Exercise.ExerciseType.LISTENING,
+            is_published=True,
+            lesson__is_published=True,
+            lesson__course__is_published=True,
+        )
+        .order_by("lesson__order", "order")
+        .first()
+    )
+
+    if hoeren_mistakes and hoeren_exercise:
+        remedies.append({
+            "key": "hoeren_audio",
+            "tag": "Hören",
+            "title": "ضعف در تشخیص شنیداری اعداد، قیمت‌ها و املا",
+            "detail": "تشخیص دقیق شماره‌ها، ساعت و واژه‌های مشابه از صوت در بخش شنیداری سرنوشت‌ساز است.",
+            "action_label": "تمرین تشخیص شنیداری و املا ←",
+            "action_url": reverse("exercises:exercise-detail", args=[hoeren_exercise.pk]),
+        })
+
+    # 3. Check Satzbau syntax / Verb in Position 2
+    satzbau_mistakes = False
+    for a in attempts.values():
+        if not a.is_correct and a.question.exercise.type == Exercise.ExerciseType.SCRAMBLE:
+            satzbau_mistakes = True
+            break
+
+    satzbau_exercise = (
+        Exercise.objects.filter(
+            type=Exercise.ExerciseType.SCRAMBLE,
+            is_published=True,
+            lesson__is_published=True,
+            lesson__course__is_published=True,
+        )
+        .order_by("lesson__order", "order")
+        .first()
+    )
+
+    if satzbau_mistakes and satzbau_exercise:
+        remedies.append({
+            "key": "satzbau_syntax",
+            "tag": "Satzbau",
+            "title": "چالش در چیدمان ارکان جمله و جایگاه دوم فعل",
+            "detail": "قانون Verb in Position 2 و قاب افعال کمکی و Perfekt مهم‌ترین ضابطهٔ ساختاری است.",
+            "action_label": "ورود به کارگاه چیدمان جمله ←",
+            "action_url": reverse("exercises:exercise-detail", args=[satzbau_exercise.pk]),
+        })
+
+    # 4. Check Speaking cards
+    speaking_mistakes = False
+    for a in attempts.values():
+        if not a.is_correct and a.question.exercise.type == Exercise.ExerciseType.SPEAKING:
+            speaking_mistakes = True
+            break
+
+    speaking_exercise = (
+        Exercise.objects.filter(
+            type=Exercise.ExerciseType.SPEAKING,
+            is_published=True,
+            lesson__is_published=True,
+            lesson__course__is_published=True,
+        )
+        .order_by("lesson__order", "order")
+        .first()
+    )
+
+    if speaking_mistakes and speaking_exercise:
+        remedies.append({
+            "key": "sprechen_cards",
+            "tag": "Sprechen",
+            "title": "نیاز به تسلط بر کارت‌های موضوعی و درخواست گوته",
+            "detail": "در بخش گفتاری، توانایی ساخت سؤال با کارت‌های Thema و بیان درخواست‌های محترمانه ۱۲ امتیاز دارد.",
+            "action_label": "تمرین کارت‌های گفتار گوته ←",
+            "action_url": reverse("exercises:exercise-detail", args=[speaking_exercise.pk]),
+        })
+
+    # 5. Grammar topics
+    if weak_grammar:
+        top_topic = weak_grammar[0]
+        if top_topic.get("practice_exercise"):
+            remedies.append({
+                "key": "grammatik_topic",
+                "tag": "Grammatik",
+                "title": f"اشکال در قاعدهٔ دستوری: {top_topic['grammar'].title}",
+                "detail": f"{top_topic['wrong']} پاسخ نادرست در آخرین تلاش‌های این موضوع ثبت شده است.",
+                "action_label": "تمرین رفع اشکال گرامر ←",
+                "action_url": reverse(
+                    "exercises:exercise-detail", args=[top_topic["practice_exercise"].pk]
+                ),
+            })
+
+    # 6. Weak Vocabulary Review
+    if weak_word_count > 0:
+        remedies.append({
+            "key": "wortschatz_review",
+            "tag": "Wortschatz",
+            "title": f"{weak_word_count} واژهٔ نیازمند تثبیت در حافظه",
+            "detail": "واژه‌هایی که تعداد پاسخ‌های نادرست آن‌ها بیشتر از پاسخ‌های درست بوده است.",
+            "action_label": "مرور واژه‌های دشوار ←",
+            "action_url": reverse("vocabulary:word-review"),
+        })
+
+    return remedies
+
+
 def readiness(user, today=None):
     """Everything the «آمادگی من» page shows, in one call.
 
@@ -685,6 +980,11 @@ def readiness(user, today=None):
         else:
             topic["practice_exercise"] = None
 
+    weak_word_count = missed_words(user).count()
+    competencies = goethe_competencies(user)
+    goethe_score = goethe_readiness_score(competencies)
+    micro_weaknesses = actionable_micro_weaknesses(user, weak_grammar, weak_word_count)
+
     return {
         "course": course_stats,
         "exercises": exercise_stats,
@@ -694,7 +994,10 @@ def readiness(user, today=None):
         "grammar_coverage": grammar_coverage(),
         "goal": goal,
         "pace": pace,
-        "weak_word_count": missed_words(user).count(),
+        "weak_word_count": weak_word_count,
         "weak_grammar_topics": weak_grammar[:3],
         "weak_grammar_count": len(weak_grammar),
+        "goethe_competencies": competencies,
+        "goethe_score": goethe_score,
+        "micro_weaknesses": micro_weaknesses,
     }

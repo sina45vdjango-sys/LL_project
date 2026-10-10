@@ -46,9 +46,12 @@ from lessons.progress import complete_lesson, progress_state, record_step
 from lessons.check import CHECK_SIZE, check_questions, pass_needed
 from lessons.skill_path import MIN_ANSWERS, XP_PER_NODE, build_path, day_steps, lesson_practice, skill_of
 from lessons.readiness import (
+    actionable_micro_weaknesses,
     course_progress,
     exercise_progress,
     goal_of,
+    goethe_competencies,
+    goethe_readiness_score,
     grammar_coverage,
     grammar_practice,
     grammar_progress,
@@ -1355,6 +1358,135 @@ class ReadinessPageTests(ReadinessFixture):
         self.assertContains(response, self.grammar.title)
         self.assertContains(response, reverse("exercises:exercise-detail", args=[self.grammar_exercise.pk]))
         self.assertContains(response, reverse("vocabulary:word-review") + "#grammar")
+
+
+class GoetheReadinessEngineTests(ReadinessFixture):
+    """Goethe A1 readiness diagnostic engine and 1-click remedies verification."""
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        # Create specialized exercises for listening, writing, speaking, and scramble
+        cls.audio_exercise = Exercise.objects.create(
+            lesson=cls.lessons[0],
+            title="شنیدن: تشخیص صوت",
+            type=Exercise.ExerciseType.LISTENING,
+            order=4,
+            is_published=True,
+        )
+        cls.audio_question = Question.objects.create(
+            exercise=cls.audio_exercise, prompt="صوت را گوش دهید", audio="test.mp3", order=1
+        )
+        Answer.objects.create(question=cls.audio_question, text="Eins", is_correct=True, order=1)
+
+        cls.writing_exercise = Exercise.objects.create(
+            lesson=cls.lessons[0],
+            title="نگارش: فرم ثبت‌نام",
+            type=Exercise.ExerciseType.WRITING,
+            order=5,
+            is_published=True,
+        )
+        cls.writing_question = Question.objects.create(
+            exercise=cls.writing_exercise, prompt="نام خانوادگی را بنویسید", order=1
+        )
+        Answer.objects.create(question=cls.writing_question, text="Müller", is_correct=True, order=1)
+
+        cls.speaking_exercise = Exercise.objects.create(
+            lesson=cls.lessons[0],
+            title="گفتار: کارت‌های گوته",
+            type=Exercise.ExerciseType.SPEAKING,
+            order=6,
+            is_published=True,
+        )
+        cls.speaking_question = Question.objects.create(
+            exercise=cls.speaking_exercise, prompt="سؤال بسازید: Thema: Essen / Wort: Frühstück", order=1
+        )
+        Answer.objects.create(
+            question=cls.speaking_question, text="Was isst du zum Frühstück?", is_correct=True, order=1
+        )
+
+        cls.scramble_exercise = Exercise.objects.create(
+            lesson=cls.lessons[0],
+            title="نحو: چیدمان جمله",
+            type=Exercise.ExerciseType.SCRAMBLE,
+            order=7,
+            is_published=True,
+        )
+        cls.scramble_question = Question.objects.create(
+            exercise=cls.scramble_exercise, prompt="جمله را مرتب کنید", order=1
+        )
+        Answer.objects.create(
+            question=cls.scramble_question, text="Ich lerne heute Deutsch.", is_correct=True, order=1
+        )
+
+    def test_untested_learner_gets_zero_points_and_not_passing(self):
+        """A new learner has 0 points across all competencies and status is not passing."""
+        comps = goethe_competencies(self.other)
+        score = goethe_readiness_score(comps)
+        self.assertEqual(score["total_points"], 0)
+        self.assertFalse(score["is_passing"])
+        self.assertEqual(score["pass_points"], 60)
+
+    def test_answered_specialized_drills_affect_competencies_and_score(self):
+        """Answers on audio, writing, and speaking directly compute points out of 25."""
+        self.answer(self.user, self.audio_question, True, exercise=self.audio_exercise)
+        self.answer(self.user, self.writing_question, True, exercise=self.writing_exercise)
+        self.answer(self.user, self.speaking_question, True, exercise=self.speaking_exercise)
+
+        comps = goethe_competencies(self.user)
+        self.assertEqual(comps["hoeren"]["answered"], 1)
+        self.assertEqual(comps["hoeren"]["correct"], 1)
+        self.assertEqual(comps["hoeren"]["points"], 25)
+
+        self.assertEqual(comps["schreiben"]["answered"], 1)
+        self.assertEqual(comps["schreiben"]["correct"], 1)
+        self.assertEqual(comps["schreiben"]["points"], 25)
+
+        self.assertEqual(comps["sprechen"]["answered"], 1)
+        self.assertEqual(comps["sprechen"]["correct"], 1)
+        self.assertEqual(comps["sprechen"]["points"], 25)
+
+        score = goethe_readiness_score(comps)
+        # 25 + 0 (Lesen) + 25 + 25 = 75 points -> Passing (>= 60)!
+        self.assertEqual(score["total_points"], 75)
+        self.assertTrue(score["is_passing"])
+
+    def test_actionable_micro_weaknesses_pinpoints_mistakes_with_drill_remedies(self):
+        """Mistakes in audio or writing generate actionable remedy items with 1-click URLs."""
+        # Answer writing wrong
+        self.answer(self.user, self.writing_question, False, exercise=self.writing_exercise)
+        # Answer audio wrong
+        self.answer(self.user, self.audio_question, False, exercise=self.audio_exercise)
+
+        remedies = actionable_micro_weaknesses(self.user)
+        keys = [r["key"] for r in remedies]
+        self.assertIn("schreiben_forms", keys)
+        self.assertIn("hoeren_audio", keys)
+
+        # Each remedy must provide a valid URL pointing to the drill
+        for remedy in remedies:
+            self.assertTrue(remedy["action_url"])
+            self.assertTrue(remedy["action_label"])
+            self.assertTrue(remedy["tag"])
+
+    def test_readiness_page_renders_goethe_diagnostic_and_remedies(self):
+        """Readiness page displays official Goethe score, competency cards, and remedy actions."""
+        self.answer(self.user, self.writing_question, False, exercise=self.writing_exercise)
+        self.client.force_login(self.user)
+        response = self.client.get(reverse("readiness"))
+        self.assertEqual(response.status_code, 200)
+
+        # Goethe section
+        self.assertContains(response, "سنجش آمادگی آزمون رسمی گوته")
+        self.assertContains(response, "HÖREN")
+        self.assertContains(response, "LESEN")
+        self.assertContains(response, "SCHREIBEN")
+        self.assertContains(response, "SPRECHEN")
+
+        # 1-Click drill remedies
+        self.assertContains(response, "نقاط ضعف کلیدی و تمرین‌های ترمیمی یک‌کلیکه")
+        self.assertContains(response, "نیاز به تمرین در پر کردن فرم‌های اداری و ثبت‌نام")
+        self.assertContains(response, reverse("exercises:exercise-detail", args=[self.writing_exercise.pk]))
 
 
 class GrammarReviewPageTests(ReadinessFixture):

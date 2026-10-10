@@ -103,6 +103,104 @@
       {% endif %}
     </section>
 
+    {# ---- Goethe A1 Diagnostic & Composite Score ----------------------- #}
+    {% if readiness.goethe_score %}
+      <section class="panel rdy-goethe" aria-labelledby="rdy-goethe-title">
+        <div class="rdy-bar">
+          <h2 id="rdy-goethe-title">سنجش آمادگی آزمون رسمی گوته (Goethe-Zertifikat A1)</h2>
+          <span class="rdy-bar__value">{{ readiness.goethe_score.total_points }} از {{ readiness.goethe_score.max_points }} امتیاز</span>
+        </div>
+
+        <div class="rdy-goethe__hero">
+          <div class="rdy-goethe__score-box">
+            <p class="rdy-goethe__points">{{ readiness.goethe_score.total_points }}<small>/۱۰۰</small></p>
+            <span class="chip {% if readiness.goethe_score.is_passing %}chip--accent{% endif %}">
+              {{ readiness.goethe_score.status_label }}
+            </span>
+          </div>
+          <p class="rdy-goethe__desc">
+            محاسبه‌شده بر اساس ساختار رسمی گوته: ۴ مهارت، هرکدام ۲۵ امتیاز خام و تراز ۱۰۰. حد نصاب قبولی در آزمون رسمی <b>۶۰ از ۱۰۰</b> است.
+          </p>
+        </div>
+
+        <div class="rdy-competencies-grid">
+          <div class="rdy-comp-card">
+            <div class="rdy-comp-card__head">
+              <span class="rdy-comp-card__de" lang="de" dir="ltr">HÖREN</span>
+              <span class="rdy-comp-card__fa">شنیدن و درک صوت</span>
+            </div>
+            <div class="rdy-comp-card__body">
+              <span class="rdy-comp-card__score">{{ readiness.goethe_competencies.hoeren.points }} از ۲۵</span>
+              <span class="rdy-comp-card__sub">دقت: {{ readiness.goethe_competencies.hoeren.percent }}٪ ({{ readiness.goethe_competencies.hoeren.correct }} از {{ readiness.goethe_competencies.hoeren.answered }})</span>
+            </div>
+          </div>
+
+          <div class="rdy-comp-card">
+            <div class="rdy-comp-card__head">
+              <span class="rdy-comp-card__de" lang="de" dir="ltr">LESEN</span>
+              <span class="rdy-comp-card__fa">خواندن و درک مطلب</span>
+            </div>
+            <div class="rdy-comp-card__body">
+              <span class="rdy-comp-card__score">{{ readiness.goethe_competencies.lesen.points }} از ۲۵</span>
+              <span class="rdy-comp-card__sub">دقت: {{ readiness.goethe_competencies.lesen.percent }}٪ ({{ readiness.goethe_competencies.lesen.correct }} از {{ readiness.goethe_competencies.lesen.answered }})</span>
+            </div>
+          </div>
+
+          <div class="rdy-comp-card">
+            <div class="rdy-comp-card__head">
+              <span class="rdy-comp-card__de" lang="de" dir="ltr">SCHREIBEN</span>
+              <span class="rdy-comp-card__fa">نگارش و فرم اداری</span>
+            </div>
+            <div class="rdy-comp-card__body">
+              <span class="rdy-comp-card__score">{{ readiness.goethe_competencies.schreiben.points }} از ۲۵</span>
+              <span class="rdy-comp-card__sub">دقت: {{ readiness.goethe_competencies.schreiben.percent }}٪ ({{ readiness.goethe_competencies.schreiben.correct }} از {{ readiness.goethe_competencies.schreiben.answered }})</span>
+            </div>
+          </div>
+
+          <div class="rdy-comp-card">
+            <div class="rdy-comp-card__head">
+              <span class="rdy-comp-card__de" lang="de" dir="ltr">SPRECHEN</span>
+              <span class="rdy-comp-card__fa">گفتار و مکالمه</span>
+            </div>
+            <div class="rdy-comp-card__body">
+              <span class="rdy-comp-card__score">{{ readiness.goethe_competencies.sprechen.points }} از ۲۵</span>
+              <span class="rdy-comp-card__sub">دقت: {{ readiness.goethe_competencies.sprechen.percent }}٪ ({{ readiness.goethe_competencies.sprechen.correct }} از {{ readiness.goethe_competencies.sprechen.answered }})</span>
+            </div>
+          </div>
+        </div>
+
+        <a class="rdy-link" href="{% url 'exams:exam-index' %}">ورود به شبیه‌ساز آزمون ۶۵ دقیقه‌ای گوته ←</a>
+      </section>
+    {% endif %}
+
+    {# ---- Micro-Weaknesses & 1-Click Drill Remedies --------------------- #}
+    {% if readiness.micro_weaknesses %}
+      <section class="panel rdy-remedies" aria-labelledby="rdy-remedies-title">
+        <div class="rdy-bar">
+          <h2 id="rdy-remedies-title">🎯 نقاط ضعف کلیدی و تمرین‌های ترمیمی یک‌کلیکه</h2>
+          <span class="rdy-bar__value">{{ readiness.micro_weaknesses|length }} مورد شناسایی‌شده</span>
+        </div>
+        <p class="rdy-note">سیستم بر اساس آخرین اشتباه‌های تو در کارگاه‌های تخصصی، این موارد را برای افزایش نمرهٔ آزمون گوته پیشنهاد می‌کند:</p>
+
+        <ul class="rdy-remedies-list">
+          {% for item in readiness.micro_weaknesses %}
+            <li class="rdy-remedy-item">
+              <div class="rdy-remedy-item__main">
+                <div class="rdy-remedy-item__header">
+                  <span class="chip chip--accent">{{ item.tag }}</span>
+                  <h3 class="rdy-remedy-item__title">{{ item.title }}</h3>
+                </div>
+                <p class="rdy-remedy-item__desc">{{ item.detail }}</p>
+              </div>
+              <div class="rdy-remedy-item__action">
+                <a class="btn btn--secondary rdy-remedy-btn" href="{{ item.action_url }}">{{ item.action_label }}</a>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+
     {# ---- 2. the course ------------------------------------------------- #}
     <section class="panel rdy-section" aria-labelledby="rdy-course-title">
       <div class="rdy-bar">
