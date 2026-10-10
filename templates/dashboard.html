@@ -4,9 +4,26 @@
    right name for a learner who has been here before and the wrong one for a visitor who
    is trying to find out what this is.{% endcomment %}
 {% block title %}{% if user.is_authenticated %}داشبورد | {{ brand.name }}{% else %}آموزش آلمانی A1 برای فارسی‌زبان‌ها | {{ brand.name }}{% endif %}{% endblock %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/bento_dashboard.css' %}">
+{% endblock %}
 {% block content %}
 <div class="dash" data-dashboard>
+
+  {% if user.is_authenticated %}
+    <div class="dash-bento-hero-banner">
+      <div class="dash-bento-banner__content">
+        <span class="prompt-badge">⚡ نمای جدید داشبورد</span>
+        <h2 style="margin: 6px 0 4px; font-size: 18px; font-weight: 800; color: var(--fg);">داشبورد هوشمند بنتو (Goethe A1 Bento Grid)</h2>
+        <p style="margin: 0; color: var(--muted); font-size: 13px;">ماتریس آمادگی گوته A1 در ۶ مهارت، مداوای ۱-کلیک ضعف‌ها و استمرار روزانه در نمای مدرن بنتو.</p>
+      </div>
+      <a href="{% url 'bento-dashboard' %}" class="btn-tactile-primary" style="text-decoration:none;">
+        <span>ورود به داشبورد بنتو</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  {% endif %}
 
   <header class="dash__head">
     <p class="dash__eyebrow">{% if user.is_authenticated %}داشبورد{% else %}آلمانی A1 برای فارسی‌زبان‌ها{% endif %}</p>

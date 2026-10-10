@@ -483,3 +483,19 @@
   .momentum-grid { grid-template-columns: 1fr; }
   .labs-grid { grid-template-columns: 1fr; }
 }
+
+/* Dashboard Bento Hero Banner */
+.dash-bento-hero-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(255, 122, 26, .10);
+}
+

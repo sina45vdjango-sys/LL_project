@@ -1,122 +1,241 @@
 /* The learning path: one sequential trail of steps per course.
-   Page-level primitives come from lessons.css (.lesson-heading, .course-tabs,
-   .lesson-empty) and components.css (.progress, .btn). Only the trail lives here.
+   Modern Tactile Learning Tree & Roadmap - Velingo */
 
-   Layout note: the trail is a vertical spine drawn with ::before on each step,
-   with the step marker absolutely positioned on it. Both are anchored with
-   inset-inline-start, so the whole path mirrors correctly in RTL. */
-
-.path { display: flex; flex-direction: column; gap: 22px; }
-.path__eyebrow { color: var(--accent-text); font: 12px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.path { display: flex; flex-direction: column; gap: 24px; }
+.path__eyebrow { color: var(--accent-text); font: 700 12px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; text-transform: uppercase; }
 
 /* ---------------------------------------------------------- progress ---- */
-.path__track { display: flex; flex-direction: column; gap: 10px; }
-.path__progress { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.path__track {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .03);
+}
+
+.path__track .progress {
+  width: 100%;
+  height: 10px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.path__track .progress__fill {
+  height: 100%;
+  background: var(--accent-grad-bar);
+  border-radius: 999px;
+  transition: width .4s ease;
+}
+
+.path__progress { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.8; font-weight: 500; }
 
 /* --------------------------------------------------------- next step ---- */
-.path__next { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 16px 20px; border: 1px solid var(--accent); border-radius: 14px; background: var(--accent-soft); }
-.path__next-text { display: flex; align-items: baseline; gap: 12px; margin: 0; min-width: 0; font-size: 14px; line-height: 1.8; }
-.path__next-label { flex: 0 0 auto; color: var(--accent-text); font: 700 12px/1.8 system-ui, sans-serif; letter-spacing: .6px; }
-.path__next-text bdi { overflow-wrap: anywhere; }
-.path__next-cta { flex: 0 0 auto; }
+.path__next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 18px 22px;
+  border: 1px solid var(--accent);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(255, 122, 26, .12);
+}
+
+.path__next-text { display: flex; align-items: baseline; gap: 12px; margin: 0; min-width: 0; font-size: 14.5px; line-height: 1.8; }
+.path__next-label { flex: 0 0 auto; color: var(--on-accent); background: var(--accent); padding: 2px 10px; border-radius: 999px; font: 800 12px/1.8 system-ui, sans-serif; letter-spacing: .6px; }
+.path__next-text bdi { overflow-wrap: anywhere; font-weight: 700; color: var(--fg); }
+.path__next-cta {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 22px;
+  border-radius: 14px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: var(--press);
+  transition: transform .08s ease, box-shadow .08s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.path__next-cta:active {
+  transform: translateY(2px);
+  box-shadow: var(--press-active);
+}
 
 /* ------------------------------------------------------------ course ---- */
-.path-group { display: flex; flex-direction: column; gap: 14px; }
+.path-group { display: flex; flex-direction: column; gap: 16px; }
 .path-group__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
-.path-group__head h2 { margin: 12px 0 0; font-size: 19px; line-height: 1.6; }
-.path-level { display: inline-block; padding: 3px 12px; border-radius: 6px; background: var(--accent-soft); color: var(--accent-text); font: 700 12px/1.7 system-ui, sans-serif; }
-.path-group__desc { margin: 8px 0 0; max-width: 62ch; color: var(--muted); font-size: 12px; line-height: 1.95; }
-.path-group__count { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; margin: 0; color: var(--muted); font-size: 12px; }
-.path-group__done { color: var(--success); }
+.path-group__head h2 { margin: 10px 0 0; font-size: 20px; font-weight: 800; line-height: 1.5; color: var(--fg); }
+.path-level { display: inline-block; padding: 4px 14px; border-radius: 8px; background: var(--accent-soft); color: var(--accent-text); font: 800 12px/1.7 system-ui, sans-serif; }
+.path-group__desc { margin: 8px 0 0; max-width: 62ch; color: var(--muted); font-size: 13px; line-height: 1.9; }
+.path-group__count { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; margin: 0; color: var(--muted); font-size: 12.5px; font-weight: 600; }
+.path-group__done { color: var(--success); font-weight: 700; }
 
 /* -------------------------------------------------------------- trail ---- */
 .path-steps { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
-.path-step { position: relative; padding-inline-start: 58px; padding-block: 9px; }
+.path-step { position: relative; padding-inline-start: 64px; padding-block: 10px; }
 
 /* the spine, from marker to marker */
-.path-step::before { content: ""; position: absolute; inset-inline-start: 26px; top: 0; bottom: 0; width: 2px; background: var(--line); }
-.path-step:first-child::before { top: 35px; }
-.path-step:last-child::before { bottom: auto; top: 0; height: 35px; }
+.path-step::before { content: ""; position: absolute; inset-inline-start: 28px; top: 0; bottom: 0; width: 3px; background: var(--line); border-radius: 2px; }
+.path-step:first-child::before { top: 38px; }
+.path-step:last-child::before { bottom: auto; top: 0; height: 38px; }
 .path-step:only-child::before { display: none; }
 
 /* the marker */
-.path-step__marker { position: absolute; inset-inline-start: 10px; top: 18px; width: 34px; height: 34px; }
-.path-step__dot { display: grid; place-content: center; width: 100%; height: 100%; border: 2px solid var(--line); border-radius: 50%; background: var(--bg); color: var(--muted); font: 600 12px/1 system-ui, sans-serif; }
-.path-step__check { display: none; width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.path-step__marker { position: absolute; inset-inline-start: 10px; top: 20px; width: 38px; height: 38px; }
+.path-step__dot {
+  display: grid;
+  place-content: center;
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--muted);
+  font: 700 13px/1 system-ui, sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+.path-step__check { display: none; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
 
 /* the card */
-.path-step__card { display: flex; flex-direction: column; gap: 10px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.path-step__card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .04);
+  position: relative;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
 .path-step__top { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
-.path-step__index { color: var(--fg); font: 600 12px/1.7 system-ui, sans-serif; }
-.path-step__time { color: var(--muted); font-size: 12px; }
-.path-step__state { margin-inline-start: auto; color: var(--muted); font-size: 12px; }
-.path-step__title { margin: 0; font-size: 16px; line-height: 1.7; overflow-wrap: anywhere; }
-/* The link's own box is a comfortable 44px band. The card overlay below already makes the
-   whole card tappable (verified with elementFromPoint: every point on a 312x180 card lands
-   on this link), but an audit measured this box itself at 17px, and target-size checkers
-   measure the box, not the overlay — so the two now agree. */
-.path-step__title a { display: flex; align-items: center; min-height: 44px; color: var(--fg); }
-/* One action per card, and it is the whole card. The title link covers its card, so the
-   tap target is the card's full height on a phone and nothing has to grow to get there. */
-.path-step__card { position: relative; }
+.path-step__index { color: var(--fg); font: 700 13px/1.7 system-ui, sans-serif; }
+.path-step__time { color: var(--muted); font-size: 12px; font-weight: 500; }
+.path-step__state { color: var(--muted); font-size: 12px; font-weight: 600; }
+
+/* Active Floating Pill */
+.path-step__active-pill {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 800;
+  font-size: 12px;
+  margin-inline-start: auto;
+}
+
+.path-step__title { margin: 0; font-size: 16.5px; font-weight: 800; line-height: 1.6; overflow-wrap: anywhere; }
+.path-step__title a { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; min-height: 44px; color: var(--fg); text-decoration: none; }
+.path-step__title-sep { color: var(--muted); opacity: 0.6; }
 .path-step__link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
-.path-step__desc { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.95; }
+.path-step__desc { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
 .path-step__foot { display: flex; justify-content: flex-end; }
-.path-step__cta { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; color: var(--fg); font-size: 13px; font-weight: 600; }
+.path-step__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--fg);
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--surface-alt);
+  box-shadow: var(--press-tile);
+  transition: transform .08s ease, box-shadow .08s ease, background .15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.path-step__cta:active {
+  transform: translateY(2px);
+  box-shadow: var(--press-tile-active);
+}
 
 /* ------------------------------------------------------- step states ---- */
-/* State is never carried by colour alone: the chip text always says what the
-   step is, and a completed step also swaps its number for a check. */
-
 .path-step.is-completed .path-step__dot { border-color: var(--success); background: var(--success); color: var(--bg); }
 .path-step.is-completed .path-step__num { display: none; }
 .path-step.is-completed .path-step__check { display: block; }
-.path-step.is-completed .path-step__state { color: var(--success); }
+.path-step.is-completed .path-step__state { color: var(--success); font-weight: 700; }
+.path-step.is-completed::before { background: var(--success); }
 
-.path-step.is-current .path-step__card { border-color: var(--accent); background: var(--accent-soft); }
-.path-step.is-current .path-step__dot { border-color: var(--accent); background: var(--accent); color: var(--on-accent); box-shadow: 0 0 0 5px var(--accent-soft); }
-.path-step.is-current .path-step__state { color: var(--accent-text); font-weight: 700; }
-.path-step.is-current .path-step__cta { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.path-step.is-current .path-step__card {
+  border-color: var(--accent);
+  background: var(--surface);
+  box-shadow: 0 8px 28px rgba(255, 122, 26, .14);
+}
+.path-step.is-current .path-step__dot {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 0 0 5px var(--accent-soft);
+}
+.path-step.is-current .path-step__state { color: var(--accent-text); font-weight: 800; }
+.path-step.is-current .path-step__active-pill { display: inline-flex; }
+.path-step.is-current .path-step__cta {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: var(--press);
+}
+.path-step.is-current .path-step__cta:active {
+  transform: translateY(2px);
+  box-shadow: var(--press-active);
+}
 
 .path-step.is-started .path-step__dot { border-color: var(--accent); color: var(--accent-text); }
-.path-step.is-started .path-step__state { color: var(--accent-text); }
+.path-step.is-started .path-step__state { color: var(--accent-text); font-weight: 700; }
 
-/* Ahead on the trail. The signal is the trail itself — solid behind you, dashed
-   ahead — never a dimmed card: nothing is locked in this phase, and a faded step
-   would read as "unavailable". The chip already says "شروع نشده". */
 .path-step.is-upcoming::before { background: repeating-linear-gradient(to bottom, var(--line) 0 6px, transparent 6px 12px); }
 
 /* --------------------------------------------------------- interactions -- */
 @media (hover: hover) {
-  .path-step:not(.is-current) .path-step__card:hover { border-color: var(--accent); }
-  .path-step__cta:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+  .path-step:not(.is-current) .path-step__card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .07);
+  }
   .path-step__title a:hover { color: var(--accent-text); }
-  /* The CTA is a span now, so it borrows the card's hover instead of its own. */
-  .path-step:not(.is-current) .path-step__card:hover .path-step__cta { text-decoration: underline; text-underline-offset: 5px; }
-  .path-step.is-current .path-step__cta:hover { background: var(--accent); color: var(--on-accent); opacity: .92; }
+  .path-step:not(.is-current) .path-step__card:hover .path-step__cta {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent-text);
+  }
 }
 
 /* --------------------------------------------------------------- mobile -- */
-/* Deliberately re-proportioned rather than shrunk: tighter spine, smaller
-   markers, descriptions clamped to two lines, full-width action. */
 @media (max-width: 560px) {
   .path { gap: 18px; }
-  .path-step { padding-inline-start: 46px; padding-block: 7px; }
-  .path-step::before { inset-inline-start: 21px; }
-  .path-step:first-child::before { top: 28px; }
-  .path-step:last-child::before { top: 0; height: 28px; }
-  .path-step__marker { inset-inline-start: 8px; top: 14px; width: 28px; height: 28px; }
+  .path-step { padding-inline-start: 48px; padding-block: 8px; }
+  .path-step::before { inset-inline-start: 22px; }
+  .path-step:first-child::before { top: 30px; }
+  .path-step:last-child::before { top: 0; height: 30px; }
+  .path-step__marker { inset-inline-start: 8px; top: 16px; width: 30px; height: 30px; }
   .path-step__dot { font-size: 12px; }
   .path-step__check { width: 14px; height: 14px; }
-  .path-step__card { gap: 8px; padding: 15px 16px; }
+  .path-step__card { gap: 10px; padding: 16px 16px; border-radius: 16px; }
   .path-step__state { margin-inline-start: 0; }
   .path-step__desc { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
   .path-step__foot { justify-content: stretch; }
   .path-step__cta { width: 100%; }
-  .path__next { padding: 14px 16px; }
+  .path__next { padding: 16px 16px; }
   .path__next-cta { width: 100%; }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .path-step__card, .path-step__cta, .path-step__title a { transition: color .15s, border-color .15s, background-color .15s; }
 }
