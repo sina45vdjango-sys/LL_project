@@ -3656,6 +3656,75 @@ class SprechenLabCommandTests(TestCase):
         self.assertEqual(first_a_count, second_a_count)
 
 
+class SatzbauLabCommandTests(TestCase):
+    """``seed_a1_satzbau_lab``: seeds interactive Satzbau Playground exercises."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.level = LanguageLevel.objects.create(level="A1", title="A1", order=1)
+        cls.course = Course.objects.create(language_level=cls.level, title="A1 Kurs", is_published=True)
+        cls.lesson4 = Lesson.objects.create(
+            course=cls.course, title="Freizeit und Hobbys", order=4, is_published=True, estimated_time=15
+        )
+        cls.lesson6 = Lesson.objects.create(
+            course=cls.course, title="Tagesablauf", order=6, is_published=True, estimated_time=15
+        )
+        cls.lesson13 = Lesson.objects.create(
+            course=cls.course, title="Arbeit und Beruf", order=13, is_published=True, estimated_time=15
+        )
+        cls.lesson16 = Lesson.objects.create(
+            course=cls.course, title="In der Stadt", order=16, is_published=True, estimated_time=15
+        )
+        cls.lesson19 = Lesson.objects.create(
+            course=cls.course, title="Vergangenheit", order=19, is_published=True, estimated_time=15
+        )
+
+    def test_dry_run_leaves_database_untouched(self):
+        out = StringIO()
+        call_command("seed_a1_satzbau_lab", dry_run=True, stdout=out)
+        self.assertIn("[DRY-RUN]", out.getvalue())
+        self.assertFalse(Exercise.objects.filter(type=Exercise.ExerciseType.SCRAMBLE).exists())
+
+    def test_command_creates_exercises_and_questions(self):
+        out = StringIO()
+        call_command("seed_a1_satzbau_lab", stdout=out)
+
+        scramble_exercises = Exercise.objects.filter(type=Exercise.ExerciseType.SCRAMBLE)
+        self.assertEqual(scramble_exercises.count(), 5)
+
+        for lesson in (self.lesson4, self.lesson6, self.lesson13, self.lesson16, self.lesson19):
+            ex = scramble_exercises.filter(lesson=lesson).first()
+            self.assertIsNotNone(ex)
+            self.assertEqual(ex.questions.count(), 5)
+
+        total_questions = Question.objects.filter(exercise__in=scramble_exercises).count()
+        self.assertEqual(total_questions, 25)
+
+        for q in Question.objects.filter(exercise__in=scramble_exercises):
+            self.assertTrue(len(q.explanation) > 0)
+            self.assertTrue(q.answers.filter(is_correct=True).exists())
+
+        # Test multi-answer support for inversion in L04
+        multi_q = Question.objects.filter(
+            exercise__lesson=self.lesson4, prompt__contains="Heute"
+        ).first()
+        self.assertIsNotNone(multi_q)
+        self.assertGreater(multi_q.answers.filter(is_correct=True).count(), 1)
+
+    def test_command_is_idempotent(self):
+        out = StringIO()
+        call_command("seed_a1_satzbau_lab", stdout=out)
+        first_q_count = Question.objects.count()
+        first_a_count = Answer.objects.count()
+
+        call_command("seed_a1_satzbau_lab", stdout=out)
+        second_q_count = Question.objects.count()
+        second_a_count = Answer.objects.count()
+
+        self.assertEqual(first_q_count, second_q_count)
+        self.assertEqual(first_a_count, second_a_count)
+
+
 class SeedA1PronunciationDrillsTests(TestCase):
     """``seed_a1_pronunciation_drills``: hear one word, tell it from one sound away.
 

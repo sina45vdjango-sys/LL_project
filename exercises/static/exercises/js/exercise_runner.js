@@ -201,6 +201,7 @@
     // right must not keep both marks.
     input.classList.remove('is-correct', 'is-wrong');
     input.classList.add(correct ? 'is-correct' : 'is-wrong');
+    disableSatzbau(question);
   }
 
   function showFeedback(question, verdict) {
@@ -457,6 +458,7 @@
         input.value = '';
         input.focus();
       }
+      resetSatzbau(question);
     }
 
     const note = question.querySelector('[data-runner-second-try]');
@@ -618,6 +620,122 @@
     return line;
   }
 
+  /* ----------------------------------------------------------- satzbau lab ---- */
+
+  function updateSatzbauZone(question) {
+    const playground = question.querySelector('[data-satzbau-playground]');
+    if (!playground) return;
+
+    const zone = playground.querySelector('[data-satzbau-zone]');
+    const placeholder = playground.querySelector('[data-satzbau-placeholder]');
+    const input = question.querySelector('.runner-answer__input');
+    if (!zone || !input) return;
+
+    const chips = zone.querySelectorAll('.satzbau-chip');
+    if (placeholder) {
+      placeholder.hidden = chips.length > 0;
+    }
+
+    const words = [];
+    chips.forEach((chip, pos) => {
+      words.push(chip.dataset.satzbauToken || chip.textContent.trim());
+      if (pos === 1) {
+        chip.classList.add('is-verb-pos');
+      } else {
+        chip.classList.remove('is-verb-pos');
+      }
+    });
+
+    input.value = words.join(' ');
+  }
+
+  function resetSatzbau(question) {
+    const playground = question.querySelector('[data-satzbau-playground]');
+    if (!playground) return;
+
+    const zone = playground.querySelector('[data-satzbau-zone]');
+    const bank = playground.querySelector('[data-satzbau-bank]');
+    const placeholder = playground.querySelector('[data-satzbau-placeholder]');
+    const resetBtn = playground.querySelector('[data-satzbau-reset]');
+
+    if (zone) {
+      zone.querySelectorAll('.satzbau-chip').forEach((chip) => chip.remove());
+    }
+    if (placeholder) {
+      placeholder.hidden = false;
+    }
+    if (bank) {
+      bank.querySelectorAll('[data-satzbau-token]').forEach((chip) => {
+        chip.disabled = false;
+        chip.classList.remove('is-used');
+      });
+    }
+    if (resetBtn) {
+      resetBtn.disabled = false;
+    }
+
+    const input = question.querySelector('.runner-answer__input');
+    if (input && !input.readOnly) {
+      input.value = '';
+    }
+  }
+
+  function disableSatzbau(question) {
+    const playground = question.querySelector('[data-satzbau-playground]');
+    if (!playground) return;
+
+    playground.querySelectorAll('button').forEach((btn) => {
+      btn.disabled = true;
+    });
+  }
+
+  function initSatzbau(question) {
+    const playground = question.querySelector('[data-satzbau-playground]');
+    if (!playground || playground.dataset.satzbauReady) return;
+    playground.dataset.satzbauReady = 'true';
+
+    const zone = playground.querySelector('[data-satzbau-zone]');
+    const bank = playground.querySelector('[data-satzbau-bank]');
+    const resetBtn = playground.querySelector('[data-satzbau-reset]');
+    const input = question.querySelector('.runner-answer__input');
+
+    if (!zone || !bank) return;
+
+    bank.addEventListener('click', (event) => {
+      const chip = event.target.closest('[data-satzbau-token]');
+      if (!chip || chip.disabled) return;
+      if (input && input.readOnly) return;
+
+      const token = chip.dataset.satzbauToken || chip.textContent.trim();
+      chip.disabled = true;
+      chip.classList.add('is-used');
+
+      const zoneChip = document.createElement('button');
+      zoneChip.type = 'button';
+      zoneChip.className = 'satzbau-chip satzbau-chip--placed';
+      zoneChip.dataset.satzbauToken = token;
+      zoneChip.textContent = token;
+
+      zoneChip.addEventListener('click', () => {
+        if (input && input.readOnly) return;
+        zoneChip.remove();
+        chip.disabled = false;
+        chip.classList.remove('is-used');
+        updateSatzbauZone(question);
+      });
+
+      zone.appendChild(zoneChip);
+      updateSatzbauZone(question);
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        if (input && input.readOnly) return;
+        resetSatzbau(question);
+      });
+    }
+  }
+
   function reset() {
     state.forEach((entry, position) => {
       state[position] = { submitted: false, outcome: null, attempts: 0 };
@@ -654,6 +772,7 @@
         helpText.textContent = '';
         helpText.hidden = true;
       }
+      resetSatzbau(question);
     });
 
     const weak = results ? results.querySelector('[data-results-weak]') : null;
@@ -762,6 +881,7 @@
   // rendered for every question, because a mistake in this sitting can earn one later.
   questions.forEach((question) => {
     if (Number(question.dataset.hintStrength) > 0) revealHelp(question);
+    initSatzbau(question);
   });
 
   apply(0, { focus: false });

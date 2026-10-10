@@ -172,17 +172,39 @@
              so the runner's JavaScript needs no case for it. The words are not the answer;
              their order is, and that is exactly what the page does not hold. Grading a
              scramble ignores punctuation too, so nothing shown here has to be guessed.{% endcomment %}
-          <div class="runner-order">
-            {% comment %}The chips read as drag-and-drop, but the only input is typing. The
-               label says so, so a learner does not try to move a word that cannot move.{% endcomment %}
-            <p class="runner-order__label">واژه‌ها به‌هم ریخته‌اند — ترتیب درست را در کادر پایین بنویس:</p>
-            <ul class="runner-order__tokens" lang="de" dir="ltr">
-              {% for token in question.tokens %}<li class="runner-order__token">{{ token }}</li>{% endfor %}
-            </ul>
-            <div class="runner-answer">
-              <label class="runner-answer__label" for="answer-{{ question.id }}">جمله را به آلمانی و با ترتیب درست بنویس</label>
+          <div class="runner-order satzbau-playground" data-satzbau-playground>
+            <div class="satzbau-header">
+              <span class="chip chip--accent">🧩 کارگاه چیدمان نحو (Satzbau)</span>
+              <p class="satzbau-hint">کلمات را به ترتیب لمس کن تا در سطر جمله قرار گیرند. با لمس مجدد، کلمه به جعبه بازمی‌گردد.</p>
+            </div>
+
+            <!-- Assembled sentence construction zone -->
+            <div class="satzbau-zone-wrapper">
+              <div class="satzbau-zone-header">
+                <span class="satzbau-zone-title">سطر ساخت جمله (Satzleiste):</span>
+                <button type="button" class="btn-text satzbau-reset" data-satzbau-reset aria-label="بازنشانی جمله">⟲ پاک کردن</button>
+              </div>
+              <div class="satzbau-zone" data-satzbau-zone lang="de" dir="ltr" aria-live="polite">
+                <span class="satzbau-placeholder" data-satzbau-placeholder>برای چیدن جمله، روی کلمات پایین کلیک کن...</span>
+              </div>
+            </div>
+
+            <!-- Word Bank -->
+            <div class="satzbau-bank-wrapper">
+              <span class="satzbau-bank-title">جعبهٔ واژگان (Wortbank):</span>
+              <div class="satzbau-bank" data-satzbau-bank lang="de" dir="ltr">
+                {% for token in question.tokens %}
+                  <button type="button" class="runner-order__token" data-satzbau-token="{{ token }}">{{ token }}</button>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Underlying input synchronized for accessibility and form submission -->
+            <div class="runner-answer satzbau-input-wrapper">
+              <label class="runner-answer__label" for="answer-{{ question.id }}">یا جمله را مستقیماً بنویس:</label>
               <input class="runner-answer__input" id="answer-{{ question.id }}" name="answer-{{ question.id }}"
-                     type="text" lang="de" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
+                     type="text" lang="de" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"
+                     placeholder="Sentence will build automatically...">
             </div>
           </div>
         {% elif question.kind == 'text' %}
