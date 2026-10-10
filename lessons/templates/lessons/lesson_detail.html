@@ -20,8 +20,14 @@
 
   <header class="lesson-head">
     <nav class="lesson-head__nav">
-      <a class="lesson-head__back" href="{% url 'lessons:lesson-list' %}">← مسیر یادگیری</a>
-      <a class="lesson-head__link" href="{% url 'lessons:lesson-review' lesson.pk %}">مرور سریع درس</a>
+      <a class="lesson-head__back" href="{% url 'lessons:lesson-list' %}">
+        <span aria-hidden="true">←</span>
+        <span>مسیر یادگیری</span>
+      </a>
+      <div class="lesson-head__actions">
+        <span class="lesson-head__badge">درس {{ lesson.order }}</span>
+        <a class="lesson-head__link" href="{% url 'lessons:lesson-review' lesson.pk %}">مرور سریع درس</a>
+      </div>
     </nav>
     <p class="lesson-head__meta">
       <span class="lesson-head__level" lang="en" dir="ltr">{{ lesson.course.language_level }}</span>
@@ -62,13 +68,16 @@
 
   <div class="journey-stepper" data-journey-stepper>
     <div class="journey-progress">
-      <div class="progress" role="progressbar" aria-labelledby="journey-progress-text"
+      <div class="spring-progress-track progress" role="progressbar" aria-labelledby="journey-progress-text"
            aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ journey_percent }}" data-journey-bar>
-        <span class="progress__fill" data-journey-fill style="width:{{ journey_percent }}%"></span>
+        <span class="spring-progress-fill progress__fill" data-journey-fill style="width:{{ journey_percent }}%"></span>
       </div>
-      <p class="journey-progress__text" id="journey-progress-text">
-        قدم <span data-journey-current>1</span> از {{ journey_step_count }} — <span data-journey-label>{{ steps.0.label }}</span>
-      </p>
+      <div class="journey-progress__meta">
+        <p class="journey-progress__text" id="journey-progress-text">
+          گام <span data-journey-current>1</span> از {{ journey_step_count }} — <span data-journey-label>{{ steps.0.label }}</span>
+        </p>
+        <span class="journey-progress__pct" data-journey-pct>{{ journey_percent }}%</span>
+      </div>
     </div>
 
     {% comment %}Filled by lesson_steps.js when the lesson was opened on the step the learner
@@ -108,9 +117,11 @@ stopped at, so coming back reads as a continuation and not as starting over.{% e
 learner reaches, and this line says it. lesson_steps.js hides it when there is nowhere to store
 anything (blocked localStorage and no account), so it never promises a save that cannot happen.{% endcomment %}
   <div class="journey-nav" data-journey-nav hidden>
-    <button type="button" class="btn journey-nav__btn" data-journey-prev>قبلی</button>
-    <span class="journey-nav__pos" aria-hidden="true"><span data-journey-current>1</span> / {{ journey_step_count }}</span>
-    <button type="button" class="btn btn--primary journey-nav__btn journey-nav__btn--next" data-journey-next>بعدی</button>
+    <div class="journey-nav__actions">
+      <button type="button" class="btn journey-nav__btn journey-nav__btn--prev" data-journey-prev>قبلی</button>
+      <span class="journey-nav__pos" aria-hidden="true"><span data-journey-current>1</span> / {{ journey_step_count }}</span>
+      <button type="button" class="btn btn--primary journey-nav__btn journey-nav__btn--next" data-journey-next>بعدی</button>
+    </div>
     <p class="journey-nav__note" data-journey-note>
       هر قدم را که باز کنی ذخیره می‌شود؛ می‌توانی وسط درس رها کنی و بعداً از همین قدم ادامه بدهی.
     </p>

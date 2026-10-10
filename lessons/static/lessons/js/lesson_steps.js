@@ -41,6 +41,7 @@
   const fill = root.querySelector('[data-journey-fill]');
   const currentEls = Array.from(root.querySelectorAll('[data-journey-current]'));
   const labelEl = root.querySelector('[data-journey-label]');
+  const pctEl = root.querySelector('[data-journey-pct]');
   const resumeEl = root.querySelector('[data-journey-resume]');
   const noteEl = root.querySelector('[data-journey-note]');
   const progress = window.GamProgress;
@@ -106,6 +107,7 @@
   const percent = Math.round(((index + 1) / steps.length) * 100);
     if (fill) fill.style.width = `${percent}%`;
     if (bar) bar.setAttribute('aria-valuenow', String(percent));
+    if (pctEl) pctEl.textContent = `${percent}%`;
     currentEls.forEach((el) => { el.textContent = String(index + 1); });
     if (labelEl && labels[index]) labelEl.textContent = labels[index];
 

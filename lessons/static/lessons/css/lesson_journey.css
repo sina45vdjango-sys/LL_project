@@ -19,77 +19,131 @@
 .lesson { display: flex; flex-direction: column; gap: 24px; }
 
 /* ------------------------------------------------------------------- head --- */
-.lesson-head { display: flex; flex-direction: column; gap: 8px; }
-.lesson-head__nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; }
-.lesson-head__back { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-size: 12px; }
-.lesson-head__back:hover { color: var(--accent-text); text-decoration: none; }
-/* The quick review, beside the way back. Accent, because it is the one action in the
-   head that goes somewhere new rather than returning to the path. */
-.lesson-head__link { display: inline-flex; align-items: center; min-height: 44px; color: var(--accent-text); font-size: 12px; font-weight: 700; }
-.lesson-head__link:hover { text-decoration: none; }
+.lesson-head { display: flex; flex-direction: column; gap: 10px; }
+.lesson-head__nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.lesson-head__back {
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 44px; padding: 8px 16px;
+  border: 1px solid var(--line); border-radius: 14px;
+  background: var(--surface); color: var(--fg);
+  font-size: 13px; font-weight: 700;
+  box-shadow: 0 2px 0 var(--line);
+  transition: border-color .15s, color .15s, transform .1s, box-shadow .1s;
+  text-decoration: none;
+}
+.lesson-head__back:hover { border-color: var(--accent); color: var(--accent-text); text-decoration: none; transform: translateY(-1px); }
+.lesson-head__back:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--line); }
+
+.lesson-head__actions { display: inline-flex; align-items: center; gap: 10px; }
+.lesson-head__badge {
+  display: inline-flex; align-items: center; min-height: 36px; padding: 4px 12px;
+  border-radius: 999px; background: var(--surface-alt); border: 1px solid var(--line);
+  color: var(--muted); font: 700 12px/1.5 system-ui, sans-serif;
+}
+.lesson-head__link {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 8px 16px;
+  border-radius: 14px; background: var(--accent-soft); border: 1px solid var(--accent);
+  color: var(--accent-text); font-size: 12.5px; font-weight: 700; text-decoration: none;
+  box-shadow: 0 2px 0 var(--accent);
+  transition: transform .1s, box-shadow .1s, opacity .15s;
+}
+.lesson-head__link:hover { text-decoration: none; transform: translateY(-1px); opacity: .95; }
+.lesson-head__link:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--accent); }
+
 .lesson-head__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 0; color: var(--muted); font-size: 12px; }
-.lesson-head__level { padding: 3px 12px; border-radius: 6px; background: var(--accent-soft); color: var(--accent-text); font: 700 12px/1.7 system-ui, sans-serif; }
+.lesson-head__level { padding: 4px 12px; border-radius: 8px; background: var(--accent-soft); color: var(--accent-text); font: 700 12px/1.7 system-ui, sans-serif; }
 .lesson-head__title { margin: 4px 0 0; font-size: clamp(23px, 2.9vw, 32px); line-height: 1.55; overflow-wrap: anywhere; }
-.lesson-head__desc { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.95; }
-/* The lesson's German name, under the Persian title. It is the secondary line, so it is
-   smaller and quieter than the title and is never allowed to wrap mid-word. */
-.lesson-head__de { margin: 0; color: var(--muted); font: 400 13px/1.8 system-ui, sans-serif; overflow-wrap: anywhere; }
+.lesson-head__desc { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13.5px; line-height: 1.95; }
+.lesson-head__de { margin: 0; color: var(--muted); font: 400 14px/1.8 system-ui, sans-serif; overflow-wrap: anywhere; }
 
 /* ------------------------------------------------------------- stepper --- */
-.journey-stepper { display: flex; flex-direction: column; gap: 8px; }
+.journey-stepper { display: flex; flex-direction: column; gap: 12px; }
 
 /* --------------------------------------------------------------- progress --- */
-.journey-progress { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
-.journey-progress__text { margin: 0; color: var(--muted); font-size: 12px; }
+.journey-progress { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.spring-progress-track {
+  width: 100%;
+  height: 12px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+  padding: 2px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+.spring-progress-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent-grad-bar, var(--accent));
+  border-radius: 999px;
+  transition: width .5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.journey-progress__meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.journey-progress__text { margin: 0; color: var(--muted); font-size: 13px; font-weight: 600; }
+.journey-progress__pct { font-size: 13px; font-weight: 800; color: var(--accent-text); font-variant-numeric: tabular-nums; }
 
 /* -------------------------------------------------------------- step chips --- */
-.journey-steps ol { display: flex; gap: 8px; margin: 0; padding: 2px 2px 8px; list-style: none; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.journey-steps ol { display: flex; gap: 10px; margin: 0; padding: 4px 2px 10px; list-style: none; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
 .journey-steps ol::-webkit-scrollbar { display: none; }
 .journey-steps li { flex: 0 0 auto; }
-.journey-chip { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 12px; white-space: nowrap; }
-.journey-chip:hover { border-color: var(--accent); color: var(--fg); text-decoration: none; }
-.journey-chip__num { display: grid; place-content: center; width: 20px; height: 20px; border-radius: 50%; background: var(--surface-alt); font: 600 12px/1 system-ui, sans-serif; }
-.journey-chip.is-active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-text); font-weight: 700; }
+.journey-chip {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 16px;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+  box-shadow: 0 2px 0 var(--line); color: var(--muted); font-size: 13px; font-weight: 600;
+  white-space: nowrap; text-decoration: none;
+  transition: border-color .15s, background-color .15s, color .15s, transform .1s, box-shadow .1s;
+}
+.journey-chip:hover { border-color: var(--accent); color: var(--fg); text-decoration: none; transform: translateY(-1px); box-shadow: 0 3px 0 var(--line); }
+.journey-chip:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--line); }
+.journey-chip__num { display: grid; place-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--surface-alt); font: 700 12px/1 system-ui, sans-serif; transition: all .15s; }
+.journey-chip.is-active { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-text); font-weight: 800; box-shadow: 0 2px 0 var(--accent); }
 .journey-chip.is-active .journey-chip__num { background: var(--accent); color: var(--on-accent); }
-/* A step the learner has already passed: the number becomes a check, the same way the
-   learning path marks a finished lesson. The chips are a trail, not a numbered list —
-   "قدم ۵ از ۹" above the step still says exactly where they are. */
-.journey-chip.is-done { border-color: var(--success); }
-.journey-chip.is-done .journey-chip__num { background: var(--success-soft); color: var(--success); }
+.journey-chip.is-done { border-color: var(--success); background: color-mix(in srgb, var(--success-soft) 35%, var(--surface)); color: var(--fg); }
+.journey-chip.is-done .journey-chip__num { background: var(--success); color: var(--on-success, #ffffff); }
 
 /* ------------------------------------------------------------------ steps --- */
 .journey-body { display: flex; flex-direction: column; }
-.journey-step { display: flex; flex-direction: column; gap: 18px; scroll-margin-block-start: 16px; }
+.journey-step { display: flex; flex-direction: column; gap: 20px; scroll-margin-block-start: 16px; }
 .js .journey-step:not(.is-active) { display: none; }
 .journey-step__head { display: flex; flex-direction: column; gap: 6px; padding-block-end: 14px; border-block-end: 1px solid var(--line); }
-.journey-step__eyebrow { margin: 0; color: var(--accent-text); font: 12px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
-.journey-step__title { margin: 0; font-size: clamp(19px, 2.2vw, 23px); line-height: 1.6; }
-.journey-step__hint { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.9; }
+.journey-step__eyebrow { margin: 0; color: var(--accent-text); font: 700 12px/1.8 system-ui, sans-serif; letter-spacing: 1.2px; }
+.journey-step__title { margin: 0; font-size: clamp(20px, 2.4vw, 24px); line-height: 1.6; }
+.journey-step__hint { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13.5px; line-height: 1.9; }
 
 /* ------------------------------------------------------------- navigation --- */
-.journey-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.journey-nav__btn { flex: 0 0 auto; }
-.journey-nav__btn--next { flex: 1 1 auto; }
-.journey-nav__pos { flex: 0 0 auto; color: var(--muted); font-size: 12px; }
-/* The break line sits on its own row under the buttons, so it never squeezes them. */
-.journey-nav__note {
-  flex: 1 1 100%;
-  margin: 0;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.9;
+.journey-nav {
+  display: flex; flex-direction: column; gap: 12px; margin-block-start: 16px;
+  padding: 16px 20px; border: 1px solid var(--line); border-radius: 20px;
+  background: var(--surface); box-shadow: var(--shadow);
 }
+.journey-nav__actions { display: flex; align-items: center; gap: 12px; width: 100%; }
+.journey-nav__btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 48px; padding: 10px 22px; font-size: 14px; font-weight: 700;
+  border-radius: 14px; border: 1px solid var(--line); background: var(--surface-alt);
+  color: var(--fg); box-shadow: 0 3px 0 var(--line); cursor: pointer;
+  transition: transform .1s, box-shadow .1s, background .15s;
+}
+.journey-nav__btn:hover { background: var(--surface); box-shadow: 0 4px 0 var(--line); }
+.journey-nav__btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--line); }
+.journey-nav__btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; transform: none; }
+.journey-nav__btn--next {
+  flex: 1 1 auto; background: var(--accent); border-color: var(--accent); color: var(--on-accent);
+  box-shadow: 0 4px 0 #9a3412;
+}
+[data-theme="dark"] .journey-nav__btn--next { box-shadow: 0 4px 0 #c2410c; }
+.journey-nav__btn--next:hover { background: var(--accent); color: var(--on-accent); box-shadow: 0 5px 0 #9a3412; }
+.journey-nav__btn--next:active { transform: translateY(2px); box-shadow: 0 1px 0 #9a3412; }
+.journey-nav__pos { flex: 0 0 auto; color: var(--muted); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; padding: 0 8px; }
+.journey-nav__note { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.8; }
 
 /* The lesson reopened on the step the learner stopped at: name it, so coming back reads as
    a continuation rather than as starting the lesson over. */
 .lesson-resume {
-  margin: 0;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: var(--surface-alt);
-  color: var(--fg);
-  font-size: 13px;
-  line-height: 1.9;
+  margin: 0; padding: 12px 16px; border-radius: 14px;
+  border: 1px solid var(--line); background: var(--surface-alt);
+  color: var(--fg); font-size: 13px; line-height: 1.9;
 }
 
 /* ------------------------------------------------------- shared primitives --- */
@@ -130,7 +184,7 @@
 
 /* ------------------------------------------------------------ prose blocks --- */
 .step-lead { display: flex; flex-direction: column; gap: 12px; }
-.step-block { display: flex; flex-direction: column; gap: 10px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.step-block { display: flex; flex-direction: column; gap: 12px; padding: 22px 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
 .step-block.callout-falle,
 .callout-falle { border: 1px solid var(--warning); background: var(--warning-soft); }
 .step-block.callout-falle .step-block__title { color: var(--on-warning); }
@@ -147,8 +201,9 @@
 
 /* ----------------------------------------------------------------- agenda --- */
 .agenda { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
-.agenda__link { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; min-height: 44px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--fg); font-size: 13px; }
-.agenda__link:hover { border-color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.agenda__link { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; min-height: 44px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--fg); font-size: 13px; box-shadow: 0 2px 0 var(--line); transition: transform .1s, box-shadow .1s, border-color .15s; }
+.agenda__link:hover { border-color: var(--accent); background: var(--surface-alt); text-decoration: none; transform: translateY(-1px); box-shadow: 0 3px 0 var(--line); }
+.agenda__link:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--line); }
 .agenda__count { color: var(--muted); font-size: 12px; white-space: nowrap; }
 
 /* -------------------------------------------------------------- vocabulary --- */
@@ -194,7 +249,7 @@
 
 /* --------------------------------------------------------------- sentences --- */
 .sentence-list { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
-.sentence { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.sentence { display: flex; flex-direction: column; gap: 8px; padding: 18px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); transition: border-color .15s ease, transform .15s ease; }
 .sentence__speaker { align-self: flex-start; margin: 0; padding: 2px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); font: 700 12px/1.8 system-ui, sans-serif; }
 .sentence__de { margin: 0; max-width: 68ch; font: 500 20px/1.85 system-ui, sans-serif; overflow-wrap: anywhere; }
 .sentence__fa { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.95; }
@@ -222,14 +277,14 @@
 
 /* ----------------------------------------------------------------- grammar --- */
 .grammar-list { display: flex; flex-direction: column; gap: 14px; }
-.grammar-topic { display: flex; flex-direction: column; gap: 10px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
-.grammar-topic__eyebrow { margin: 0; color: var(--muted); font: 12px/1.8 system-ui, sans-serif; letter-spacing: 1px; }
+.grammar-topic { display: flex; flex-direction: column; gap: 12px; padding: 22px 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
+.grammar-topic__eyebrow { margin: 0; color: var(--muted); font: 700 12px/1.8 system-ui, sans-serif; letter-spacing: 1px; }
 .grammar-topic__title { margin: 0; font-size: 18px; line-height: 1.6; overflow-wrap: anywhere; }
 .grammar-topic__body { max-width: 68ch; line-height: 2.1; overflow-wrap: anywhere; }
 
 /* ---------------------------------------------------------------- practice --- */
 .ex-list { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
-.ex-item { display: flex; flex-direction: column; gap: 8px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.ex-item { display: flex; flex-direction: column; gap: 10px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
 .ex-item__head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .ex-item__number { font: 600 12px/1.7 system-ui, sans-serif; }
 .ex-item__difficulty { color: var(--muted); font-size: 12px; }
@@ -242,18 +297,18 @@
 /* The block the lesson closes with: the words of this lesson the learner really did
    answer wrong, and the way back into practising them. Reuses the `.ex-item` panel
    treatment so the finish step does not invent a second card style. */
-.finish-missed { display: flex; flex-direction: column; gap: 12px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.finish-missed { display: flex; flex-direction: column; gap: 14px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
 .finish-missed__title { margin: 0; font-size: 17px; line-height: 1.65; }
 .finish-missed__lead { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.9; }
 .finish-missed__list { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.finish-missed__word { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 10px; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-alt); }
+.finish-missed__word { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 10px; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-alt); }
 .finish-missed__term { color: var(--fg); font-size: 15px; }
 .finish-missed__article { color: var(--accent-text); }
 .finish-missed__meaning { color: var(--muted); font-size: 13px; }
 .finish-missed__count { margin-inline-start: auto; color: var(--danger); font-size: 12px; white-space: nowrap; }
 .finish-missed__cta { align-self: flex-start; }
 
-.finish-srs { display: flex; flex-direction: column; gap: 12px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.finish-srs { display: flex; flex-direction: column; gap: 14px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
 .finish-srs__body { display: flex; flex-direction: column; gap: 6px; }
 .finish-srs__title { margin: 0; font-size: 17px; line-height: 1.65; }
 .finish-srs__lead { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.9; }
@@ -281,44 +336,60 @@
 
 /* ------------------------------------------------------------------ mobile --- */
 /* A focused player: compact header, one step at a time, and the primary action
-   pinned above the shell's bottom navigation rather than below the fold. */
+   docked above the shell's bottom navigation with safe-area spacing. */
 @media (max-width: 899.98px) {
+  .content--lesson {
+    padding-bottom: calc(var(--bottom-nav-h, 64px) + env(safe-area-inset-bottom, 0px) + 84px) !important;
+  }
   .journey-stepper {
     position: sticky;
     top: var(--app-bar-h, 48px);
     z-index: 25;
-    background: var(--bg);
+    background: color-mix(in srgb, var(--bg) 95%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     margin-inline: -16px;
-    padding: 8px 16px 6px;
+    padding: 10px 16px 8px;
     border-block-end: 1px solid var(--line);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   }
-  .journey-step { scroll-margin-block-start: 140px; }
+  .journey-step { scroll-margin-block-start: 150px; }
   .journey-nav {
-    position: sticky; bottom: var(--bottom-nav-h); z-index: 20;
-    margin-inline: -16px; margin-block-start: 4px;
-    padding: 10px 16px;
-    background: var(--bg); border-block-start: 1px solid var(--line);
+    position: sticky;
+    bottom: calc(var(--bottom-nav-h, 64px) + env(safe-area-inset-bottom, 0px) + 8px);
+    z-index: 35;
+    margin-inline: 0;
+    margin-block-start: 16px;
+    padding: 12px 16px;
+    background: color-mix(in srgb, var(--surface) 96%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
   }
 }
 
 @media (max-width: 560px) {
   .lesson { gap: 18px; }
+  .lesson-head__nav { flex-direction: column; align-items: stretch; gap: 8px; }
+  .lesson-head__back { align-self: flex-start; }
+  .lesson-head__actions { justify-content: space-between; width: 100%; }
 
   .journey-nav__pos { display: none; }
-  .journey-step { gap: 14px; }
-  .step-block, .grammar-topic, .ex-item, .finish-missed, .finish-srs { padding: 16px; border-radius: 12px; }
+  .journey-step { gap: 16px; }
+  .step-block, .grammar-topic, .ex-item, .finish-missed, .finish-srs { padding: 18px 16px; border-radius: 16px; }
   .finish-missed__count { margin-inline-start: 0; }
-  .sentence { padding: 14px 16px; }
+  .sentence { padding: 16px; border-radius: 16px; }
   .sentence__de { font-size: 18px; }
   /* Mobile chunked card layout for vocabulary: each item is an individual touch card */
   .word-row {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 4px 12px;
-    padding: 10px 14px;
+    padding: 12px 14px;
     margin-block-end: 8px;
     border: 1px solid var(--line);
-    border-radius: 14px;
+    border-radius: 16px;
     background: var(--surface);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
   }
@@ -348,8 +419,15 @@
 .practice-path { display: flex; flex-direction: column; gap: 14px; }
 .practice-path__lead { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.9; }
 .practice-nodes { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
-.practice-node { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--fg); text-decoration: none; }
-.practice-node:hover { border-color: var(--accent); text-decoration: none; }
+.practice-node {
+  display: flex; align-items: flex-start; gap: 14px; margin-bottom: 12px;
+  padding: 16px 18px; border: 1px solid var(--line); border-radius: 18px;
+  background: var(--surface); color: var(--fg); text-decoration: none;
+  box-shadow: 0 3px 0 var(--line);
+  transition: transform .1s, box-shadow .1s, border-color .15s;
+}
+.practice-node:hover { border-color: var(--accent); text-decoration: none; transform: translateY(-1px); box-shadow: 0 4px 0 var(--line); }
+.practice-node:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--line); }
 .practice-node__dot { display: grid; place-items: center; flex-shrink: 0; width: 38px; height: 38px; border: 2px solid var(--line); border-radius: 50%; background: var(--surface-alt); font-weight: 800; }
 .practice-node__body { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
 .practice-node__title { font-weight: 700; }
@@ -375,13 +453,19 @@
 /* The finish step's summary of what the lesson held. Counts come from the journey's own
    steps (lessons/journey.py), so this card and the intro agenda cannot disagree. Colour is
    read from base.css tokens only. */
-.finish-summary { display: flex; flex-direction: column; gap: 6px; padding: 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-alt); }
+.finish-summary { display: flex; flex-direction: column; gap: 8px; padding: 22px 24px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
 .finish-summary__eyebrow { margin: 0; color: var(--accent-text); font-size: 12px; font-weight: 800; letter-spacing: .5px; }
 .finish-summary__title { margin: 0; font-size: 18px; }
 .finish-summary__lead { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.9; }
 .finish-summary__list { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 0; padding: 0; list-style: none; }
-.finish-summary__link { display: inline-flex; align-items: baseline; gap: 8px; min-height: 44px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--fg); font-size: 13px; text-decoration: none; }
-.finish-summary__link:hover { border-color: var(--accent); text-decoration: none; }
+.finish-summary__link {
+  display: inline-flex; align-items: baseline; gap: 8px; min-height: 44px; padding: 12px 16px;
+  border: 1px solid var(--line); border-radius: 14px; background: var(--surface-alt);
+  color: var(--fg); font-size: 13px; text-decoration: none; box-shadow: 0 2px 0 var(--line);
+  transition: transform .1s, box-shadow .1s, border-color .15s;
+}
+.finish-summary__link:hover { border-color: var(--accent); text-decoration: none; transform: translateY(-1px); box-shadow: 0 3px 0 var(--line); }
+.finish-summary__link:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--line); }
 .finish-summary__label { font-weight: 700; }
 .finish-summary__count { color: var(--muted); }
 
