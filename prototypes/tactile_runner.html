@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رانر تمرین لمسی | Tactile Exercise Runner Prototype</title>
+  <style>
+    /* 1. Design Tokens from base.css */
+    :root,
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg: #fff8f2;
+      --surface: #ffffff;
+      --surface-alt: #faf3ea;
+      --fg: #33281f;
+      --muted: #6d5947;
+      --line: #f0e3d6;
+
+      --accent: #ff7a1a;
+      --accent-text: #c2410c;
+      --accent-soft: #fdeee0;
+      --on-accent: #33281f;
+      --accent-grad: linear-gradient(135deg, #ffa04d, #ff7a1a);
+      --accent-grad-bar: linear-gradient(90deg, #ff7a1a, #ffb25e);
+
+      --success: #0f7c44;
+      --success-soft: #e7f8ee;
+      --on-success: #0f7c44;
+      --danger: #c02222;
+      --danger-soft: #fff1f1;
+      --on-danger: #c02222;
+      --warning: #8a5300;
+      --warning-soft: #fdf3e3;
+      --info: #0b62c4;
+      --info-soft: #eaf3fb;
+
+      --press: 0 4px 0 #d95f08;
+      --press-active: 0 1px 0 #d95f08;
+      --press-tile: 0 3px 0 var(--line);
+      --press-tile-active: 0 1px 0 var(--line);
+      --press-success: 0 4px 0 #09502b;
+      --press-danger: 0 4px 0 #851212;
+
+      --shadow: 0 10px 26px rgba(120, 72, 24, .08);
+      --card-border: 1px solid var(--line);
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0f1116;
+      --surface: #171a21;
+      --surface-alt: #1f232c;
+      --fg: #e9edf5;
+      --muted: #9aa4b8;
+      --line: #2a2f3a;
+
+      --accent: #ff8a4c;
+      --accent-text: #ff8a4c;
+      --accent-soft: #2a1c12;
+      --on-accent: #20120a;
+      --accent-grad: linear-gradient(135deg, #ff9a63, #f97316);
+      --accent-grad-bar: linear-gradient(90deg, #ff8a4c, #fdba74);
+
+      --success: #7bd88f;
+      --success-soft: #12261c;
+      --on-success: #7bd88f;
+      --danger: #ffaaaa;
+      --danger-soft: #2a1618;
+      --on-danger: #ffaaaa;
+      --warning: #e7c280;
+      --warning-soft: #2a2313;
+      --info: #9acded;
+      --info-soft: #12222e;
+
+      --press: 0 4px 0 #b45309;
+      --press-active: 0 1px 0 #92400e;
+      --press-tile: 0 3px 0 #2a2f3a;
+      --press-tile-active: 0 1px 0 #2a2f3a;
+      --press-success: 0 4px 0 #3c824c;
+      --press-danger: 0 4px 0 #9e3636;
+
+      --shadow: 0 10px 30px rgba(0, 0, 0, .42);
+      --card-border: 1px solid var(--line);
+    }
+
+    /* 2. Reset & Layout Setup */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Vazirmatn', 'IRANSansX', 'Sahel', 'Segoe UI', Tahoma, sans-serif;
+      font-size: 14px;
+      line-height: 1.8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background-color .25s ease, color .25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .de {
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-weight: 600;
+    }
+
+    /* 3. Top Spring Progress Bar */
+    .runner-top-bar {
+      width: 100%;
+      max-width: 640px;
+      padding: 16px 20px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .runner-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .runner-close-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 18px;
+      transition: background .15s ease, color .15s ease;
+      text-decoration: none;
+    }
+
+    .runner-close-btn:hover {
+      background: var(--surface-alt);
+      color: var(--fg);
+    }
+
+    .runner-stats {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-mini-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .spring-progress-track {
+      width: 100%;
+      height: 12px;
+      background: var(--surface-alt);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+      padding: 2px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,.04);
+    }
+
+    .spring-progress-fill {
+      height: 100%;
+      width: 40%;
+      background: var(--accent-grad-bar);
+      border-radius: 999px;
+      transition: width .5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* 4. Runner Main Container */
+    .runner-main {
+      width: 100%;
+      max-width: 640px;
+      padding: 12px 16px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex: 1;
+    }
+
+    /* 5. Tactile 3D Buttons & Tiles */
+    .tactile-card {
+      background: var(--surface);
+      border: var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    /* 6. Micro-interaction Keyframes */
+    @keyframes correctPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(15, 124, 68, 0.4);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 0 12px rgba(15, 124, 68, 0);
+        transform: scale(1.015);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(15, 124, 68, 0);
+        transform: scale(1);
+      }
+    }
+
+    @keyframes subtleShake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .is-correct-pulse {
+      animation: correctPulse .6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      border-color: var(--success) !important;
+    }
+
+    .is-wrong-shake {
+      animation: subtleShake .45s ease-in-out;
+      border-color: var(--danger) !important;
+    }
+
+    /* 7. Primary Action Button */
+    .runner-action-bar {
+      margin-top: auto;
+      padding-top: 16px;
+    }
+
+    .btn-tactile-submit {
+      width: 100%;
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 16px;
+      background: var(--accent);
+      color: var(--on-accent);
+      font-weight: 800;
+      font-size: 15px;
+      border: none;
+      box-shadow: var(--press);
+      cursor: pointer;
+      transition: transform .08s ease, box-shadow .08s ease;
+    }
+
+    .btn-tactile-submit:active {
+      transform: translateY(3px);
+      box-shadow: var(--press-active);
+    }
+
+    .btn-tactile-submit:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* Satzbau Playground Styles */
+    .prompt-eyebrow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .prompt-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: var(--accent-soft);
+      color: var(--accent-text);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .prompt-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--fg);
+      line-height: 1.5;
+    }
+
+    .prompt-context {
+      background: var(--surface-alt);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .context-label {
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
+    .context-persian {
+      color: var(--fg);
+      font-weight: 700;
+    }
+
+    .tutor-callout {
+      background: var(--accent-soft);
+      border-right: 3px solid var(--accent);
+      border-radius: 8px 12px 12px 8px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      color: var(--fg);
+      line-height: 1.6;
+    }
+
+    /* Active Assembly Drop Zone */
+    .satzbau-drop-zone {
+      min-height: 72px;
+      background: var(--surface-alt);
+      border: 2px dashed var(--line);
+      border-radius: 16px;
+      padding: 10px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      direction: ltr;
+      transition: border-color .2s ease, background-color .2s ease;
+    }
+
+    .satzbau-drop-zone.has-items {
+      border-style: solid;
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+
+    .drop-placeholder {
+      width: 100%;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      direction: rtl;
+      user-select: none;
+    }
+
+    /* Tactile Word Bank & Chips */
+    .satzbau-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      direction: ltr;
+      padding: 8px 0;
+    }
+
+    .tactile-chip {
+      min-height: 48px;
+      min-width: 58px;
+      padding: 8px 18px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      color: var(--fg);
+      font-weight: 700;
+      font-size: 15px;
+      box-shadow: var(--press-tile);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .08s ease, box-shadow .08s ease, opacity .15s ease, background .15s ease;
+      user-select: none;
+    }
+
+    .tactile-chip:hover {
+      border-color: var(--accent);
+    }
+
+    .tactile-chip:active {
+      transform: translateY(2px);
+      box-shadow: var(--press-tile-active);
+    }
+
+    .tactile-chip.is-used {
+      opacity: .35;
+      pointer-events: none;
+      transform: none;
+      box-shadow: none;
+      border-style: dashed;
+    }
+
+    /* Placed Chip inside Assembly Zone */
+    .assembled-chip {
+      min-height: 44px;
+      padding: 6px 14px;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      color: var(--accent-text);
+      font-weight: 700;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,.04);
+      transition: transform .08s ease;
+    }
+
+    .assembled-chip:active {
+      transform: scale(.96);
+    }
+
+    .assembly-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-clear-assembly {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: color .15s ease;
+    }
+
+    .btn-clear-assembly:hover {
+      color: var(--accent-text);
+    }
+
+    /* Feedback Drawer */
+    .feedback-drawer {
+      border-radius: 18px;
+      padding: 16px 20px;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      border: 1px solid transparent;
+      animation: bentoFadeUp .3s ease both;
+    }
+
+    .feedback-drawer.is-correct {
+      display: flex;
+      background: var(--success-soft);
+      border-color: var(--success);
+      color: var(--on-success);
+    }
+
+    .feedback-drawer.is-wrong {
+      display: flex;
+      background: var(--danger-soft);
+      border-color: var(--danger);
+      color: var(--on-danger);
+    }
+
+    .feedback-title {
+      font-size: 16px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .feedback-explanation {
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* 8. Mobile Viewport Constraints (390px Hygiene) */
+    @media (max-width: 480px) {
+      .runner-top-bar {
+        padding: 12px 14px 6px;
+      }
+      .runner-main {
+        padding: 8px 12px 36px;
+      }
+      .tactile-card {
+        padding: 18px 14px;
+        border-radius: 16px;
+      }
+      .tactile-chip {
+        padding: 8px 14px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation & Spring Progress Bar -->
+  <header class="runner-top-bar">
+    <div class="runner-meta-row">
+      <a href="#exit" class="runner-close-btn" aria-label="خروج از تمرین">✕</a>
+      <div class="runner-stats" id="runnerStats">
+        <span class="prompt-badge">🔥 ۳ استریک</span>
+        <span>سوال ۳ از ۱۰</span>
+        <span>·</span>
+        <span>۳۰٪</span>
+      </div>
+      <button class="theme-mini-btn" id="themeMiniBtn" aria-label="تغییر پوسته">🌙</button>
+    </div>
+    
+    <div class="spring-progress-track" aria-label="پیشرفت سوالات">
+      <div class="spring-progress-fill" id="springProgressFill" style="width: 30%;"></div>
+    </div>
+  </header>
+
+  <!-- Main Tactile Runner Content Container -->
+  <main class="runner-main" id="runnerContainer">
+    <!-- Exercise Card: Satzbau Playground -->
+    <article class="tactile-card" id="questionCard">
+      <div class="prompt-eyebrow">
+        <span class="prompt-badge">نحو آلمانی · Satzbau</span>
+        <span>خرید و فروشگاه · A1</span>
+      </div>
+
+      <h2 class="prompt-title">جمله زیر را با قطعات داده‌شده به شکل صحیح بسازید:</h2>
+
+      <div class="prompt-context">
+        <span class="context-label">معنی جمله:</span>
+        <span class="context-persian">«من امروز در سوپرمارکت خرید می‌کنم.»</span>
+      </div>
+
+      <div class="tutor-callout">
+        💡 نکته گوته A1: فعل <span class="de">einkaufen</span> از افعال جداشدنی (<span class="de">Trennbare Verben</span>) است؛ پیشوند <span class="de">ein</span> در جمله خبری به انتهای جمله منتقل می‌شود.
+      </div>
+
+      <!-- Active Assembly Drop Zone -->
+      <div class="satzbau-drop-zone" id="assemblyZone" aria-label="محل چینش قطعات جمله">
+        <span class="drop-placeholder" id="assemblyPlaceholder">کلمات را به ترتیب صحیح لمس کنید...</span>
+      </div>
+
+      <!-- Word Bank -->
+      <div class="satzbau-bank" id="wordBank">
+        <button class="tactile-chip" type="button" data-word="Ich"><span class="de" dir="ltr" lang="de">Ich</span></button>
+        <button class="tactile-chip" type="button" data-word="kaufe"><span class="de" dir="ltr" lang="de">kaufe</span></button>
+        <button class="tactile-chip" type="button" data-word="heute"><span class="de" dir="ltr" lang="de">heute</span></button>
+        <button class="tactile-chip" type="button" data-word="im Supermarkt"><span class="de" dir="ltr" lang="de">im Supermarkt</span></button>
+        <button class="tactile-chip" type="button" data-word="ein"><span class="de" dir="ltr" lang="de">ein</span></button>
+        <!-- Distractor -->
+        <button class="tactile-chip" type="button" data-word="kaufen"><span class="de" dir="ltr" lang="de">kaufen</span></button>
+      </div>
+
+      <div class="assembly-actions">
+        <button class="btn-clear-assembly" id="clearAssemblyBtn" type="button">🔄 پاک کردن و چینش مجدد</button>
+      </div>
+    </article>
+
+    <!-- Feedback Drawer -->
+    <div class="feedback-drawer" id="feedbackDrawer" role="alert" aria-live="polite">
+      <div class="feedback-title" id="feedbackTitle">
+        <span id="feedbackIcon">✅</span>
+        <span id="feedbackHeading">کاملاً درست و دقیق!</span>
+      </div>
+      <p class="feedback-explanation" id="feedbackExplanation">
+        آفرین! در جمله خبری حال ساده، بخش صرف‌شده فعل در جایگاه دوم (<span class="de">kaufe</span>) و پیشوند جداشدنی (<span class="de">ein</span>) در انتهای جمله قرار می‌گیرد.
+      </p>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="runner-action-bar">
+      <button class="btn-tactile-submit" id="submitActionBtn" type="button" disabled>
+        <span>بررسی پاسخ</span>
+        <span>⚡</span>
+      </button>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      // 1. Theme Engine (synchronized with bento_dashboard)
+      const THEME_STORAGE_KEY = 'bm_theme_preference';
+      const root = document.documentElement;
+      const themeMiniBtn = document.getElementById('themeMiniBtn');
+
+      function getPreferredTheme() {
+        try {
+          const stored = localStorage.getItem(THEME_STORAGE_KEY);
+          if (stored === 'light' || stored === 'dark') {
+            return stored;
+          }
+        } catch (e) {}
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+
+      function applyTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        if (themeMiniBtn) {
+          themeMiniBtn.textContent = (theme === 'dark') ? '☀️' : '🌙';
+        }
+      }
+
+      applyTheme(getPreferredTheme());
+
+      if (themeMiniBtn) {
+        themeMiniBtn.addEventListener('click', function() {
+          const current = root.getAttribute('data-theme') || 'light';
+          const next = (current === 'dark') ? 'light' : 'dark';
+          applyTheme(next);
+          try {
+            localStorage.setItem(THEME_STORAGE_KEY, next);
+          } catch (e) {}
+        });
+      }
+
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        try {
+          if (!localStorage.getItem(THEME_STORAGE_KEY)) {
+            applyTheme(e.matches ? 'dark' : 'light');
+          }
+        } catch (err) {}
+      });
+
+      // 2. Chip Assembly Mechanics
+      const assemblyZone = document.getElementById('assemblyZone');
+      const placeholder = document.getElementById('assemblyPlaceholder');
+      const wordBank = document.getElementById('wordBank');
+      const submitBtn = document.getElementById('submitActionBtn');
+      const clearBtn = document.getElementById('clearAssemblyBtn');
+      const questionCard = document.getElementById('questionCard');
+      const feedbackDrawer = document.getElementById('feedbackDrawer');
+      const feedbackIcon = document.getElementById('feedbackIcon');
+      const feedbackHeading = document.getElementById('feedbackHeading');
+      const feedbackExplanation = document.getElementById('feedbackExplanation');
+      const progressFill = document.getElementById('springProgressFill');
+      const runnerStats = document.getElementById('runnerStats');
+
+      let assembledWords = [];
+      let isAnswered = false;
+
+      // Target valid sequences
+      const correctSequences = [
+        ["Ich", "kaufe", "heute", "im Supermarkt", "ein"],
+        ["Heute", "kaufe", "ich", "im Supermarkt", "ein"]
+      ];
+
+      function updateUIState() {
+        if (assembledWords.length > 0) {
+          assemblyZone.classList.add('has-items');
+          if (placeholder) placeholder.style.display = 'none';
+          if (!isAnswered) submitBtn.disabled = false;
+        } else {
+          assemblyZone.classList.remove('has-items');
+          if (placeholder) placeholder.style.display = 'block';
+          submitBtn.disabled = true;
+        }
+      }
+
+      function renderAssembledChips() {
+        const existingChips = assemblyZone.querySelectorAll('.assembled-chip');
+        existingChips.forEach(function(c) { c.remove(); });
+
+        assembledWords.forEach(function(item, index) {
+          const chipEl = document.createElement('button');
+          chipEl.type = 'button';
+          chipEl.className = 'assembled-chip';
+          chipEl.setAttribute('aria-label', 'حذف کلمه ' + item.word);
+          chipEl.innerHTML = '<span class="de" dir="ltr" lang="de">' + item.word + '</span> <span style="font-size:11px;opacity:0.7">✕</span>';
+
+          chipEl.addEventListener('click', function() {
+            if (isAnswered) return;
+            item.bankBtn.classList.remove('is-used');
+            assembledWords.splice(index, 1);
+            renderAssembledChips();
+            updateUIState();
+          });
+
+          assemblyZone.appendChild(chipEl);
+        });
+
+        updateUIState();
+      }
+
+      // Word bank button clicks
+      wordBank.querySelectorAll('.tactile-chip').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          if (isAnswered || btn.classList.contains('is-used')) return;
+          const word = btn.getAttribute('data-word');
+          btn.classList.add('is-used');
+          assembledWords.push({ word: word, bankBtn: btn });
+          renderAssembledChips();
+        });
+      });
+
+      // Clear button
+      if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+          if (isAnswered) return;
+          assembledWords.forEach(function(item) {
+            item.bankBtn.classList.remove('is-used');
+          });
+          assembledWords = [];
+          renderAssembledChips();
+          resetFeedback();
+        });
+      }
+
+      function resetFeedback() {
+        feedbackDrawer.style.display = 'none';
+        feedbackDrawer.className = 'feedback-drawer';
+        questionCard.classList.remove('is-correct-pulse', 'is-wrong-shake');
+      }
+
+      // 3. Validation & Answer Evaluation
+      submitBtn.addEventListener('click', function() {
+        if (submitBtn.getAttribute('data-mode') === 'next') {
+          isAnswered = false;
+          submitBtn.removeAttribute('data-mode');
+          submitBtn.innerHTML = '<span>بررسی پاسخ</span> <span>⚡</span>';
+          resetFeedback();
+          assembledWords.forEach(function(item) { item.bankBtn.classList.remove('is-used'); });
+          assembledWords = [];
+          renderAssembledChips();
+          return;
+        }
+
+        if (submitBtn.getAttribute('data-mode') === 'retry') {
+          isAnswered = false;
+          submitBtn.removeAttribute('data-mode');
+          submitBtn.innerHTML = '<span>بررسی پاسخ</span> <span>⚡</span>';
+          resetFeedback();
+          return;
+        }
+
+        if (assembledWords.length === 0) return;
+
+        const currentSeq = assembledWords.map(function(item) { return item.word; });
+        const isCorrect = correctSequences.some(function(seq) {
+          if (seq.length !== currentSeq.length) return false;
+          return seq.every(function(val, idx) { return val.toLowerCase() === currentSeq[idx].toLowerCase(); });
+        });
+
+        resetFeedback();
+
+        if (isCorrect) {
+          isAnswered = true;
+          questionCard.classList.add('is-correct-pulse');
+          feedbackDrawer.className = 'feedback-drawer is-correct';
+          feedbackDrawer.style.display = 'flex';
+          feedbackIcon.textContent = '✅';
+          feedbackHeading.textContent = 'کاملاً درست و دقیق!';
+          feedbackExplanation.innerHTML = 'عالی بود! در جمله خبری حال ساده، بخش صرف‌شده فعل در جایگاه دوم (<span class="de">kaufe</span>) و پیشوند جداشدنی (<span class="de">ein</span>) در انتهای جمله قرار می‌گیرد.';
+
+          // Update spring progress bar
+          if (progressFill) progressFill.style.width = '40%';
+          if (runnerStats) {
+            runnerStats.innerHTML = '<span class="prompt-badge">🔥 ۴ استریک</span> <span>سوال ۴ از ۱۰</span> <span>·</span> <span>۴۰٪</span>';
+          }
+
+          submitBtn.setAttribute('data-mode', 'next');
+          submitBtn.innerHTML = '<span>سوال بعدی</span> <span class="de">→</span>';
+          submitBtn.disabled = false;
+        } else {
+          questionCard.classList.add('is-wrong-shake');
+          feedbackDrawer.className = 'feedback-drawer is-wrong';
+          feedbackDrawer.style.display = 'flex';
+          feedbackIcon.textContent = '❌';
+          feedbackHeading.textContent = 'جایگاه قطعات نیاز به اصلاح دارد';
+          feedbackExplanation.innerHTML = 'توجه کنید: در زبان آلمانی جایگاه دوم همیشه متعلق به فعل صرف‌شده (<span class="de">kaufe</span>) است و پیشوند جداشدنی (<span class="de">ein</span>) باید دقیقاً در آخرین جایگاه جمله قرار گیرد. کلمه <span class="de">kaufen</span> شکل مصدر است و اینجا صرف نمی‌شود.';
+
+          submitBtn.setAttribute('data-mode', 'retry');
+          submitBtn.innerHTML = '<span>تلاش مجدد</span> <span>🔄</span>';
+          submitBtn.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
