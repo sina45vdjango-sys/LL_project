@@ -26,11 +26,11 @@
     </p>
     <h1 class="exercise-head__title">{{ exercise.title|direction }}</h1>
     {% if exercise.instruction %}
-      {% if exercise.type == 'WRITING' %}
+      {% if exercise.type == 'WRITING' or exercise.type == 'SPEAKING' %}
         <div class="exercise-writing-brief" role="region" aria-label="راهنمای سناریو">
           <div class="exercise-writing-brief__badge">
-            <span class="exercise-writing-brief__icon" aria-hidden="true">📋</span>
-            <span>موقعیت و سناریوی تمرین</span>
+            <span class="exercise-writing-brief__icon" aria-hidden="true">{% if exercise.type == 'SPEAKING' %}🎙️{% else %}📋{% endif %}</span>
+            <span>{% if exercise.type == 'SPEAKING' %}راهنمای بخش گفتاری گوته{% else %}موقعیت و سناریوی تمرین{% endif %}</span>
           </div>
           <div class="exercise-writing-brief__text">{{ exercise.instruction|direction|linebreaksbr }}</div>
         </div>

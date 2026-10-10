@@ -436,3 +436,155 @@
   }
 }
 
+/* --------------------------------------------------- Sprechen Lab (Phase 9) ---- */
+.sprecher-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  margin-block-end: 4px;
+}
+
+.sprecher-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.sprecher-card__icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.sprecher-card__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sprecher-card__badge-sub {
+  font: 700 10.5px/1.2 system-ui, sans-serif;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.sprecher-card__title {
+  font: 700 14px/1.4 system-ui, sans-serif;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+/* Teil 1: Vorstellungs-Karte */
+.card-vorstellung {
+  border-inline-start: 4px solid var(--accent);
+}
+
+.card-vorstellung__bullets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-block-start: 6px;
+  border-block-start: 1px dashed var(--line);
+}
+
+.card-bullet {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  color: var(--fg);
+  font: 600 12px/1.6 system-ui, sans-serif;
+}
+
+/* Teil 2: Thema-Karte (Distinctive Yellow Theme) */
+.card-thema {
+  border-inline-start: 4px solid var(--accent);
+  background: var(--surface);
+}
+
+.card-thema__banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  border: 1px solid var(--line);
+}
+
+.card-thema__tag {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 11px/1.5 system-ui, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.card-thema__inst {
+  font: 500 12px/1.6 system-ui, sans-serif;
+  color: var(--fg);
+}
+
+/* Teil 3: Bitte-Karte (Distinctive Everyday Situation) */
+.card-bitte {
+  border-inline-start: 4px solid var(--danger);
+  background: var(--surface);
+}
+
+.card-bitte__banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--danger-soft);
+  border: 1px solid var(--line);
+}
+
+.card-bitte__tag {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--danger);
+  color: var(--on-danger);
+  font: 700 11px/1.5 system-ui, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.card-bitte__inst {
+  font: 500 12px/1.6 system-ui, sans-serif;
+  color: var(--fg);
+}
+
+@media (max-width: 560px) {
+  .sprecher-card {
+    padding: 10px 12px;
+  }
+  .sprecher-card__icon {
+    font-size: 18px;
+  }
+  .sprecher-card__badge-sub {
+    font-size: 9.5px;
+  }
+  .card-bullet {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+  .card-thema__banner,
+  .card-bitte__banner {
+    padding: 6px 10px;
+    gap: 6px;
+  }
+}
+
+

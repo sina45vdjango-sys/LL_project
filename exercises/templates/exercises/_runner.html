@@ -78,6 +78,58 @@
                 </div>
               </div>
             {% endif %}
+          {% elif exercise and exercise.type == 'SPEAKING' %}
+            {% if 'Teil 1' in exercise.title or 'معرفی' in exercise.title %}
+              <div class="sprecher-card card-vorstellung" aria-label="کارت معرفی خود گوته A1">
+                <div class="sprecher-card__header">
+                  <span class="sprecher-card__icon" aria-hidden="true">🎙️</span>
+                  <div class="sprecher-card__titles">
+                    <span class="sprecher-card__badge-sub">GOETHE-ZERTIFIKAT A1 · SPRECHEN</span>
+                    <strong class="sprecher-card__title">Teil 1: Sich vorstellen (معرفی خود)</strong>
+                  </div>
+                  <span class="chip chip--accent">۳ امتیاز</span>
+                </div>
+                <div class="card-vorstellung__bullets" aria-label="کلیدواژه‌های کارت آزمون">
+                  <span class="card-bullet">Name</span>
+                  <span class="card-bullet">Alter</span>
+                  <span class="card-bullet">Land</span>
+                  <span class="card-bullet">Wohnort</span>
+                  <span class="card-bullet">Sprachen</span>
+                  <span class="card-bullet">Beruf</span>
+                  <span class="card-bullet">Hobby</span>
+                </div>
+              </div>
+            {% elif 'Teil 2' in exercise.title or 'موضوعی' in exercise.title %}
+              <div class="sprecher-card card-thema" aria-label="کارت موضوعی گوته A1">
+                <div class="sprecher-card__header">
+                  <span class="sprecher-card__icon" aria-hidden="true">💬</span>
+                  <div class="sprecher-card__titles">
+                    <span class="sprecher-card__badge-sub">GOETHE-ZERTIFIKAT A1 · SPRECHEN</span>
+                    <strong class="sprecher-card__title">Teil 2: Thema-Karte (تبادل اطلاعات)</strong>
+                  </div>
+                  <span class="chip chip--accent">۶ امتیاز</span>
+                </div>
+                <div class="card-thema__banner">
+                  <span class="card-thema__tag">THEMA-KARTE</span>
+                  <span class="card-thema__inst">سؤال با کلمهٔ روی کارت و پاسخ طرف مقابل</span>
+                </div>
+              </div>
+            {% elif 'Teil 3' in exercise.title or 'درخواست' in exercise.title %}
+              <div class="sprecher-card card-bitte" aria-label="کارت درخواست و واکنش گوته A1">
+                <div class="sprecher-card__header">
+                  <span class="sprecher-card__icon" aria-hidden="true">🤝</span>
+                  <div class="sprecher-card__titles">
+                    <span class="sprecher-card__badge-sub">GOETHE-ZERTIFIKAT A1 · SPRECHEN</span>
+                    <strong class="sprecher-card__title">Teil 3: Bitte-Karte (درخواست و واکنش)</strong>
+                  </div>
+                  <span class="chip chip--accent">۶ امتیاز</span>
+                </div>
+                <div class="card-bitte__banner">
+                  <span class="card-bitte__tag">BITTE & REAKTION</span>
+                  <span class="card-bitte__inst">درخواست مؤدبانه در موقعیت روزمره</span>
+                </div>
+              </div>
+            {% endif %}
           {% endif %}
           {% if question.passage %}
             <p class="runner-q__passage" lang="de" dir="ltr">{{ question.passage }}</p>
@@ -134,20 +186,22 @@
             </div>
           </div>
         {% elif question.kind == 'text' %}
-          <div class="runner-answer{% if exercise and exercise.type == 'WRITING' %} runner-answer--writing{% endif %}">
+          <div class="runner-answer{% if exercise and exercise.type == 'WRITING' or exercise and exercise.type == 'SPEAKING' %} runner-answer--writing{% endif %}">
             <label class="runner-answer__label" for="answer-{{ question.id }}">
               {% if exercise and exercise.type == 'WRITING' and 'فرم' in exercise.title %}
                 مقدار مناسب برای این فیلد فرم اداری را بنویس (به آلمانی):
               {% elif exercise and exercise.type == 'WRITING' %}
                 متن این بخش از ایمیل را بنویس (به آلمانی):
+              {% elif exercise and exercise.type == 'SPEAKING' %}
+                جمله، سؤال یا پاسخ شفاهی خود را بنویس (به آلمانی):
               {% else %}
                 پاسخ را به آلمانی بنویس
               {% endif %}
             </label>
-            <input class="runner-answer__input{% if exercise and exercise.type == 'WRITING' %} runner-answer__input--writing{% endif %}"
+            <input class="runner-answer__input{% if exercise and exercise.type == 'WRITING' or exercise and exercise.type == 'SPEAKING' %} runner-answer__input--writing{% endif %}"
                    id="answer-{{ question.id }}" name="answer-{{ question.id }}"
                    type="text" lang="de" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"
-                   placeholder="{% if exercise and exercise.type == 'WRITING' and 'فرم' in exercise.title %}Eintragen...{% elif exercise and exercise.type == 'WRITING' %}Auf Deutsch schreiben...{% endif %}">
+                   placeholder="{% if exercise and exercise.type == 'WRITING' and 'فرم' in exercise.title %}Eintragen...{% elif exercise and exercise.type == 'SPEAKING' %}Auf Deutsch sagen / schreiben...{% elif exercise and exercise.type == 'WRITING' %}Auf Deutsch schreiben...{% endif %}">
           </div>
         {% else %}
           <p class="runner-note">این پرسش پاسخ تعریف‌شده‌ای ندارد و بررسی نمی‌شود.</p>
