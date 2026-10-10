@@ -29,7 +29,37 @@
       {% if skill_label %}<span class="chip">{{ skill_label }}</span>{% endif %}
     </p>
     <h1 class="exercise-head__title">{{ lesson.display_title|direction }}</h1>
-    {% if turns %}
+    {% if scenario %}
+      <div class="situations-briefing" data-situations-briefing>
+        <div class="situations-briefing__header">
+          <span class="chip chip--accent">🎭 سناریوی نقش‌آفرینی واقعی (Situationsdialog)</span>
+          <h2 class="situations-briefing__title">{{ scenario.title }}</h2>
+        </div>
+        <div class="situations-briefing__meta">
+          <div class="situations-meta-item">
+            <span class="situations-meta-label">مکان / صحنه:</span>
+            <span class="situations-meta-val" lang="de" dir="ltr">{{ scenario.setting }}</span>
+          </div>
+          <div class="situations-meta-item">
+            <span class="situations-meta-label">نقش شما:</span>
+            <span class="situations-meta-val">{{ scenario.role_you }}</span>
+          </div>
+          <div class="situations-meta-item">
+            <span class="situations-meta-label">طرف گفت‌وگو:</span>
+            <span class="situations-meta-val">{{ scenario.role_partner }}</span>
+          </div>
+          <div class="situations-meta-item situations-meta-item--full">
+            <span class="situations-meta-label">هدف شما:</span>
+            <span class="situations-meta-val">{{ scenario.objective }}</span>
+          </div>
+        </div>
+        {% if scenario.etiquette_tip %}
+          <div class="situations-briefing__tip">
+            <p class="situations-tip__text">{{ scenario.etiquette_tip }}</p>
+          </div>
+        {% endif %}
+      </div>
+    {% elif turns %}
       <p class="exercise-head__instruction">
         صحنه: {{ lesson.display_title }}. تو یکی از دو طرف گفت‌وگویی{% if you %} — نقش
         <bdi lang="de" dir="ltr">{{ you }}</bdi>{% endif %}؛ هر بار خط خودت را به واژه‌های

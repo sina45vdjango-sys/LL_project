@@ -17,8 +17,29 @@
           <div class="chat-bubble">
             <p class="chat-bubble__who">تو{% if you %} · <span lang="de" dir="ltr">{{ you }}</span>{% endif %}</p>
             <p class="chat-bubble__answer" data-typed hidden></p>
+            {% if turn.prompt_label %}
+              <p class="chat-prompt-label" data-prompt-label>{{ turn.prompt_label }}</p>
+            {% endif %}
+
+            {% if turn.branches %}
+              <div class="chat-branches" data-branches>
+                <p class="chat-branches__label">یک پاسخ را انتخاب کن:</p>
+                <div class="chat-branches__list">
+                  {% for branch in turn.branches %}
+                    <button type="button" class="chat-branch-btn{% if branch.is_recommended %} chat-branch-btn--rec{% endif %}"
+                            data-branch-btn
+                            data-branch-text="{{ branch.text }}"
+                            data-branch-note="{{ branch.etiquette_note }}"
+                            lang="de" dir="ltr">
+                      {{ branch.text }}
+                    </button>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+
             <div class="chat-compose" data-compose>
-              <label class="chat-compose__label" for="line-{{ forloop.counter }}">خودت را جای او بگذار و جواب بده</label>
+              <label class="chat-compose__label" for="line-{{ forloop.counter }}">{% if turn.branches %}یا خودت پاسخ را بنویس:{% else %}خودت را جای او بگذار و جواب بده{% endif %}</label>
               <div class="chat-compose__row">
                 <input class="runner-answer__input" id="line-{{ forloop.counter }}" type="text"
                        lang="de" dir="ltr" autocomplete="off" autocapitalize="off"
@@ -26,8 +47,14 @@
                 <button type="button" class="btn btn--primary" data-send>بفرست</button>
               </div>
             </div>
+
+            <div class="chat-etiquette-toast" data-etiquette-toast hidden>
+              <span class="chat-etiquette-badge">🇩🇪 نکتهٔ آداب معاشرت (Etikette):</span>
+              <p class="chat-etiquette-msg" data-etiquette-msg></p>
+            </div>
+
             <div class="chat-model" data-model hidden>
-              <p class="chat-model__label">در همین درس این‌طور گفته می‌شود:</p>
+              <p class="chat-model__label">{% if turn.branches %}پاسخ پیشنهادی در این موقعیت:{% else %}در همین درس این‌طور گفته می‌شود:{% endif %}</p>
               <p class="chat-model__text" lang="de" dir="ltr">{{ turn.text }}</p>
               <p class="chat-model__fa">{{ turn.translation }}</p>
               <div class="chat-model__check">

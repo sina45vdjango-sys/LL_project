@@ -15,18 +15,27 @@ nothing here is graded and nothing is stored: the graded practice of the same le
 on its exercise page, which every node still links to.
 """
 
+from exercises.situations import get_situational_scenario
 from lessons.models import LessonSentence
 
 
 def conversation_turns(lesson):
     """The lesson's dialogue as turns, each marked whose line it is.
 
-    Returns ``{"you": name, "partner": name, "turns": [...]}``. ``turns`` is in the order
-    the lesson stores, and a turn is ``{"speaker", "mine", "text", "translation",
-    "audio"}``. A lesson with no published dialogue (the two review lessons) returns an
-    empty ``turns`` list rather than an error, because a review lesson has no scene of its
-    own and the page shows an honest empty state instead.
+    Returns ``{"you": name, "partner": name, "turns": [...], "scenario": scenario}``.
+    If a situational roleplay scenario is curated for this lesson (exercises/situations.py),
+    it provides the scenario metadata and interactive branching turns.
+    Otherwise, it reads standard LessonSentence rows.
     """
+    scenario = get_situational_scenario(lesson)
+    if scenario:
+        return {
+            "you": scenario["role_you"],
+            "partner": scenario["role_partner"],
+            "turns": scenario["turns"],
+            "scenario": scenario,
+        }
+
     rows = (
         LessonSentence.objects.filter(
             lesson=lesson,
@@ -62,4 +71,4 @@ def conversation_turns(lesson):
             }
         )
 
-    return {"you": you, "partner": partner, "turns": turns}
+    return {"you": you, "partner": partner, "turns": turns, "scenario": None}

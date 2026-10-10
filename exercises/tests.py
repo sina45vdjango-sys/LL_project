@@ -17,10 +17,12 @@ from django.urls import reverse
 from django.utils import timezone
 
 from exercises import generated
+from exercises.conversation import conversation_turns
 from exercises.eligibility import eligible_lesson_ids, eligible_lessons
 from exercises.grading import grade
 from exercises.hints import hint_for, hint_strength, masked_text
 from exercises.history import exercise_history, wrong_counts
+from exercises.situations import SITUATIONAL_SCENARIOS, get_situational_scenario
 from exercises.management.commands import (
     seed_a1_dictation_drills,
     seed_a1_exercises,
@@ -532,6 +534,136 @@ class PracticeDialogueViewTests(ExercisePageTestBase):
 
     def test_a_lesson_without_a_dialogue_gets_an_empty_state(self):
         self.assertContains(self.get(self.other_lesson_exercise), "exercise-empty")
+
+
+class SituationsdialogeTests(PracticeDialogueViewTests):
+    """Interactive Situational Roleplay Lab (Situationsdialoge) verification.
+
+    Tests scenario resolution, data structure across the 5 domains (L05, L09, L15, L18, L23),
+    branching choices with cultural etiquette feedback, and seamless template rendering
+    with clean fallback for standard lessons.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        # Create an authentic L05 lesson and exercise for situational roleplay testing
+        cls.lesson_five = Lesson.objects.create(
+            course=cls.course,
+            title="Lektion 5 — Im Büro und in der Kantine",
+            is_published=True,
+            order=5,
+            estimated_time=15,
+        )
+        cls.situation_exercise = cls._exercise(
+            cls.lesson_five,
+            "موقعیت واقعی: غذاخوری شرکت",
+            Exercise.ExerciseType.MULTIPLE_CHOICE,
+            1,
+        )
+        cls._choice_question(
+            cls.situation_exercise,
+            1,
+            "واژهٔ «Mahlzeit» در محیط کار به چه معناست؟",
+            [("نوش جان / سلام وقت ناهار", True), ("صبح بخیر", False)],
+        )
+
+    def test_all_five_core_domains_configured_with_rich_metadata(self):
+        """All 5 curriculum domains must have complete situational metadata."""
+        expected_orders = [5, 9, 15, 18, 23]
+        for order in expected_orders:
+            self.assertIn(order, SITUATIONAL_SCENARIOS)
+            scenario = SITUATIONAL_SCENARIOS[order]
+            self.assertTrue(scenario.get("scenario_id"))
+            self.assertTrue(scenario.get("title"))
+            self.assertTrue(scenario.get("setting"))
+            self.assertTrue(scenario.get("role_you"))
+            self.assertTrue(scenario.get("role_partner"))
+            self.assertTrue(scenario.get("objective"))
+            self.assertTrue(scenario.get("etiquette_tip"))
+            self.assertTrue(len(scenario.get("turns", [])) >= 4)
+
+            # Check that every learner turn has prompt_label and branches
+            learner_turns = [t for t in scenario["turns"] if t.get("mine")]
+            self.assertTrue(len(learner_turns) >= 2)
+            for turn in learner_turns:
+                self.assertTrue(turn.get("prompt_label"))
+                branches = turn.get("branches", [])
+                self.assertTrue(len(branches) >= 2)
+                has_rec = False
+                for branch in branches:
+                    self.assertTrue(branch.get("text"))
+                    self.assertTrue(branch.get("etiquette_note"))
+                    if branch.get("is_recommended"):
+                        has_rec = True
+                self.assertTrue(has_rec, f"Order {order} turn missing recommended branch")
+
+    def test_get_situational_scenario_resolution_and_fallback(self):
+        """Resolves scenario for curated lessons and safely falls back to None for others."""
+        # Curated lesson 5
+        scenario = get_situational_scenario(self.lesson_five)
+        self.assertIsNotNone(scenario)
+        self.assertEqual(scenario["scenario_id"], "arbeitsplatz_kantine")
+
+        # Standard lesson 1 without scenario
+        self.assertIsNone(get_situational_scenario(self.lesson))
+
+        # None or invalid input
+        self.assertIsNone(get_situational_scenario(None))
+
+    def test_conversation_turns_integration_with_scenario(self):
+        """conversation_turns returns full scenario payload when configured."""
+        result = conversation_turns(self.lesson_five)
+        self.assertIsNotNone(result.get("scenario"))
+        self.assertEqual(result["you"], "Neuer Azubi (کارآموز جدید)")
+        self.assertEqual(result["partner"], "Herr Krause (Ausbilder / سرپرست کارآموزی)")
+        self.assertEqual(len(result["turns"]), len(SITUATIONAL_SCENARIOS[5]["turns"]))
+
+    def test_dialogue_view_renders_situations_briefing_and_interactive_controls(self):
+        """Dialogue page renders authentic briefing card and branch selection chips."""
+        response = self.client.get(
+            reverse("exercises:exercise-dialogue", args=[self.situation_exercise.pk])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "exercises/dialogue.html")
+
+        # Briefing card elements
+        self.assertContains(response, "situations-briefing")
+        self.assertContains(response, "اولین روز کارآموزی و ناهار در غذاخوری شرکت")
+        self.assertContains(response, "Betriebskantine der Firma, Stuttgart")
+        self.assertContains(response, "Herr Krause (Ausbilder / سرپرست کارآموزی)")
+        self.assertContains(response, "Neuer Azubi (کارآموز جدید)")
+        self.assertContains(response, "فرهنگ کارآموزی (Ausbildung)")
+
+        # Interactive branch and toast hooks
+        self.assertContains(response, "data-branches")
+        self.assertContains(response, "data-branch-btn")
+        self.assertContains(response, "data-prompt-label")
+        self.assertContains(response, "data-etiquette-toast")
+        self.assertContains(response, "Vielen Dank, Herr Krause!")
+
+    def test_chat_view_renders_situations_scenario_elements(self):
+        """Chat view renders situations branch controls seamlessly."""
+        response = self.client.get(
+            reverse("exercises:exercise-chat", args=[self.situation_exercise.pk])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "exercises/chat.html")
+        self.assertContains(response, "data-branches")
+        self.assertContains(response, "data-branch-btn")
+
+    def test_standard_lesson_preserves_clean_fallback_without_situations_bloat(self):
+        """Standard lessons (without scenario) render regular dialogue cleanly without briefing."""
+        response = self.client.get(
+            reverse("exercises:exercise-dialogue", args=[self.multiple_choice.pk])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "situations-briefing")
+        self.assertNotContains(response, "data-branches")
+        self.assertNotContains(response, "data-branch-btn")
+        # Regular dialogue sentences are present
+        self.assertContains(response, "Guten Morgen!")
+        self.assertContains(response, "Wie heißt du?")
 
 
 class ExerciseRunnerTests(ExercisePageTestBase):

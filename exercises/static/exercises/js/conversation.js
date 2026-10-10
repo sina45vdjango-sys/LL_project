@@ -77,6 +77,9 @@
       return;
     }
 
+    const branches = turn.querySelector('[data-branches]');
+    if (branches) branches.hidden = true;
+
     typed.textContent = text;
     typed.hidden = false;
     compose.hidden = true;
@@ -84,6 +87,36 @@
 
     const first = model.querySelector('[data-check]');
     if (first) first.focus();
+  }
+
+  function pickBranch(turn, button) {
+    const typed = turn.querySelector('[data-typed]');
+    const compose = turn.querySelector('[data-compose]');
+    const branches = turn.querySelector('[data-branches]');
+    const model = turn.querySelector('[data-model]');
+    const toast = turn.querySelector('[data-etiquette-toast]');
+    const toastMsg = turn.querySelector('[data-etiquette-msg]');
+
+    const text = button.dataset.branchText || button.textContent.trim();
+    const note = button.dataset.branchNote;
+
+    if (typed) {
+      typed.textContent = text;
+      typed.hidden = false;
+    }
+    if (compose) compose.hidden = true;
+    if (branches) branches.hidden = true;
+
+    if (toast && toastMsg && note) {
+      toastMsg.textContent = note;
+      toast.hidden = false;
+    }
+
+    if (model) {
+      model.hidden = false;
+      const first = model.querySelector('[data-check]');
+      if (first) first.focus();
+    }
   }
 
   function check(turn, verdict) {
@@ -97,6 +130,12 @@
   }
 
   chat.addEventListener('click', (event) => {
+    const branchButton = event.target.closest('[data-branch-btn]');
+    if (branchButton) {
+      pickBranch(branchButton.closest('[data-turn]'), branchButton);
+      return;
+    }
+
     const sendButton = event.target.closest('[data-send]');
     if (sendButton) {
       send(sendButton.closest('[data-turn]'));
