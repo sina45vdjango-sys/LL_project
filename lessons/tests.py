@@ -3907,3 +3907,21 @@ class ContrastiveCalloutsCommandTests(TestCase):
         self.assertContains(response, "tag--falle")
         self.assertContains(response, "tag--ausbildung")
 
+
+class BentoDashboardViewTests(TestCase):
+    """Verifies that the Bento Dashboard loads cleanly on /bento/ and /dashboard/."""
+
+    def test_bento_dashboard_renders_successfully(self):
+        response = self.client.get("/bento/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "themeToggleBtn")
+        self.assertContains(response, "bento-tile")
+        self.assertContains(response, 'dir="ltr"')
+        self.assertContains(response, 'lang="de"')
+
+    def test_bento_dashboard_alias_route(self):
+        response = self.client.get("/dashboard/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "bento-container")
+
+

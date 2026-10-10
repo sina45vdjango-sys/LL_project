@@ -1,0 +1,485 @@
+/* Language Isolation for German Terms */
+.de {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+}
+
+/* Header bar & Theme toggle */
+.bento-header-bar {
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
+.bento-header-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 8px 16px;
+  background: var(--surface);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .04);
+  transition: background .2s ease, border-color .2s ease, transform .1s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--surface-alt);
+  border-color: var(--accent);
+}
+
+.theme-toggle-btn:active {
+  transform: translateY(1px);
+}
+
+/* 1. Bento Grid Container */
+.bento-container {
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+  padding: 12px 0 48px;
+}
+
+/* 2. Staggered Entrance Animations */
+@keyframes bentoFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bento-tile {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  animation: bentoFadeUp .45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.bento-tile:hover {
+  border-color: var(--line);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .08);
+}
+
+.tile-delay-1 { animation-delay: 0.05s; }
+.tile-delay-2 { animation-delay: 0.12s; }
+.tile-delay-3 { animation-delay: 0.18s; }
+.tile-delay-4 { animation-delay: 0.24s; }
+.tile-delay-5 { animation-delay: 0.30s; }
+
+/* 3. Grid Column Spans */
+.tile-hero {
+  grid-column: span 8;
+}
+
+.tile-readiness {
+  grid-column: span 4;
+}
+
+.tile-remedies {
+  grid-column: span 7;
+}
+
+.tile-momentum {
+  grid-column: span 5;
+}
+
+.tile-labs {
+  grid-column: span 12;
+}
+
+/* 4. Common Tile Elements */
+.tile-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.tile-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--fg);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.tile-desc {
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+/* 5. Tactile Push-Down Button */
+.btn-tactile-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  min-width: 44px;
+  padding: 10px 24px;
+  border-radius: 14px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  box-shadow: var(--press);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .08s ease, box-shadow .08s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-tactile-primary:active {
+  transform: translateY(2px);
+  box-shadow: var(--press-active);
+}
+
+/* 6. Tile 1: Hero & Lesson Progress */
+.lesson-progress-wrap {
+  margin-bottom: 20px;
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 10px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent-grad-bar);
+  border-radius: 999px;
+  transition: width .4s ease;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.time-estimate {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* 7. Tile 2: Readiness Gauge */
+.gauge-overall {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  background: var(--surface-alt);
+  border-radius: 16px;
+  border: 1px solid var(--line);
+}
+
+.gauge-badge {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--accent-text);
+  line-height: 1;
+}
+
+.gauge-meta-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.gauge-meta-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.skill-meter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skill-meter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.skill-meter-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.skill-meter-bar {
+  height: 6px;
+  background: var(--surface-alt);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.skill-meter-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width .5s ease;
+}
+
+/* 8. Tile 3: 1-Click Remedies */
+.remedy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.remedy-pill {
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  min-height: 44px;
+  position: relative;
+}
+
+.remedy-pill:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.06);
+}
+
+.remedy-pill-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.remedy-pill-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+}
+
+.remedy-pill-error {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.remedy-action-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-text);
+  background: var(--accent-soft);
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+/* 9. Tile 4: Momentum & Stats */
+.momentum-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.momentum-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+}
+
+.momentum-card-val {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent-text);
+  line-height: 1.2;
+}
+
+.momentum-card-lbl {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.daily-quota-box {
+  background: var(--surface-alt);
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid var(--line);
+}
+
+/* 10. Tile 5: Interactive Labs */
+.labs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.lab-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  min-height: 44px;
+}
+
+.lab-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.06);
+}
+
+.lab-card-icon {
+  font-size: 28px;
+}
+
+.lab-card-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--fg);
+}
+
+.lab-card-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.lab-card-badge {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-text);
+  background: var(--accent-soft);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* 11. Toast System */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--surface);
+  color: var(--fg);
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  padding: 12px 22px;
+  box-shadow: 0 12px 36px rgba(0,0,0,.18);
+  font-size: 13.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1), opacity .25s ease;
+}
+
+.toast-container.is-active {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* 12. Responsive Breakpoints */
+@media (max-width: 960px) {
+  .tile-hero { grid-column: span 12; }
+  .tile-readiness { grid-column: span 12; }
+  .tile-remedies { grid-column: span 12; }
+  .tile-momentum { grid-column: span 12; }
+  .tile-labs { grid-column: span 12; }
+  .remedy-grid { grid-template-columns: 1fr; }
+  .labs-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .bento-container {
+    gap: 16px;
+    padding-bottom: 32px;
+  }
+  .bento-tile {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+  .tile-title {
+    font-size: 18px;
+  }
+  .momentum-grid { grid-template-columns: 1fr; }
+  .labs-grid { grid-template-columns: 1fr; }
+}

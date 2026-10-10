@@ -258,6 +258,43 @@ class DashboardView(View):
         )
 
 
+class BentoDashboardView(View):
+    """Bento Grid Dashboard view for interactive learner overview."""
+
+    def get(self, request, *args, **kwargs):
+        course = (
+            Course.objects.filter(is_published=True)
+            .select_related("language_level")
+            .order_by("language_level__order", "pk")
+            .first()
+        )
+        lessons = []
+        active_lesson = None
+        sample_audio = None
+        if course is not None:
+            lessons = list(course.lessons.filter(is_published=True).order_by("order", "pk"))
+            if lessons:
+                if len(lessons) > 5:
+                    active_lesson = lessons[5]
+                else:
+                    active_lesson = lessons[0]
+
+        from vocabulary.models import Sentence
+        sample_sentence = Sentence.objects.filter(audio__isnull=False).exclude(audio="").first()
+        if sample_sentence is not None:
+            if sample_sentence.audio:
+                sample_audio = sample_sentence.audio
+
+        context = {
+            "course": course,
+            "active_lesson": active_lesson,
+            "sample_audio": sample_audio,
+            "readiness_score": 78,
+            "brand": {"name": "ولینگو", "tagline": "یادگیری آلمانی برای فارسی‌زبان‌ها"},
+        }
+        return render(request, "bento_dashboard.html", context)
+
+
 class ReadinessView(View):
     """«آمادگی من»: how this learner is doing, from their own stored rows.
 
