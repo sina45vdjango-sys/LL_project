@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from .forms import GoalForm, LoginForm, SignUpForm
 from .models import UserProfile
+from . import xp
+from .badges import badges_for
 
 
 def _next_url(request):
@@ -176,6 +178,8 @@ class ProfileView(views.View):
                 "profile": user_profile,
                 "theme_options": theme_options,
                 "has_goal": has_goal,
+                "badges": badges_for(request.user, user_profile),
+                "xp": xp.summary(user_profile),
             },
         )
 

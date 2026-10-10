@@ -3,89 +3,264 @@
 {% block title %}حساب من | {{ brand.name }}{% endblock %}
 {% block extra_css %}<link rel="stylesheet" href="{% static 'css/auth.css' %}">{% endblock %}
 {% block content %}
-<div class="auth">
-  <header class="auth__head auth__head--row">
-    <span class="account__avatar account__avatar--lg" aria-hidden="true">{{ user.get_username|slice:":1" }}</span>
-    <div>
-      <p class="auth__eyebrow">حساب من</p>
-      <h1 class="auth__title"><bdi>{{ user.get_username }}</bdi></h1>
+<div class="profile-dashboard">
+  <!-- Profile Hero Header Tile -->
+  <header class="profile-hero panel">
+    <div class="profile-hero__main">
+      <div class="profile-hero__avatar" aria-hidden="true">{{ user.get_username|slice:":1" }}</div>
+      <div class="profile-hero__info">
+        <span class="profile-hero__badge">زبان‌آموز ولینگو</span>
+        <h1 class="profile-hero__title"><bdi>{{ user.get_username }}</bdi></h1>
+        <p class="profile-hero__joined">عضویت از {{ user.date_joined|date:"Y/m/d" }}</p>
+      </div>
+    </div>
+    <div class="profile-hero__stats">
+      <div class="hero-stat-card">
+        <span class="hero-stat-card__icon" aria-hidden="true">⚡</span>
+        <div class="hero-stat-card__content">
+          <span class="hero-stat-card__val">{{ profile.xp }}</span>
+          <span class="hero-stat-card__lbl">امتیاز تجربه (XP)</span>
+        </div>
+      </div>
+      <div class="hero-stat-card">
+        <span class="hero-stat-card__icon" aria-hidden="true">🔥</span>
+        <div class="hero-stat-card__content">
+          <span class="hero-stat-card__val">{{ profile.streak_days }}</span>
+          <span class="hero-stat-card__lbl">روز پشت‌سرهم</span>
+        </div>
+      </div>
+      <div class="hero-stat-card">
+        <span class="hero-stat-card__icon" aria-hidden="true">🏆</span>
+        <div class="hero-stat-card__content">
+          <span class="hero-stat-card__val">سطح {{ profile.level }}</span>
+          <span class="hero-stat-card__lbl">سطح یادگیری</span>
+        </div>
+      </div>
     </div>
   </header>
 
-  {% comment %}A new learner lands here the moment the account is made, so this page has to
-     tell them the one thing that turns the product on. Without a goal there is no countdown
-     and «امروز» has nothing to aim at, so the goal is the only call to action that matters
-     and it gets its own block rather than one button among five. An existing goal replaces
-     it with the summary below — «ویرایش هدف» in the actions is then the calm way back in.{% endcomment %}
   {% if not has_goal %}
     <section class="panel goal-cta" aria-labelledby="goal-cta-title">
-      <p class="auth__eyebrow">اولین قدم</p>
-      <h2 class="goal-cta__title" id="goal-cta-title">هدف یادگیری‌ات را بگو</h2>
-      <p class="auth__intro">بدون هدف، «امروز» نمی‌داند تو را به کدام سمت ببرد و شمارش روزهای مانده معنا ندارد. با یک بار گفتن سطح فعلی، سطح هدف و تاریخ امتحان، صفحهٔ «امروز» نشان می‌دهد امروز دقیقاً چه کاری تو را جلو می‌برد.</p>
-      <a class="btn btn--primary" href="{% url 'accounts:goal' %}">تعیین هدف</a>
+      <div class="goal-cta__icon" aria-hidden="true">🎯</div>
+      <div class="goal-cta__content">
+        <p class="auth__eyebrow">اولین قدم</p>
+        <h2 class="goal-cta__title" id="goal-cta-title">هدف یادگیری‌ات را بگو</h2>
+        <p class="auth__intro">بدون هدف، «امروز» نمی‌داند تو را به کدام سمت ببرد و شمارش روزهای مانده معنا ندارد. با یک بار گفتن سطح فعلی، سطح هدف و تاریخ امتحان، صفحهٔ «امروز» نشان می‌دهد امروز دقیقاً چه کاری تو را جلو می‌برد.</p>
+        <a class="btn btn-tactile-primary goal-cta__btn" href="{% url 'accounts:goal' %}">تعیین هدف</a>
+      </div>
     </section>
   {% endif %}
 
-  <section class="panel" aria-label="اطلاعات حساب">
-    <dl class="detail-list">
-      <div><dt>نام کاربری</dt><dd><bdi>{{ user.get_username }}</bdi></dd></div>
-      <div>
-        <dt>ایمیل</dt>
-        <dd>{% if user.email %}<bdi dir="ltr">{{ user.email }}</bdi>{% else %}<span class="muted">ثبت نشده</span>{% endif %}</dd>
-      </div>
-      <div><dt>تاریخ عضویت</dt><dd>{{ user.date_joined|date:"Y/m/d" }}</dd></div>
-      <div>
-        <dt>سطح فعلی</dt>
-        <dd>{% if profile.current_level %}<bdi>{{ profile.current_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
-      </div>
-      <div>
-        <dt>سطح هدف</dt>
-        <dd>{% if profile.target_level %}<bdi>{{ profile.target_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
-      </div>
-      <div>
-        <dt>دلیل یادگیری</dt>
-        <dd>{% if profile.reason_label %}{{ profile.reason_label }}{% else %}<span class="muted">گفته نشده</span>{% endif %}</dd>
-      </div>
-      <div>
-        <dt>تاریخ هدف</dt>
-        <dd>{% if profile.target_date %}{{ profile.target_date|jalali }}{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
-      </div>
-      <div>
-        <dt>زبان مادری</dt>
-        <dd>{% if profile.native_language == "fa" %}فارسی{% else %}<bdi>{{ profile.native_language }}</bdi>{% endif %}</dd>
-      </div>
-    </dl>
-  </section>
-
-  <section class="panel" aria-labelledby="theme-heading">
-    <h2 class="auth__eyebrow" id="theme-heading">پوستهٔ نمایش</h2>
-    <p class="field__hint">روی حساب تو ذخیره می‌شود، پس در هر دستگاهی که وارد شوی همان می‌ماند. «سیستم» یعنی از تنظیم روشن/تاریک دستگاه پیروی کن.</p>
-    <form class="theme-form" method="post" action="{% url 'accounts:theme' %}">
-      {% csrf_token %}
-      <fieldset class="theme-form__fieldset">
-        <legend class="field__label">انتخاب پوسته</legend>
-        <div class="theme-form__options">
-          {% for option in theme_options %}
-            <label class="theme-option">
-              <input type="radio" name="theme" value="{{ option.value }}"{% if profile.theme == option.value %} checked{% endif %}>
-              <span class="theme-option__label">{{ option.label }}</span>
-            </label>
-          {% endfor %}
+  <!-- Bento Grid Container -->
+  <div class="profile-bento-grid">
+    <!-- Tile 1: XP Progress Card -->
+    <section class="panel bento-card bento-card--xp" aria-labelledby="xp-card-title">
+      <div class="bento-card__head">
+        <span class="bento-card__icon" aria-hidden="true">⚡</span>
+        <div class="bento-card__titles">
+          <span class="bento-card__eyebrow">رشد و تجربه</span>
+          <h2 class="bento-card__title" id="xp-card-title">پیشرفت تا سطح بعدی</h2>
         </div>
-      </fieldset>
-      <button class="btn btn--primary" type="submit">ذخیرهٔ پوسته</button>
-    </form>
-  </section>
+        <span class="bento-card__tag">سطح {{ profile.level }}</span>
+      </div>
+      <div class="bento-xp-body">
+        <div class="bento-xp-row">
+          <span class="bento-xp-caption">پیشرفت این سطح</span>
+          <span class="bento-xp-num"><b>{{ xp.into_level|default:0 }}</b> از {{ xp.per_level|default:100 }} XP</span>
+        </div>
+        <div class="bento-progress-track" role="progressbar" aria-valuenow="{{ profile.xp_percent }}" aria-valuemin="0" aria-valuemax="100">
+          <div class="bento-progress-fill" style="width: {{ profile.xp_percent }}%;"></div>
+        </div>
+        <div class="bento-xp-footer">
+          <span class="bento-card__hint">هر پاسخ درست ۱۰ XP و هر آزمون کامل ۵۰ XP دارد.</span>
+          <span class="bento-xp-pct">{{ profile.xp_percent }}٪</span>
+        </div>
+      </div>
+    </section>
 
-  <div class="auth__actions">
-    <a class="btn btn--primary" href="{% url 'readiness' %}">آمادگی من</a>
-    {% if has_goal %}
-      <a class="btn" href="{% url 'accounts:goal' %}">ویرایش هدف</a>
-    {% endif %}
-    <a class="btn" href="{{ home_url }}">ادامهٔ یادگیری</a>
+    <!-- Tile 2: Streak Flame Counter Card -->
+    <section class="panel bento-card bento-card--streak" aria-labelledby="streak-card-title">
+      <div class="bento-card__head">
+        <span class="bento-card__icon bento-card__icon--flame" aria-hidden="true">🔥</span>
+        <div class="bento-card__titles">
+          <span class="bento-card__eyebrow">استمرار مطالعه</span>
+          <h2 class="bento-card__title" id="streak-card-title">زنجیرهٔ تمرین</h2>
+        </div>
+        {% if profile.streak_days %}
+          <span class="bento-card__tag bento-card__tag--flame">{{ profile.streak_days }} روز</span>
+        {% endif %}
+      </div>
+      <div class="bento-streak-body">
+        <div class="streak-gauge">
+          <div class="streak-gauge__flame" aria-hidden="true">🔥</div>
+          <div class="streak-gauge__count">
+            <span class="streak-gauge__num">{{ profile.streak_days }}</span>
+            <span class="streak-gauge__unit">روز تمرین مداوم</span>
+          </div>
+        </div>
+        <p class="bento-card__hint">
+          {% if profile.streak_days > 0 %}
+            عالیه! با حل تمرین امروز، شعلهٔ زنجیره‌ات پایدار می‌ماند.
+          {% else %}
+            امروز اولین تمرینت را انجام بده تا شعلهٔ زنجیره روشن شود!
+          {% endif %}
+        </p>
+      </div>
+    </section>
+
+    <!-- Tile 3: Study Goal Gauges -->
+    <section class="panel bento-card bento-card--goal" aria-labelledby="goal-card-title">
+      <div class="bento-card__head">
+        <span class="bento-card__icon" aria-hidden="true">🎯</span>
+        <div class="bento-card__titles">
+          <span class="bento-card__eyebrow">چشم‌انداز آموزشی</span>
+          <h2 class="bento-card__title" id="goal-card-title">هدف یادگیری</h2>
+        </div>
+        {% if has_goal %}
+          <a class="bento-card__link" href="{% url 'accounts:goal' %}">ویرایش هدف</a>
+        {% endif %}
+      </div>
+      <div class="bento-goal-body">
+        <div class="goal-flow">
+          <div class="goal-flow-node">
+            <span class="goal-flow-node__lbl">سطح فعلی</span>
+            <span class="goal-flow-node__val">{% if profile.current_level %}<bdi>{{ profile.current_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</span>
+          </div>
+          <div class="goal-flow-arrow" aria-hidden="true">←</div>
+          <div class="goal-flow-node goal-flow-node--target">
+            <span class="goal-flow-node__lbl">سطح هدف</span>
+            <span class="goal-flow-node__val">{% if profile.target_level %}<bdi>{{ profile.target_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</span>
+          </div>
+        </div>
+        <div class="goal-details-grid">
+          <div class="goal-detail-item">
+            <span class="goal-detail-item__k">انگیزه:</span>
+            <span class="goal-detail-item__v">{% if profile.reason_label %}{{ profile.reason_label }}{% else %}<span class="muted">گفته نشده</span>{% endif %}</span>
+          </div>
+          <div class="goal-detail-item">
+            <span class="goal-detail-item__k">موعد هدف:</span>
+            <span class="goal-detail-item__v">{% if profile.target_date %}{{ profile.target_date|jalali }}{% else %}<span class="muted">تعیین نشده</span>{% endif %}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tile 4: Unlocked Achievement Badges -->
+    <section class="panel bento-card bento-card--badges" aria-labelledby="badges-card-title">
+      <div class="bento-card__head">
+        <span class="bento-card__icon" aria-hidden="true">🎖️</span>
+        <div class="bento-card__titles">
+          <span class="bento-card__eyebrow">افتخارات من</span>
+          <h2 class="bento-card__title" id="badges-card-title">نشان‌های کسب‌شده</h2>
+        </div>
+        <span class="bento-card__tag">{{ badges|length }} نشان</span>
+      </div>
+      <div class="bento-badges-body">
+        {% if badges %}
+          <div class="profile-badges-grid">
+            {% for badge in badges %}
+              <div class="tactile-badge" title="{{ badge.hint }}">
+                <span class="tactile-badge__star" aria-hidden="true">★</span>
+                <div class="tactile-badge__info">
+                  <span class="tactile-badge__label">{{ badge.label }}</span>
+                  <span class="tactile-badge__hint">{{ badge.hint }}</span>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="badges-placeholder">
+            <span class="badges-placeholder__icon" aria-hidden="true">✨</span>
+            <p class="badges-placeholder__text">هنوز نشانی ثبت نشده است. با حل پرسش‌ها، پیشروی در درس‌ها و شرکت در آزمون آزمایشی، نشان‌ها آنی باز می‌شوند!</p>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- Tile 5: Account Details & Settings -->
+    <section class="panel bento-card bento-card--settings" aria-label="اطلاعات حساب">
+      <div class="bento-card__head">
+        <span class="bento-card__icon" aria-hidden="true">👤</span>
+        <div class="bento-card__titles">
+          <span class="bento-card__eyebrow">اطلاعات کاربری</span>
+          <h2 class="bento-card__title">مشخصات حساب</h2>
+        </div>
+      </div>
+      <dl class="detail-list">
+        <div><dt>نام کاربری</dt><dd><bdi>{{ user.get_username }}</bdi></dd></div>
+        <div>
+          <dt>ایمیل</dt>
+          <dd>{% if user.email %}<bdi dir="ltr">{{ user.email }}</bdi>{% else %}<span class="muted">ثبت نشده</span>{% endif %}</dd>
+        </div>
+        <div><dt>تاریخ عضویت</dt><dd>{{ user.date_joined|date:"Y/m/d" }}</dd></div>
+        <div>
+          <dt>سطح فعلی</dt>
+          <dd>{% if profile.current_level %}<bdi>{{ profile.current_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
+        </div>
+        <div>
+          <dt>سطح هدف</dt>
+          <dd>{% if profile.target_level %}<bdi>{{ profile.target_level }}</bdi>{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
+        </div>
+        <div>
+          <dt>دلیل یادگیری</dt>
+          <dd>{% if profile.reason_label %}{{ profile.reason_label }}{% else %}<span class="muted">گفته نشده</span>{% endif %}</dd>
+        </div>
+        <div>
+          <dt>تاریخ هدف</dt>
+          <dd>{% if profile.target_date %}{{ profile.target_date|jalali }}{% else %}<span class="muted">تعیین نشده</span>{% endif %}</dd>
+        </div>
+        <div>
+          <dt>زبان مادری</dt>
+          <dd>{% if profile.native_language == "fa" %}فارسی{% else %}<bdi>{{ profile.native_language }}</bdi>{% endif %}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- Tile 6: Dual-Theme Selector Toggle Cards -->
+    <section class="panel bento-card bento-card--theme" aria-labelledby="theme-heading">
+      <div class="bento-card__head">
+        <span class="bento-card__icon" aria-hidden="true">🌓</span>
+        <div class="bento-card__titles">
+          <span class="bento-card__eyebrow">تنظیمات تم</span>
+          <h2 class="bento-card__title" id="theme-heading">پوستهٔ نمایش</h2>
+        </div>
+      </div>
+      <p class="field__hint">روی حساب تو ذخیره می‌شود، پس در هر دستگاهی که وارد شوی همان می‌ماند. «سیستم» یعنی از تنظیم روشن/تاریک دستگاه پیروی کن.</p>
+      <form class="theme-form" method="post" action="{% url 'accounts:theme' %}">
+        {% csrf_token %}
+        <fieldset class="theme-form__fieldset">
+          <legend class="sr-only">انتخاب پوسته</legend>
+          <div class="theme-form__options">
+            {% for option in theme_options %}
+              <label class="theme-option">
+                <input type="radio" name="theme" value="{{ option.value }}"{% if profile.theme == option.value %} checked{% endif %}>
+                <span class="theme-option__label">
+                  <span class="theme-option__icon" aria-hidden="true">
+                    {% if option.value == 'system' %}💻{% elif option.value == 'light' %}☀️{% else %}🌙{% endif %}
+                  </span>
+                  <span class="theme-option__txt">{{ option.label }}</span>
+                </span>
+              </label>
+            {% endfor %}
+          </div>
+        </fieldset>
+        <button class="btn btn-tactile-primary theme-form__submit" type="submit">ذخیرهٔ پوسته</button>
+      </form>
+    </section>
+  </div>
+
+  <!-- Profile Action Bar -->
+  <div class="panel profile-actions-bar">
+    <div class="profile-actions-bar__links">
+      <a class="btn btn-tactile-primary" href="{% url 'readiness' %}">آمادگی من</a>
+      {% if has_goal %}
+        <a class="btn btn--tactile" href="{% url 'accounts:goal' %}">ویرایش هدف</a>
+      {% endif %}
+      <a class="btn btn--tactile" href="{{ home_url }}">ادامهٔ یادگیری</a>
+    </div>
     <form method="post" action="{% url 'accounts:logout' %}">
       {% csrf_token %}
-      <button class="btn" type="submit">خروج از حساب</button>
+      <button class="btn btn--tactile-danger" type="submit">خروج از حساب</button>
     </form>
   </div>
 </div>

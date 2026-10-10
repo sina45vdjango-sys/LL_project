@@ -1,15 +1,25 @@
-{# Renders a form's fields, help text and errors in the design-system style. #}
+{% comment %}Renders form fields, hints and errors in the Tactile 2026 design system.{% endcomment %}
 {% if form.non_field_errors %}
-  <ul class="form-alert" role="alert">
-    {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
-  </ul>
+  <div class="form-alert" role="alert">
+    <span class="form-alert__icon" aria-hidden="true">⚠️</span>
+    <ul class="form-alert__list">
+      {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+    </ul>
+  </div>
 {% endif %}
 
 {% for field in form %}
   <div class="field{% if field.errors %} field--invalid{% endif %}">
     <label class="field__label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-    {{ field }}
+    <div class="field__control">
+      {{ field }}
+    </div>
     {% if field.help_text %}<p class="field__hint">{{ field.help_text|safe }}</p>{% endif %}
-    {% for error in field.errors %}<p class="field__error" role="alert">{{ error }}</p>{% endfor %}
+    {% for error in field.errors %}
+      <p class="field__error" role="alert">
+        <span class="field__error-icon" aria-hidden="true">✕</span>
+        <span>{{ error }}</span>
+      </p>
+    {% endfor %}
   </div>
 {% endfor %}

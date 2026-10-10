@@ -6,13 +6,13 @@
 {% comment %}The learner says what they are working towards. Every field is optional and
    submitting everything empty clears the goal, so this page is also how a goal is
    removed — there is no separate delete action to misunderstand.{% endcomment %}
-<div class="auth">
-  {% comment %}Two framings of one form. During the first run this is step one of two and has
-     to say what the goal is *for*, because a new learner has never seen the pages it feeds.
-     Every later visit is the plain «هدف من» they came here for.{% endcomment %}
+<div class="auth auth--goal">
   {% if onboarding %}
     <header class="auth__head">
-      <p class="auth__eyebrow">قدم ۱ از ۲ · هدف تو</p>
+      <div class="auth__badge">
+        <span class="auth__badge-icon" aria-hidden="true">🎯</span>
+        <span class="auth__eyebrow">قدم ۱ از ۲ · هدف تو</span>
+      </div>
       <h1 class="auth__title">هدفت را بگو تا برنامه‌ات ساخته شود.</h1>
       <p class="auth__intro">
         این تنها چیزی است که در شروع از تو می‌خواهیم. با همین چند خط، «امروز» می‌داند کدام درس را جلوی تو بگذارد
@@ -22,14 +22,20 @@
     </header>
   {% else %}
     <header class="auth__head">
-      <p class="auth__eyebrow">هدف من</p>
+      <div class="auth__badge">
+        <span class="auth__badge-icon" aria-hidden="true">🎯</span>
+        <span class="auth__eyebrow">هدف من</span>
+      </div>
       <h1 class="auth__title">چه چیزی را دنبال می‌کنی؟</h1>
       <p class="auth__intro">این هدف یک یادداشت تشریفاتی نیست: صفحهٔ «آمادگی من» از آن می‌گوید کجای مسیری و برای رسیدن به هدفت چقدر وقت داری. هر فیلدی را ندانی خالی بگذار.</p>
     </header>
   {% endif %}
 
   {% if profile.current_level or profile.target_level or profile.reason or profile.target_date %}
-    <section class="panel" aria-label="هدف فعلی">
+    <section class="panel current-goal-card" aria-label="هدف فعلی">
+      <div class="current-goal-card__head">
+        <span class="current-goal-card__badge">هدف ثبت‌شدهٔ فعلی</span>
+      </div>
       <dl class="detail-list">
         <div>
           <dt>سطح فعلی</dt>
@@ -51,7 +57,7 @@
     </section>
   {% endif %}
 
-  <form class="panel auth__form" method="post" novalidate>
+  <form class="panel auth__form auth-card" method="post" novalidate>
     {% csrf_token %}
     {% comment %}The flag travels with the submission so `post` knows to continue the first-run
        flow. Without it, saving the goal on the first run would land on a page with no next
@@ -59,7 +65,7 @@
     {% if onboarding %}<input type="hidden" name="onboarding" value="1">{% endif %}
     {% include "accounts/_form_fields.html" %}
     <p class="field__hint">سطح‌ها همان سطح‌هایی هستند که محتوایشان ساخته شده است. اگر همهٔ فیلدها را خالی بگذاری و ذخیره کنی، هدفت پاک می‌شود.</p>
-    <button class="btn btn--primary auth__submit" type="submit">
+    <button class="btn btn-tactile-primary auth__submit" type="submit">
       {% if onboarding %}ذخیره و دیدن برنامه{% else %}ذخیرهٔ هدف{% endif %}
     </button>
   </form>

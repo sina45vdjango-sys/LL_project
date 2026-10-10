@@ -62,3 +62,543 @@
      way instead. */
   .theme-option__label { padding: 8px 6px; }
 }
+
+/* ------------------------------------------------------------ Tactile 2026 Profile & Auth --- */
+.auth-card {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .04);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.auth__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 4px 10px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+}
+
+.auth__badge-icon {
+  font-size: 14px;
+}
+
+.current-goal-card {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.current-goal-card__head {
+  margin-bottom: 8px;
+}
+
+.current-goal-card__badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Profile Bento Dashboard */
+.profile-dashboard {
+  width: 100%;
+  max-width: 1040px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-block: 8px 36px;
+}
+
+.profile-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, .04);
+}
+
+@media (min-width: 768px) {
+  .profile-hero {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.profile-hero__main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-hero__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-text));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
+  flex-shrink: 0;
+}
+
+.profile-hero__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-hero__badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+
+.profile-hero__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.profile-hero__joined {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.profile-hero__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.hero-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.hero-stat-card__icon {
+  font-size: 20px;
+}
+
+.hero-stat-card__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-stat-card__val {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.hero-stat-card__lbl {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Bento Grid */
+.profile-bento-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .profile-bento-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .bento-card--badges {
+    grid-column: span 2;
+  }
+}
+
+.bento-card {
+  padding: 20px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bento-card__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bento-card__icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.bento-card__titles {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.bento-card__eyebrow {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.bento-card__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.bento-card__tag {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.bento-card__link {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-text);
+  text-decoration: underline;
+}
+
+.bento-card__hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* XP Card */
+.bento-xp-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bento-xp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.bento-xp-caption {
+  color: var(--muted);
+}
+
+.bento-xp-num {
+  font-weight: 700;
+}
+
+.bento-progress-track {
+  width: 100%;
+  height: 10px;
+  background: var(--surface-alt);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.bento-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-text));
+  border-radius: 8px;
+  transition: width .3s ease;
+}
+
+.bento-xp-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bento-xp-pct {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+
+/* Streak Card */
+.bento-streak-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.streak-gauge {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: var(--surface-alt);
+  border-radius: 14px;
+}
+
+.streak-gauge__flame {
+  font-size: 32px;
+}
+
+.streak-gauge__count {
+  display: flex;
+  flex-direction: column;
+}
+
+.streak-gauge__num {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.streak-gauge__unit {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Goal Card */
+.bento-goal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.goal-flow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--surface-alt);
+  border-radius: 14px;
+}
+
+.goal-flow-node {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.goal-flow-node__lbl {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.goal-flow-node__val {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.goal-flow-arrow {
+  font-size: 18px;
+  color: var(--accent);
+}
+
+.goal-details-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.goal-detail-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.goal-detail-item__k {
+  color: var(--muted);
+}
+
+.goal-detail-item__v {
+  font-weight: 600;
+}
+
+/* Badges Card */
+.profile-badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.tactile-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  transition: transform .15s ease, border-color .15s ease;
+}
+
+.tactile-badge:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.tactile-badge__star {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.tactile-badge__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.tactile-badge__label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tactile-badge__hint {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.badges-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--surface-alt);
+  border-radius: 14px;
+}
+
+.badges-placeholder__icon {
+  font-size: 24px;
+}
+
+.badges-placeholder__text {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Profile Actions Bar */
+.profile-actions-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+@media (min-width: 640px) {
+  .profile-actions-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.profile-actions-bar__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-tactile-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 20px;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+  transition: transform .1s ease, box-shadow .15s ease;
+  text-decoration: none;
+}
+
+.btn-tactile-primary:active {
+  transform: translateY(2px);
+}
+
+.btn--tactile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  background: var(--surface-alt);
+  color: var(--fg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .1s ease, border-color .15s ease;
+}
+
+.btn--tactile:hover {
+  border-color: var(--accent);
+}
+
+.btn--tactile:active {
+  transform: translateY(2px);
+}
+
+.btn--tactile-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .1s ease;
+}
+
+.btn--tactile-danger:active {
+  transform: translateY(2px);
+}
+

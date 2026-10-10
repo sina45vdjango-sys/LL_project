@@ -4,26 +4,53 @@
    ways on one page.
 
    The row arrives already stamped by vocabulary/views.py: `row.practice` (the real exercises
-   that test this word) and `row.is_due` (whether its review time has passed), because a
-   template cannot index a dict with a variable key.
+   that test this word) and `row.is_due` (whether its review time has passed).
 
    `audio_prefix` is passed by each caller because the audio control's element id is
-   `{{ prefix }}-{{ pk }}`: the same word can sit in the sitting *and* in the mistakes list,
-   and two players with one id is broken HTML.{% endcomment %}
-<li class="vrow">
+   `{{ prefix }}-{{ pk }}`.{% endcomment %}
+<li class="vrow vrow--review vrow--tactile" data-srs-state="{{ row.state|lower }}">
   <div class="vrow__main">
-    <a class="vrow__term" href="{% url 'vocabulary:word-detail' row.word.pk %}" lang="de" dir="ltr">{% if row.word.article %}<span class="vrow__article">{{ row.word.article }}</span> {% endif %}{{ row.word.word }}</a>
+    <a class="vrow__term" href="{% url 'vocabulary:word-detail' row.word.pk %}" lang="de" dir="ltr">{% if row.word.article %}<span class="vrow__article vrow__article--{{ row.word.gender|lower }}">{{ row.word.article }}</span> {% endif %}<span class="de">{{ row.word.word }}</span></a>
     {% if row.word.audio %}
       {% include "includes/audio_control.html" with audio=row.word.audio prefix=audio_prefix pk=row.pk label=row.word.word inline=True %}
     {% endif %}
   </div>
-  <p class="vrow__meaning">{{ row.word.meaning_fa }}</p>
+
+  <div class="vrow__answer">
+    <p class="vrow__meaning">{{ row.word.meaning_fa }}</p>
+    {% if row.word.plural %}
+      <p class="vrow__plural" lang="de" dir="ltr"><span class="chip chip--value">جمع: <span class="de">{{ row.word.plural }}</span></span></p>
+    {% endif %}
+  </div>
+
+  <div class="vrow__verdicts" role="group" aria-label="ارزیابی پاسخ مرور">
+    <button type="button" class="vverdict vverdict--again" data-verdict="again" title="دوباره مرور شود">
+      <span class="vverdict__icon">🔁</span>
+      <span class="vverdict__label">دوباره مرور شود</span>
+    </button>
+    <button type="button" class="vverdict vverdict--learned" data-verdict="good" title="یاد گرفتم">
+      <span class="vverdict__icon">✓</span>
+      <span class="vverdict__label">یاد گرفتم</span>
+    </button>
+    <button type="button" class="vverdict vverdict--easy" data-verdict="easy" title="ساده بود">
+      <span class="vverdict__icon">⚡</span>
+      <span class="vverdict__label">ساده بود</span>
+    </button>
+  </div>
+
   <p class="vrow__meta">
     <span class="vstat vstat--wrong">غلط: {{ row.wrong_count }}</span>
     <span class="vstat vstat--right">درست: {{ row.correct_count }}</span>
+    {% if row.word.gender_label %}<span class="chip chip--gender chip--gender-{{ row.word.gender|lower }}">{{ row.word.gender_label }}</span>{% endif %}
+    {% if row.state == 'NEW' %}<span class="chip chip--srs chip--srs-new">تازه</span>
+    {% elif row.state == 'LEARNING' %}<span class="chip chip--srs chip--srs-learning">در حال یادگیری</span>
+    {% elif row.state == 'REVIEW' %}<span class="chip chip--srs chip--srs-review">تثبیت‌شده</span>
+    {% elif row.state == 'RELEARNING' %}<span class="chip chip--srs chip--srs-relearning">یادگیری مجدد</span>{% endif %}
+    {% if row.interval_days %}<span class="chip chip--interval" title="فاصلهٔ مرور انطباقی">{{ row.interval_days }} روز</span>{% endif %}
     {% if row.is_due %}<span class="chip chip--accent">وقت مرور</span>{% endif %}
     <span class="chip chip--accent" lang="en" dir="ltr">{{ row.word.level }}</span>
   </p>
+
   {% if row.practice %}
     <p class="vrow__practice">
       <span class="vrow__practice-label">تمرین</span>
