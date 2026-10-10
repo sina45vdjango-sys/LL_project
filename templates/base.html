@@ -16,8 +16,21 @@
   <script>
     (() => {
       const mode = document.documentElement.dataset.themeMode;
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const isDark = mode === 'dark' || (mode !== 'light' && prefersDark);
+      let isDark = false;
+      try {
+        const stored = localStorage.getItem('bm_theme_preference');
+        if (stored === 'dark') {
+          isDark = true;
+        } else if (stored === 'light') {
+          isDark = false;
+        } else {
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          isDark = mode === 'dark' || (mode !== 'light' && prefersDark);
+        }
+      } catch (e) {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        isDark = mode === 'dark' || (mode !== 'light' && prefersDark);
+      }
       document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
     })();
   </script>
@@ -94,6 +107,61 @@
       document.head.appendChild(meta);
     })();
   </script>
+  <!-- Global Toast Notification Container -->
+  <div class="toast-container" id="toastBox" role="alert" aria-live="polite">
+    <span id="toastIcon">⚡</span>
+    <span id="toastMessage">پیام سیستم</span>
+  </div>
+
+  <script>
+    (() => {
+      const toastBox = document.getElementById('toastBox');
+      const toastIcon = document.getElementById('toastIcon');
+      const toastMessage = document.getElementById('toastMessage');
+      let toastTimer = null;
+
+      window.showToast = function(msg, icon) {
+        if (!toastBox) return;
+        if (toastTimer) clearTimeout(toastTimer);
+        if (toastIcon) toastIcon.textContent = icon || '⚡';
+        if (toastMessage) toastMessage.textContent = msg;
+        toastBox.classList.add('is-active');
+        toastTimer = setTimeout(() => {
+          toastBox.classList.remove('is-active');
+        }, 2600);
+      };
+
+      const root = document.documentElement;
+      const toggleBtns = document.querySelectorAll('#globalThemeToggleBtn, #sidebarThemeToggleBtn');
+
+      function updateThemeButtons(theme) {
+        toggleBtns.forEach(btn => {
+          const icon = btn.querySelector('.theme-toggle-icon');
+          const label = btn.querySelector('.theme-toggle-label');
+          if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+          if (label) label.textContent = theme === 'dark' ? 'پوسته روشن' : 'پوسته تاریک';
+          if (!icon && !label) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+        });
+      }
+
+      const activeTheme = root.getAttribute('data-theme') || 'light';
+      updateThemeButtons(activeTheme);
+
+      toggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const current = root.getAttribute('data-theme') || 'light';
+          const next = current === 'dark' ? 'light' : 'dark';
+          root.setAttribute('data-theme', next);
+          try {
+            localStorage.setItem('bm_theme_preference', next);
+          } catch (e) {}
+          updateThemeButtons(next);
+          window.showToast(next === 'dark' ? 'پوسته تاریک فعال شد' : 'پوسته روشن فعال شد', '🎨');
+        });
+      });
+    })();
+  </script>
+
   {% block extra_js %}{% endblock %}
 </body>
 </html>

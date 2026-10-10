@@ -164,7 +164,7 @@
 }
 
 .rdy-comp-card__sub {
-  font: 500 11.5px/1.4 system-ui, sans-serif;
+  font: 500 12px/1.4 system-ui, sans-serif;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
 }

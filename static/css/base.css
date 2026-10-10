@@ -116,6 +116,14 @@
    and a whole line is isolated as well so its runs keep the order they are written in.
    <bdi> already isolates by default; this states it explicitly so nothing can reset it. */
 .run, .text-line { unicode-bidi: isolate; }
+/* Language Isolation for German Terms */
+.de {
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  display: inline-block;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-weight: 600;
+}
 /* The Persian UI stack, best first. A modern Persian face (Vazirmatn / IRANSansX / Sahel)
    is used when the reader has one installed, and the previous Tahoma/Segoe UI pair stays as
    the fallback — so nothing regresses on a machine that has none of them, and a machine
@@ -151,3 +159,32 @@ svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width:
 .icon-button:hover { background: var(--surface-alt); }
 .messages .icon-button { font-size: 24px; border: 0; }
 @media (prefers-reduced-motion: no-preference) { button, a { transition: color .15s, background-color .15s; } }
+
+/* Global Toast Notification Container */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--surface);
+  color: var(--fg);
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  padding: 12px 22px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .18);
+  font-size: 13.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: transform .25s cubic-bezier(0.16, 1, 0.3, 1), opacity .25s ease;
+}
+
+.toast-container.is-active {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+

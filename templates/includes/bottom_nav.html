@@ -1,4 +1,21 @@
-{# Mobile-only bottom navigation. Hidden at the desktop breakpoint. #}
+{# Mobile-only bottom navigation. Tactile floating dock with min 44x44px touch targets. #}
 <nav class="bottom-nav" aria-label="ناوبری اصلی">
-  {% include "includes/nav_links.html" %}
+  <div class="bottom-nav__dock">
+    <a class="bottom-nav__item{% if request.resolver_match.view_name == 'bento-dashboard' or request.resolver_match.view_name == 'bento-dashboard-alias' or request.resolver_match.view_name == 'home' %} is-active{% endif %}" href="{% url 'bento-dashboard' %}">
+      <span class="bottom-nav__icon" aria-hidden="true">🏠</span>
+      <span class="bottom-nav__label">داشبورد</span>
+    </a>
+    <a class="bottom-nav__item{% if request.resolver_match.app_name == 'lessons' and request.resolver_match.view_name != 'bento-dashboard' and request.resolver_match.view_name != 'bento-dashboard-alias' and request.resolver_match.view_name != 'satzbau-drill' and request.resolver_match.view_name != 'tactile-runner' %} is-active{% endif %}" href="{% url 'lessons:lesson-list' %}">
+      <span class="bottom-nav__icon" aria-hidden="true">📚</span>
+      <span class="bottom-nav__label">درس‌ها</span>
+    </a>
+    <a class="bottom-nav__item{% if request.resolver_match.view_name == 'satzbau-drill' or request.resolver_match.view_name == 'tactile-runner' %} is-active{% endif %}" href="{% url 'satzbau-drill' %}">
+      <span class="bottom-nav__icon" aria-hidden="true">🧪</span>
+      <span class="bottom-nav__label">آزمایشگاه‌ها</span>
+    </a>
+    <a class="bottom-nav__item{% if request.resolver_match.app_name == 'accounts' %} is-active{% endif %}" href="{% if user.is_authenticated %}{% url 'accounts:profile' %}{% else %}{% url 'accounts:login' %}{% endif %}">
+      <span class="bottom-nav__icon" aria-hidden="true">👤</span>
+      <span class="bottom-nav__label">{% if user.is_authenticated %}پروفایل{% else %}حساب{% endif %}</span>
+    </a>
+  </div>
 </nav>
