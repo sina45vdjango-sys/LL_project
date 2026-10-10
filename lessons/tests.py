@@ -3727,3 +3727,51 @@ class LessonReviewTests(TestCase):
     def test_the_lesson_page_links_to_the_review(self):
         response = self.client.get(reverse("lessons:lesson-detail", args=[self.lesson.pk]))
         self.assertContains(response, self.url)
+
+
+class ContrastiveCalloutsCommandTests(TestCase):
+    """Verifies that seed_a1_contrastive_callouts seeds 10 callout blocks across L01–L05."""
+
+    @classmethod
+    def setUpTestData(cls):
+        level = LanguageLevel.objects.create(level="A1", title="A1", order=1)
+        course = Course.objects.create(language_level=level, title="German A1", is_published=True)
+        for i in range(1, 6):
+            Lesson.objects.create(course=course, order=i, title=f"Lesson {i}", estimated_time=15, is_published=True)
+
+    def test_dry_run_does_not_mutate_database(self):
+        out = io.StringIO()
+        call_command("seed_a1_contrastive_callouts", "--dry-run", stdout=out)
+        self.assertIn("[DRY RUN]", out.getvalue())
+        self.assertEqual(LessonContent.objects.count(), 0)
+
+    def test_command_seeds_callouts_and_is_idempotent(self):
+        out = io.StringIO()
+        call_command("seed_a1_contrastive_callouts", stdout=out)
+        self.assertIn("10 created", out.getvalue())
+        self.assertEqual(LessonContent.objects.count(), 10)
+
+        # Verify each lesson has 2 callouts with types and badges
+        for order in range(1, 6):
+            blocks = LessonContent.objects.filter(lesson__order=order)
+            self.assertEqual(blocks.count(), 2)
+            titles = [b.title for b in blocks]
+            self.assertTrue(any("تلهٔ فارسی‌زبانان" in t for t in titles))
+            self.assertTrue(any("کارآموزی و زندگی" in t for t in titles))
+
+        # Idempotency run
+        out2 = io.StringIO()
+        call_command("seed_a1_contrastive_callouts", stdout=out2)
+        self.assertIn("10 reused", out2.getvalue())
+        self.assertEqual(LessonContent.objects.count(), 10)
+
+    def test_callouts_render_with_custom_classes_and_tags(self):
+        call_command("seed_a1_contrastive_callouts", stdout=io.StringIO())
+        lesson = Lesson.objects.get(order=1)
+        response = self.client.get(reverse("lessons:lesson-detail", args=[lesson.pk]) + "?step=explanation")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "callout-falle")
+        self.assertContains(response, "callout-ausbildung")
+        self.assertContains(response, "tag--falle")
+        self.assertContains(response, "tag--ausbildung")
+

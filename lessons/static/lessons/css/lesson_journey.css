@@ -104,6 +104,8 @@
 .tag--example { background: var(--warning-soft); color: var(--warning); }
 .tag--type { background: var(--surface-alt); color: var(--info); }
 .tag--role.is-review { background: var(--warning-soft); color: var(--warning); }
+.tag--falle { background: var(--warning-soft); color: var(--on-warning); border: 1px solid var(--warning); font-weight: 700; }
+.tag--ausbildung { background: var(--accent-soft); color: var(--accent-text); border: 1px solid var(--accent); font-weight: 700; }
 
 .step-lead-text { margin: 0; max-width: 68ch; font-size: 14px; line-height: 2; }
 
@@ -129,6 +131,12 @@
 /* ------------------------------------------------------------ prose blocks --- */
 .step-lead { display: flex; flex-direction: column; gap: 12px; }
 .step-block { display: flex; flex-direction: column; gap: 10px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.step-block.callout-falle,
+.callout-falle { border: 1px solid var(--warning); background: var(--warning-soft); }
+.step-block.callout-falle .step-block__title { color: var(--on-warning); }
+.step-block.callout-ausbildung,
+.callout-ausbildung { border: 1px solid var(--accent); background: var(--accent-soft); }
+.step-block.callout-ausbildung .step-block__title { color: var(--accent-text); }
 .step-block__title { margin: 0; font-size: 17px; line-height: 1.7; overflow-wrap: anywhere; }
 .step-block__body { max-width: 68ch; line-height: 2.1; overflow-wrap: anywhere; }
 /* Prose blocks and grammar explanations are written in paragraphs (Phase 7 renders them

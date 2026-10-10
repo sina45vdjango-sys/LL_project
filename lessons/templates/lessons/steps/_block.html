@@ -6,9 +6,9 @@
    The body may carry `English:` glosses that the Persian page has no use for, so it goes
    through `without_english` first — the stored text is untouched. The vocabulary step
    additionally asks for its `·` list to be broken into lines.{% endcomment %}
-<article class="step-block">
-  <span class="tag tag--{% if block.type == 'GRAMMAR' %}grammar{% elif block.type == 'VOCABULARY' %}vocabulary{% elif block.type == 'DIALOGUE' %}dialogue{% elif block.type == 'EXAMPLE' %}example{% elif block.type == 'NOTE' %}note{% else %}explanation{% endif %}">
-    {% if block.type == 'GRAMMAR' %}گرامر{% elif block.type == 'VOCABULARY' %}واژگان{% elif block.type == 'DIALOGUE' %}گفت‌وگو{% elif block.type == 'EXAMPLE' %}مثال{% elif block.type == 'NOTE' %}نکته{% else %}توضیح{% endif %}
+<article class="step-block{% if 'تله' in block.title %} callout-falle{% elif 'کارآموزی' in block.title or 'زندگی' in block.title %} callout-ausbildung{% endif %}">
+  <span class="tag tag--{% if 'تله' in block.title %}falle{% elif 'کارآموزی' in block.title or 'زندگی' in block.title %}ausbildung{% elif block.type == 'GRAMMAR' %}grammar{% elif block.type == 'VOCABULARY' %}vocabulary{% elif block.type == 'DIALOGUE' %}dialogue{% elif block.type == 'EXAMPLE' %}example{% elif block.type == 'NOTE' %}note{% else %}explanation{% endif %}">
+    {% if 'تله' in block.title %}⚠️ تلهٔ فارسی‌زبانان{% elif 'کارآموزی' in block.title or 'زندگی' in block.title %}🇩🇪 کارآموزی و زندگی در آلمان{% elif block.type == 'GRAMMAR' %}گرامر{% elif block.type == 'VOCABULARY' %}واژگان{% elif block.type == 'DIALOGUE' %}گفت‌وگو{% elif block.type == 'EXAMPLE' %}مثال{% elif block.type == 'NOTE' %}نکته{% else %}توضیح{% endif %}
   </span>
   <h3 class="step-block__title" data-lookup>{{ block.title|direction }}</h3>
   {% comment %}`suppress_block_body` is set by the steps that render the same sentences as
