@@ -3730,13 +3730,13 @@ class LessonReviewTests(TestCase):
 
 
 class ContrastiveCalloutsCommandTests(TestCase):
-    """Verifies that seed_a1_contrastive_callouts seeds 24 callout blocks across L01–L12."""
+    """Verifies that seed_a1_contrastive_callouts seeds 48 callout blocks across L01–L24."""
 
     @classmethod
     def setUpTestData(cls):
         level = LanguageLevel.objects.create(level="A1", title="A1", order=1)
         course = Course.objects.create(language_level=level, title="German A1", is_published=True)
-        for i in range(1, 13):
+        for i in range(1, 25):
             Lesson.objects.create(course=course, order=i, title=f"Lesson {i}", estimated_time=15, is_published=True)
 
     def test_dry_run_does_not_mutate_database(self):
@@ -3748,11 +3748,11 @@ class ContrastiveCalloutsCommandTests(TestCase):
     def test_command_seeds_callouts_and_is_idempotent(self):
         out = io.StringIO()
         call_command("seed_a1_contrastive_callouts", stdout=out)
-        self.assertIn("24 created", out.getvalue())
-        self.assertEqual(LessonContent.objects.count(), 24)
+        self.assertIn("48 created", out.getvalue())
+        self.assertEqual(LessonContent.objects.count(), 48)
 
-        # Verify each lesson (L01-L12) has 2 callouts with types and badges
-        for order in range(1, 13):
+        # Verify each lesson (L01-L24) has 2 callouts with types and badges
+        for order in range(1, 25):
             blocks = LessonContent.objects.filter(lesson__order=order)
             self.assertEqual(blocks.count(), 2)
             titles = [b.title for b in blocks]
@@ -3762,8 +3762,8 @@ class ContrastiveCalloutsCommandTests(TestCase):
         # Idempotency run
         out2 = io.StringIO()
         call_command("seed_a1_contrastive_callouts", stdout=out2)
-        self.assertIn("24 reused", out2.getvalue())
-        self.assertEqual(LessonContent.objects.count(), 24)
+        self.assertIn("48 reused", out2.getvalue())
+        self.assertEqual(LessonContent.objects.count(), 48)
 
     def test_callouts_render_with_custom_classes_and_tags(self):
         call_command("seed_a1_contrastive_callouts", stdout=io.StringIO())
