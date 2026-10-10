@@ -13,12 +13,14 @@ from django.views.generic import RedirectView
 from django.templatetags.static import static
 
 from config.media import serve_media
-from lessons.views import BentoDashboardView, DashboardView, ReadinessView
+from lessons.views import BentoDashboardView, DashboardView, ReadinessView, TactileRunnerView
 
 urlpatterns = [
     path('', DashboardView.as_view(), name='home'),
     path('bento/', BentoDashboardView.as_view(), name='bento-dashboard'),
     path('dashboard/', BentoDashboardView.as_view(), name='bento-dashboard-alias'),
+    path('drills/satzbau/', TactileRunnerView.as_view(), name='satzbau-drill'),
+    path('runner/tactile/', TactileRunnerView.as_view(), name='tactile-runner'),
     path('readiness/', ReadinessView.as_view(), name='readiness'),
     # Every browser asks for /favicon.ico on its own, whether or not a page declares an
     # icon, so this exact address was a 404 on every single page load. The picture lives

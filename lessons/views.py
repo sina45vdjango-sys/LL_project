@@ -295,6 +295,35 @@ class BentoDashboardView(View):
         return render(request, "bento_dashboard.html", context)
 
 
+class TactileRunnerView(View):
+    """Tactile sentence construction runner (Satzbau Playground)."""
+
+    def get(self, request, *args, **kwargs):
+        from vocabulary.models import Sentence
+
+        sample_audio = None
+        sample_sentence = Sentence.objects.filter(audio__isnull=False).exclude(audio="").first()
+        if sample_sentence is not None:
+            if sample_sentence.audio:
+                sample_audio = sample_sentence.audio
+
+        word_chips = ["Ich", "kaufe", "heute", "im Supermarkt", "ein", "kaufen"]
+        correct_sequences = [
+            ["Ich", "kaufe", "heute", "im Supermarkt", "ein"],
+            ["Heute", "kaufe", "ich", "im Supermarkt", "ein"],
+        ]
+
+        context = {
+            "brand": {"name": "ولینگو", "tagline": "یادگیری آلمانی برای فارسی‌زبان‌ها"},
+            "sample_audio": sample_audio,
+            "word_chips": word_chips,
+            "correct_sequences_json": json.dumps(correct_sequences),
+            "target_meaning": "«من امروز در سوپرمارکت خرید می‌کنم.»",
+            "exercise_category": "خرید و فروشگاه · A1",
+        }
+        return render(request, "tactile_runner.html", context)
+
+
 class ReadinessView(View):
     """«آمادگی من»: how this learner is doing, from their own stored rows.
 

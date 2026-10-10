@@ -3925,3 +3925,24 @@ class BentoDashboardViewTests(TestCase):
         self.assertContains(response, "bento-container")
 
 
+class TactileRunnerViewTests(TestCase):
+    """Verifies that the Tactile Sentence Runner loads cleanly on /drills/satzbau/ and /runner/tactile/."""
+
+    def test_tactile_runner_renders_successfully(self):
+        response = self.client.get("/drills/satzbau/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "assemblyZone")
+        self.assertContains(response, "wordBank")
+        self.assertContains(response, "submitActionBtn")
+        self.assertContains(response, "spring-progress-track")
+        self.assertContains(response, "data-correct-sequences")
+        self.assertContains(response, 'dir="ltr"')
+        self.assertContains(response, 'lang="de"')
+
+    def test_tactile_runner_alias_route(self):
+        response = self.client.get("/runner/tactile/")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "assemblyZone")
+
+
+

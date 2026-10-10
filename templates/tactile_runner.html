@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}پلی‌گراند جمله‌سازی تعاملی (Satzbau) | {{ brand.name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/tactile_runner.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Top Navigation & Spring Progress Bar -->
+<header class="runner-top-bar">
+  <div class="runner-meta-row">
+    <a href="{% url 'bento-dashboard' %}" class="runner-close-btn" aria-label="خروج از تمرین و بازگشت به داشبورد">✕</a>
+    <div class="runner-stats" id="runnerStats">
+      <span class="prompt-badge">🔥 ۳ استریک</span>
+      <span>سوال ۳ از ۱۰</span>
+      <span>·</span>
+      <span>۳۰٪</span>
+    </div>
+    <button class="theme-mini-btn" id="themeMiniBtn" type="button" aria-label="تغییر پوسته">🌙</button>
+  </div>
+  
+  <div class="spring-progress-track" aria-label="پیشرفت سوالات">
+    <div class="spring-progress-fill" id="springProgressFill" style="width: 30%;"></div>
+  </div>
+</header>
+
+<!-- Main Tactile Runner Container -->
+<main class="runner-main" id="runnerContainer">
+  <!-- Exercise Card: Satzbau Playground -->
+  <article class="tactile-card" id="questionCard" data-correct-sequences='{{ correct_sequences_json|default:"[[\"Ich\", \"kaufe\", \"heute\", \"im Supermarkt\", \"ein\"], [\"Heute\", \"kaufe\", \"ich\", \"im Supermarkt\", \"ein\"]]" }}'>
+    <div class="prompt-eyebrow">
+      <span class="prompt-badge">نحو آلمانی · <span class="de" dir="ltr" lang="de">Satzbau</span></span>
+      <span>{{ exercise_category|default:"خرید و فروشگاه · A1" }}</span>
+    </div>
+
+    <h2 class="prompt-title">جمله زیر را با قطعات داده‌شده به شکل صحیح بسازید:</h2>
+
+    <div class="prompt-context">
+      <span class="context-label">معنی جمله:</span>
+      <span class="context-persian">{{ target_meaning|default:"«من امروز در سوپرمارکت خرید می‌کنم.»" }}</span>
+    </div>
+
+    {% if sample_audio %}
+    <div class="runner-audio-wrap">
+      {% include "includes/audio_control.html" with audio=sample_audio prefix="runner-satzbau" pk="1" label="تلفظ صوتی جمله هدف" %}
+      <span class="context-label">تلفظ هدف آلمانی</span>
+    </div>
+    {% endif %}
+
+    <div class="tutor-callout">
+      💡 نکته گوته A1: فعل <span class="de" dir="ltr" lang="de">einkaufen</span> از افعال جداشدنی (<span class="de" dir="ltr" lang="de">Trennbare Verben</span>) است؛ پیشوند <span class="de" dir="ltr" lang="de">ein</span> در جمله خبری به انتهای جمله منتقل می‌شود.
+    </div>
+
+    <!-- Active Assembly Drop Zone -->
+    <div class="satzbau-drop-zone" id="assemblyZone" aria-label="محل چینش قطعات جمله">
+      <span class="drop-placeholder" id="assemblyPlaceholder">کلمات را به ترتیب صحیح لمس کنید...</span>
+    </div>
+
+    <!-- Word Bank -->
+    <div class="satzbau-bank" id="wordBank">
+      {% if word_chips %}
+        {% for chip in word_chips %}
+          <button class="tactile-chip" type="button" data-word="{{ chip }}">
+            <span class="de" dir="ltr" lang="de">{{ chip }}</span>
+          </button>
+        {% endfor %}
+      {% else %}
+        <button class="tactile-chip" type="button" data-word="Ich"><span class="de" dir="ltr" lang="de">Ich</span></button>
+        <button class="tactile-chip" type="button" data-word="kaufe"><span class="de" dir="ltr" lang="de">kaufe</span></button>
+        <button class="tactile-chip" type="button" data-word="heute"><span class="de" dir="ltr" lang="de">heute</span></button>
+        <button class="tactile-chip" type="button" data-word="im Supermarkt"><span class="de" dir="ltr" lang="de">im Supermarkt</span></button>
+        <button class="tactile-chip" type="button" data-word="ein"><span class="de" dir="ltr" lang="de">ein</span></button>
+        <!-- Distractor -->
+        <button class="tactile-chip" type="button" data-word="kaufen"><span class="de" dir="ltr" lang="de">kaufen</span></button>
+      {% endif %}
+    </div>
+
+    <div class="assembly-actions">
+      <button class="btn-clear-assembly" id="clearAssemblyBtn" type="button">🔄 پاک کردن و چینش مجدد</button>
+    </div>
+  </article>
+
+  <!-- Feedback Drawer -->
+  <div class="feedback-drawer" id="feedbackDrawer" role="alert" aria-live="polite">
+    <div class="feedback-title" id="feedbackTitle">
+      <span id="feedbackIcon">✅</span>
+      <span id="feedbackHeading">کاملاً درست و دقیق!</span>
+    </div>
+    <p class="feedback-explanation" id="feedbackExplanation">
+      عالی بود! در جمله خبری حال ساده، بخش صرف‌شده فعل در جایگاه دوم (<span class="de" dir="ltr" lang="de">kaufe</span>) و پیشوند جداشدنی (<span class="de" dir="ltr" lang="de">ein</span>) در انتهای جمله قرار می‌گیرد.
+    </p>
+  </div>
+
+  <!-- Action Bar -->
+  <div class="runner-action-bar">
+    <button class="btn-tactile-submit" id="submitActionBtn" type="button" disabled>
+      <span>بررسی پاسخ</span>
+      <span>⚡</span>
+    </button>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/tactile_runner.js' %}" defer></script>
+{% endblock %}
