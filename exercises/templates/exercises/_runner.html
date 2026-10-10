@@ -48,6 +48,37 @@
                aria-labelledby="question-title-{{ question.id }}">
         <header class="runner-q__head">
           <p class="runner-q__eyebrow">سؤال {{ question.number }} از {{ total_questions }}</p>
+          {% if exercise and exercise.type == 'WRITING' %}
+            {% if 'فرم' in exercise.title %}
+              <div class="form-lab-sheet" aria-label="برگهٔ فرم اداری">
+                <div class="form-lab-sheet__header">
+                  <span class="form-lab-sheet__emblem" aria-hidden="true">🏛️</span>
+                  <div class="form-lab-sheet__titles">
+                    <span class="form-lab-sheet__gov">BUNDESREPUBLIK DEUTSCHLAND</span>
+                    <strong class="form-lab-sheet__doc">{{ exercise.title|direction }}</strong>
+                  </div>
+                  <span class="form-lab-sheet__badge">A1 Schreiben · Teil 1</span>
+                </div>
+              </div>
+            {% elif 'نگارش' in exercise.title or 'ایمیل' in exercise.title %}
+              <div class="email-lab-card" aria-label="کارت نگارش ایمیل">
+                <div class="email-lab-card__header">
+                  <div class="email-lab-card__dots" aria-hidden="true">
+                    <span class="email-lab-dot email-lab-dot--red"></span>
+                    <span class="email-lab-dot email-lab-dot--yellow"></span>
+                    <span class="email-lab-dot email-lab-dot--green"></span>
+                  </div>
+                  <span class="email-lab-card__title">✉️ E-Mail Entwurf (A1 Schreiben · Teil 2)</span>
+                </div>
+                <div class="email-lab-stepper" aria-label="مراحل ساختار ایمیل">
+                  <span class="email-lab-step{% if question.number == 1 %} is-current{% elif question.number > 1 %} is-done{% endif %}">۱. عنوان (Anrede)</span>
+                  <span class="email-lab-step{% if question.number == 2 %} is-current{% elif question.number > 2 %} is-done{% endif %}">۲. دلیل (Grund)</span>
+                  <span class="email-lab-step{% if question.number == 3 %} is-current{% elif question.number > 3 %} is-done{% endif %}">۳. درخواست (Bitte/Termin)</span>
+                  <span class="email-lab-step{% if question.number == 4 %} is-current{% elif question.number > 4 %} is-done{% endif %}">۴. پایان‌بندی (Gruß)</span>
+                </div>
+              </div>
+            {% endif %}
+          {% endif %}
           {% if question.passage %}
             <p class="runner-q__passage" lang="de" dir="ltr">{{ question.passage }}</p>
           {% endif %}
@@ -103,10 +134,20 @@
             </div>
           </div>
         {% elif question.kind == 'text' %}
-          <div class="runner-answer">
-            <label class="runner-answer__label" for="answer-{{ question.id }}">پاسخ را به آلمانی بنویس</label>
-            <input class="runner-answer__input" id="answer-{{ question.id }}" name="answer-{{ question.id }}"
-                   type="text" lang="de" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done">
+          <div class="runner-answer{% if exercise and exercise.type == 'WRITING' %} runner-answer--writing{% endif %}">
+            <label class="runner-answer__label" for="answer-{{ question.id }}">
+              {% if exercise and exercise.type == 'WRITING' and 'فرم' in exercise.title %}
+                مقدار مناسب برای این فیلد فرم اداری را بنویس (به آلمانی):
+              {% elif exercise and exercise.type == 'WRITING' %}
+                متن این بخش از ایمیل را بنویس (به آلمانی):
+              {% else %}
+                پاسخ را به آلمانی بنویس
+              {% endif %}
+            </label>
+            <input class="runner-answer__input{% if exercise and exercise.type == 'WRITING' %} runner-answer__input--writing{% endif %}"
+                   id="answer-{{ question.id }}" name="answer-{{ question.id }}"
+                   type="text" lang="de" dir="ltr" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"
+                   placeholder="{% if exercise and exercise.type == 'WRITING' and 'فرم' in exercise.title %}Eintragen...{% elif exercise and exercise.type == 'WRITING' %}Auf Deutsch schreiben...{% endif %}">
           </div>
         {% else %}
           <p class="runner-note">این پرسش پاسخ تعریف‌شده‌ای ندارد و بررسی نمی‌شود.</p>

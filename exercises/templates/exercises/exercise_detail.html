@@ -25,7 +25,19 @@
       <span class="chip">{{ total_questions }} پرسش</span>
     </p>
     <h1 class="exercise-head__title">{{ exercise.title|direction }}</h1>
-    {% if exercise.instruction %}<p class="exercise-head__instruction">{{ exercise.instruction|direction }}</p>{% endif %}
+    {% if exercise.instruction %}
+      {% if exercise.type == 'WRITING' %}
+        <div class="exercise-writing-brief" role="region" aria-label="راهنمای سناریو">
+          <div class="exercise-writing-brief__badge">
+            <span class="exercise-writing-brief__icon" aria-hidden="true">📋</span>
+            <span>موقعیت و سناریوی تمرین</span>
+          </div>
+          <div class="exercise-writing-brief__text">{{ exercise.instruction|direction|linebreaksbr }}</div>
+        </div>
+      {% else %}
+        <p class="exercise-head__instruction">{{ exercise.instruction|direction }}</p>
+      {% endif %}
+    {% endif %}
   </header>
 
   {% comment %}The learner's own past result, read back from ExerciseAttempt

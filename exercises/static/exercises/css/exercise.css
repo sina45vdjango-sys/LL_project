@@ -219,3 +219,220 @@
   @keyframes results-in { from { opacity: 0; } to { opacity: 1; } }
   .runner-results:not([hidden]) { animation: results-in .25s ease-out; }
 }
+
+/* --------------------------------------------------- Schreiben Lab (Phase 8) ---- */
+/* Specialized layout for Goethe A1 Schreiben Teil 1 (Form Lab) and Teil 2 (Email Composer) */
+.exercise-writing-brief {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  border-inline-start: 4px solid var(--accent);
+  border-radius: 14px;
+  background: var(--surface-alt);
+}
+
+.exercise-writing-brief__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font: 700 12px/1.8 system-ui, sans-serif;
+}
+
+.exercise-writing-brief__icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.exercise-writing-brief__text {
+  margin: 0;
+  color: var(--fg);
+  font: 500 14.5px/1.95 system-ui, sans-serif;
+  overflow-wrap: anywhere;
+}
+
+/* -------------------------------------------- Form Lab Sheet (Goethe Teil 1) ---- */
+.form-lab-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  margin-block-end: 4px;
+}
+
+.form-lab-sheet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.form-lab-sheet__emblem {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.form-lab-sheet__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.form-lab-sheet__gov {
+  font: 700 10.5px/1.2 system-ui, sans-serif;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.form-lab-sheet__doc {
+  font: 700 14px/1.4 system-ui, sans-serif;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+.form-lab-sheet__badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  color: var(--accent-text);
+  font: 700 11px/1.6 system-ui, sans-serif;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------- Email Lab Card (Goethe Teil 2) ---- */
+.email-lab-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  margin-block-end: 4px;
+}
+
+.email-lab-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-block-end: 8px;
+  border-block-end: 1px solid var(--line);
+}
+
+.email-lab-card__dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.email-lab-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.email-lab-dot--red { background: #ff5f56; }
+.email-lab-dot--yellow { background: #ffbd2e; }
+.email-lab-dot--green { background: #27c93f; }
+
+.email-lab-card__title {
+  font: 600 12.5px/1.4 system-ui, sans-serif;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+.email-lab-stepper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.email-lab-step {
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface-alt);
+  color: var(--muted);
+  font: 500 11.5px/1.6 system-ui, sans-serif;
+  white-space: nowrap;
+}
+
+.email-lab-step.is-current {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.email-lab-step.is-done {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border-color: var(--accent-text);
+}
+
+/* ------------------------------------------ Writing Input Field Enhancements ---- */
+.runner-answer--writing .runner-answer__label {
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.runner-answer__input--writing {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 16px;
+  min-height: 52px;
+  letter-spacing: 0.3px;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+}
+
+.runner-answer__input--writing:focus-visible {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent-text);
+  outline-offset: 1px;
+}
+
+@media (max-width: 560px) {
+  .exercise-writing-brief {
+    padding: 12px 14px;
+    border-radius: 12px;
+  }
+  .exercise-writing-brief__text {
+    font-size: 13.5px;
+    line-height: 1.85;
+  }
+  .form-lab-sheet {
+    padding: 10px 12px;
+  }
+  .form-lab-sheet__emblem {
+    font-size: 18px;
+  }
+  .form-lab-sheet__gov {
+    font-size: 9.5px;
+  }
+  .email-lab-card {
+    padding: 10px 12px;
+  }
+  .email-lab-stepper {
+    gap: 4px;
+  }
+  .email-lab-step {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+}
+

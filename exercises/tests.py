@@ -3544,6 +3544,62 @@ class SeedA1ListeningDiscriminationTests(TestCase):
         self.assertEqual(first_a_count, second_a_count)
 
 
+class SchreibenLabCommandTests(TestCase):
+    """``seed_a1_schreiben_lab``: seeds authentic Goethe A1 Schreiben Lab exercises."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.level = LanguageLevel.objects.create(level="A1", title="A1", order=1)
+        cls.course = Course.objects.create(language_level=cls.level, title="A1 Kurs", is_published=True)
+        cls.lesson21 = Lesson.objects.create(
+            course=cls.course, title="Telefonieren, E-Mail und Post", order=21, is_published=True, estimated_time=15
+        )
+        cls.lesson23 = Lesson.objects.create(
+            course=cls.course, title="Amt, Bank und Formulare", order=23, is_published=True, estimated_time=15
+        )
+
+    def test_dry_run_leaves_database_untouched(self):
+        out = StringIO()
+        call_command("seed_a1_schreiben_lab", dry_run=True, stdout=out)
+        self.assertIn("[DRY-RUN]", out.getvalue())
+        self.assertFalse(Exercise.objects.filter(type=Exercise.ExerciseType.WRITING).exists())
+
+    def test_command_creates_exercises_and_questions(self):
+        out = StringIO()
+        call_command("seed_a1_schreiben_lab", stdout=out)
+
+        writing_exercises = Exercise.objects.filter(type=Exercise.ExerciseType.WRITING)
+        self.assertEqual(writing_exercises.count(), 7)
+
+        l23_exercises = writing_exercises.filter(lesson=self.lesson23)
+        self.assertEqual(l23_exercises.count(), 3)
+        self.assertEqual(Question.objects.filter(exercise__in=l23_exercises).count(), 15)
+
+        l21_exercises = writing_exercises.filter(lesson=self.lesson21)
+        self.assertEqual(l21_exercises.count(), 4)
+        self.assertEqual(Question.objects.filter(exercise__in=l21_exercises).count(), 16)
+
+        total_questions = Question.objects.filter(exercise__in=writing_exercises).count()
+        self.assertEqual(total_questions, 31)
+
+        for q in Question.objects.filter(exercise__in=writing_exercises):
+            self.assertTrue(len(q.explanation) > 0)
+            self.assertTrue(q.answers.filter(is_correct=True).exists())
+
+    def test_command_is_idempotent(self):
+        out = StringIO()
+        call_command("seed_a1_schreiben_lab", stdout=out)
+        first_q_count = Question.objects.count()
+        first_a_count = Answer.objects.count()
+
+        call_command("seed_a1_schreiben_lab", stdout=out)
+        second_q_count = Question.objects.count()
+        second_a_count = Answer.objects.count()
+
+        self.assertEqual(first_q_count, second_q_count)
+        self.assertEqual(first_a_count, second_a_count)
+
+
 class SeedA1PronunciationDrillsTests(TestCase):
     """``seed_a1_pronunciation_drills``: hear one word, tell it from one sound away.
 
