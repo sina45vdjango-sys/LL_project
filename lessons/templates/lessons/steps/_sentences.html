@@ -9,9 +9,9 @@
 {% include "lessons/steps/_lead.html" with suppress_block_body=True %}
 
 {% if step.sentences %}
-  <ul class="sentence-list">
+  <ul class="sentence-list{% if step.key == 'dialogue' or step.role == 'DIALOGUE' %} sentence-list--dialogue{% endif %}">
     {% for link in step.sentences %}
-      {% include "lessons/steps/_sentence.html" with link=link %}
+      {% include "lessons/steps/_sentence.html" with link=link index=forloop.counter %}
     {% endfor %}
   </ul>
 {% endif %}

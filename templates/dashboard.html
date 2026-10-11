@@ -94,12 +94,12 @@
         <div class="hero-actions">
           {% if active_lesson %}
             <a href="{% url 'lessons:lesson-detail' active_lesson.pk %}" class="btn-tactile-primary" id="bentoHeroResumeBtn">
-              <span>{% if active_started %}ادامه یادگیری{% else %}شروع درس {{ active_lesson.order }}{% endif %}</span>
+              <span>{% if active_started %}ادامه یادگیری (درس {{ active_lesson.order }}){% else %}شروع درس {{ active_lesson.order }}: {{ active_lesson.display_title|default:"سلام و احوالپرسی" }}{% endif %}</span>
               <span aria-hidden="true">→</span>
             </a>
           {% else %}
             <a href="{% url 'lessons:lesson-detail' first_lesson.pk %}" class="btn-tactile-primary" id="bentoHeroResumeBtn">
-              <span>شروع درس ۱</span>
+              <span>شروع درس ۱: {{ first_lesson.display_title|default:"سلام و احوالپرسی" }}</span>
               <span aria-hidden="true">→</span>
             </a>
           {% endif %}
@@ -107,7 +107,7 @@
           {% if active_audio %}
             {% include "includes/audio_control.html" with audio=active_audio prefix="bento-hero" pk=active_lesson.pk label="تلفظ صوتی درس" %}
           {% endif %}
-          <span class="time-estimate">⏱ حدود {{ active_lesson.estimated_time|default:15 }} دقیقه</span>
+          <span class="time-estimate">⏱ {{ active_lesson.estimated_time|default:15 }} دقیقه</span>
         </div>
       </article>
 

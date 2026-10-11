@@ -248,31 +248,35 @@
 .word-row__status--exam { background: var(--violet-soft); color: var(--on-violet); }
 
 /* --------------------------------------------------------------- sentences --- */
-.sentence-list { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
-.sentence { display: flex; flex-direction: column; gap: 8px; padding: 18px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); transition: border-color .15s ease, transform .15s ease; }
-.sentence__speaker { align-self: flex-start; margin: 0; padding: 2px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); font: 700 12px/1.8 system-ui, sans-serif; }
-.sentence__de { margin: 0; max-width: 68ch; font: 500 20px/1.85 system-ui, sans-serif; overflow-wrap: anywhere; }
-.sentence__fa { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13px; line-height: 1.95; }
-.sentence__audio { margin-top: 4px; }
-/* Only the vocabulary step passes words in: the page's own words this sentence uses. */
-.sentence__words { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.sentence-list { display: flex; flex-direction: column; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.sentence { display: flex; flex-direction: column; gap: 10px; padding: 18px 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease; }
+.sentence:hover { border-color: var(--line); box-shadow: 0 6px 20px rgba(0, 0, 0, .06); }
+.sentence__speaker { align-self: flex-start; margin: 0 0 4px 0; padding: 3px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-text); font: 700 12px/1.8 system-ui, sans-serif; letter-spacing: 0.3px; }
+.sentence__content { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.sentence__main-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.sentence__de { margin: 0; max-width: 68ch; font: 600 20px/1.85 system-ui, sans-serif; color: var(--fg); overflow-wrap: anywhere; }
+.sentence__fa { margin: 0; max-width: 68ch; color: var(--muted); font-size: 13.5px; line-height: 1.95; }
+.sentence__audio { display: inline-flex; align-items: center; flex-shrink: 0; }
+.sentence__words { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 0 0; }
 
-/* Dialogue reads as a script: the speaker sits beside the line, the translation and the
-   player stay under it. Still one card per line and no bubbles — this is reading
-   material, not a chat window. */
+/* Interactive Tap-to-Reveal cards */
+.tap-to-reveal { margin-top: 6px; border-radius: 12px; background: var(--surface-alt); border: 1px dashed var(--line); transition: background .2s ease, border-color .2s ease, box-shadow .2s ease; overflow: hidden; }
+.tap-to-reveal[open] { border-style: solid; background: var(--surface); border-color: var(--line); box-shadow: 0 2px 10px rgba(0, 0, 0, .04); }
+.tap-to-reveal__trigger { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer; user-select: none; list-style: none; -webkit-tap-highlight-color: transparent; }
+.tap-to-reveal__trigger::-webkit-details-marker { display: none; }
+.tap-to-reveal__trigger:hover { color: var(--accent-text); }
+.tap-to-reveal__icon { font-size: 13px; opacity: 0.85; }
+.tap-to-reveal__content { padding: 4px 14px 12px; animation: revealSlide .22s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes revealSlide { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Chat Bubbles in Dialogue Mode */
+.sentence-list--dialogue { gap: 16px; }
+.sentence--dialogue { position: relative; border-radius: 20px 20px 6px 20px; max-width: 88%; border-width: 1.5px; }
+.sentence--dialogue-alt { align-self: flex-start; margin-inline-start: auto; background: var(--surface-alt); border-radius: 20px 20px 20px 6px; }
+
 @media (min-width: 768px) {
-  .sentence[data-role="DIALOGUE"] {
-    display: grid;
-    grid-template-columns: 9rem minmax(0, 1fr);
-    grid-template-areas: "speaker de" ". fa" ". audio";
-    align-items: start;
-    column-gap: 14px;
-    row-gap: 6px;
-  }
-  .sentence[data-role="DIALOGUE"] .sentence__speaker { grid-area: speaker; }
-  .sentence[data-role="DIALOGUE"] .sentence__de { grid-area: de; }
-  .sentence[data-role="DIALOGUE"] .sentence__fa { grid-area: fa; }
-  .sentence[data-role="DIALOGUE"] .sentence__audio { grid-area: audio; }
+  .sentence--dialogue { max-width: 80%; }
+  .sentence--dialogue-alt { max-width: 80%; margin-inline-start: 12%; }
 }
 
 /* ----------------------------------------------------------------- grammar --- */

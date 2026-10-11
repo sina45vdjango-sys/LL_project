@@ -10,16 +10,32 @@
 
    `words` is optional and only the vocabulary step passes it: the page's own words that
    this sentence uses, shown as chips so the learner sees which of them appear here.{% endcomment %}
-<li class="sentence" data-role="{{ link.role }}">
+<li class="sentence{% if link.role == 'DIALOGUE' %} sentence--dialogue{% if index and index|divisibleby:2 %} sentence--dialogue-alt{% endif %}{% endif %}" data-role="{{ link.role }}">
   {% if link.speaker %}<p class="sentence__speaker"><bdi>{{ link.speaker }}</bdi></p>{% endif %}
-  <p class="sentence__de" lang="de" dir="ltr" data-lookup>{{ link.sentence.text }}</p>
-  <p class="sentence__fa">{{ link.sentence.translation_fa }}</p>
-  {% if words %}
-    <p class="sentence__words">{% for word in words %}<span class="chip" lang="de" dir="ltr">{{ word.word }}</span>{% endfor %}</p>
-  {% endif %}
-  {% if link.sentence.audio %}
-    <div class="sentence__audio">
-      {% include "includes/audio_control.html" with audio=link.sentence.audio prefix="sentence" pk=link.sentence.pk label=link.sentence.text|truncatechars:60 %}
+  <div class="sentence__content">
+    <div class="sentence__main-row">
+      <p class="sentence__de" lang="de" dir="ltr" data-lookup>{{ link.sentence.text }}</p>
+      {% if link.sentence.audio %}
+        <div class="sentence__audio">
+          {% include "includes/audio_control.html" with audio=link.sentence.audio prefix="sentence" pk=link.sentence.pk label=link.sentence.text|truncatechars:60 inline=True %}
+        </div>
+      {% endif %}
     </div>
-  {% endif %}
+
+    {% if link.sentence.translation_fa %}
+      <details class="tap-to-reveal sentence__reveal">
+        <summary class="tap-to-reveal__trigger">
+          <span class="tap-to-reveal__icon">👁️</span>
+          <span class="tap-to-reveal__label">معنی فارسی (لمس کنید)</span>
+        </summary>
+        <div class="tap-to-reveal__content">
+          <p class="sentence__fa">{{ link.sentence.translation_fa }}</p>
+        </div>
+      </details>
+    {% endif %}
+
+    {% if words %}
+      <p class="sentence__words">{% for word in words %}<span class="chip" lang="de" dir="ltr">{{ word.word }}</span>{% endfor %}</p>
+    {% endif %}
+  </div>
 </li>

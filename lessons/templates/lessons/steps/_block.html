@@ -15,7 +15,17 @@
      cards (see lessons/steps/_sentences.html): the heading still names the section, but the
      body would repeat, line for line, what the cards below already show.{% endcomment %}
   {% if not suppress_block_body %}
-    {% if split_lists %}
+    {% if 'تله' in block.title or 'نکته' in block.title or block.type == 'NOTE' %}
+      <details class="tap-to-reveal block-reveal" open>
+        <summary class="tap-to-reveal__trigger">
+          <span class="tap-to-reveal__icon">💡</span>
+          <span class="tap-to-reveal__label">تحلیل آموزشی و رفع تله زبانی</span>
+        </summary>
+        <div class="tap-to-reveal__content">
+          <div class="step-block__body" data-lookup>{{ block.body|without_english|direction|linebreaks }}</div>
+        </div>
+      </details>
+    {% elif split_lists %}
       <div class="step-block__body" data-lookup>{{ block.body|without_english|list_lines|direction|linebreaks }}</div>
     {% else %}
       <div class="step-block__body" data-lookup>{{ block.body|without_english|direction|linebreaks }}</div>
