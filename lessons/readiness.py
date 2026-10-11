@@ -754,19 +754,30 @@ def goethe_competencies(user):
     return result
 
 
-def goethe_readiness_score(competencies):
+def goethe_readiness_score(competencies, course_stats=None):
     """Official Goethe A1 100-point composite readiness score.
 
     Calculates the learner's estimated score across the 4 Goethe modalities:
     Hören (25) + Lesen (25) + Schreiben (25) + Sprechen (25) = 100 max points.
     Official pass mark is 60 points.
+
+    When course_stats is provided, weights the score by curriculum completion so
+    an early learner who has only completed a couple lessons is accurately classified
+    as 'در ابتدای مسیر یادگیری' rather than getting a misleading pass score.
     """
     hoeren_pts = competencies["hoeren"]["points"]
     lesen_pts = competencies["lesen"]["points"]
     schreiben_pts = competencies["schreiben"]["points"]
     sprechen_pts = competencies["sprechen"]["points"]
 
-    total = hoeren_pts + lesen_pts + schreiben_pts + sprechen_pts
+    raw_total = hoeren_pts + lesen_pts + schreiben_pts + sprechen_pts
+
+    if course_stats is not None and course_stats.get("total", 0) > 0:
+        coverage_ratio = course_stats.get("completed", 0) / course_stats["total"]
+        total = round(raw_total * coverage_ratio)
+    else:
+        total = raw_total
+
     is_passing = total >= 60
 
     if total >= 85:
@@ -780,6 +791,7 @@ def goethe_readiness_score(competencies):
 
     return {
         "total_points": total,
+        "raw_points": raw_total,
         "max_points": 100,
         "pass_points": 60,
         "is_passing": is_passing,
@@ -982,7 +994,7 @@ def readiness(user, today=None):
 
     weak_word_count = missed_words(user).count()
     competencies = goethe_competencies(user)
-    goethe_score = goethe_readiness_score(competencies)
+    goethe_score = goethe_readiness_score(competencies, course_stats)
     micro_weaknesses = actionable_micro_weaknesses(user, weak_grammar, weak_word_count)
 
     return {

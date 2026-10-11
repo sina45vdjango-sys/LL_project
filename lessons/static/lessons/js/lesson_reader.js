@@ -99,7 +99,10 @@
         }
         if (word.audio) {
           const audio = document.createElement('audio'); audio.controls = true; audio.preload = 'none'; audio.src = word.audio;
-          audio.setAttribute('aria-label', 'تلفظ واژه'); item.append(audio);
+          audio.setAttribute('aria-label', 'تلفظ واژه');
+          audio.addEventListener('pointerdown', event => event.stopPropagation());
+          audio.addEventListener('click', event => event.stopPropagation());
+          item.append(audio);
         }
         const link = document.createElement('a'); link.href = word.url; link.textContent = 'جزئیات واژه ←'; item.append(link);
         body.append(item);
@@ -130,10 +133,18 @@
   });
   popup.addEventListener('pointerenter', () => clearTimeout(hideTimer));
   popup.addEventListener('pointerleave', () => { hideTimer = setTimeout(close, 400); });
+  popup.addEventListener('pointerdown', event => event.stopPropagation());
+  popup.addEventListener('click', event => event.stopPropagation());
   popup.querySelector('[data-lookup-close]').addEventListener('click', close);
   document.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
   document.addEventListener('pointerdown', event => { if (!popup.contains(event.target) && !event.target.closest('.lookup-word')) close(); });
   document.addEventListener('focusin', event => { if (active && !popup.contains(event.target) && !event.target.closest('.lookup-word')) close(); });
   window.addEventListener('scroll', position, {passive: true});
-  window.addEventListener('resize', close);
+  let lastWidth = window.innerWidth;
+  window.addEventListener('resize', () => {
+    if (window.innerWidth !== lastWidth) {
+      lastWidth = window.innerWidth;
+      close();
+    }
+  });
 })();

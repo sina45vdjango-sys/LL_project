@@ -82,7 +82,7 @@
 
   var gaugeBadge = document.querySelector('.gauge-badge');
   if (gaugeBadge) {
-    var target = parseInt(gaugeBadge.getAttribute('data-value') || '78', 10);
+    var target = parseInt(gaugeBadge.getAttribute('data-value') || '0', 10);
     var current = 0;
     var step = function() {
       current += 2;

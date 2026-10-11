@@ -200,7 +200,7 @@ class DashboardView(View):
 
             # Live Goethe Readiness & Diagnosis
             competencies = goethe_competencies(request.user)
-            goethe_score = goethe_readiness_score(competencies)
+            goethe_score = goethe_readiness_score(competencies, course_stats)
             remedies = actionable_micro_weaknesses(request.user)
 
             # Real active lesson to work on
